@@ -1,0 +1,161 @@
+package gr.uoi.cs.pythia.engine;
+
+import static org.apache.spark.sql.functions.expr;
+import static org.apache.spark.sql.types.DataTypes.StringType;
+
+import gr.uoi.cs.pythia.config.SparkConfig;
+import gr.uoi.cs.pythia.engine.correlations.CorrelationsSystemConstants;
+import gr.uoi.cs.pythia.engine.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.engine.labeling.RuleSet;
+import gr.uoi.cs.pythia.engine.labeling.SparkSqlExpressionGenerator;
+import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilderForLabeledColumn;
+import gr.uoi.cs.pythia.model.*;
+import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
+import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
+import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.apache.log4j.Logger;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+
+public class DatasetProfiler implements IDatasetProfiler {
+
+  private final Logger logger = Logger.getLogger(DatasetProfile.class);
+  private final IDatasetReaderFactory dataFrameReaderFactory;
+  private DatasetProfile datasetProfile;
+  private Dataset<Row> dataset;
+
+  public DatasetProfiler() {
+    SparkConfig sparkConfig = new SparkConfig();
+    this.dataFrameReaderFactory =
+        new IDatasetReaderFactory(
+            SparkSession.builder()
+                .appName(sparkConfig.getAppName())
+                .master(sparkConfig.getMaster())
+                .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
+                .getOrCreate());
+  }
+
+  @Override
+  public void registerDataset(String alias, String path, LinkedHashMap<String, String> schema) {
+    StructField[] fields = new StructField[schema.size()];
+    List<String> keysList = new ArrayList<>(schema.keySet());
+    for (int i = 0; i < keysList.size(); i++) {
+      String key = keysList.get(i);
+      String value = schema.get(key);
+      fields[i] =
+          DataTypes.createStructField(key, DatasetProfilerConstants.DATATYPES.get(value), true);
+    }
+    StructType datasetSchema = new StructType(fields);
+
+    dataset = dataFrameReaderFactory.createDataframeReader(path, datasetSchema).read();
+    List<String> columnNames =
+        Arrays.stream(dataset.schema().fields())
+            .map(StructField::name)
+            .collect(Collectors.toList());
+    List<String> dataTypes =
+        Arrays.stream(dataset.schema().fields())
+            .map(field -> field.dataType().toString())
+            .collect(Collectors.toList());
+
+    List<Column> columnProperties = new ArrayList<>();
+    for (int i = 0; i < dataTypes.size(); ++i) {
+      columnProperties.add(new Column(i, columnNames.get(i), dataTypes.get(i)));
+    }
+    datasetProfile = new DatasetProfile(alias, path, columnProperties);
+    logger.info(String.format("Registered Dataset file with alias %s at %s", alias, path));
+  }
+
+  @Override
+  public DatasetProfile computeProfileOfDataset() {
+    computeDescriptiveStats();
+    computeAllPairsCorrelations();
+    return datasetProfile;
+  }
+
+  @Override
+  public void computeLabeledColumn(RuleSet ruleSet) {
+    String newColumnName = ruleSet.getNewColumnName();
+    String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
+    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
+    logger.info(String.format("Computed labeled column %s", newColumnName));
+
+    DecisionTreeBuilderForLabeledColumn decisionTreeBuilderForLabeledColumn =
+        new DecisionTreeBuilderForLabeledColumn(dataset, datasetProfile, newColumnName);
+    logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
+
+    List<Column> columns = datasetProfile.getColumns();
+    columns.add(
+        new LabeledColumn(
+            columns.get(columns.size() - 1).getPosition(),
+            StringType.toString(),
+            newColumnName,
+            decisionTreeBuilderForLabeledColumn));
+  }
+
+  private void computeDescriptiveStats() {
+    Dataset<Row> descriptiveStatistics =
+        dataset.summary(
+            DatasetProfilerConstants.COUNT,
+            DatasetProfilerConstants.MEAN,
+            DatasetProfilerConstants.STANDARD_DEVIATION,
+            DatasetProfilerConstants.MEDIAN,
+            DatasetProfilerConstants.MIN,
+            DatasetProfilerConstants.MAX);
+
+    List<Column> columns = datasetProfile.getColumns();
+    Set<String> summaryColumns = new HashSet<>(Arrays.asList(descriptiveStatistics.columns()));
+    for (Column column : columns) {
+      if (summaryColumns.contains(column.getName())) {
+        List<Row> columnNames = descriptiveStatistics.select(column.getName()).collectAsList();
+        List<Object> descriptiveStatisticsRow =
+            columnNames.stream().map(col -> col.get(0)).collect(Collectors.toList());
+
+        String count = (String) descriptiveStatisticsRow.get(0);
+        String mean = (String) descriptiveStatisticsRow.get(1);
+        String standardDeviation = (String) descriptiveStatisticsRow.get(2);
+        String median = (String) descriptiveStatisticsRow.get(3);
+        String min = (String) descriptiveStatisticsRow.get(4);
+        String max = (String) descriptiveStatisticsRow.get(5);
+
+        DescriptiveStatisticsProfile columnDescriptiveStatisticsProfile =
+            new DescriptiveStatisticsProfile(count, mean, standardDeviation, median, min, max);
+        column.setDescriptiveStatisticsProfile(columnDescriptiveStatisticsProfile);
+      }
+      logger.info(
+          String.format(
+              "Computed Descriptive Statistics Profile for %s", datasetProfile.getPath()));
+    }
+  }
+
+  private void computeAllPairsCorrelations() {
+    ICorrelationsCalculatorFactory.createCorrelationsCalculator(CorrelationsSystemConstants.PEARSON)
+        .calculateAllPairsCorrelations(dataset, datasetProfile);
+    logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
+  }
+
+  @Override
+  public void generateReport(String reportGeneratorType, String path) {
+    IReportGeneratorFactory.createReportGenerator(reportGeneratorType)
+        .produceReport(datasetProfile, path);
+    logger.info(
+        String.format(
+            "Generated %s report for %s to %s.",
+            reportGeneratorType, datasetProfile.getAlias(), path));
+  }
+
+  @Override
+  public void writeDataset(String datasetWriterType, String path) {
+    IDatasetWriterFactory.createDatasetWriter(datasetWriterType).write(dataset, path);
+  }
+}

@@ -5,7 +5,9 @@
   <artifactId>Pythia</artifactId>
   <name>Pythia</name>
   <version>0.0.1-SNAPSHOT</version>
-  <description>Pythia</description>
+  <description>A standard dataset is just a text file, with lines, where each line is a record, the fields of which
+        are separated by a separator (eg. tabs, comma, pipe, etc).
+        After registering a data set, the system produces a 100% automatic statistical profile of the dataset.</description>
   <build>
     <plugins>
       <plugin>
@@ -30,15 +32,58 @@
               </filters>
               <transformers>
                 <transformer>
-                  <mainClass>cs.uoi.pythia.PythiaApplication</mainClass>
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer>
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer />
+                <transformer>
+                  <mainClass>gr.uoi.cs.pythia.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>8</source>
+          <target>8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <includes>
+            <include>gr.uoi.cs.pythia.AllTests</include>
+          </includes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.22</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <properties>
     <java.version>1.8</java.version>
   </properties>
