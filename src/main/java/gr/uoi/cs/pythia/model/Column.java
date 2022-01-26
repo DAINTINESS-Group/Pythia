@@ -24,14 +24,11 @@ public class Column {
   @Override
   public String toString() {
     String descriptiveStatisticsProfileString =
-        descriptiveStatisticsProfile != null
-            ? descriptiveStatisticsProfile.toString()
-            : "";
+        descriptiveStatisticsProfile != null ? descriptiveStatisticsProfile.toString() : "";
     String correlationsProfileString =
-        correlationsProfile != null
-            ? correlationsProfile.toString()
-            : "";
-    return "Column"
+        correlationsProfile != null ? correlationsProfile.toString() : "";
+    return "=============================================================================\n"
+        + "Column"
         + "\n"
         + "position: "
         + position

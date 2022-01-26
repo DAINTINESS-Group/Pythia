@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Pair<T> implements Serializable {
-  final T columnA, columnB;
+  private final T columnA, columnB;
 
   @Override
   public boolean equals(Object obj) {

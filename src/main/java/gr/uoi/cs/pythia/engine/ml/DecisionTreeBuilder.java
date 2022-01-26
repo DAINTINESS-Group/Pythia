@@ -21,17 +21,17 @@ import org.apache.spark.sql.Row;
 
 @Getter
 @Setter
-public class DecisionTreeBuilderForLabeledColumn {
+public class DecisionTreeBuilder {
 
   private String[] featureColumnNames;
   private Map<String, String> indexedLabelsToActualValues;
   private double accuracy;
   private String decisionTreeVisualization;
 
-  public DecisionTreeBuilderForLabeledColumn(
+  public DecisionTreeBuilder(
       Dataset<Row> dataset, DatasetProfile datasetProfile, String labeledColumnName) {
     // Index labeled column
-    Dataset<Row> dataset2 =
+    Dataset<Row> indexedLabeledColumDataset =
         new StringIndexer()
             .setHandleInvalid("skip")
             .setInputCol(labeledColumnName)
@@ -44,7 +44,8 @@ public class DecisionTreeBuilderForLabeledColumn {
         new IndexToString()
             .setInputCol(labeledColumnName + "_indexed")
             .setOutputCol("value")
-            .transform(dataset2.select(labeledColumnName + "_indexed").distinct());
+            .transform(
+                indexedLabeledColumDataset.select(labeledColumnName + "_indexed").distinct());
 
     // Determine input columns for the features
     featureColumnNames =
@@ -63,7 +64,9 @@ public class DecisionTreeBuilderForLabeledColumn {
             .setOutputCol("features");
 
     Dataset<Row> inputData =
-        vectorAssembler.transform(dataset2).select(labeledColumnName + "_indexed", "features");
+        vectorAssembler
+            .transform(indexedLabeledColumDataset)
+            .select(labeledColumnName + "_indexed", "features");
 
     // Split the data into training and test sets (30% held out for testing).
     Dataset<Row>[] splits = inputData.randomSplit(new double[] {0.7, 0.3});

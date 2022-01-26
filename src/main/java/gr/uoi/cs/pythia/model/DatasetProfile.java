@@ -33,6 +33,7 @@ public class DatasetProfile {
         + '\n'
         + "Column Profiles:"
         + '\n'
-        + stringBuilder;
+        + stringBuilder
+        + "\n";
   }
 }

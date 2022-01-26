@@ -8,7 +8,7 @@ import gr.uoi.cs.pythia.engine.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.engine.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.engine.labeling.RuleSet;
 import gr.uoi.cs.pythia.engine.labeling.SparkSqlExpressionGenerator;
-import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilderForLabeledColumn;
+import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
@@ -83,26 +83,6 @@ public class DatasetProfiler implements IDatasetProfiler {
     return datasetProfile;
   }
 
-  @Override
-  public void computeLabeledColumn(RuleSet ruleSet) {
-    String newColumnName = ruleSet.getNewColumnName();
-    String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
-    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
-    logger.info(String.format("Computed labeled column %s", newColumnName));
-
-    DecisionTreeBuilderForLabeledColumn decisionTreeBuilderForLabeledColumn =
-        new DecisionTreeBuilderForLabeledColumn(dataset, datasetProfile, newColumnName);
-    logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
-
-    List<Column> columns = datasetProfile.getColumns();
-    columns.add(
-        new LabeledColumn(
-            columns.get(columns.size() - 1).getPosition(),
-            StringType.toString(),
-            newColumnName,
-            decisionTreeBuilderForLabeledColumn));
-  }
-
   private void computeDescriptiveStats() {
     Dataset<Row> descriptiveStatistics =
         dataset.summary(
@@ -145,12 +125,32 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
+  public void computeLabeledColumn(RuleSet ruleSet) {
+    String newColumnName = ruleSet.getNewColumnName();
+    String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
+    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
+    logger.info(String.format("Computed labeled column %s", newColumnName));
+
+    DecisionTreeBuilder decisionTreeBuilderForLabeledColumn =
+        new DecisionTreeBuilder(dataset, datasetProfile, newColumnName);
+    logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
+
+    List<Column> columns = datasetProfile.getColumns();
+    columns.add(
+        new LabeledColumn(
+            columns.get(columns.size() - 1).getPosition(),
+            StringType.toString(),
+            newColumnName,
+            decisionTreeBuilderForLabeledColumn));
+  }
+
+  @Override
   public void generateReport(String reportGeneratorType, String path) {
     IReportGeneratorFactory.createReportGenerator(reportGeneratorType)
         .produceReport(datasetProfile, path);
     logger.info(
         String.format(
-            "Generated %s report for %s to %s.",
+            "Generated %s report for %s: %s.",
             reportGeneratorType, datasetProfile.getAlias(), path));
   }
 

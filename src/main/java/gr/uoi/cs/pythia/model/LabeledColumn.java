@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.model;
 
-import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilderForLabeledColumn;
+import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
@@ -12,13 +12,13 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class LabeledColumn extends Column {
 
-  private DecisionTreeBuilderForLabeledColumn decisionTree;
+  private DecisionTreeBuilder decisionTree;
 
   public LabeledColumn(
       int position,
       String datatype,
       String newColumnName,
-      DecisionTreeBuilderForLabeledColumn decisionTree) {
+      DecisionTreeBuilder decisionTree) {
     super(position, newColumnName, datatype);
     this.decisionTree = decisionTree;
   }

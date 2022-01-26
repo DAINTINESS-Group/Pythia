@@ -4,10 +4,11 @@
   <groupId>cs.uoi</groupId>
   <artifactId>Pythia</artifactId>
   <name>Pythia</name>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1-all-deps</version>
   <description>A standard dataset is just a text file, with lines, where each line is a record, the fields of which
         are separated by a separator (eg. tabs, comma, pipe, etc).
-        After registering a data set, the system produces a 100% automatic statistical profile of the dataset.</description>
+        After registering a data set, the system produces a 100% automatic statistical profile of the dataset
+        and generates a report of the findings in txt or json format.</description>
   <build>
     <plugins>
       <plugin>
