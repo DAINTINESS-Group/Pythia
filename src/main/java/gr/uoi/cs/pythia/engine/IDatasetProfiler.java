@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.engine;
 
-import gr.uoi.cs.pythia.engine.labeling.RuleSet;
+import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import java.util.LinkedHashMap;
 

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.engine.labeling;
+package gr.uoi.cs.pythia.labeling;
 
 public class LabelingSystemConstants {
   public static final String GT = ">";

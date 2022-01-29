@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.engine.correlations;
+package gr.uoi.cs.pythia.correlations;
 
 public class ICorrelationsCalculatorFactory {
 

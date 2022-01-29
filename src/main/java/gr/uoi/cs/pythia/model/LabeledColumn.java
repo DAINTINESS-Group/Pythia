@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.model;
 
-import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilder;
+import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.engine.ml;
+package gr.uoi.cs.pythia.ml;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;

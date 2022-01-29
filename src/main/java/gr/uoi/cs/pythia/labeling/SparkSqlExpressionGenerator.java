@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.engine.labeling;
+package gr.uoi.cs.pythia.labeling;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

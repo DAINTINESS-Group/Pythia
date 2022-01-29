@@ -2,9 +2,9 @@ package gr.uoi.cs.pythia;
 
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.engine.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.engine.labeling.Rule;
-import gr.uoi.cs.pythia.engine.labeling.RuleSet;
+import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
+import gr.uoi.cs.pythia.labeling.Rule;
+import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 import java.io.File;

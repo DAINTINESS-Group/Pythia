@@ -4,11 +4,11 @@ import static org.apache.spark.sql.functions.expr;
 import static org.apache.spark.sql.types.DataTypes.StringType;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.engine.correlations.CorrelationsSystemConstants;
-import gr.uoi.cs.pythia.engine.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.engine.labeling.RuleSet;
-import gr.uoi.cs.pythia.engine.labeling.SparkSqlExpressionGenerator;
-import gr.uoi.cs.pythia.engine.ml.DecisionTreeBuilder;
+import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
+import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.labeling.SparkSqlExpressionGenerator;
+import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;

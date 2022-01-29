@@ -2,10 +2,10 @@ package gr.uoi.cs.pythia;
 
 import static org.junit.Assert.*;
 
-import gr.uoi.cs.pythia.engine.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.engine.labeling.Rule;
-import gr.uoi.cs.pythia.engine.labeling.RuleSet;
-import gr.uoi.cs.pythia.engine.labeling.SparkSqlExpressionGenerator;
+import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
+import gr.uoi.cs.pythia.labeling.Rule;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.labeling.SparkSqlExpressionGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
