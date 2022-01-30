@@ -16,7 +16,6 @@ import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +23,6 @@ import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
@@ -47,18 +45,8 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void registerDataset(String alias, String path, LinkedHashMap<String, String> schema) {
-    StructField[] fields = new StructField[schema.size()];
-    List<String> keysList = new ArrayList<>(schema.keySet());
-    for (int i = 0; i < keysList.size(); i++) {
-      String key = keysList.get(i);
-      String value = schema.get(key);
-      fields[i] =
-          DataTypes.createStructField(key, DatasetProfilerConstants.DATATYPES.get(value), true);
-    }
-    StructType datasetSchema = new StructType(fields);
-
-    dataset = dataFrameReaderFactory.createDataframeReader(path, datasetSchema).read();
+  public void registerDataset(String alias, String path, StructType schema) {
+    dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
     List<String> columnNames =
         Arrays.stream(dataset.schema().fields())
             .map(StructField::name)

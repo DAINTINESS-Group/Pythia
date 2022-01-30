@@ -6,33 +6,38 @@ import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
-
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Main {
   public static void main(String[] args) {
     IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
 
-    LinkedHashMap<String, String> schema = new LinkedHashMap<>();
-    schema.put("id", "StringType");
-    schema.put("user_name", "StringType");
-    schema.put("user_location", "StringType");
-    schema.put("user_description", "StringType");
-    schema.put("user_created", "TimestampType");
-    schema.put("user_followers", "IntegerType");
-    schema.put("user_friends", "IntegerType");
-    schema.put("user_favourites", "IntegerType");
-    schema.put("user_verified", "BooleanType");
-    schema.put("date", "TimestampType");
-    schema.put("text", "StringType");
-    schema.put("hashtags", "StringType");
-    schema.put("source", "StringType");
-    schema.put("retweets", "IntegerType");
-    schema.put("favorites", "IntegerType");
-    schema.put("is_retweet", "BooleanType");
+    StructType schema =
+        new StructType(
+            new StructField[] {
+              new StructField("id", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("user_name", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("user_location", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("user_description", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("user_created", DataTypes.TimestampType, false, Metadata.empty()),
+              new StructField("user_followers", DataTypes.IntegerType, false, Metadata.empty()),
+              new StructField("user_friends", DataTypes.IntegerType, false, Metadata.empty()),
+              new StructField("user_favourites", DataTypes.IntegerType, false, Metadata.empty()),
+              new StructField("user_verified", DataTypes.BooleanType, false, Metadata.empty()),
+              new StructField("date", DataTypes.TimestampType, false, Metadata.empty()),
+              new StructField("text", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("hashtags", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("source", DataTypes.StringType, false, Metadata.empty()),
+              new StructField("retweets", DataTypes.IntegerType, false, Metadata.empty()),
+              new StructField("favorites", DataTypes.IntegerType, false, Metadata.empty()),
+              new StructField("is_retweet", DataTypes.BooleanType, false, Metadata.empty()),
+            });
     datasetProfiler.registerDataset(
         "peoples", String.format("data%stweets.csv", File.separator), schema);
 
@@ -44,26 +49,8 @@ public class Main {
     rules.add(new Rule("user_followers", LabelingSystemConstants.GEQ, 500000, "super_high"));
 
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
-
-    //        LinkedHashMap<String, String> schema = new LinkedHashMap<>();
-    //        schema.put("name", "StringType");
-    //        schema.put("age", "IntegerType");
-    //        schema.put("funny", "IntegerType");
-    //        schema.put("iQ", "IntegerType");
-    //
-    //        DatasetProfile datasetProfile = datasetProfiler
-    //                .registerDataset("peoples", "people.json", schema);
-    //
-    //        List<Rule> rules = new ArrayList<>();
-    //        rules.add(new Rule("iQ", LabelingSystemConstants.LEQ, 50, "low"));
-    //        rules.add(new Rule("iQ", LabelingSystemConstants.LEQ, 70, "average"));
-    //        rules.add(new Rule("iQ", LabelingSystemConstants.LEQ, 90, "smart"));
-    //        rules.add(new Rule("iQ", LabelingSystemConstants.GEQ, 90, "smartx2"));
-    //        RuleSet ruleSet = new RuleSet("iQ_labeled", rules);
-
     datasetProfiler.computeLabeledColumn(ruleSet);
     datasetProfiler.computeProfileOfDataset();
-    datasetProfiler.generateReport(ReportGeneratorConstants.JSON_REPORT, "test.json");
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "test.txt");
   }
 }
