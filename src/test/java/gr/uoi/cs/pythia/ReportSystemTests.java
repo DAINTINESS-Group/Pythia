@@ -40,7 +40,6 @@ public class ReportSystemTests {
             });
 
     IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
-    System.out.println(getResource("people.json").getAbsolutePath());
     datasetProfiler.registerDataset("people", getResource("people.json").getAbsolutePath(), schema);
     DatasetProfile datasetProfile = datasetProfiler.computeProfileOfDataset();
     datasetProfile.setPath("");
