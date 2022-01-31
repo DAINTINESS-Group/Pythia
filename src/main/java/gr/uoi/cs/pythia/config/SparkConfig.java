@@ -3,9 +3,9 @@ package gr.uoi.cs.pythia.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class SparkConfig {
   private String master;
   private String appName;

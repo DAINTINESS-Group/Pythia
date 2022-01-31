@@ -45,10 +45,7 @@ public class UtilTests {
     columnProperties.add(new Column(2, "Test3", String.valueOf(DataTypes.StringType)));
     columnProperties.add(new Column(3, "Test4", String.valueOf(DataTypes.StringType)));
 
-    DatasetProfile test = new DatasetProfile();
-    test.setAlias("test");
-    test.setPath("test.json");
-    test.setColumns(columnProperties);
+    DatasetProfile test = new DatasetProfile("test", "test.json", columnProperties);
 
     List<String> actualFiltered =
         DatasetProfilerUtils.filterOutDatasetColumnsByTypes(

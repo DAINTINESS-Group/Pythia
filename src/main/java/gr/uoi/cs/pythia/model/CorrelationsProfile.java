@@ -1,16 +1,12 @@
 package gr.uoi.cs.pythia.model;
 
-import java.util.Map;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Map;
 
-@Getter
-@Setter
 @AllArgsConstructor
 public class CorrelationsProfile {
 
-  private Map<String, Double> allCorrelations;
+  private final Map<String, Double> allCorrelations;
 
   @Override
   public String toString() {

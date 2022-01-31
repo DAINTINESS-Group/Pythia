@@ -4,16 +4,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class DatasetProfile {
 
   private String alias;
-  private String path;
+  @Setter private String path;
   private List<Column> columns;
 
   @Override
