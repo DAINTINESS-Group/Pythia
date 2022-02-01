@@ -1,9 +1,7 @@
 package gr.uoi.cs.pythia.labeling;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
-@Data
 @AllArgsConstructor
 public class Rule {
   private String targetColumnName;

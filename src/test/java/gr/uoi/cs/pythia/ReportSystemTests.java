@@ -4,6 +4,7 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class ReportSystemTests {
 
   @Test
-  public void testProduceReportTxt() throws IOException {
+  public void testProduceReportTxt() throws IOException, AnalysisException {
     SparkConfig sparkConfig = new SparkConfig();
     SparkSession sparkSession =
         SparkSession.builder()

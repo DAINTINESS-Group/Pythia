@@ -15,19 +15,18 @@ and generates a report of the findings.
 
 ---
 
-#### Intellij IDEA Installation
-Requirements
-- You need to have [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) installed (Community edition is free)
+#### Intellij IDEA Installation Requirements
+- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) installed (Community edition is free)
 - Import the project as a Maven project and it runs out of the box
 
-#### Eclipse Installation
-Requirements
-- You need to have [**Eclipse**](https://www.eclipse.org/downloads/) installed
+#### Eclipse Installation Requirements
+- Install [**Eclipse**](https://www.eclipse.org/downloads/) installed
 - Import the project as a Maven project.
 
 _Note_: This project uses [**lombok**](https://projectlombok.org/) to generate boilerplate code at compile time
 
-- Follow the instructions at Lombok's official website to set it up in Eclipse
+- Follow the instructions at [**Lombok's official website**](https://projectlombok.org/setup/eclipse) 
+in the `Via eclipse plugin installer` section
 
 
 
@@ -55,4 +54,18 @@ The difference is that the all deps jar file is an uber jar so you can import Py
 To run with the driver Main method, navigate to the root folder of the repo:
 ~~~~
 java -jar target/Pythia-x.y.z-all-deps.jar
+~~~~
+
+### <div align="center">Code Formatter</div>
+
+---
+
+This project complies with Google's Java coding style and is formatted using the official [**Google java formatter**](https://github.com/google/google-java-format).
+You can follow the installation guide in the official GitHub repo to install it to your Editor.
+
+_Note:  Consider installing it and run it so that the project follows a coding style_
+
+In case you want to format all java files from the command line, run in the root folder of the project:
+~~~~shell
+java -jar google-java-format-x.y.z-all-deps.jar -i $(find . -type f -name "*.java")
 ~~~~

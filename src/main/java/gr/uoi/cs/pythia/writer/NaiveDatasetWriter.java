@@ -11,15 +11,12 @@ import org.apache.spark.sql.Row;
 public class NaiveDatasetWriter implements IDatasetWriter {
 
   @Override
-  public void write(Dataset<Row> dataset, String path) {
-    try (PrintWriter printWriter = new PrintWriter(new FileWriter(path))) {
-      printWriter.println(String.join(",", dataset.columns()));
-      for (Row row : dataset.collectAsList()) {
-        List<String> rowValues = getRowValues(row);
-        printWriter.println(String.join(",", rowValues));
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+  public void write(Dataset<Row> dataset, String path) throws IOException {
+    PrintWriter printWriter = new PrintWriter(new FileWriter(path));
+    printWriter.println(String.join(",", dataset.columns()));
+    for (Row row : dataset.collectAsList()) {
+      List<String> rowValues = getRowValues(row);
+      printWriter.println(String.join(",", rowValues));
     }
   }
 

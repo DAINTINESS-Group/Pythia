@@ -1,17 +1,17 @@
 package gr.uoi.cs.pythia.reader;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 
-@Data
+@AllArgsConstructor
 public class JsonDatasetReader implements IDatasetReader {
 
-  private final SparkSession sparkSession;
-  private final String path;
-  private final StructType schema;
+  private SparkSession sparkSession;
+  private String path;
+  private StructType schema;
 
   @Override
   public Dataset<Row> read() {

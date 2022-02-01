@@ -38,8 +38,13 @@ public class Main {
               new StructField("favorites", DataTypes.IntegerType, false, Metadata.empty()),
               new StructField("is_retweet", DataTypes.BooleanType, false, Metadata.empty()),
             });
-    datasetProfiler.registerDataset(
-        "peoples", String.format("data%stweets.csv", File.separator), schema);
+    try {
+      datasetProfiler.registerDataset(
+          "peoples", String.format("data%stweets.csv", File.separator), schema);
+    } catch (Exception e) {
+      System.out.println("Input file not found.");
+      return;
+    }
 
     List<Rule> rules = new ArrayList<>();
     rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 500, "low"));

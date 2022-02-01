@@ -3,9 +3,9 @@ package gr.uoi.cs.pythia.util;
 import java.io.Serializable;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class Pair<T> implements Serializable {
   private final T columnA, columnB;

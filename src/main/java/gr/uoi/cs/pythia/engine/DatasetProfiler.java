@@ -13,6 +13,7 @@ import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.log4j.Logger;
+import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -45,7 +47,8 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void registerDataset(String alias, String path, StructType schema) {
+  public void registerDataset(String alias, String path, StructType schema)
+      throws AnalysisException {
     dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
     List<String> columnNames =
         Arrays.stream(dataset.schema().fields())
@@ -143,7 +146,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void writeDataset(String datasetWriterType, String path) {
+  public void writeDataset(String datasetWriterType, String path) throws IOException {
     IDatasetWriterFactory.createDatasetWriter(datasetWriterType).write(dataset, path);
   }
 }

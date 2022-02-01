@@ -1,18 +1,18 @@
 package gr.uoi.cs.pythia.reader;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 
-@Data
+@AllArgsConstructor
 public class DelimiterSeparatedDataFrameReader implements IDatasetReader {
 
-  private final SparkSession sparkSession;
-  private final String path;
-  private final String separator;
-  private final StructType schema;
+  private SparkSession sparkSession;
+  private String path;
+  private String separator;
+  private StructType schema;
 
   public Dataset<Row> read() {
     return sparkSession
