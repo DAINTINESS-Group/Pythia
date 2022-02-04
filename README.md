@@ -34,7 +34,7 @@ in the `Via eclipse plugin installer` section
 The project uses a Maven wrapper so there is no need to install it to your system as long as you have the JAVA_HOME 
 environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/) installation folder.
 
-### <div align="center">Run with Maven</div>
+### <div align="center">Build with Maven</div>
 
 ---
 

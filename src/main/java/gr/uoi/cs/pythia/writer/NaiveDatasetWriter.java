@@ -12,12 +12,13 @@ public class NaiveDatasetWriter implements IDatasetWriter {
 
   @Override
   public void write(Dataset<Row> dataset, String path) throws IOException {
-    PrintWriter printWriter = new PrintWriter(new FileWriter(path));
+    PrintWriter printWriter = new PrintWriter(new FileWriter(path), true);
     printWriter.println(String.join(",", dataset.columns()));
     for (Row row : dataset.collectAsList()) {
       List<String> rowValues = getRowValues(row);
       printWriter.println(String.join(",", rowValues));
     }
+    printWriter.close();
   }
 
   private List<String> getRowValues(Row row) {
