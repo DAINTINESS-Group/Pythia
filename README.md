@@ -89,6 +89,7 @@ run in the command line_
 ---
 
 Sample Main class with API usage
+
 ```java
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -96,6 +97,7 @@ import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
@@ -105,43 +107,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
-        // Initialize a DatasetProfiler
-        IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+  public static void main(String[] args) throws AnalysisException {
+    // Initialize a DatasetProfiler
+    IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
 
-        // Specify input file schema
-        StructType schema =
+    // Specify input file schema
+    StructType schema =
             new StructType(
-                new StructField[] {
-                  new StructField("name", DataTypes.StringType, true, Metadata.empty()),
-                  new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
-                  new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
-                });
+                    new StructField[]{
+                            new StructField("name", DataTypes.StringType, true, Metadata.empty()),
+                            new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
+                            new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
+                    });
 
-        // Register the input file
-        try {
-            datasetProfiler.registerDataset("people", "people.csv", schema);
-        } catch (Exception e) {
-            // Do something if the file is not found
-        }
+    // Register the input file
+    datasetProfiler.registerDataset("people", "people.csv", schema);
 
-        // Specify labeling rules for a column
-        List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 10, "poor"));
-        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "mid"));
-        rules.add(new Rule("money", LabelingSystemConstants.GT, 20, "rich"));
+    // Specify labeling rules for a column
+    List<Rule> rules = new ArrayList<>();
+    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 10, "poor"));
+    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "mid"));
+    rules.add(new Rule("money", LabelingSystemConstants.GT, 20, "rich"));
 
-        // Create Ruleset and specify the new column name
-        RuleSet ruleSet = new RuleSet("money_labeled", rules);
-        
-        // Compute the new labeled column
-        datasetProfiler.computeLabeledColumn(ruleSet);
-        
-        // Compute the profile of the Dataset (this will take a while for big datasets)
-        datasetProfiler.computeProfileOfDataset();
+    // Create Ruleset and specify the new column name
+    RuleSet ruleSet = new RuleSet("money_labeled", rules);
 
-        // Generate a report (txt report in this case)
-        datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
-    }
+    // Compute the new labeled column
+    datasetProfiler.computeLabeledColumn(ruleSet);
+
+    // Compute the profile of the Dataset (this will take a while for big datasets)
+    datasetProfiler.computeProfileOfDataset();
+
+    // Generate a report (txt report in this case)
+    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
+  }
 }
 ```
