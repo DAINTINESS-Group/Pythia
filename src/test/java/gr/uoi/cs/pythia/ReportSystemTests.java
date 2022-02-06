@@ -16,6 +16,7 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.sparkproject.guava.io.Resources;
@@ -33,7 +34,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ReportSystemTests {
 
-  private SparkSession sparkSession;
+  private static SparkSession sparkSession;
 
   @Before
   public void init() {
@@ -61,10 +62,9 @@ public class ReportSystemTests {
     DatasetProfile datasetProfile = datasetProfiler.computeProfileOfDataset();
     datasetProfile.setPath("");
 
-    URL url = Resources.getResource("dummy_txt_report1.txt");
+    URL url = Resources.getResource("dummy_txt_report_tweets.txt");
     String text = Resources.toString(url, StandardCharsets.UTF_8);
-    assertEquals("File contents differ!", text, datasetProfile.toString());
-    sparkSession.stop();
+    assertEquals("File contents differ!", text.replace("\r", ""), datasetProfile.toString());
   }
 
   @Test
@@ -95,8 +95,12 @@ public class ReportSystemTests {
     List<Object> actual = dataset.select("_c3").toJavaRDD().map(row -> row.get(0)).collect();
     List<String> expected = new ArrayList<>(Arrays.asList("money_labeled", "poor", "mid", "rich"));
     assertEquals(expected, actual);
-    sparkSession.stop();
     assertTrue(testCsv.delete());
+  }
+
+  @AfterClass
+  public static void closeSparkSession() {
+    sparkSession.stop();
   }
 
   private File getResource(String resourceName) {

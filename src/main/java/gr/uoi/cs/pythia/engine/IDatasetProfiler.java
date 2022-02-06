@@ -10,7 +10,7 @@ public interface IDatasetProfiler {
 
   void registerDataset(String alias, String path, StructType schema) throws AnalysisException;
 
-  void computeLabeledColumn(RuleSet ruleSet);
+  void computeLabeledColumn(RuleSet ruleSet) throws AnalysisException;
 
   DatasetProfile computeProfileOfDataset();
 

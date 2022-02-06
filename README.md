@@ -113,9 +113,9 @@ public class Main {
         StructType schema =
             new StructType(
                 new StructField[] {
-                  new StructField("name", DataTypes.StringType, false, Metadata.empty()),
-                  new StructField("age", DataTypes.IntegerType, false, Metadata.empty()),
-                  new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
+                  new StructField("name", DataTypes.StringType, true, Metadata.empty()),
+                  new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
+                  new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
                 });
 
         // Register the input file

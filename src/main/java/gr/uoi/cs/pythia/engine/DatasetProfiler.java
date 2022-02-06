@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.engine;
 
 import static org.apache.spark.sql.functions.expr;
+import static org.apache.spark.sql.functions.max;
 import static org.apache.spark.sql.types.DataTypes.StringType;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
@@ -116,7 +117,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void computeLabeledColumn(RuleSet ruleSet) {
+  public void computeLabeledColumn(RuleSet ruleSet) throws AnalysisException {
     String newColumnName = ruleSet.getNewColumnName();
     String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
     dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
