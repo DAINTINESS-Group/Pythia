@@ -1,7 +1,6 @@
 package gr.uoi.cs.pythia.engine;
 
 import static org.apache.spark.sql.functions.expr;
-import static org.apache.spark.sql.functions.max;
 import static org.apache.spark.sql.types.DataTypes.StringType;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
