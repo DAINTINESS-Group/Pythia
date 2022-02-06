@@ -6,52 +6,61 @@
 
 #### <div align="center">Java library that produces an automated statistical profile of an input dataset.</div>
 
-A standard dataset is just a text file, with lines, where each line is a record, the fields of which
-are separated by a separator (eg. tabs, comma, pipe, etc).
-After registering a data set, the system produces a 100% automatic statistical profile of the dataset
-and generates a report of the findings.
+A standard dataset is just a text file, with lines, where each line is a record, the fields of which are separated by a
+separator (eg. tabs, comma, pipe, etc). After registering a data set, the system produces a 100% automatic statistical
+profile of the dataset and generates a report of the findings.
 
 ### <div align="center">Setup</div>
 
 ---
 
 #### Intellij IDEA Installation Requirements
-- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) installed (Community edition is free)
+
+- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) installed (Community edition is
+  free)
 - Import the project as a Maven project and it runs out of the box
 
 #### Eclipse Installation Requirements
+
 - Install [**Eclipse**](https://www.eclipse.org/downloads/) installed
 - Import the project as a Maven project.
 
 _Note_: This project uses [**lombok**](https://projectlombok.org/) to generate boilerplate code at compile time
 
-- Follow the instructions at [**Lombok's official website**](https://projectlombok.org/setup/eclipse) 
-in the `Via eclipse plugin installer` section
-
-
+- Follow the instructions at [**Lombok's official website**](https://projectlombok.org/setup/eclipse)
+  in the `Via eclipse plugin installer` section
 
 #### Maven
-The project uses a Maven wrapper so there is no need to install it to your system as long as you have the JAVA_HOME 
-environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/) installation folder.
+
+The project uses a Maven wrapper so there is no need to install it to your system as long as you have the JAVA_HOME
+environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/) installation
+folder.
 
 ### <div align="center">Build with Maven</div>
 
 ---
 
 Navigate to the root folder of the repo and run,
+
 ~~~~
 ./mvnw clean install
 ~~~~
+
 and wait for the procedure to finish
 
 After that, there should be a folder called `target` that has two jar files:
+
 ~~~~
 Pythia-x.y.z-all-deps.jar and Pythia-x.y.z.jar
 ~~~~
-The difference is that the all deps jar file is an uber jar so you can import Pythia to a project and run it out of the box. (All dependecies are embedded into the all deps jar)
+
+The difference is that the all deps jar file is an uber jar so you can import Pythia to a project and run it out of the
+box. (All dependecies are embedded into the all deps jar)
+
 * Otherwise you will need to provide the Pythia dependencies to your pom.xml file.
 
 To run with the driver Main method, navigate to the root folder of the repo:
+
 ~~~~
 java -jar target/Pythia-x.y.z-all-deps.jar
 ~~~~
@@ -60,12 +69,79 @@ java -jar target/Pythia-x.y.z-all-deps.jar
 
 ---
 
-This project complies with Google's Java coding style and is formatted using the official [**Google java formatter**](https://github.com/google/google-java-format).
-You can follow the installation guide in the official GitHub repo to install it to your Editor.
+This project complies with Google's Java coding style and is formatted using the official [**Google java
+formatter**](https://github.com/google/google-java-format). You can follow the installation guide in the official GitHub
+repo to install it to your Editor.
 
 _Note:  Consider installing it and run it so that the project follows a coding style_
 
 In case you want to format all java files from the command line, run in the root folder of the project:
+
 ~~~~shell
 java -jar google-java-format-x.y.z-all-deps.jar -i $(find . -type f -name "*.java")
 ~~~~
+
+_Note: The formatter needs a [**Java 11**](https://www.oracle.com/java/technologies/downloads/#java11) installation to
+run in the command line_
+
+### <div align="center">Usage</div>
+
+---
+
+Sample Main class with API usage
+```java
+import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
+import gr.uoi.cs.pythia.labeling.Rule;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        // Initialize a DatasetProfiler
+        IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+
+        // Specify input file schema
+        StructType schema =
+            new StructType(
+                new StructField[] {
+                  new StructField("name", DataTypes.StringType, false, Metadata.empty()),
+                  new StructField("age", DataTypes.IntegerType, false, Metadata.empty()),
+                  new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
+                });
+
+        // Register the input file
+        try {
+            datasetProfiler.registerDataset("people", "people.csv", schema);
+        } catch (Exception e) {
+            // Do something if the file is not found
+        }
+
+        // Specify labeling rules for a column
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 10, "poor"));
+        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "mid"));
+        rules.add(new Rule("money", LabelingSystemConstants.GT, 20, "rich"));
+
+        // Create Ruleset and specify the new column name
+        RuleSet ruleSet = new RuleSet("money_labeled", rules);
+        
+        // Compute the new labeled column
+        datasetProfiler.computeLabeledColumn(ruleSet);
+        
+        // Compute the profile of the Dataset (this will take a while for big datasets)
+        datasetProfiler.computeProfileOfDataset();
+
+        // Generate a report (txt report in this case)
+        datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
+    }
+}
+```
