@@ -16,10 +16,10 @@ public class IDatasetReaderFactory {
     String fileExtension = Files.getFileExtension(path);
     switch (fileExtension) {
       case DatasetReaderConstants.CSV:
-        return new DelimiterSeparatedDataFrameReader(
+        return new DelimiterSeparatedDatasetReader(
             sparkSession, path, DatasetReaderConstants.CSV_DELIMITER, schema);
       case DatasetReaderConstants.TSV:
-        return new DelimiterSeparatedDataFrameReader(
+        return new DelimiterSeparatedDatasetReader(
             sparkSession, path, DatasetReaderConstants.TSV_DELIMITER, schema);
       case DatasetReaderConstants.JSON:
         return new JsonDatasetReader(sparkSession, path, schema);

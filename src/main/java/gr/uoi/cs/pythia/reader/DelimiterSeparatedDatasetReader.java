@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 
 @AllArgsConstructor
-public class DelimiterSeparatedDataFrameReader implements IDatasetReader {
+public class DelimiterSeparatedDatasetReader implements IDatasetReader {
 
   private SparkSession sparkSession;
   private String path;

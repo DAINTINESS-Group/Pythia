@@ -7,8 +7,6 @@ import gr.uoi.cs.pythia.util.Pair;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
@@ -19,13 +17,11 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-@Getter
-@Setter
 public class DecisionTreeBuilder {
 
-  private String[] featureColumnNames;
-  private Map<String, String> indexedLabelsToActualValues;
-  private double accuracy;
+  private final String[] featureColumnNames;
+  private final Map<String, String> indexedLabelsToActualValues;
+  private final double accuracy;
   private String decisionTreeVisualization;
 
   public DecisionTreeBuilder(
