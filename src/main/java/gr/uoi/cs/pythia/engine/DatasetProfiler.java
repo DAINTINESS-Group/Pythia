@@ -7,7 +7,6 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.labeling.SparkSqlExpressionGenerator;
 import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
@@ -118,8 +117,8 @@ public class DatasetProfiler implements IDatasetProfiler {
   @Override
   public void computeLabeledColumn(RuleSet ruleSet) throws AnalysisException {
     String newColumnName = ruleSet.getNewColumnName();
-    String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
-    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
+    String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
+    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
     logger.info(String.format("Computed labeled column %s", newColumnName));
 
     DecisionTreeBuilder decisionTreeBuilderForLabeledColumn =

@@ -7,7 +7,6 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.labeling.SparkSqlExpressionGenerator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,8 +49,6 @@ public class LabelingSystemTests {
   @Test
   public void testRuleSetCreation() {
     RuleSet ruleSet = new RuleSet("age_labeled", rules);
-    SparkSqlExpressionGenerator sparkSqlExpressionGenerator =
-        new SparkSqlExpressionGenerator(ruleSet);
     String expected =
         "CASE WHEN age <= '17' THEN 'kid' "
             + "WHEN age <= '30' THEN 'adult' "
@@ -61,7 +58,7 @@ public class LabelingSystemTests {
             + "WHEN age > '90' THEN 'lucky one' "
             + "END";
 
-    assertEquals(expected, sparkSqlExpressionGenerator.generateExpression());
+    assertEquals(expected, ruleSet.generateSparkSqlExpression());
   }
 
   @Test
@@ -87,7 +84,7 @@ public class LabelingSystemTests {
     Dataset<Row> df = sparkSession.createDataFrame(data, schema);
 
     RuleSet ruleSet = new RuleSet("age_labeled", rules);
-    String expression = new SparkSqlExpressionGenerator(ruleSet).generateExpression();
+    String expression = ruleSet.generateSparkSqlExpression();
     df = df.withColumn(ruleSet.getNewColumnName(), expr(expression));
     df.show();
     List<Object> actual = df.select("age_labeled").toJavaRDD().map(row -> row.get(0)).collect();

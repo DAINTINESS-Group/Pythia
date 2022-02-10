@@ -87,8 +87,37 @@ run in the command line_
 ### <div align="center">Usage</div>
 
 ---
+Suppose we want to generate a statistical profile of the following file:
 
-Sample Main class with API usage
+<table>
+<thead>
+	<tr>
+		<th>name</th>
+		<th>age</th>
+		<th>money</th>
+	</tr>
+</thead>
+<tbody>
+	<tr>
+		<td>Michael</td>
+		<td>25</td>
+		<td>20</td>
+	</tr>
+	<tr>
+		<td>Andy</td>
+		<td>30</td>
+		<td>1000</td>
+	</tr>
+    <tr>
+		<td>Justin</td>
+		<td>65</td>
+		<td>10000</td>
+	</tr>
+</tbody>
+</table>
+
+
+Sample Main class with API usage for the file above
 
 ```java
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
@@ -107,39 +136,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-  public static void main(String[] args) throws AnalysisException {
-    // Initialize a DatasetProfiler
-    IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+    public static void main(String[] args) throws AnalysisException {
+        // Initialize a DatasetProfiler
+        IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
 
-    // Specify input file schema
-    StructType schema =
-            new StructType(
-                    new StructField[]{
-                            new StructField("name", DataTypes.StringType, true, Metadata.empty()),
-                            new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
-                            new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
-                    });
+        // Specify input file schema
+        StructType schema =
+                new StructType(
+                        new StructField[]{
+                                new StructField("name", DataTypes.StringType, true, Metadata.empty()),
+                                new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
+                                new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
+                        });
 
-    // Register the input file
-    datasetProfiler.registerDataset("people", "people.csv", schema);
+        // Register the input file
+        datasetProfiler.registerDataset("people", "people.csv", schema);
 
-    // Specify labeling rules for a column
-    List<Rule> rules = new ArrayList<>();
-    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 10, "poor"));
-    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "mid"));
-    rules.add(new Rule("money", LabelingSystemConstants.GT, 20, "rich"));
+        // Specify labeling rules for a column
+        List<Rule> rules = new ArrayList<>();
+        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "poor"));
+        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 1000, "mid"));
+        rules.add(new Rule("money", LabelingSystemConstants.GT, 1000, "rich"));
 
-    // Create Ruleset and specify the new column name
-    RuleSet ruleSet = new RuleSet("money_labeled", rules);
+        // Create Ruleset and specify the new column name
+        RuleSet ruleSet = new RuleSet("money_labeled", rules);
 
-    // Compute the new labeled column
-    datasetProfiler.computeLabeledColumn(ruleSet);
+        // Compute the new labeled column
+        datasetProfiler.computeLabeledColumn(ruleSet);
 
-    // Compute the profile of the Dataset (this will take a while for big datasets)
-    datasetProfiler.computeProfileOfDataset();
+        // Compute the profile of the Dataset (this will take a while for big datasets)
+        datasetProfiler.computeProfileOfDataset();
 
-    // Generate a report (txt report in this case)
-    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
-  }
+        // Generate a report (txt report in this case)
+        datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
+    }
 }
 ```
