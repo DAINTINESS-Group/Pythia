@@ -36,7 +36,7 @@ The project uses a Maven wrapper so there is no need to install it to your syste
 environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/) installation
 folder.
 
-### <div align="center">Build with Maven</div>
+### <div align="center">🛠️ Build with Maven</div>
 
 ---
 
@@ -48,7 +48,7 @@ Navigate to the root folder of the repo and run,
 
 and wait for the procedure to finish
 
-After that, there should be a folder called `target` that has two jar files:
+After that, there should be a folder called `target` that includes two jar files:
 
 ~~~~
 Pythia-x.y.z-all-deps.jar and Pythia-x.y.z.jar
@@ -63,6 +63,15 @@ To run with the driver Main method, navigate to the root folder of the repo:
 
 ~~~~
 java -jar target/Pythia-x.y.z-all-deps.jar
+~~~~
+
+### <div align="center">🧪 Run tests</div>
+
+---
+
+Navigate to the root folder of the repo and run,
+~~~~
+./mvnw test
 ~~~~
 
 ### <div align="center">Code Formatter</div>
