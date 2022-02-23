@@ -7,6 +7,7 @@ import gr.uoi.cs.pythia.util.DatasetProfilerUtils;
 import gr.uoi.cs.pythia.util.Pair;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,14 +19,16 @@ public class PearsonCorrelationsCalculator implements ICorrelationsCalculator {
 
   @Override
   public void calculateAllPairsCorrelations(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+    Set<String> supportedDataTypes =
+        new HashSet<>(
+            Arrays.asList(
+                String.valueOf(DataTypes.IntegerType),
+                String.valueOf(DataTypes.DoubleType),
+                String.valueOf(DataTypes.FloatType),
+                String.valueOf(DataTypes.LongType),
+                String.valueOf(DataTypes.ShortType)));
     List<String> columnNames =
-        DatasetProfilerUtils.filterOutDatasetColumnsByTypes(
-            datasetProfile,
-            new HashSet<>(
-                Arrays.asList(
-                    String.valueOf(DataTypes.StringType),
-                    String.valueOf(DataTypes.TimestampType),
-                    String.valueOf(DataTypes.BooleanType))));
+        DatasetProfilerUtils.filterOutDatasetColumnsByTypes(datasetProfile, supportedDataTypes);
 
     List<Pair<String>> allPairs = DatasetProfilerUtils.calculateAllPairsOfColumns(columnNames);
 

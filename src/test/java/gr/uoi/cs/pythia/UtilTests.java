@@ -52,8 +52,11 @@ public class UtilTests {
             test,
             new HashSet<>(
                 Arrays.asList(
-                    String.valueOf(DataTypes.StringType),
-                    String.valueOf(DataTypes.TimestampType))));
+                    String.valueOf(DataTypes.IntegerType),
+                    String.valueOf(DataTypes.DoubleType),
+                    String.valueOf(DataTypes.FloatType),
+                    String.valueOf(DataTypes.LongType),
+                    String.valueOf(DataTypes.ShortType))));
     assertEquals(actualFiltered, Collections.singletonList("Test2"));
   }
 

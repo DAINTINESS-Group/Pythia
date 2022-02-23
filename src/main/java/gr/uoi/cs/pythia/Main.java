@@ -41,7 +41,10 @@ public class Main {
             });
 
     datasetProfiler.registerDataset(
-        "tweets", String.format("data%stweets.csv", File.separator), schema);
+        "tweets",
+        String.format(
+            "src%stest%sresources%stweets.csv", File.separator, File.separator, File.separator),
+        schema);
 
     List<Rule> rules = new ArrayList<>();
     rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 500, "low"));

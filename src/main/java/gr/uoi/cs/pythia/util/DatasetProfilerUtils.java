@@ -18,7 +18,7 @@ public class DatasetProfilerUtils {
   public static List<String> filterOutDatasetColumnsByTypes(
       DatasetProfile datasetProfile, Set<String> dataTypes) {
     return datasetProfile.getColumns().stream()
-        .filter(columnProperty -> !dataTypes.contains(columnProperty.getDatatype()))
+        .filter(columnProperty -> dataTypes.contains(columnProperty.getDatatype()))
         .map(Column::getName)
         .collect(Collectors.toList());
   }

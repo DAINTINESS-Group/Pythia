@@ -6,7 +6,7 @@ import org.sparkproject.guava.io.Files;
 
 public class IDatasetReaderFactory {
 
-  SparkSession sparkSession;
+  private final SparkSession sparkSession;
 
   public IDatasetReaderFactory(SparkSession sparkSession) {
     this.sparkSession = sparkSession;
