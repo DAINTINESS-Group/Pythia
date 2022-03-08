@@ -16,19 +16,19 @@ profile of the dataset and generates a report of the findings.
 
 #### Intellij IDEA Installation Requirements
 
-- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) installed (Community edition is
+- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) (Community edition is
   free)
-- Import the project as a Maven project and it runs out of the box
+- Import the project as a Maven project, and it runs out of the box
 
 #### Eclipse Installation Requirements
 
-- Install [**Eclipse**](https://www.eclipse.org/downloads/) installed
+- Install [**Eclipse**](https://www.eclipse.org/downloads/)
 - Import the project as a Maven project.
 
 _Note_: This project uses [**lombok**](https://projectlombok.org/) to generate boilerplate code at compile time
 
 - Follow the instructions at [**Lombok's official website**](https://projectlombok.org/setup/eclipse)
-  in the `Via eclipse plugin installer` section
+  in the `Via eclipse plugin installer` section to install it in Eclipse
 
 #### Maven
 
