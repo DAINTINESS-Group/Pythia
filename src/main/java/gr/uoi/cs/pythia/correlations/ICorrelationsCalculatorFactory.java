@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.correlations;
 
 public class ICorrelationsCalculatorFactory {
 
-  public static ICorrelationsCalculator createCorrelationsCalculator(String type) {
+  public ICorrelationsCalculator createCorrelationsCalculator(String type) {
     switch (type) {
       case CorrelationsSystemConstants.PEARSON:
         return new PearsonCorrelationsCalculator();

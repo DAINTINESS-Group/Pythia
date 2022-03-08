@@ -7,11 +7,10 @@ import java.io.PrintWriter;
 
 public class TxtReportGenerator implements IReportGenerator {
 
-  public void produceReport(DatasetProfile datasetProfile, String path) {
-    try (PrintWriter printWriter = new PrintWriter(new FileWriter(path))) {
-      printWriter.write(datasetProfile.toString());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public void produceReport(DatasetProfile datasetProfile, String path) throws IOException {
+    PrintWriter printWriter = new PrintWriter(new FileWriter(path));
+    printWriter.write(datasetProfile.toString());
+    printWriter.flush();
+    printWriter.close();
   }
 }

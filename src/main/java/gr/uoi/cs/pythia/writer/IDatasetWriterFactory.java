@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.writer;
 
 public class IDatasetWriterFactory {
 
-  public static IDatasetWriter createDatasetWriter(String type) {
+  public IDatasetWriter createDatasetWriter(String type) {
     switch (type) {
       case DatasetWriterConstants.HADOOP:
         return new HadoopDatasetWriter();

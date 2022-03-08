@@ -57,7 +57,7 @@ public class ReportSystemTests {
               new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
             });
 
-    IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+    IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
     datasetProfiler.registerDataset("people", getResource("people.json").getAbsolutePath(), schema);
     DatasetProfile datasetProfile = datasetProfiler.computeProfileOfDataset();
     datasetProfile.setPath("");
@@ -77,7 +77,7 @@ public class ReportSystemTests {
               new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
             });
 
-    IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+    IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
     datasetProfiler.registerDataset("people", getResource("people.json").getAbsolutePath(), schema);
 
     List<Rule> rules = new ArrayList<>();

@@ -14,7 +14,7 @@ public interface IDatasetProfiler {
 
   DatasetProfile computeProfileOfDataset();
 
-  void generateReport(String reportGeneratorType, String path);
+  void generateReport(String reportGeneratorType, String path) throws IOException;
 
   void writeDataset(String datasetWriterType, String path) throws IOException;
 }

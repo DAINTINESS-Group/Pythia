@@ -1,21 +1,40 @@
 package gr.uoi.cs.pythia.model;
 
-import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class LabeledColumn extends Column {
 
-  private DecisionTreeBuilder decisionTree;
+  private double decisionTreeAccuracy;
+  private String[] featureColumnNames;
+  private String decisionTreeVisualization;
 
   public LabeledColumn(
-      int position, String datatype, String newColumnName, DecisionTreeBuilder decisionTree) {
+      int position,
+      String datatype,
+      String newColumnName,
+      double decisionTreeAccuracy,
+      String[] featureColumnNames,
+      String decisionTreeVisualization) {
     super(position, newColumnName, datatype);
-    this.decisionTree = decisionTree;
+    this.decisionTreeAccuracy = decisionTreeAccuracy;
+    this.featureColumnNames = featureColumnNames;
+    this.decisionTreeVisualization = decisionTreeVisualization;
   }
 
   @Override
   public String toString() {
-    return super.toString() + decisionTree + "\n";
+    return super.toString()
+        + "\nDecisionTree\n"
+        + "featureColumnNames="
+        + Arrays.toString(featureColumnNames)
+        + "\n"
+        + "accuracy="
+        + decisionTreeAccuracy
+        + "\n"
+        + "decisionTreeVisualization='"
+        + decisionTreeVisualization
+        + "\n";
   }
 }

@@ -16,8 +16,7 @@ profile of the dataset and generates a report of the findings.
 
 #### Intellij IDEA Installation Requirements
 
-- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) (Community edition is
-  free)
+- Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) (Community edition is free)
 - Import the project as a Maven project, and it runs out of the box
 
 #### Eclipse Installation Requirements
@@ -70,6 +69,7 @@ java -jar target/Pythia-x.y.z-all-deps.jar
 ---
 
 Navigate to the root folder of the repo and run,
+
 ~~~~
 ./mvnw test
 ~~~~
@@ -112,6 +112,11 @@ Suppose we want to generate a statistical profile of the following file:
 		<td>25</td>
 		<td>20</td>
 	</tr>
+    <tr>
+		<td>John</td>
+		<td>21</td>
+		<td>15</td>
+	</tr>
 	<tr>
 		<td>Andy</td>
 		<td>30</td>
@@ -141,13 +146,14 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws AnalysisException {
+    public static void main(String[] args) throws AnalysisException, IOException {
         // Initialize a DatasetProfiler
-        IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+        IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 
         // Specify input file schema
         StructType schema =
@@ -162,10 +168,12 @@ public class Main {
         datasetProfiler.registerDataset("people", "people.csv", schema);
 
         // Specify labeling rules for a column
-        List<Rule> rules = new ArrayList<>();
-        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "poor"));
-        rules.add(new Rule("money", LabelingSystemConstants.LEQ, 1000, "mid"));
-        rules.add(new Rule("money", LabelingSystemConstants.GT, 1000, "rich"));
+        List<Rule> rules =
+                new ArrayList<Rule>(
+                        Arrays.asList(
+                                new Rule("money", LabelingSystemConstants.LEQ, 20, "poor"),
+                                new Rule("money", LabelingSystemConstants.LEQ, 1000, "mid"),
+                                new Rule("money", LabelingSystemConstants.GT, 1000, "rich")));
 
         // Create Ruleset and specify the new column name
         RuleSet ruleSet = new RuleSet("money_labeled", rules);

@@ -12,12 +12,14 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-  public static void main(String[] args) throws AnalysisException {
-    IDatasetProfiler datasetProfiler = IDatasetProfilerFactory.createDatasetProfiler();
+  public static void main(String[] args) throws AnalysisException, IOException {
+    IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 
     StructType schema =
         new StructType(
@@ -46,13 +48,14 @@ public class Main {
             "src%stest%sresources%stweets.csv", File.separator, File.separator, File.separator),
         schema);
 
-    List<Rule> rules = new ArrayList<>();
-    rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 500, "low"));
-    rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 10000, "rel_low"));
-    rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 100000, "medium"));
-    rules.add(new Rule("user_followers", LabelingSystemConstants.LEQ, 500000, "high"));
-    rules.add(new Rule("user_followers", LabelingSystemConstants.GEQ, 500000, "super_high"));
-
+    List<Rule> rules =
+        new ArrayList<>(
+            Arrays.asList(
+                new Rule("user_followers", LabelingSystemConstants.LEQ, 500, "low"),
+                new Rule("user_followers", LabelingSystemConstants.LEQ, 10000, "rel_low"),
+                new Rule("user_followers", LabelingSystemConstants.LEQ, 100000, "medium"),
+                new Rule("user_followers", LabelingSystemConstants.LEQ, 500000, "high"),
+                new Rule("user_followers", LabelingSystemConstants.GEQ, 500000, "super_high")));
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
     datasetProfiler.computeProfileOfDataset();

@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.engine;
 
 public class IDatasetProfilerFactory {
 
-  public static IDatasetProfiler createDatasetProfiler() {
+  public IDatasetProfiler createDatasetProfiler() {
     return new DatasetProfiler();
   }
 }

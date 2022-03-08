@@ -4,9 +4,9 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.util.DatasetProfilerUtils;
 import gr.uoi.cs.pythia.util.Pair;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Getter;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
@@ -19,10 +19,9 @@ import org.apache.spark.sql.Row;
 
 public class DecisionTreeBuilder {
 
-  private final String[] featureColumnNames;
-  private final Map<String, String> indexedLabelsToActualValues;
-  private final double accuracy;
-  private String decisionTreeVisualization;
+  @Getter private final String[] featureColumnNames;
+  @Getter private final double accuracy;
+  @Getter private String decisionTreeVisualization;
 
   public DecisionTreeBuilder(
       Dataset<Row> dataset, DatasetProfile datasetProfile, String labeledColumnName) {
@@ -86,7 +85,7 @@ public class DecisionTreeBuilder {
             .setMetricName("accuracy");
     accuracy = evaluator.evaluate(predictions);
 
-    indexedLabelsToActualValues =
+    Map<String, String> indexedLabelsToActualValues =
         indexToString
             .toJavaRDD()
             .map(
@@ -107,22 +106,5 @@ public class DecisionTreeBuilder {
           decisionTreeVisualization.replace(
               "Predict: " + entry.getKey(), "Predict: " + entry.getValue());
     }
-  }
-
-  @Override
-  public String toString() {
-    return "\nDecisionTree\n"
-        + "featureColumnNames="
-        + Arrays.toString(featureColumnNames)
-        + "\n"
-        + "indexedLabelsToActualValues="
-        + indexedLabelsToActualValues
-        + "\n"
-        + "accuracy="
-        + accuracy
-        + "\n"
-        + "decisionTreeVisualization='"
-        + decisionTreeVisualization
-        + "\n";
   }
 }

@@ -109,7 +109,8 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void computeAllPairsCorrelations() {
-    ICorrelationsCalculatorFactory.createCorrelationsCalculator(CorrelationsSystemConstants.PEARSON)
+    new ICorrelationsCalculatorFactory()
+        .createCorrelationsCalculator(CorrelationsSystemConstants.PEARSON)
         .calculateAllPairsCorrelations(dataset, datasetProfile);
     logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
   }
@@ -121,22 +122,25 @@ public class DatasetProfiler implements IDatasetProfiler {
     dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
     logger.info(String.format("Computed labeled column %s", newColumnName));
 
-    DecisionTreeBuilder decisionTreeBuilderForLabeledColumn =
+    DecisionTreeBuilder decisionTreeBuilder =
         new DecisionTreeBuilder(dataset, datasetProfile, newColumnName);
     logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
 
     List<Column> columns = datasetProfile.getColumns();
     columns.add(
         new LabeledColumn(
-            columns.get(columns.size() - 1).getPosition(),
+            columns.get(columns.size() - 1).getPosition() + 1,
             StringType.toString(),
             newColumnName,
-            decisionTreeBuilderForLabeledColumn));
+            decisionTreeBuilder.getAccuracy(),
+            decisionTreeBuilder.getFeatureColumnNames(),
+            decisionTreeBuilder.getDecisionTreeVisualization()));
   }
 
   @Override
-  public void generateReport(String reportGeneratorType, String path) {
-    IReportGeneratorFactory.createReportGenerator(reportGeneratorType)
+  public void generateReport(String reportGeneratorType, String path) throws IOException {
+    new IReportGeneratorFactory()
+        .createReportGenerator(reportGeneratorType)
         .produceReport(datasetProfile, path);
     logger.info(
         String.format(
@@ -146,6 +150,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void writeDataset(String datasetWriterType, String path) throws IOException {
-    IDatasetWriterFactory.createDatasetWriter(datasetWriterType).write(dataset, path);
+    new IDatasetWriterFactory().createDatasetWriter(datasetWriterType).write(dataset, path);
+    logger.info(
+        String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
   }
 }

@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.report;
 
 public class IReportGeneratorFactory {
 
-  public static IReportGenerator createReportGenerator(String type) {
+  public IReportGenerator createReportGenerator(String type) {
     switch (type) {
       case ReportGeneratorConstants.TXT_REPORT:
         return new TxtReportGenerator();
