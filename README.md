@@ -32,7 +32,7 @@ _Note_: This project uses [**lombok**](https://projectlombok.org/) to generate b
 #### Maven
 
 The project uses a Maven wrapper so there is no need to install it to your system as long as you have the JAVA_HOME
-environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/) installation
+environmental variable pointing to your [**Java 8**](https://www.oracle.com/java/technologies/downloads/archive/) installation
 folder.
 
 ### <div align="center">🛠️ Build with Maven</div>
