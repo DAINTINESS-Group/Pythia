@@ -129,7 +129,7 @@ public class DatasetProfiler implements IDatasetProfiler {
     List<Column> columns = datasetProfile.getColumns();
     columns.add(
         new LabeledColumn(
-            columns.get(columns.size() - 1).getPosition() + 1,
+            columns.size(),
             StringType.toString(),
             newColumnName,
             decisionTreeBuilder.getAccuracy(),
