@@ -1,8 +1,5 @@
 package gr.uoi.cs.pythia.model;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public class DescriptiveStatisticsProfile {
 
   private final String count;
@@ -11,6 +8,15 @@ public class DescriptiveStatisticsProfile {
   private final String median;
   private final String min;
   private final String max;
+
+  public DescriptiveStatisticsProfile(String count, String mean, String standardDeviation, String median, String min, String max) {
+    this.count = count;
+    this.mean = mean;
+    this.standardDeviation = standardDeviation;
+    this.median = median;
+    this.min = min;
+    this.max = max;
+  }
 
   @Override
   public String toString() {

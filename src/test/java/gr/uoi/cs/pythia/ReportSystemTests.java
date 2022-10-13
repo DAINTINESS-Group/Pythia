@@ -8,6 +8,7 @@ import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.writer.DatasetWriterConstants;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -48,7 +49,7 @@ public class ReportSystemTests {
   }
 
   @Test
-  public void testProduceReportTxt() throws IOException, AnalysisException {
+  public void testProduceReportTxt() throws IOException, AnalysisException, IllegalAccessException {
     StructType schema =
         new StructType(
             new StructField[] {
@@ -60,7 +61,7 @@ public class ReportSystemTests {
     IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
     datasetProfiler.registerDataset("people", getResource("people.json").getAbsolutePath(), schema);
     DatasetProfile datasetProfile = datasetProfiler.computeProfileOfDataset();
-    datasetProfile.setPath("");
+    FieldUtils.writeField(datasetProfile, "path", "", true);
 
     URL url = Resources.getResource("dummy_txt_report_tweets.txt");
     String text = Resources.toString(url, StandardCharsets.UTF_8);

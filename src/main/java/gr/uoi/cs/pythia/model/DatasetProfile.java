@@ -1,17 +1,30 @@
 package gr.uoi.cs.pythia.model;
 
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.AllArgsConstructor;
 
-@Getter
-@AllArgsConstructor
 public class DatasetProfile {
 
   private String alias;
-  @Setter private String path;
+  private String path;
   private List<Column> columns;
+
+  public DatasetProfile(String alias, String path, List<Column> columns) {
+    this.alias = alias;
+    this.path = path;
+    this.columns = columns;
+  }
+
+  public String getAlias() {
+    return alias;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public List<Column> getColumns() {
+    return columns;
+  }
 
   @Override
   public String toString() {

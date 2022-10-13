@@ -116,7 +116,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void computeLabeledColumn(RuleSet ruleSet) throws AnalysisException {
+  public void computeLabeledColumn(RuleSet ruleSet) {
     String newColumnName = ruleSet.getNewColumnName();
     String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
     dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));

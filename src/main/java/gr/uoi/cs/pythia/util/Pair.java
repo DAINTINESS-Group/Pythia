@@ -2,13 +2,22 @@ package gr.uoi.cs.pythia.util;
 
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 public class Pair<T> implements Serializable {
   private final T columnA, columnB;
+
+  public Pair(T columnA, T columnB) {
+    this.columnA = columnA;
+    this.columnB = columnB;
+  }
+
+  public T getColumnA() {
+    return columnA;
+  }
+
+  public T getColumnB() {
+    return columnB;
+  }
 
   @Override
   public boolean equals(Object obj) {

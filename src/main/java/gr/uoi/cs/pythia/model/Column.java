@@ -1,23 +1,33 @@
 package gr.uoi.cs.pythia.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@NoArgsConstructor
 public class Column {
 
   private int position;
   private String name;
   private String datatype;
-  @Setter private CorrelationsProfile correlationsProfile;
-  @Setter private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
+  private CorrelationsProfile correlationsProfile;
+  private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
     this.name = name;
     this.datatype = datatype;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDatatype() {
+    return datatype;
+  }
+
+  public void setCorrelationsProfile(CorrelationsProfile correlationsProfile) {
+    this.correlationsProfile = correlationsProfile;
+  }
+
+  public void setDescriptiveStatisticsProfile(DescriptiveStatisticsProfile descriptiveStatisticsProfile) {
+    this.descriptiveStatisticsProfile = descriptiveStatisticsProfile;
   }
 
   @Override

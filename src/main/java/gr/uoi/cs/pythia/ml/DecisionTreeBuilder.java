@@ -6,7 +6,6 @@ import gr.uoi.cs.pythia.util.DatasetProfilerUtils;
 import gr.uoi.cs.pythia.util.Pair;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
@@ -19,9 +18,9 @@ import org.apache.spark.sql.Row;
 
 public class DecisionTreeBuilder {
 
-  @Getter private final String[] featureColumnNames;
-  @Getter private final double accuracy;
-  @Getter private String decisionTreeVisualization;
+  private final String[] featureColumnNames;
+  private final double accuracy;
+  private String decisionTreeVisualization;
 
   public DecisionTreeBuilder(
       Dataset<Row> dataset, DatasetProfile datasetProfile, String labeledColumnName) {
@@ -107,4 +106,17 @@ public class DecisionTreeBuilder {
               "Predict: " + entry.getKey(), "Predict: " + entry.getValue());
     }
   }
+
+  public String[] getFeatureColumnNames() {
+    return featureColumnNames;
+  }
+
+  public double getAccuracy() {
+    return accuracy;
+  }
+
+  public String getDecisionTreeVisualization() {
+    return decisionTreeVisualization;
+  }
+
 }

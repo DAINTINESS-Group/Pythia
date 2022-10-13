@@ -3,9 +3,7 @@ package gr.uoi.cs.pythia.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import lombok.Getter;
 
-@Getter
 public class SparkConfig {
   private String master;
   private String appName;
@@ -24,5 +22,17 @@ public class SparkConfig {
     } catch (IOException ex) {
       ex.printStackTrace();
     }
+  }
+
+  public String getMaster() {
+    return master;
+  }
+
+  public String getAppName() {
+    return appName;
+  }
+
+  public String getSparkWarehouse() {
+    return sparkWarehouse;
   }
 }

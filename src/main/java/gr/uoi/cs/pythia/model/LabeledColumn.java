@@ -1,9 +1,7 @@
 package gr.uoi.cs.pythia.model;
 
 import java.util.Arrays;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class LabeledColumn extends Column {
 
   private double decisionTreeAccuracy;
