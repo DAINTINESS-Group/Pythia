@@ -9,6 +9,7 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.*;
+import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
@@ -154,4 +155,12 @@ public class DatasetProfiler implements IDatasetProfiler {
     logger.info(
         String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
   }
+
+	@Override
+	public void identifyPatternHighlights() {
+		// TODO Is anything else required here?
+		new IPatternManagerFactory().createPatternManager()
+			.identifyPatternHighlights(dataset, datasetProfile);
+		logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
+	}
 }
