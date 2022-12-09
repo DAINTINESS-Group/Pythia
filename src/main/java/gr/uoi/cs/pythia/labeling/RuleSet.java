@@ -15,6 +15,8 @@ public class RuleSet {
     return newColumnName;
   }
 
+  public List<Rule> getRules() { return rules; }
+
   public String generateSparkSqlExpression() {
     StringBuilder stringBuilder = new StringBuilder("CASE ");
     for (Rule rule : rules) {

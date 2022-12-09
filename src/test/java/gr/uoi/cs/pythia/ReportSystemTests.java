@@ -3,9 +3,6 @@ package gr.uoi.cs.pythia;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.labeling.Rule;
-import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.writer.DatasetWriterConstants;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -69,33 +66,34 @@ public class ReportSystemTests {
   }
 
   @Test
-  public void testNaiveDatasetWriter() throws AnalysisException, IOException {
+  public void testNaiveDatasetWriter2() throws AnalysisException, IOException {
     StructType schema =
-        new StructType(
-            new StructField[] {
-              new StructField("name", DataTypes.StringType, false, Metadata.empty()),
-              new StructField("age", DataTypes.IntegerType, false, Metadata.empty()),
-              new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
-            });
+            new StructType(
+                    new StructField[] {
+                            new StructField("name", DataTypes.StringType, false, Metadata.empty()),
+                            new StructField("age", DataTypes.IntegerType, false, Metadata.empty()),
+                            new StructField("money", DataTypes.IntegerType, false, Metadata.empty()),
+                    });
 
     IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
     datasetProfiler.registerDataset("people", getResource("people.json").getAbsolutePath(), schema);
-
-    List<Rule> rules = new ArrayList<>();
-    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 10, "poor"));
-    rules.add(new Rule("money", LabelingSystemConstants.LEQ, 20, "mid"));
-    rules.add(new Rule("money", LabelingSystemConstants.GT, 20, "rich"));
-    RuleSet ruleSet = new RuleSet("money_labeled", rules);
-    datasetProfiler.computeLabeledColumn(ruleSet);
     File testCsv =
-        new File(
-            String.format(
-                "src%stest%sresources%stest.csv", File.separator, File.separator, File.separator));
+            new File(
+                    String.format(
+                            "src%stest%sresources%stest.csv", File.separator, File.separator, File.separator));
     datasetProfiler.writeDataset(DatasetWriterConstants.NAIVE, testCsv.getAbsolutePath());
     Dataset<Row> dataset = sparkSession.read().csv(testCsv.getAbsolutePath());
-    List<Object> actual = dataset.select("_c3").toJavaRDD().map(row -> row.get(0)).collect();
-    List<String> expected = new ArrayList<>(Arrays.asList("money_labeled", "poor", "mid", "rich"));
-    assertEquals(expected, actual);
+    List<Object> actualFirstColumn = dataset.select("_c0").toJavaRDD().map(row -> row.get(0)).collect();
+    List<Object> actualSecondColumn = dataset.select("_c1").toJavaRDD().map(row -> row.get(0)).collect();
+    List<Object> actualThirdColumn = dataset.select("_c2").toJavaRDD().map(row -> row.get(0)).collect();
+
+    List<String> expectedFirstColumn = new ArrayList<>(Arrays.asList("name", "Michael", "Andy", "Justin"));
+    List<String> expectedSecondColumn = new ArrayList<>(Arrays.asList("age", "50", "30", "19"));
+    List<String> expectedThirdColumn = new ArrayList<>(Arrays.asList("money", "10", "20", "30"));
+
+    assertEquals(expectedFirstColumn, actualFirstColumn);
+    assertEquals(expectedSecondColumn, actualSecondColumn);
+    assertEquals(expectedThirdColumn, actualThirdColumn);
     assertTrue(testCsv.delete());
   }
 

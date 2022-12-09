@@ -6,8 +6,10 @@ import static org.apache.spark.sql.types.DataTypes.StringType;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.decisiontree.DecisionTreeGenerator;
+import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
@@ -19,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -36,6 +40,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
+    Logger.getRootLogger().setLevel(Level.ERROR);
+    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR);
+    Logger.getLogger("org.spark-project").setLevel(Level.ERROR);
     this.dataFrameReaderFactory =
         new IDatasetReaderFactory(
             SparkSession.builder()
@@ -117,24 +124,33 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void computeLabeledColumn(RuleSet ruleSet) {
-    String newColumnName = ruleSet.getNewColumnName();
+    computeLabeledColumn(new DecisionTreeParams(ruleSet), ruleSet);
+  }
+
+  @Override
+  public void computeLabeledColumn(DecisionTreeParams decisionTreeParams, RuleSet ruleSet) {
+    // Add new labeledColumn
     String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
     dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
-    logger.info(String.format("Computed labeled column %s", newColumnName));
+    logger.info(String.format("Computed labeled column %s", ruleSet.getNewColumnName()));
+    // Determine params
+    if (decisionTreeParams == null)
+      decisionTreeParams = new DecisionTreeParams(ruleSet);
+    decisionTreeParams.setDataset(dataset);
 
-    DecisionTreeBuilder decisionTreeBuilder =
-        new DecisionTreeBuilder(dataset, datasetProfile, newColumnName);
-    logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
-
+    // Make decision tree and
+    DecisionTree dt = new DecisionTreeGenerator(decisionTreeParams).getDecisionTree();
     List<Column> columns = datasetProfile.getColumns();
     columns.add(
-        new LabeledColumn(
-            columns.size(),
-            StringType.toString(),
-            newColumnName,
-            decisionTreeBuilder.getAccuracy(),
-            decisionTreeBuilder.getFeatureColumnNames(),
-            decisionTreeBuilder.getDecisionTreeVisualization()));
+            new LabeledColumn(
+                    columns.size(),
+                    StringType.toString(),
+                    decisionTreeParams.getLabeledColumnName(),
+                    dt.getAccuracy(),
+                    dt.getFeatureColumnNames(),
+                    dt.getDecisionTreeVisualization()));
+    logger.info(String.format("Computed Decision Tree for labeled column %s",
+            decisionTreeParams.getLabeledColumnName()));
   }
 
   @Override

@@ -13,6 +13,8 @@ public class Rule {
     this.label = label;
   }
 
+  public String getTargetColumnName() { return targetColumnName; }
+
   @Override
   public String toString() {
     return String.format(
