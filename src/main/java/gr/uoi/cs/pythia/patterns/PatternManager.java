@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia.patterns;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.spark.sql.Column;
@@ -17,24 +18,23 @@ public class PatternManager implements IPatternManager {
 	public PatternManager() {
 		// TODO Is this the best way to keep track of all supported patterns?
 		patterns = new IPatternAlgo[] { 
-				new IPatternAlgoFactory().createPattern(PatternConstants.DOMINANCE),
-				new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
+			new IPatternAlgoFactory().createPattern(PatternConstants.DOMINANCE),
+			new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
 		};
 	}
 	
 	@Override
-	public void identifyPatternHighlights(Dataset<Row> dataset, DatasetProfile datasetProfile) {
-		// TODO This is just a rough sketch for the overall pattern identification execution flow
+	public void identifyPatternHighlights(Dataset<Row> dataset, DatasetProfile datasetProfile) 
+			throws IOException {
+		// TODO This class is most likely missing responsibilities 
+		// e.g. measurement/coordinates columns selection
+		// e.g. initialization of highlight pattern result objects
+		// These responsibilites are currently in the DominancePatternAlgo class
 		
-		// Get the measurement column 
-		List<Row> measurementColumn = determineMeasurementColumn(dataset, datasetProfile);
-		
-		// Get the cooridnate column(s)
-		List<Row> coordinateColumn = determineCoordinateColumn(dataset, datasetProfile);
-		
+
 		// Pass the columns through each of the highlight extractor modules
 		for (IPatternAlgo pattern : patterns) {
-			pattern.identify(measurementColumn, coordinateColumn);
+			pattern.identify(dataset, datasetProfile);
 		}
 		
 		// TODO Decide what to do with the result, once a highlight pattern has been identified.
@@ -43,35 +43,6 @@ public class PatternManager implements IPatternManager {
 		
 		// TODO We probably want to identify patterns 
 		// for more than one measurement-coordinate column pair
-		
-		// Random code - START - will delete on next commit
-		Column ageCol = dataset.col("age");
-		System.out.println(ageCol); 
-		
-		dataset.printSchema();
-		
-		 // Print whole dataset - only works for small datasets
-		 for (Row row : dataset.collectAsList()) { 
-			 for (int i=0; i<row.length(); i++) { 
-				 System.out.print(row.get(i) + " "); 
-			 }
-		 System.out.println(); 
-		 }
-		// Random code - END
 	}
-
-	private List<Row> determineCoordinateColumn(
-			Dataset<Row> dataset, DatasetProfile datasetProfile) {
-		// TODO how do we determine coordinate column?
-		String columnName = datasetProfile.getColumns().get(2).getName();
-		return dataset.select(columnName).collectAsList();
-	}
-
-	private List<Row> determineMeasurementColumn(
-			Dataset<Row> dataset, DatasetProfile datasetProfile) {
-		// TODO how do we determine measurement column?
-		String columnName = datasetProfile.getColumns().get(1).getName();
-		return dataset.select(columnName).collectAsList();
-	}
-
+	
 }

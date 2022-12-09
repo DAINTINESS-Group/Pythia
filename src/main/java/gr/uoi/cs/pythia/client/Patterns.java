@@ -22,14 +22,14 @@ public class Patterns {
 		StructType schema = createInternetUsageDatasetSchema();
         String alias = "internet_usage";
 		String path = String.format(
-			"src%stest%sresources%sinternet_usage_20.csv", 
+			"src%stest%sresources%sinternet_usage_100.csv", 
 			File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
         datasetProfiler.identifyPatternHighlights();        
 	}
 	
-	private static StructType createInternetUsageDatasetSchema() {
+	public static StructType createInternetUsageDatasetSchema() {
 		return new StructType(
                 new StructField[]{
                         new StructField("name", DataTypes.StringType, true, Metadata.empty()),
@@ -44,7 +44,7 @@ public class Patterns {
                 });
 	}
 	
-	private static StructType createGooglePlaystoreAppsDatasetSchema() {
+	public static StructType createGooglePlaystoreAppsDatasetSchema() {
 		return new StructType(
                 new StructField[]{
                         new StructField("App Name", DataTypes.StringType, true, Metadata.empty()),

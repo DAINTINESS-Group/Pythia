@@ -46,7 +46,10 @@ public class DatasetProfiler implements IDatasetProfiler {
                 .getOrCreate());
   }
 
-  @Override
+  public DatasetProfile getDatasetProfile() { return datasetProfile; }
+  public Dataset<Row> getDataset() { return dataset; }
+
+@Override
   public void registerDataset(String alias, String path, StructType schema)
       throws AnalysisException {
     dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
@@ -157,7 +160,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
 	@Override
-	public void identifyPatternHighlights() {
+	public void identifyPatternHighlights() throws IOException {
 		// TODO Is anything else required here?
 		new IPatternManagerFactory().createPatternManager()
 			.identifyPatternHighlights(dataset, datasetProfile);

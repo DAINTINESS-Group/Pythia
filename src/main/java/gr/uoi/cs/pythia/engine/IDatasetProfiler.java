@@ -18,5 +18,5 @@ public interface IDatasetProfiler {
 
   void writeDataset(String datasetWriterType, String path) throws IOException;
   
-  void identifyPatternHighlights();
+  void identifyPatternHighlights() throws IOException;
 }
