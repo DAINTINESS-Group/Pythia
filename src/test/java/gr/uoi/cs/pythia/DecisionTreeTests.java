@@ -1,8 +1,8 @@
 package gr.uoi.cs.pythia;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.decisiontree.DecisionTreeGenerator;
 import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.node.FeatureType;
@@ -196,19 +196,25 @@ public class DecisionTreeTests {
     }
 
     private DecisionTree getDecisionTree(List<String> selectedFeatures) {
-        DecisionTreeParams decisionTreeParams = new DecisionTreeParams(ruleSet, selectedFeatures)
-                .setDataset(dataset)
-                .setTrainingAndTestDataSplitRatio(new double[]{1, 0});
-        return new DecisionTreeGenerator(decisionTreeParams).getDecisionTree();
+        DecisionTreeParams decisionTreeParams = new DecisionTreeParams.Builder(ruleSet)
+                .selectedFeatures(selectedFeatures)
+                .trainingToTestDataSplitRatio(new double[]{1, 0})
+                .build();
+        return new DecisionTreeEngineFactory(decisionTreeParams, dataset)
+                .getDefaultEngine()
+                .getDecisionTree();
     }
 
     private DecisionTree getDecisionTreeForNodeTesting() {
-        String[] expectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
-        DecisionTreeParams decisionTreeParams = new DecisionTreeParams(ruleSet, Arrays.asList(expectedFeatures))
-                .setDataset(dataset)
-                .setTrainingAndTestDataSplitRatio(new double[]{1, 0})
-                .setMaxDepth(2);
-        return new DecisionTreeGenerator(decisionTreeParams).getDecisionTree();
+        String[] selectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
+        DecisionTreeParams decisionTreeParams = new DecisionTreeParams.Builder(ruleSet)
+                .selectedFeatures(Arrays.asList(selectedFeatures))
+                .trainingToTestDataSplitRatio(new double[]{1, 0})
+                .maxDepth(2)
+                .build();
+        return new DecisionTreeEngineFactory(decisionTreeParams, dataset)
+                .getDefaultEngine()
+                .getDecisionTree();
     }
 
     @AfterClass

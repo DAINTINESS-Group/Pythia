@@ -1,6 +1,8 @@
 package gr.uoi.cs.pythia.decisiontree.dataprepatarion;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
@@ -10,13 +12,15 @@ import java.util.stream.Collectors;
 
 public class FeaturesFinder {
 
+    private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
     private List<String> numericalFeatures = new ArrayList<>();
     private List<String> categoricalFeatures = new ArrayList<>();
     private List<String> categoricalFeaturesIndexed = new ArrayList<>();
 
-    public FeaturesFinder(DecisionTreeParams decisionTreeParams) {
+    public FeaturesFinder(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
+        this.dataset = dataset;
         discernFeatures();
     }
 
@@ -49,7 +53,7 @@ public class FeaturesFinder {
                         DataTypes.DoubleType,
                         DataTypes.createDecimalType()));
 
-        numericalFeatures = Arrays.stream(decisionTreeParams.getDataset().schema().fields())
+        numericalFeatures = Arrays.stream(dataset.schema().fields())
                 .filter(field ->
                         numericDatatypes.contains(field.dataType())
                         && featureIsValid(field.name())
@@ -58,7 +62,7 @@ public class FeaturesFinder {
     }
 
     private void findCategoricalFeatures() {
-        categoricalFeatures = Arrays.stream(decisionTreeParams.getDataset().schema().fields())
+        categoricalFeatures = Arrays.stream(dataset.schema().fields())
                 .filter(field ->
                         field.dataType() == DataTypes.StringType
                         && featureIsValid(field.name())

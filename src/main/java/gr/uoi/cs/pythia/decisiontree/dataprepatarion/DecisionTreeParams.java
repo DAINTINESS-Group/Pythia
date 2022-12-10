@@ -2,9 +2,6 @@ package gr.uoi.cs.pythia.decisiontree.dataprepatarion;
 
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import org.apache.spark.ml.classification.DecisionTreeClassifier;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,45 +10,26 @@ import java.util.stream.Collectors;
 
 public class DecisionTreeParams {
     public enum Impurity {ENTROPY, GINI}
-    private Dataset<Row> dataset;
+    private final String impurity;
     private final String labeledColumnName;
     private final List<String> notValidFeatures;
-    private List<String> selectedFeatures = new ArrayList<>();
-    private final DecisionTreeClassifier decisionTreeClassifier;
-    private double[] trainingAndTestDataSplitRatio;
+    private final List<String> selectedFeatures;
+    private final double[] trainingToTestDataSplitRatio;
+    private final int maxDepth;
+    private final double minInfoGain;
 
-    public DecisionTreeParams(RuleSet ruleSet) {
-        this.labeledColumnName = ruleSet.getNewColumnName();
-        this.notValidFeatures = findNotValidFeatures(ruleSet);
-        this.decisionTreeClassifier = new DecisionTreeClassifier();
-        this.trainingAndTestDataSplitRatio = new double[]{0.3, 0.7};
+    private DecisionTreeParams(Builder builder) {
+        this.impurity = builder.impurity;
+        this.labeledColumnName = builder.labeledColumnName;
+        this.notValidFeatures = builder.notValidFeatures;
+        this.selectedFeatures = builder.selectedFeatures;
+        this.trainingToTestDataSplitRatio = builder.trainingToTestDataSplitRatio;
+        this.maxDepth = builder.maxDepth;
+        this.minInfoGain = builder.minInfoGain;
     }
 
-    public DecisionTreeParams(RuleSet ruleSet, List<String> selectedFeatures) {
-        this(ruleSet);
-        this.selectedFeatures = validateSelectedFeatures(selectedFeatures);
-    }
-
-    private List<String> validateSelectedFeatures(List<String> selectedFeatures) {
-        if (selectedFeatures == null)
-            return new ArrayList<>();
-        // TODO: Removes only not null elements (?) maybe throw error?
-        if (selectedFeatures.contains(null))
-            return selectedFeatures.stream()
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-        return selectedFeatures;
-    }
-
-    // TODO: Maybe inside FeaturesFinder (?)
-    private List<String> findNotValidFeatures(RuleSet ruleSet) {
-        return ruleSet.getRules().stream()
-                .map(Rule::getTargetColumnName)
-                .collect(Collectors.toList());
-    }
-
-    public Dataset<Row> getDataset() {
-        return dataset;
+    public String getImpurity() {
+        return impurity;
     }
 
     public String getLabeledColumnName() {
@@ -66,41 +44,89 @@ public class DecisionTreeParams {
         return selectedFeatures;
     }
 
-    public DecisionTreeClassifier getDecisionTreeClassifier() {
-        return decisionTreeClassifier;
+    public double[] getTrainingToTestDataSplitRatio() {
+        return trainingToTestDataSplitRatio;
     }
 
-    public double[] getTrainingAndTestDataSplitRatio() {
-        return trainingAndTestDataSplitRatio;
+    public int getMaxDepth() {
+        return maxDepth;
     }
 
-    public DecisionTreeParams setDataset(Dataset<Row> dataset) {
-        this.dataset = dataset;
-        return this;
+    public double getMinInfoGain() {
+        return minInfoGain;
     }
 
-    public DecisionTreeParams setImpurity(DecisionTreeParams.Impurity impurityType) {
-        decisionTreeClassifier.setImpurity(impurityType.toString().toLowerCase());
-        return this;
-    }
+    public static class Builder {
+        private final String labeledColumnName;
+        private final List<String> notValidFeatures;
+        private String impurity;
+        private List<String> selectedFeatures;
+        private double[] trainingToTestDataSplitRatio;
+        private int maxDepth;
+        private double minInfoGain;
 
-    public DecisionTreeParams setMaxDepth(int value) {
-        decisionTreeClassifier.setMaxDepth(value);
-        return this;
-    }
+        public Builder(RuleSet ruleSet) {
+            // does not check each rule etc., should it?
+            if (ruleSet == null)
+                throw new NullPointerException("Null RuleSet on DecisionTreeParams.");
+            this.labeledColumnName = ruleSet.getNewColumnName();
+            this.notValidFeatures = findNotValidFeatures(ruleSet);
+            // default values
+            this.impurity = Impurity.GINI.toString().toLowerCase();
+            this.selectedFeatures = new ArrayList<>();
+            this.trainingToTestDataSplitRatio = new double[]{0.3, 0.7};
+            this.maxDepth = 5;
+            this.minInfoGain = 0.0;
+        }
 
-    public DecisionTreeParams setMaxBins(int value) {
-        decisionTreeClassifier.setMaxBins(value);
-        return this;
-    }
+        public Builder impurity(Impurity impurity) {
+            this.impurity = impurity.toString().toLowerCase();
+            return this;
+        }
 
-    public DecisionTreeParams setMinInfoGain(int value) {
-        decisionTreeClassifier.setMinInfoGain(value);
-        return this;
-    }
+        public Builder selectedFeatures(List<String> selectedFeatures) {
+            this.selectedFeatures = validateSelectedFeatures(selectedFeatures);
+            return this;
+        }
 
-    public DecisionTreeParams setTrainingAndTestDataSplitRatio(double[] ratio) {
-        trainingAndTestDataSplitRatio = ratio;
-        return this;
+        public Builder trainingToTestDataSplitRatio(double[] ratio) {
+            if (ratio != null)
+                this.trainingToTestDataSplitRatio = ratio;
+            return this;
+        }
+
+        public Builder maxDepth(int value) {
+            if (value >= 0)
+                this.maxDepth = value;
+            return this;
+        }
+
+        public Builder minInfoGain(double value) {
+            if (value >= 0)
+                this.minInfoGain = value;
+            return this;
+        }
+
+        public DecisionTreeParams build() {
+            return new DecisionTreeParams(this);
+        }
+
+        // TODO: Maybe inside FeaturesFinder (?)
+        private List<String> findNotValidFeatures(RuleSet ruleSet) {
+            return ruleSet.getRules().stream()
+                    .map(Rule::getTargetColumnName)
+                    .collect(Collectors.toList());
+        }
+
+        private List<String> validateSelectedFeatures(List<String> selectedFeatures) {
+            if (selectedFeatures == null)
+                return new ArrayList<>();
+            // TODO: Removes only not null elements (?) maybe throw error?
+            if (selectedFeatures.contains(null))
+                return selectedFeatures.stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
+            return selectedFeatures;
+        }
     }
 }

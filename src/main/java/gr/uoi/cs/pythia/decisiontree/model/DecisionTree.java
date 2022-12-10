@@ -5,11 +5,19 @@ import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import java.util.List;
 
 public class DecisionTree {
-    private double accuracy;
-    private List<String> featureColumnNames;
-    private DecisionTreeNode rootNode;
+    private final double accuracy;
+    private final List<String> featureColumnNames;
+    private final DecisionTreeNode rootNode;
 
-    private String decisionTreeVisualization;
+    private final String decisionTreeVisualization;
+
+    public DecisionTree(double accuracy, List<String> featureColumnNames,
+                        DecisionTreeNode rootNode, String decisionTreeVisualization) {
+        this.accuracy = accuracy;
+        this.featureColumnNames = featureColumnNames;
+        this.rootNode = rootNode;
+        this.decisionTreeVisualization = decisionTreeVisualization;
+    }
 
     public double getAccuracy() {
         return accuracy;
@@ -25,25 +33,5 @@ public class DecisionTree {
 
     public String getDecisionTreeVisualization() {
         return decisionTreeVisualization;
-    }
-
-    public DecisionTree setAccuracy(double accuracy) {
-        this.accuracy = accuracy;
-        return this;
-    }
-
-    public DecisionTree setFeatureColumnNames(List<String> featureColumnNames) {
-        this.featureColumnNames = featureColumnNames;
-        return this;
-    }
-
-    public DecisionTree setRootNode(DecisionTreeNode rootNode) {
-        this.rootNode = rootNode;
-        return this;
-    }
-
-    public DecisionTree setDecisionTreeVisualization(String value) {
-        this.decisionTreeVisualization = value;
-        return this;
     }
 }

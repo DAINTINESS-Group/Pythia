@@ -6,9 +6,9 @@ import static org.apache.spark.sql.types.DataTypes.StringType;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
-import gr.uoi.cs.pythia.decisiontree.DecisionTreeGenerator;
+import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
 import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
@@ -124,7 +124,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void computeLabeledColumn(RuleSet ruleSet) {
-    computeLabeledColumn(new DecisionTreeParams(ruleSet), ruleSet);
+    computeLabeledColumn(new DecisionTreeParams.Builder(ruleSet).build(), ruleSet);
   }
 
   @Override
@@ -134,12 +134,17 @@ public class DatasetProfiler implements IDatasetProfiler {
     dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
     logger.info(String.format("Computed labeled column %s", ruleSet.getNewColumnName()));
     // Determine params
-    if (decisionTreeParams == null)
-      decisionTreeParams = new DecisionTreeParams(ruleSet);
-    decisionTreeParams.setDataset(dataset);
+    if (decisionTreeParams == null){
+      decisionTreeParams = new DecisionTreeParams.Builder(ruleSet).build();
+    }
 
-    // Make decision tree and
-    DecisionTree dt = new DecisionTreeGenerator(decisionTreeParams).getDecisionTree();
+    // Make decision tree
+    DecisionTree dt = new DecisionTreeEngineFactory(decisionTreeParams, dataset)
+            .getDefaultEngine()
+            .getDecisionTree();
+
+
+    // Add column data
     List<Column> columns = datasetProfile.getColumns();
     columns.add(
             new LabeledColumn(

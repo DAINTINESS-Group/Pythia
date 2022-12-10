@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.decisiontree;
+package gr.uoi.cs.pythia.decisiontree.engine;
 
 import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeDataProcessor;
 import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
@@ -12,31 +12,33 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-public class DecisionTreeGenerator {
+public class DecisionTreeEngine implements IDecisionTreeEngine {
 
+    private final Dataset<Row> dataset;
+    private final DecisionTreeParams decisionTreeParams;
     private final DecisionTree decisionTree;
 
-    private final DecisionTreeParams decisionTreeParams;
-
-    public DecisionTreeGenerator(DecisionTreeParams decisionTreeParams) {
+    public DecisionTreeEngine(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
-        this.decisionTree = new DecisionTree();
-        computeDecisionTree();
+        this.dataset = dataset;
+        this.decisionTree = computeDecisionTree();
     }
 
     public DecisionTree getDecisionTree() {
         return decisionTree;
     }
 
-    private void computeDecisionTree() {
-        FeaturesFinder featuresFinder = new FeaturesFinder(decisionTreeParams);
+    private DecisionTree computeDecisionTree() {
+        FeaturesFinder featuresFinder = new FeaturesFinder(decisionTreeParams, dataset);
         DecisionTreeDataProcessor decisionTreeDataProcessor =
-                new DecisionTreeDataProcessor(decisionTreeParams, featuresFinder);
+                new DecisionTreeDataProcessor(decisionTreeParams, featuresFinder, dataset);
 
         // Train a DecisionTree model.
-        DecisionTreeClassifier decisionTreeClassifier = decisionTreeParams
-                .getDecisionTreeClassifier()
-                .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed");
+        DecisionTreeClassifier decisionTreeClassifier = new DecisionTreeClassifier()
+                .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
+                .setImpurity(decisionTreeParams.getImpurity())
+                .setMaxDepth(decisionTreeParams.getMaxDepth())
+                .setMinInfoGain(decisionTreeParams.getMinInfoGain());
 
         DecisionTreeClassificationModel model = decisionTreeClassifier
                 .fit(decisionTreeDataProcessor.getTrainingData());
@@ -57,10 +59,10 @@ public class DecisionTreeGenerator {
                 featuresFinder.getAllFeatures(),
                 model.toOld().topNode()
         );
-        // Get decision tree data
-        decisionTree.setAccuracy(accuracy)
-                    .setFeatureColumnNames(featuresFinder.getAllFeatures())
-                    .setRootNode(new DecisionTreeNode(nodeParams))
-                    .setDecisionTreeVisualization(model.toDebugString());
+
+        return new DecisionTree(accuracy,
+                                featuresFinder.getAllFeatures(),
+                                new DecisionTreeNode(nodeParams),
+                                model.toDebugString());
     }
 }

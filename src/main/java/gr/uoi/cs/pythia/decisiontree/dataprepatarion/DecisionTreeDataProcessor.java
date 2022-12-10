@@ -18,13 +18,14 @@ public class DecisionTreeDataProcessor {
     private final Dataset<Row> trainingData;
     private final Dataset<Row> testData;
 
-    public DecisionTreeDataProcessor(DecisionTreeParams decisionTreeParams, FeaturesFinder featuresFinder) {
+    public DecisionTreeDataProcessor(DecisionTreeParams decisionTreeParams, FeaturesFinder featuresFinder,
+                                     Dataset<Row> dataset) {
         this.featuresFinder = featuresFinder;
         this.labeledColumnName = decisionTreeParams.getLabeledColumnName();
-        this.dataset = decisionTreeParams.getDataset();
+        this.dataset = dataset;
         // compute data
         Dataset<Row>[] splits = getInputData()
-                .randomSplit(decisionTreeParams.getTrainingAndTestDataSplitRatio());
+                .randomSplit(decisionTreeParams.getTrainingToTestDataSplitRatio());
         this.trainingData = splits[0];
         this.testData = splits[1];
     }
