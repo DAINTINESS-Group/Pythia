@@ -6,6 +6,8 @@ import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.node.FeatureType;
+import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizer;
+import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizerFactory;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
@@ -25,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -193,6 +196,19 @@ public class DecisionTreeTests {
 
         assertTrue(rightMostLeaf.isLeaf());
         assertEquals(rightMostLeaf.getPredict().getPrediction(), "mid");
+    }
+
+    // Right now, only here, so that it does not create the png on every test
+    @Test
+    public void toPngTest() throws IOException{
+        // Depth 5
+        DecisionTree decisionTree = getDecisionTree(new ArrayList<>());
+        // Depth 2
+//        DecisionTree decisionTree = getDecisionTreeForNodeTesting();
+
+        DecisionTreeVisualizer dtVisualizer = new DecisionTreeVisualizerFactory(decisionTree)
+                .getGraphvizVisualizer();
+        dtVisualizer.createPng();
     }
 
     private DecisionTree getDecisionTree(List<String> selectedFeatures) {

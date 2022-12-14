@@ -2,6 +2,7 @@ package gr.uoi.cs.pythia.decisiontree.model.node;
 
 public class DecisionTreeNode {
     private final DecisionTreeNodeParams nodeParams;
+    private final int id;
     private final boolean isLeaf;
     private final Predict predict;
     private final Split split;
@@ -10,10 +11,15 @@ public class DecisionTreeNode {
     public DecisionTreeNode(DecisionTreeNodeParams nodeParams) {
         this.nodeParams = nodeParams;
         // data
+        this.id = nodeParams.getNode().id();
         this.isLeaf = nodeParams.getNode().isLeaf();
         this.predict = new Predict(nodeParams);
         this.split = new Split(nodeParams);
         this.stats = new InformationGainStats(nodeParams);
+    }
+
+    public int getId() {
+        return id;
     }
 
     public boolean isLeaf() {
@@ -42,6 +48,23 @@ public class DecisionTreeNode {
         return new DecisionTreeNode(
                 new DecisionTreeNodeParams(nodeParams,
                         nodeParams.getNode().rightNode().get()));
+    }
+
+    public String toVisualizationString() {
+        if (isLeaf)
+            return predict.getPrediction();
+        StringBuilder sb = new StringBuilder();
+        sb.append(split.getFeature());
+        if (split.getFeatureType() == FeatureType.CONTINUOUS) {
+            sb.append("  <= ");
+            sb.append(split.getThreshold());
+        } else {
+            sb.append(" in ");
+            sb.append("(");
+            sb.append(String.join(", ", split.getCategories()));;
+            sb.append(")");
+        }
+        return sb.toString();
     }
 
     @Override

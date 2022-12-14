@@ -143,7 +143,6 @@ public class DatasetProfiler implements IDatasetProfiler {
             .getDefaultEngine()
             .getDecisionTree();
 
-
     // Add column data
     List<Column> columns = datasetProfile.getColumns();
     columns.add(
