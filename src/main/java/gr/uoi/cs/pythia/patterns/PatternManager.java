@@ -1,9 +1,7 @@
 package gr.uoi.cs.pythia.patterns;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
@@ -13,11 +11,15 @@ import gr.uoi.cs.pythia.patterns.algos.IPatternAlgoFactory;
 
 public class PatternManager implements IPatternManager {
 
-	private final IPatternAlgo[] patterns;
+	private final IPatternAlgo[] patternAlgos;
+	
+	private String measurementColName;
+	private String xCoordinateColName;
+	private String yCoordinateColName;
 	
 	public PatternManager() {
 		// TODO Is this the best way to keep track of all supported patterns?
-		patterns = new IPatternAlgo[] { 
+		patternAlgos = new IPatternAlgo[] { 
 			new IPatternAlgoFactory().createPattern(PatternConstants.DOMINANCE),
 			new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
 		};
@@ -26,23 +28,33 @@ public class PatternManager implements IPatternManager {
 	@Override
 	public void identifyPatternHighlights(Dataset<Row> dataset, DatasetProfile datasetProfile) 
 			throws IOException {
-		// TODO This class is most likely missing responsibilities 
-		// e.g. measurement/coordinates columns selection
-		// e.g. initialization of highlight pattern result objects
-		// These responsibilites are currently in the DominancePatternAlgo class
-		
+		determineColumnNames(datasetProfile);
 
 		// Pass the columns through each of the highlight extractor modules
-		for (IPatternAlgo pattern : patterns) {
-			pattern.identify(dataset, datasetProfile);
+		for (IPatternAlgo algo : patternAlgos) {
+			// Identify pattern highlights with one coordinate column
+			algo.identify(dataset, measurementColName, xCoordinateColName);
+			
+			// Identify pattern highlights with two coordinate columns
+			algo.identify(dataset, measurementColName, xCoordinateColName, yCoordinateColName);
 		}
 		
-		// TODO Decide what to do with the result, once a highlight pattern has been identified.
-		// Maybe create a PatternResult object (and class) with everything required
-		// for exporting on the dataset profile, visualization, etc.
-		
-		// TODO We probably want to identify patterns 
-		// for more than one measurement-coordinate column pair
+		// TODO do we want to keep pattern results objects here?
 	}
 	
+	// TODO We probably want to identify patterns 
+	// for different measurement and coordinate(s) columns
+	private void determineColumnNames(DatasetProfile datasetProfile) {
+		// TODO how do we determine the measurement column?
+		// Currently "mileage" column of the "cars" dataset is hard-coded.
+		measurementColName = datasetProfile.getColumns().get(5).getName();
+		
+		// TODO how do we determine the coordinate X column?
+		// Currently "model" column of the "cars" dataset is hard-coded.
+		xCoordinateColName = datasetProfile.getColumns().get(1).getName();
+		
+		// TODO how do we determine the coordinate Y column?
+		// Currently "year" column of the "cars" dataset is hard-coded.
+		yCoordinateColName = datasetProfile.getColumns().get(2).getName();
+	}	
 }

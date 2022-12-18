@@ -8,5 +8,10 @@ import org.apache.spark.sql.Row;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 
 public interface IPatternAlgo {
-	void identify(Dataset<Row> dataset, DatasetProfile datasetProfile) throws IOException;
+	
+	void identify(Dataset<Row> dataset, String measurementColName, String xCoordinateColName)
+			throws IOException;
+	
+	void identify(Dataset<Row> dataset, String measurementColName, String xCoordinateColName,
+			String yCoordinateColName) throws IOException;
 }

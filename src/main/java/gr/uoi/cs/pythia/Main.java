@@ -1,22 +1,23 @@
 package gr.uoi.cs.pythia;
 
-import gr.uoi.cs.pythia.engine.IDatasetProfiler;
-import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.labeling.Rule;
-import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
+import gr.uoi.cs.pythia.labeling.Rule;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 public class Main {
   public static void main(String[] args) throws AnalysisException, IOException {
@@ -46,7 +47,8 @@ public class Main {
     datasetProfiler.registerDataset(
         "tweets",
         String.format(
-            "src%stest%sresources%stweets.csv", File.separator, File.separator, File.separator),
+            "src%stest%sresources%sdatasets%stweets.csv", 
+            File.separator, File.separator, File.separator, File.separator),
         schema);
 
     List<Rule> rules =

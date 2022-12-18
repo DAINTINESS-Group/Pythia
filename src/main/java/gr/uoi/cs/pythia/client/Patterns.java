@@ -19,11 +19,11 @@ public class Patterns {
 	public static void main(String[] args) throws AnalysisException, IOException {
 		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 		
-		StructType schema = createInternetUsageDatasetSchema();
-        String alias = "internet_usage";
+		StructType schema = createCarsDatasetSchema();
+        String alias = "cars";
 		String path = String.format(
-			"src%stest%sresources%sinternet_usage_100.csv", 
-			File.separator, File.separator, File.separator);
+				"src%stest%sresources%sdatasets%scars_100.csv", 
+				File.separator, File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
         datasetProfiler.identifyPatternHighlights();        
@@ -72,7 +72,22 @@ public class Patterns {
                         new StructField("Editors Choice", DataTypes.BooleanType, true, Metadata.empty()),
                         new StructField("Scraped Time", DataTypes.DateType, true, Metadata.empty()),
                 });
-		
+	}
+	
+	public static StructType createCarsDatasetSchema() {
+		return new StructType(
+                new StructField[]{
+                        new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("model", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("year", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("price", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("transmission", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("mileage", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("fuelType", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("tax", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("mpg", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("engineSize", DataTypes.DoubleType, true, Metadata.empty()),
+                });
 	}
 
 }
