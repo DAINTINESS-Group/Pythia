@@ -44,7 +44,6 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     }
 
     private Node getNodes(DecisionTreeNode dtNode) {
-        System.out.println(dtNode);
         Node graphNode = createNode(dtNode);
         if (dtNode.isLeaf())
             return graphNode.with(leafNodeColor);
@@ -64,9 +63,9 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     }
 
     @Override
-    public void createPng() throws IOException {
+    public void createPng(String directory, String fileName) throws IOException {
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
-                .toFile(new File("test.png"));
+                .toFile(new File(directory + File.separator + fileName + ".png"));
     }
 }

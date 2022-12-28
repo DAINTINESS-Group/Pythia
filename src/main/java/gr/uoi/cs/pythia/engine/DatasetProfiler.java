@@ -157,7 +157,7 @@ public class DatasetProfiler implements IDatasetProfiler {
     // Make decision tree
     DecisionTree dt = new DecisionTreeEngineFactory(decisionTreeParams, dataset)
             .getDefaultEngine()
-            .getDecisionTree();
+            .computeDecisionTree();
 
     // Add column data
     List<Column> columns = datasetProfile.getColumns();

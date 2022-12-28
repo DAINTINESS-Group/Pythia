@@ -94,13 +94,14 @@ public class AttributesFinder {
                 decisionTreeParams.getSelectedFeatures().contains(feature);
     }
 
-    public void findNonGeneratingAttributes() {
+    private void findNonGeneratingAttributes() {
         nonGeneratingAttributes = Arrays.stream(dataset.schema().fields())
                 .filter(field ->
                         !numericalFeatures.contains(field.name()) &&
                         !categoricalFeatures.contains(field.name()) &&
-                        !field.name().equals(decisionTreeParams.getLabeledColumnName()) &&
-                        !decisionTreeParams.getNonGeneratorAttributes().contains(field.name())
+                        !field.name().equals(decisionTreeParams.getLabeledColumnName())
+                        // uncomment if we want the target column names to not be included
+//                        && !decisionTreeParams.getNonGeneratorAttributes().contains(field.name()
                 )
                 .map(StructField::name)
                 .collect(Collectors.toList());

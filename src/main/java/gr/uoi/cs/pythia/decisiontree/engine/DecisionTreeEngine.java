@@ -12,26 +12,17 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DecisionTreeEngine implements IDecisionTreeEngine {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
-    private final DecisionTree decisionTree;
 
     public DecisionTreeEngine(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
         this.dataset = dataset;
-        this.decisionTree = computeDecisionTree();
     }
 
-    public DecisionTree getDecisionTree() {
-        return decisionTree;
-    }
-
-    private DecisionTree computeDecisionTree() {
+    public DecisionTree computeDecisionTree() {
         AttributesFinder attributesFinder = new AttributesFinder(decisionTreeParams, dataset);
         DecisionTreeDataProcessor decisionTreeDataProcessor =
                 new DecisionTreeDataProcessor(decisionTreeParams, attributesFinder, dataset);
@@ -48,6 +39,7 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
         Dataset<Row> predictions = model
                 .transform(decisionTreeDataProcessor.getTestData());
 
+        // Calculate accuracy
         MulticlassClassificationEvaluator evaluator =
                 new MulticlassClassificationEvaluator()
                         .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
@@ -64,9 +56,9 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
         );
 
         return new DecisionTree(accuracy,
-                                attributesFinder.getAllFeatures(),
-                                attributesFinder.getNonGeneratingAttributes(),
-                                new DecisionTreeNode(nodeParams),
-                                model.toDebugString());
+                attributesFinder.getAllFeatures(),
+                attributesFinder.getNonGeneratingAttributes(),
+                new DecisionTreeNode(nodeParams),
+                model.toDebugString());
     }
 }
