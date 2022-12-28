@@ -1,7 +1,4 @@
-package gr.uoi.cs.pythia.decisiontree.dataprepatarion;
-
-import gr.uoi.cs.pythia.labeling.Rule;
-import gr.uoi.cs.pythia.labeling.RuleSet;
+package gr.uoi.cs.pythia.decisiontree.input;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +9,7 @@ public class DecisionTreeParams {
     public enum Impurity {ENTROPY, GINI}
     private final String impurity;
     private final String labeledColumnName;
-    private final List<String> notValidFeatures;
+    private final List<String> nonGeneratorAttributes;
     private final List<String> selectedFeatures;
     private final double[] trainingToTestDataSplitRatio;
     private final int maxDepth;
@@ -21,7 +18,7 @@ public class DecisionTreeParams {
     private DecisionTreeParams(Builder builder) {
         this.impurity = builder.impurity;
         this.labeledColumnName = builder.labeledColumnName;
-        this.notValidFeatures = builder.notValidFeatures;
+        this.nonGeneratorAttributes = builder.nonGeneratorAttributes;
         this.selectedFeatures = builder.selectedFeatures;
         this.trainingToTestDataSplitRatio = builder.trainingToTestDataSplitRatio;
         this.maxDepth = builder.maxDepth;
@@ -36,8 +33,8 @@ public class DecisionTreeParams {
         return labeledColumnName;
     }
 
-    public List<String> getNotValidFeatures() {
-        return notValidFeatures;
+    public List<String> getNonGeneratorAttributes() {
+        return nonGeneratorAttributes;
     }
 
     public List<String> getSelectedFeatures() {
@@ -58,25 +55,20 @@ public class DecisionTreeParams {
 
     public static class Builder {
         private final String labeledColumnName;
-        private final List<String> notValidFeatures;
+        private final List<String> nonGeneratorAttributes;
         private String impurity;
-        private List<String> selectedFeatures;
+        private List<String> selectedFeatures = new ArrayList<>();
         private double[] trainingToTestDataSplitRatio;
         private int maxDepth;
         private double minInfoGain;
 
-        public Builder(RuleSet ruleSet) {
-            // does not check each rule etc., should it?
-            if (ruleSet == null)
-                throw new NullPointerException("Null RuleSet on DecisionTreeParams.");
-            this.labeledColumnName = ruleSet.getNewColumnName();
-            this.notValidFeatures = findNotValidFeatures(ruleSet);
-            // default values
-            this.impurity = Impurity.GINI.toString().toLowerCase();
-            this.selectedFeatures = new ArrayList<>();
-            this.trainingToTestDataSplitRatio = new double[]{0.3, 0.7};
-            this.maxDepth = 5;
-            this.minInfoGain = 0.0;
+        public Builder(String labeledColumnName, List<String> nonGeneratorAttributes) {
+            this.labeledColumnName = labeledColumnName;
+            this.nonGeneratorAttributes = nonGeneratorAttributes;
+            this.impurity = DecisionTreeDefaultParams.DEFAULT_IMPURITY.toString().toLowerCase();
+            this.trainingToTestDataSplitRatio = DecisionTreeDefaultParams.DEFAULT_TRAINING_TO_TEST_SPLIT_RATIO;
+            this.maxDepth = DecisionTreeDefaultParams.DEFAULT_MAX_DEPTH;
+            this.minInfoGain = DecisionTreeDefaultParams.DEFAULT_MIN_INFO_GAIN;
         }
 
         public Builder impurity(Impurity impurity) {
@@ -96,26 +88,19 @@ public class DecisionTreeParams {
         }
 
         public Builder maxDepth(int value) {
-            if (value >= 0)
+            if (value >= DecisionTreeDefaultParams.MINIMUM_MAX_DEPTH)
                 this.maxDepth = value;
             return this;
         }
 
         public Builder minInfoGain(double value) {
-            if (value >= 0)
+            if (value >= DecisionTreeDefaultParams.MINIMUM_MIN_INFO_GAIN)
                 this.minInfoGain = value;
             return this;
         }
 
         public DecisionTreeParams build() {
             return new DecisionTreeParams(this);
-        }
-
-        // TODO: Maybe inside FeaturesFinder (?)
-        private List<String> findNotValidFeatures(RuleSet ruleSet) {
-            return ruleSet.getRules().stream()
-                    .map(Rule::getTargetColumnName)
-                    .collect(Collectors.toList());
         }
 
         private List<String> validateSelectedFeatures(List<String> selectedFeatures) {

@@ -1,5 +1,6 @@
-package gr.uoi.cs.pythia.decisiontree.dataprepatarion;
+package gr.uoi.cs.pythia.decisiontree.dataprepararion;
 
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
@@ -12,15 +13,15 @@ import java.util.List;
 
 public class DecisionTreeDataProcessor {
 
-    private final FeaturesFinder featuresFinder;
+    private final AttributesFinder attributesFinder;
     private final String labeledColumnName;
     private Dataset<Row> dataset;
     private final Dataset<Row> trainingData;
     private final Dataset<Row> testData;
 
-    public DecisionTreeDataProcessor(DecisionTreeParams decisionTreeParams, FeaturesFinder featuresFinder,
+    public DecisionTreeDataProcessor(DecisionTreeParams decisionTreeParams, AttributesFinder attributesFinder,
                                      Dataset<Row> dataset) {
-        this.featuresFinder = featuresFinder;
+        this.attributesFinder = attributesFinder;
         this.labeledColumnName = decisionTreeParams.getLabeledColumnName();
         this.dataset = dataset;
         // compute data
@@ -43,7 +44,7 @@ public class DecisionTreeDataProcessor {
 
         return new VectorAssembler()
                 .setHandleInvalid("skip")
-                .setInputCols(featuresFinder.getAllFeaturesIndexed()
+                .setInputCols(attributesFinder.getAllFeaturesIndexed()
                         .toArray(new String[0]))
                 .setOutputCol("features")
                 .transform(dataset)
@@ -52,7 +53,7 @@ public class DecisionTreeDataProcessor {
 
     private void indexCategoricalFeaturesInTheDataset() {
         // index all categorical features
-        for (String categoricalColumn : featuresFinder.getCategoricalFeatures()) {
+        for (String categoricalColumn : attributesFinder.getCategoricalFeatures()) {
             dataset = indexColumn(categoricalColumn);
         }
         // index labeled field
@@ -71,8 +72,8 @@ public class DecisionTreeDataProcessor {
         HashMap<String, HashMap<Double, String>> indexedColumnsToIndexedAndActualValues = new HashMap<>();
 
         List<String> indexedColumns = new ArrayList<>();
-        indexedColumns.addAll(featuresFinder.getCategoricalFeatures());
         indexedColumns.add(labeledColumnName);
+        indexedColumns.addAll(attributesFinder.getCategoricalFeatures());
         for (String indexedColumn : indexedColumns) {
             HashMap<Double, String> indexedToActualValues = new HashMap<>();
             Iterator<Row> rows = dataset

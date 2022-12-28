@@ -1,24 +1,28 @@
 package gr.uoi.cs.pythia.model;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class LabeledColumn extends Column {
 
   private double decisionTreeAccuracy;
   private String[] featureColumnNames;
   private String decisionTreeVisualization;
+  private List<String> nonGeneratorColumns;
 
   public LabeledColumn(
-      int position,
-      String datatype,
-      String newColumnName,
-      double decisionTreeAccuracy,
-      String[] featureColumnNames,
-      String decisionTreeVisualization) {
+          int position,
+          String datatype,
+          String newColumnName,
+          double decisionTreeAccuracy,
+          String[] featureColumnNames,
+          String decisionTreeVisualization,
+          List<String> nonGeneratorColumns) {
     super(position, newColumnName, datatype);
     this.decisionTreeAccuracy = decisionTreeAccuracy;
     this.featureColumnNames = featureColumnNames;
     this.decisionTreeVisualization = decisionTreeVisualization;
+    this.nonGeneratorColumns = nonGeneratorColumns;
   }
 
   @Override
@@ -33,6 +37,9 @@ public class LabeledColumn extends Column {
         + "\n"
         + "decisionTreeVisualization='"
         + decisionTreeVisualization
+        + "\n"
+        + "Non generator columns="
+        + String.join(", ", nonGeneratorColumns)
         + "\n";
   }
 }

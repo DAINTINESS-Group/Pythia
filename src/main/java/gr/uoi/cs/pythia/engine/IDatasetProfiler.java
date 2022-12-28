@@ -1,8 +1,8 @@
 package gr.uoi.cs.pythia.engine;
 
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.UserDefinedSettings;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
 import java.io.IOException;
@@ -12,9 +12,9 @@ public interface IDatasetProfiler {
   void registerDataset(String alias, String path, StructType schema) throws AnalysisException;
 
   void computeLabeledColumn(RuleSet ruleSet);
-  void computeLabeledColumn(DecisionTreeParams decisionTreeParams, RuleSet ruleSet);
 
   DatasetProfile computeProfileOfDataset();
+  DatasetProfile computeProfileOfDataset(UserDefinedSettings settings);
 
   void generateReport(String reportGeneratorType, String path) throws IOException;
 

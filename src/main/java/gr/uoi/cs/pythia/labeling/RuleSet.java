@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.labeling;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RuleSet {
   private String newColumnName;
@@ -15,7 +16,11 @@ public class RuleSet {
     return newColumnName;
   }
 
-  public List<Rule> getRules() { return rules; }
+  public List<String> getTargetColumns() {
+    return rules.stream()
+            .map(Rule::getTargetColumnName)
+            .collect(Collectors.toList());
+  }
 
   public String generateSparkSqlExpression() {
     StringBuilder stringBuilder = new StringBuilder("CASE ");

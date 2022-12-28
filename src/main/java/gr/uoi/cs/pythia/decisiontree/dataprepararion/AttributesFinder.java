@@ -1,6 +1,6 @@
-package gr.uoi.cs.pythia.decisiontree.dataprepatarion;
+package gr.uoi.cs.pythia.decisiontree.dataprepararion;
 
-import org.apache.commons.collections.ListUtils;
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataType;
@@ -10,18 +10,23 @@ import org.apache.spark.sql.types.StructField;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FeaturesFinder {
+public class AttributesFinder {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
     private List<String> numericalFeatures = new ArrayList<>();
     private List<String> categoricalFeatures = new ArrayList<>();
     private List<String> categoricalFeaturesIndexed = new ArrayList<>();
+    private List<String> nonGeneratingAttributes = new ArrayList<>();
 
-    public FeaturesFinder(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
+    public AttributesFinder(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
         this.dataset = dataset;
         discernFeatures();
+    }
+
+    public List<String> getNonGeneratingAttributes() {
+        return nonGeneratingAttributes;
     }
 
     public List<String> getCategoricalFeatures() {
@@ -29,17 +34,23 @@ public class FeaturesFinder {
     }
 
     public List<String> getAllFeatures() {
-        return ListUtils.union(numericalFeatures, categoricalFeatures);
+        List<String> allFeatures = new ArrayList<>();
+        allFeatures.addAll(numericalFeatures);
+        allFeatures.addAll(categoricalFeatures);
+        return allFeatures;
     }
 
     public List<String> getAllFeaturesIndexed() {
-        return ListUtils.union(numericalFeatures, categoricalFeaturesIndexed);
+        List<String> allFeatures = new ArrayList<>();
+        allFeatures.addAll(numericalFeatures);
+        allFeatures.addAll(categoricalFeaturesIndexed);
+        return allFeatures;
     }
 
-    public void discernFeatures() {
-
+    private void discernFeatures() {
         findNumericalFeatures();
         findCategoricalFeatures();
+        findNonGeneratingAttributes();
     }
 
     private void findNumericalFeatures() {
@@ -74,12 +85,24 @@ public class FeaturesFinder {
     }
 
     private boolean featureIsValid(String feature) {
-        return !decisionTreeParams.getNotValidFeatures().contains(feature) &&
+        return !decisionTreeParams.getNonGeneratorAttributes().contains(feature) &&
                 !feature.equals(decisionTreeParams.getLabeledColumnName());
     }
 
     private boolean featureIsSelected(String feature) {
         return  decisionTreeParams.getSelectedFeatures().isEmpty() ||
                 decisionTreeParams.getSelectedFeatures().contains(feature);
+    }
+
+    public void findNonGeneratingAttributes() {
+        nonGeneratingAttributes = Arrays.stream(dataset.schema().fields())
+                .filter(field ->
+                        !numericalFeatures.contains(field.name()) &&
+                        !categoricalFeatures.contains(field.name()) &&
+                        !field.name().equals(decisionTreeParams.getLabeledColumnName()) &&
+                        !decisionTreeParams.getNonGeneratorAttributes().contains(field.name())
+                )
+                .map(StructField::name)
+                .collect(Collectors.toList());
     }
 }

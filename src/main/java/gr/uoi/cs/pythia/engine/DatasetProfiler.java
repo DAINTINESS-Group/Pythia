@@ -7,7 +7,7 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
@@ -15,11 +15,7 @@ import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Level;
@@ -37,6 +33,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
+  private final List<RuleSet> ruleSets = new ArrayList<>();
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
@@ -74,9 +71,25 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
+  public void computeLabeledColumn(RuleSet ruleSet) {
+    // Add new labeledColumn
+    String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
+    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
+    logger.info(String.format("Computed labeled column %s", ruleSet.getNewColumnName()));
+
+    ruleSets.add(ruleSet);
+  }
+
+  @Override
   public DatasetProfile computeProfileOfDataset() {
+    return computeProfileOfDataset(new UserDefinedSettings());
+  }
+
+  @Override
+  public DatasetProfile computeProfileOfDataset(UserDefinedSettings settings) {
     computeDescriptiveStats();
     computeAllPairsCorrelations();
+    extractAllDecisionTrees(settings);
     return datasetProfile;
   }
 
@@ -122,22 +135,25 @@ public class DatasetProfiler implements IDatasetProfiler {
     logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
   }
 
-  @Override
-  public void computeLabeledColumn(RuleSet ruleSet) {
-    computeLabeledColumn(new DecisionTreeParams.Builder(ruleSet).build(), ruleSet);
-  }
-
-  @Override
-  public void computeLabeledColumn(DecisionTreeParams decisionTreeParams, RuleSet ruleSet) {
-    // Add new labeledColumn
-    String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
-    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
-    logger.info(String.format("Computed labeled column %s", ruleSet.getNewColumnName()));
-    // Determine params
-    if (decisionTreeParams == null){
-      decisionTreeParams = new DecisionTreeParams.Builder(ruleSet).build();
+  private void extractAllDecisionTrees(UserDefinedSettings settings) {
+    HashMap<String, DecisionTreeParams> decisionTreeAllParams = new HashMap<>();
+    for (DecisionTreeParams dtParams : settings.getDecisionTreeParams()) {
+      decisionTreeAllParams.put(dtParams.getLabeledColumnName(), dtParams);
     }
 
+    for (RuleSet ruleSet : ruleSets) {
+      String labeledColumnName = ruleSet.getNewColumnName();
+      if (decisionTreeAllParams.containsKey(labeledColumnName)) {
+        extractDecisionTree(decisionTreeAllParams.get(labeledColumnName));
+      } else {
+        extractDecisionTree(new DecisionTreeParams
+                .Builder(labeledColumnName, ruleSet.getTargetColumns())
+                .build());
+      }
+    }
+  }
+
+  private void extractDecisionTree(DecisionTreeParams decisionTreeParams) {
     // Make decision tree
     DecisionTree dt = new DecisionTreeEngineFactory(decisionTreeParams, dataset)
             .getDefaultEngine()
@@ -152,7 +168,8 @@ public class DatasetProfiler implements IDatasetProfiler {
                     decisionTreeParams.getLabeledColumnName(),
                     dt.getAccuracy(),
                     dt.getFeatureColumnNames(),
-                    dt.getDecisionTreeVisualization()));
+                    dt.getDecisionTreeVisualization(),
+                    dt.getNonGeneratorAttributes()));
     logger.info(String.format("Computed Decision Tree for labeled column %s",
             decisionTreeParams.getLabeledColumnName()));
   }

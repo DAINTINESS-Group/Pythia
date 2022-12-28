@@ -14,7 +14,7 @@ import static guru.nidi.graphviz.attribute.Attributes.attr;
 import static guru.nidi.graphviz.model.Factory.*;
 
 
-public class DecisionTreeGraphvizVisualizer implements DecisionTreeVisualizer {
+public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
 
     private final Color rootNodeColor = Color.RED4;
     private final Color internalNodeColor = Color.LIGHTSKYBLUE;
@@ -26,7 +26,7 @@ public class DecisionTreeGraphvizVisualizer implements DecisionTreeVisualizer {
     }
 
     private Graph getGraph(DecisionTreeNode dtNode) {
-        Graph graph = graph("decisionTree").directed()
+        return graph("decisionTree").directed()
                 .nodeAttr().with(Font.name("Arial"))
                 .linkAttr().with("class", "link-class")
                 .with(
@@ -34,7 +34,6 @@ public class DecisionTreeGraphvizVisualizer implements DecisionTreeVisualizer {
                                 .link(to(getNodes(dtNode.getLeftNode())).with(attr("label", "Yes")))
                                 .link(to(getNodes(dtNode.getRightNode())).with(attr("label", "No")))
                 );
-        return graph;
     }
 
     private Node getRootNode(DecisionTreeNode dtNode) {
@@ -45,6 +44,7 @@ public class DecisionTreeGraphvizVisualizer implements DecisionTreeVisualizer {
     }
 
     private Node getNodes(DecisionTreeNode dtNode) {
+        System.out.println(dtNode);
         Node graphNode = createNode(dtNode);
         if (dtNode.isLeaf())
             return graphNode.with(leafNodeColor);
@@ -67,6 +67,6 @@ public class DecisionTreeGraphvizVisualizer implements DecisionTreeVisualizer {
     public void createPng() throws IOException {
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
-                .toFile(new File("testtttt.png"));
+                .toFile(new File("test.png"));
     }
 }

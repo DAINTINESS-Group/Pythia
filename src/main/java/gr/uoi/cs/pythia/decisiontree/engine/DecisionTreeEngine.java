@@ -1,8 +1,8 @@
 package gr.uoi.cs.pythia.decisiontree.engine;
 
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeDataProcessor;
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.FeaturesFinder;
+import gr.uoi.cs.pythia.decisiontree.dataprepararion.DecisionTreeDataProcessor;
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.dataprepararion.AttributesFinder;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNodeParams;
@@ -11,6 +11,9 @@ import org.apache.spark.ml.classification.DecisionTreeClassifier;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DecisionTreeEngine implements IDecisionTreeEngine {
 
@@ -29,9 +32,9 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
     }
 
     private DecisionTree computeDecisionTree() {
-        FeaturesFinder featuresFinder = new FeaturesFinder(decisionTreeParams, dataset);
+        AttributesFinder attributesFinder = new AttributesFinder(decisionTreeParams, dataset);
         DecisionTreeDataProcessor decisionTreeDataProcessor =
-                new DecisionTreeDataProcessor(decisionTreeParams, featuresFinder, dataset);
+                new DecisionTreeDataProcessor(decisionTreeParams, attributesFinder, dataset);
 
         // Train a DecisionTree model.
         DecisionTreeClassifier decisionTreeClassifier = new DecisionTreeClassifier()
@@ -56,12 +59,13 @@ public class DecisionTreeEngine implements IDecisionTreeEngine {
         DecisionTreeNodeParams nodeParams = new DecisionTreeNodeParams(
                 decisionTreeDataProcessor.getIndexedToActualValuesForEachIndexedColumn(),
                 decisionTreeParams.getLabeledColumnName(),
-                featuresFinder.getAllFeatures(),
+                attributesFinder.getAllFeatures(),
                 model.toOld().topNode()
         );
 
         return new DecisionTree(accuracy,
-                                featuresFinder.getAllFeatures(),
+                                attributesFinder.getAllFeatures(),
+                                attributesFinder.getNonGeneratingAttributes(),
                                 new DecisionTreeNode(nodeParams),
                                 model.toDebugString());
     }

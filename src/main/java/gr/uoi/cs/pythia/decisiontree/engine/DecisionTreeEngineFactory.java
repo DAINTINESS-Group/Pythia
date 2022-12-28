@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree.engine;
 
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 

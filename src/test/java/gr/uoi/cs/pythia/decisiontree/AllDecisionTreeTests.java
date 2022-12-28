@@ -1,12 +1,12 @@
-package gr.uoi.cs.pythia;
+package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.decisiontree.dataprepatarion.DecisionTreeParams;
+import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.node.FeatureType;
-import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizer;
+import gr.uoi.cs.pythia.decisiontree.visualization.IDecisionTreeVisualizer;
 import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizerFactory;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -34,11 +34,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static org.apache.spark.sql.functions.expr;
 import static org.junit.Assert.*;
 
-
-public class DecisionTreeTests {
+public class AllDecisionTreeTests {
 
     private static SparkSession sparkSession;
     private RuleSet ruleSet;
@@ -79,18 +77,16 @@ public class DecisionTreeTests {
                         Objects.requireNonNull(getClass().getClassLoader().getResource("carseats.csv"))
                                 .getFile()).getAbsolutePath(),
                 schema);
-        // Get dataset
-        Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
-        dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
         // Get rules
         List<Rule> rules = new ArrayList<>();
         rules.add(new Rule("Sales", LabelingSystemConstants.LEQ, 3, "low"));
         rules.add(new Rule("Sales", LabelingSystemConstants.LEQ, 9, "mid"));
         rules.add(new Rule("Sales", LabelingSystemConstants.GT, 9, "high"));
         ruleSet = new RuleSet("Sales_labeled", rules);
-        // Add new labeledColumn
-        String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
-        dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
+        datasetProfiler.computeLabeledColumn(ruleSet);
+        // Get dataset
+        Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
+        dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
     }
 
     @Test
@@ -99,6 +95,7 @@ public class DecisionTreeTests {
         assertTrue("Accuracy should be Nan, due to 0 testing data",
                 Double.isNaN(decisionTree.getAccuracy()));
     }
+
     @Test
     public void testFeatureColumns() {
         String[] expectedFeatures = {"CompPrice", "Income", "Advertising",
@@ -139,6 +136,20 @@ public class DecisionTreeTests {
         DecisionTree decisionTree = getDecisionTree(Arrays.asList(someNullSelectedFeatures));
         String[] expectedFeatures = {"Income", "Age"};
         assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+    }
+
+    @Test
+    public void testZeroNonGeneratorAttributes() {
+        DecisionTree decisionTree = getDecisionTree(new ArrayList<>());
+        assertTrue(decisionTree.getNonGeneratorAttributes().isEmpty());
+    }
+
+    @Test
+    public void testNonGeneratorAttributesWithSelectedFeatures() {
+        String[] expectedNonGeneratorAttributes = {"Income", "Price", "ShelveLoc", "Age"};
+        String[] selectedFeatures = {"CompPrice", "Advertising", "Population", "Education", "Urban", "US"};
+        DecisionTree decisionTree = getDecisionTree(Arrays.asList(selectedFeatures));
+        assertArrayEquals(expectedNonGeneratorAttributes, decisionTree.getNonGeneratorAttributes().toArray());
     }
 
     @Test
@@ -206,13 +217,20 @@ public class DecisionTreeTests {
         // Depth 2
 //        DecisionTree decisionTree = getDecisionTreeForNodeTesting();
 
-        DecisionTreeVisualizer dtVisualizer = new DecisionTreeVisualizerFactory(decisionTree)
-                .getGraphvizVisualizer();
+        IDecisionTreeVisualizer dtVisualizer = new DecisionTreeVisualizerFactory(decisionTree)
+                .getJGraphXVisualizer();
         dtVisualizer.createPng();
     }
 
+//    @Test
+//    public void test() throws IOException {
+//
+//        new PlotFactory(dataset.limit(10)).getPlot(PlotType.HISTOGRAM).saveAsPng("histogramTest");
+//    }
+
     private DecisionTree getDecisionTree(List<String> selectedFeatures) {
-        DecisionTreeParams decisionTreeParams = new DecisionTreeParams.Builder(ruleSet)
+        DecisionTreeParams decisionTreeParams = new DecisionTreeParams
+                .Builder(ruleSet.getNewColumnName(), ruleSet.getTargetColumns())
                 .selectedFeatures(selectedFeatures)
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .build();
@@ -223,7 +241,8 @@ public class DecisionTreeTests {
 
     private DecisionTree getDecisionTreeForNodeTesting() {
         String[] selectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
-        DecisionTreeParams decisionTreeParams = new DecisionTreeParams.Builder(ruleSet)
+        DecisionTreeParams decisionTreeParams = new DecisionTreeParams
+                .Builder(ruleSet.getNewColumnName(), ruleSet.getTargetColumns())
                 .selectedFeatures(Arrays.asList(selectedFeatures))
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .maxDepth(2)
