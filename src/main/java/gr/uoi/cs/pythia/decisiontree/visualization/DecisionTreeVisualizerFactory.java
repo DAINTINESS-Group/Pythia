@@ -9,7 +9,7 @@ public class DecisionTreeVisualizerFactory {
         this.decisionTree = decisionTree;
     }
 
-    public DecisionTreeVisualizer getGraphvizVisualizer() {
+    public IDecisionTreeVisualizer getGraphvizVisualizer() {
         return new DecisionTreeGraphvizVisualizer(decisionTree);
     }
 }

@@ -218,7 +218,7 @@ public class AllDecisionTreeTests {
 //        DecisionTree decisionTree = getDecisionTreeForNodeTesting();
 
         IDecisionTreeVisualizer dtVisualizer = new DecisionTreeVisualizerFactory(decisionTree)
-                .getJGraphXVisualizer();
+                .getGraphvizVisualizer();
         dtVisualizer.createPng();
     }
 
