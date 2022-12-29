@@ -12,14 +12,20 @@ import org.apache.spark.mllib.stat.KernelDensity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import gr.uoi.cs.pythia.patterns.PatternConstants;
+
 public class DistributionPatternAlgo implements IPatternAlgo {
 
 	@Override
-	public void identify(
+	public String getPatternName() {
+		return PatternConstants.DISTRIBUTION;
+	}
+	
+	@Override
+	public void identifyPatternWithOneCoordinate(
 			Dataset<Row> dataset, 
 			String measurementColName, 
-			String xCoordinateColName)
-					throws IOException {
+			String xCoordinateColName) {
 		// TODO Actually check for a distribution highlight
 		// Currently this method has an example of usage of the KernelDensity estimate method
 		SparkContext sc =SparkContext.getOrCreate();
@@ -47,12 +53,17 @@ public class DistributionPatternAlgo implements IPatternAlgo {
 	}
 
 	@Override
-	public void identify(
+	public void identifyPatternWithTwoCoordinates(
 			Dataset<Row> dataset, 
 			String measurementColName, 
 			String xCoordinateColName,
-			String yCoordinateColName) 
-					throws IOException {
+			String yCoordinateColName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportResultsToFile(String path) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

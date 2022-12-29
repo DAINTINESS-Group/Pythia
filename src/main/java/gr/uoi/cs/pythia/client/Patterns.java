@@ -11,6 +11,7 @@ import org.apache.spark.sql.types.StructType;
 
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 
 public class Patterns {
 
@@ -26,7 +27,11 @@ public class Patterns {
 				File.separator, File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
-        datasetProfiler.identifyPatternHighlights();        
+        datasetProfiler.identifyPatternHighlights(
+        		ColumnSelectionMode.USER_SPECIFIED_ONLY, 
+        		new String[] {"mileage", "price"}, 
+        		new String[] {"manufacturer", "model", "year"});        
+        
 	}
 	
 	public static StructType createInternetUsageDatasetSchema() {
@@ -79,7 +84,7 @@ public class Patterns {
                 new StructField[]{
                         new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
                         new StructField("model", DataTypes.StringType, true, Metadata.empty()),
-                        new StructField("year", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("year", DataTypes.StringType, true, Metadata.empty()),
                         new StructField("price", DataTypes.DoubleType, true, Metadata.empty()),
                         new StructField("transmission", DataTypes.StringType, true, Metadata.empty()),
                         new StructField("mileage", DataTypes.DoubleType, true, Metadata.empty()),

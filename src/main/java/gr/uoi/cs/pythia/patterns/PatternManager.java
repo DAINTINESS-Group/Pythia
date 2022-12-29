@@ -1,6 +1,8 @@
 package gr.uoi.cs.pythia.patterns;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -10,51 +12,81 @@ import gr.uoi.cs.pythia.patterns.algos.IPatternAlgo;
 import gr.uoi.cs.pythia.patterns.algos.IPatternAlgoFactory;
 
 public class PatternManager implements IPatternManager {
-
-	private final IPatternAlgo[] patternAlgos;
 	
-	private String measurementColName;
-	private String xCoordinateColName;
-	private String yCoordinateColName;
-	
-	public PatternManager() {
-		// TODO Is this the best way to keep track of all supported patterns?
-		patternAlgos = new IPatternAlgo[] { 
+	// TODO Is this the best way to keep track of all supported pattern algos?
+	private final IPatternAlgo[] patternAlgos = { 
 			new IPatternAlgoFactory().createPattern(PatternConstants.DOMINANCE),
 			new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
-		};
+	};
+	
+	private ColumnSelector columnSelector;
+	private List<String> measurementColumns;
+	private List<String> coordinateColumns;
+	
+	public PatternManager(
+			ColumnSelectionMode columnSelectionMode, 
+			String[] measurementColumns, 
+			String[] coordinateColumns) {
+		this.columnSelector = new ColumnSelector(
+				columnSelectionMode, 
+				measurementColumns, 
+				coordinateColumns);
 	}
 	
 	@Override
 	public void identifyPatternHighlights(Dataset<Row> dataset, DatasetProfile datasetProfile) 
 			throws IOException {
-		determineColumnNames(datasetProfile);
-
-		// Pass the columns through each of the highlight extractor modules
-		for (IPatternAlgo algo : patternAlgos) {
-			// Identify pattern highlights with one coordinate column
-			algo.identify(dataset, measurementColName, xCoordinateColName);
-			
-			// Identify pattern highlights with two coordinate columns
-			algo.identify(dataset, measurementColName, xCoordinateColName, yCoordinateColName);
-		}
+		// Select the measurement & coordinate columns for pattern identification
+		measurementColumns = columnSelector.selectMeasurementColumns(datasetProfile);
+		coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile);
+		
+		// Highlight identification can not proceed with no measurement/coordinate
+		if (measurementColumns.isEmpty()) return;
+		if (coordinateColumns.isEmpty()) return;
+		
+		// Pass all the measurement & coordinate column combinations 
+		// through each of the highlight extractor modules (pattern algorithms)
+		// for one & two coordinates respectively.
+		identifyPatternHighlightsWithOneCoordinate(dataset);				
+		identifyPatternHighlightsWithTwoCoordinates(dataset);
+				
+		// Once identification is done, export the results.
+		exportResultsToFile();
 		
 		// TODO do we want to keep pattern results objects here?
 	}
+
+	private void identifyPatternHighlightsWithOneCoordinate(Dataset<Row> dataset) {
+		for (String measurement : measurementColumns) {
+			for (String xCoordinate : coordinateColumns) {
+				for (IPatternAlgo algo : patternAlgos) {
+					algo.identifyPatternWithOneCoordinate(dataset, measurement, xCoordinate);
+				}
+			}
+		}
+	}
 	
-	// TODO We probably want to identify patterns 
-	// for different measurement and coordinate(s) columns
-	private void determineColumnNames(DatasetProfile datasetProfile) {
-		// TODO how do we determine the measurement column?
-		// Currently "mileage" column of the "cars" dataset is hard-coded.
-		measurementColName = datasetProfile.getColumns().get(5).getName();
-		
-		// TODO how do we determine the coordinate X column?
-		// Currently "model" column of the "cars" dataset is hard-coded.
-		xCoordinateColName = datasetProfile.getColumns().get(1).getName();
-		
-		// TODO how do we determine the coordinate Y column?
-		// Currently "year" column of the "cars" dataset is hard-coded.
-		yCoordinateColName = datasetProfile.getColumns().get(2).getName();
-	}	
+	private void identifyPatternHighlightsWithTwoCoordinates(Dataset<Row> dataset) {
+		for (String measurement : measurementColumns) {
+			for (String xCoordinate : coordinateColumns) {
+				for (String yCoordinate : coordinateColumns) {
+					if (xCoordinate.equals(yCoordinate)) continue;
+					for (IPatternAlgo algo : patternAlgos) {
+						algo.identifyPatternWithTwoCoordinates(
+								dataset, measurement, xCoordinate, yCoordinate);
+					}
+				}
+			}
+		}
+	}
+
+	private void exportResultsToFile() throws IOException {
+		for (IPatternAlgo algo : patternAlgos) {
+			algo.exportResultsToFile(new File(String.format(
+				"src%stest%sresources%s%s_results.md",
+				File.separator, File.separator, File.separator,
+				algo.getPatternName())).getAbsolutePath());
+		}
+	}
+	
 }

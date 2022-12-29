@@ -3,16 +3,6 @@ package gr.uoi.cs.pythia.engine;
 import static org.apache.spark.sql.functions.expr;
 import static org.apache.spark.sql.types.DataTypes.StringType;
 
-import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
-import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
-import gr.uoi.cs.pythia.model.*;
-import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
-import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
-import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
-import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -27,6 +18,21 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+
+import gr.uoi.cs.pythia.config.SparkConfig;
+import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
+import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
+import gr.uoi.cs.pythia.model.Column;
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;
+import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
+import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
+import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
+import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 
 public class DatasetProfiler implements IDatasetProfiler {
 
@@ -160,10 +166,15 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
 	@Override
-	public void identifyPatternHighlights() throws IOException {
-		// TODO Is anything else required here?
-		new IPatternManagerFactory().createPatternManager()
+	public void identifyPatternHighlights(
+			ColumnSelectionMode columnSelectionMode,
+			String[] measurementColNames,
+			String[] coordinateColNames) 
+					throws IOException {
+		new IPatternManagerFactory()
+			.createPatternManager(columnSelectionMode,  measurementColNames, coordinateColNames)
 			.identifyPatternHighlights(dataset, datasetProfile);
-		logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
+		logger.info(
+				String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
 	}
 }

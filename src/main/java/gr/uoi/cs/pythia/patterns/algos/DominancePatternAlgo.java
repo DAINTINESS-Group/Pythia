@@ -1,87 +1,74 @@
 package gr.uoi.cs.pythia.patterns.algos;
 
-import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.patterns.PatternConstants;
-import gr.uoi.cs.pythia.patterns.results.DominancePatternResults;
+import gr.uoi.cs.pythia.patterns.results.DominancePatternResult;
 
 public class DominancePatternAlgo implements IPatternAlgo {
 
 	private static final double TOTAL_DOMINANCE_THRESHOLD = 100.0;
 	private static final double PARTIAL_DOMINANCE_THRESHOLD = 75.0;
 
-	// TODO maybe keep a list of DominancePatternResults objects (?) to keep 
-	// the dominance results of multiple identifications 
-	// for different measurement and coordinate(s) columns
-	private DominancePatternResults results;
+	private List<DominancePatternResult> results;
 	
-	public DominancePatternResults getResults() { return results; }
-
+	public DominancePatternAlgo() {
+		this.results = new ArrayList<DominancePatternResult>();
+	}
+		
+	public DominancePatternResult getLatestResult() {
+		return results.get(results.size()-1);
+	}
+	
 	@Override
-	public void identify(
+	public String getPatternName() {
+		return PatternConstants.DOMINANCE;
+	}
+	
+	@Override
+	public void identifyPatternWithOneCoordinate(
 			Dataset<Row> dataset, 
 			String measurementColName,
-			String xCoordinateColName) 
-					throws IOException {
-		// Initialize pattern result object for identification with one coordinate
-		results = new DominancePatternResults(
-				"## Dominance Pattern Results With One Coordinate Column",
-				"avg", measurementColName, xCoordinateColName);
+			String xCoordinateColName) {
+		// Add a new pattern result object to the results list
+		results.add(new DominancePatternResult(
+				"avg", measurementColName, xCoordinateColName));
 
-		// Identify dominance with one coordinate
-		identifyDominanceWithOneCoordinate(dataset, measurementColName,
-				xCoordinateColName);
-
-		// and write results to file
-		results.writeToFile(new File(String.format(
-				"src%stest%sresources%sdominance_results_1.md",
-				File.separator, File.separator, File.separator)).getAbsolutePath());
-
-		// TODO eventually we want to write the results to the overall report
-		// so we might need the DatasetProfile object here 
-		// or alternatively maybe return results object to PatternManager instead (?)
+		// query the dataset
+		List<Row> queryResult = runQuery(dataset, measurementColName, xCoordinateColName);
+				
+		// and actually check for dominance
+		identifyDominanceWithOneCoordinate(queryResult);
 	}
 
 	@Override
-	public void identify(
+	public void identifyPatternWithTwoCoordinates(
 			Dataset<Row> dataset, 
 			String measurementColName,
 			String xCoordinateColName, 
-			String yCoordinateColName) 
-					throws IOException {
-		// Initialize pattern result object for identification with two coordinates
-		results = new DominancePatternResults(
-				"## Dominance Pattern Results With Two Coordinate Columns",
-				"avg", measurementColName, xCoordinateColName, yCoordinateColName);
-
-		// Identify dominance with two coordinates
-		identifyDominanceWithTwoCoordinates(dataset, measurementColName,
+			String yCoordinateColName) {
+		// Add a new pattern result object to the results list
+		results.add(new DominancePatternResult(
+				"avg", measurementColName, xCoordinateColName, yCoordinateColName));
+		
+		// query the dataset
+		List<Row> queryResult = runQuery(dataset, measurementColName, 
 				xCoordinateColName, yCoordinateColName);
-
-		// and write results to file
-		results.writeToFile(new File(String.format("src%stest%sresources%sdominance_results_2.md",
-				File.separator, File.separator, File.separator)).getAbsolutePath());
-
-		// TODO eventually we want to write the results to the overall report
-		// so we might need the DatasetProfile object here 
-		// or alternatively maybe return results object to PatternManager instead (?)
+		
+		// and actually check for dominance
+		identifyDominanceWithTwoCoordinates(queryResult);
 	}
-
-	// This method executes the query to the dataset with one coordinate
-	// and actually performs the check for dominance.
-	// All results, including any identified highlights, are added to the results object.
-	private void identifyDominanceWithOneCoordinate(
-			Dataset<Row> dataset,
-			String measurementColName,
-			String xCoordinateColName) {
-
-		List<Row> queryResult = runQuery(dataset, measurementColName, xCoordinateColName);
-
+	
+	// This method actually performs the check for dominance.
+	// All results, including any identified highlights, are added to the results list.
+	private void identifyDominanceWithOneCoordinate(List<Row> queryResult) {
 		for (Row rowA : queryResult) {
 			String xCoordinate = parseCoordinateValue(rowA, 0);
 			double aggValueA = parseAggregateValue(rowA);
@@ -109,7 +96,7 @@ public class DominancePatternAlgo implements IPatternAlgo {
 			String highlightType = determineHighlightType(
 					highDominancePercentage, lowDominancePercentage);
 
-			results.addResult(
+			getLatestResult().addIdentificationResult(
 					xCoordinate, 
 					aggValueA, 
 					highDominancePercentage,
@@ -117,20 +104,14 @@ public class DominancePatternAlgo implements IPatternAlgo {
 					isHighlight(highlightType), 
 					highlightType);
 		}
+		// TODO filter results such that we only keep top-K highlights.
+		// Results for big datasets and/or multiple measurement/coordinates
+		// are very likey to be way too long to read.
 	}
 
-	// This method executes the query to the dataset with two coordinates
-	// and actually performs the check for dominance.
+	// This method actually performs the check for dominance.
 	// All results, including any identified highlights, are added to the results object.
-	private void identifyDominanceWithTwoCoordinates(
-			Dataset<Row> dataset,
-			String measurementColName,
-			String xCoordinateColName, 
-			String yCoordinateColName) {
-
-		List<Row> queryResult = runQuery(dataset, measurementColName, 
-				xCoordinateColName, yCoordinateColName);
-		
+	private void identifyDominanceWithTwoCoordinates(List<Row> queryResult) {
 		for (Row rowA : queryResult) {
 			String xCoordinateA = parseCoordinateValue(rowA, 0);
 			String yCoordinateA = parseCoordinateValue(rowA, 1);
@@ -165,7 +146,7 @@ public class DominancePatternAlgo implements IPatternAlgo {
 			String highlightType = determineHighlightType(
 					highDominancePercentage, lowDominancePercentage);
 
-			results.addResult(
+			getLatestResult().addIdentificationResult(
 					xCoordinateA, 
 					yCoordinateA,
 					aggValueA, 
@@ -174,6 +155,10 @@ public class DominancePatternAlgo implements IPatternAlgo {
 					isHighlight(highlightType), 
 					highlightType);
 			}
+			// TODO filter results such that we only keep top-K highlights.
+			// Results for big datasets and/or multiple measurement/coordinates
+			// are very likey to be way too long to read,
+			// esp. for 2 coordinates.
 	}
 
 	private double parseAggregateValue(Row row) {
@@ -203,8 +188,8 @@ public class DominancePatternAlgo implements IPatternAlgo {
 	}
 	
 	// TODO is it ok to use collectAsList here?
-	// Perhaps the query returns a dataset that doesn't fit on main memory for
-	// very large input datasets.
+	// Is it likely that the query returns a dataset that doesn't fit on main
+	// memory for very large input datasets?
 	private List<Row> runQuery(
 			Dataset<Row> dataset, 
 			String measurementColName,
@@ -242,6 +227,26 @@ public class DominancePatternAlgo implements IPatternAlgo {
 		return PatternConstants.EMPTY;
 	}
 
+	@Override
+	public void exportResultsToFile(String path) throws IOException {
+		String str = "## Dominance Pattern Results\n";
+		for (DominancePatternResult result : results) {
+			str += result.toString();
+		}
+		writeToFile(path, str);
+		
+		// TODO eventually we want to write the results to the overall report
+		// so we might need the DatasetProfile object here 
+		// or alternatively maybe return results object to PatternManager instead (?)
+	}
+	
+	private void writeToFile(String path, String str) throws IOException {
+		PrintWriter printWriter = new PrintWriter(new FileWriter(path));
+	    printWriter.write(str);
+	    printWriter.flush();
+	    printWriter.close();
+	}
+	
 	public void debugPrintList(List<Row> list, String title) {
 		String str = title;
 		for (Row row : list) {
