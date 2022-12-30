@@ -98,9 +98,10 @@ public class AttributesFinder {
         nonGeneratingAttributes = Arrays.stream(dataset.schema().fields())
                 .filter(field ->
                         !numericalFeatures.contains(field.name()) &&
-                        !categoricalFeatures.contains(field.name()) &&
-                        !field.name().equals(decisionTreeParams.getLabeledColumnName())
-                        // uncomment if we want the target column names to not be included
+                        !categoricalFeatures.contains(field.name())
+//                        // uncomment if we want the labeled column to not be included
+//                        && !field.name().equals(decisionTreeParams.getLabeledColumnName())
+//                        // uncomment if we want the target column names to not be included
 //                        && !decisionTreeParams.getNonGeneratorAttributes().contains(field.name()
                 )
                 .map(StructField::name)

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class DecisionTreeAttributesTests {
@@ -23,59 +23,61 @@ public class DecisionTreeAttributesTests {
 
     @Test
     public void testFeatureColumns() {
-        String[] expectedFeatures = {"CompPrice", "Income", "Advertising",
+        List<String> expectedFeatures = Arrays.asList("CompPrice", "Income", "Advertising",
                 "Population", "Price", "Age", "Education",
-                "ShelveLoc", "Urban", "US"};
+                "ShelveLoc", "Urban", "US");
         DecisionTree decisionTree = getDecisionTree(new ArrayList<>());
-        assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
     }
 
     @Test
     public void testValidSelectedFeatureColumns() {
-        String[] expectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
-        DecisionTree decisionTree = getDecisionTree(Arrays.asList(expectedFeatures));
-        assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+        List<String> expectedFeatures = Arrays.asList("Income", "Price", "Age", "ShelveLoc");
+        DecisionTree decisionTree = getDecisionTree(expectedFeatures);
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
     }
 
     @Test
     public void testSomeNotValidSelectedFeatureColumns() {
-        String[] someNotValidFeatures = {"Income", "Price", "Age", "ShelveLoc",
-                "Sales_labeled", "Sales_labeled_indexed", "ShelveLoc_indexed"};
-        DecisionTree decisionTree = getDecisionTree(Arrays.asList(someNotValidFeatures));
-        String[] expectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
-        assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+        List<String> someNotValidFeatures = Arrays.asList("Income", "Price", "Age", "ShelveLoc",
+                "Sales_labeled", "Sales_labeled_indexed", "ShelveLoc_indexed");
+        DecisionTree decisionTree = getDecisionTree(someNotValidFeatures);
+        List<String> expectedFeatures = Arrays.asList("Income", "Price", "Age", "ShelveLoc");
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
     }
 
     @Test
     public void testNullSelectedFeaturesList() {
-        String[] expectedFeatures = {"CompPrice", "Income", "Advertising",
+        List<String> expectedFeatures = Arrays.asList("CompPrice", "Income", "Advertising",
                 "Population", "Price", "Age", "Education",
-                "ShelveLoc", "Urban", "US"};
+                "ShelveLoc", "Urban", "US");
         DecisionTree decisionTree = getDecisionTree(null);
-        assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
     }
 
     @Test
     public void testSomeNullElementsSelectedFeatureColumns() {
-        String[] someNullSelectedFeatures = {"Income", null, "Age", null};
-        DecisionTree decisionTree = getDecisionTree(Arrays.asList(someNullSelectedFeatures));
-        String[] expectedFeatures = {"Income", "Age"};
-        assertArrayEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+        List<String> someNullSelectedFeatures = Arrays.asList("Income", null, "Age", null);
+        DecisionTree decisionTree = getDecisionTree(someNullSelectedFeatures);
+        List<String> expectedFeatures = Arrays.asList("Income", "Age");
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
     }
 
     @Test
     public void testNonGeneratorAttributesWithAllAsFeatures() {
-        String[] expectedNonGeneratorAttributes = {"Sales"};
+        List<String> expectedNonGeneratorAttributes = Arrays.asList("Sales", "Sales_labeled");
         DecisionTree decisionTree = getDecisionTree(new ArrayList<>());
-        assertArrayEquals(expectedNonGeneratorAttributes, decisionTree.getNonGeneratorAttributes().toArray());
+        assertEquals(expectedNonGeneratorAttributes, decisionTree.getNonGeneratorAttributes());
     }
 
     @Test
     public void testNonGeneratorAttributesWithSomeFeatures() {
-        String[] expectedNonGeneratorAttributes = {"Sales", "Income", "Price", "ShelveLoc", "Age"};
-        String[] selectedFeatures = {"CompPrice", "Advertising", "Population", "Education", "Urban", "US"};
-        DecisionTree decisionTree = getDecisionTree(Arrays.asList(selectedFeatures));
-        assertArrayEquals(expectedNonGeneratorAttributes, decisionTree.getNonGeneratorAttributes().toArray());
+        List<String> expectedNonGeneratorAttributes = Arrays.asList("Sales", "Income", "Price",
+                "ShelveLoc", "Age", "Sales_labeled");
+        List<String> selectedFeatures = Arrays.asList("CompPrice", "Advertising", "Population",
+                "Education", "Urban", "US");
+        DecisionTree decisionTree = getDecisionTree(selectedFeatures);
+        assertEquals(expectedNonGeneratorAttributes, decisionTree.getNonGeneratorAttributes());
     }
 
     private DecisionTree getDecisionTree(List<String> selectedFeatures) {

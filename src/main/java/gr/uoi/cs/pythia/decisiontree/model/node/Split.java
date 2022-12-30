@@ -50,7 +50,8 @@ public class Split {
                     .collect(Collectors.toList());
             for (Double indexedValue : splitIndexedCategories) {
                 String actualValue = nodeParams
-                        .getIndexedToActualValuesForEachIndexedColumn().get(feature)
+                        .getIndexedToActualValuesForEachIndexedColumn()
+                        .get(feature)
                         .get(indexedValue);
                 splitCategories.add(actualValue);
             }

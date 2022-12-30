@@ -28,7 +28,7 @@ public class DecisionTreeVisualizationTests {
         assertTrue("The graphvizTest.png file could not be deleted." ,decisionTreeImage.delete());
     }
 
-    public String getDecisionTreeTestFilePath() {
+    private String getDecisionTreeTestFilePath() {
         String relativePath = "\\src\\test\\java\\gr\\uoi\\cs\\pythia\\decisiontree"
                 .replace("\\", File.separator);
         return System.getProperty("user.dir") + relativePath;

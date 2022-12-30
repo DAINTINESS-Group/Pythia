@@ -1,14 +1,11 @@
 package gr.uoi.cs.pythia.engine;
 
 import static org.apache.spark.sql.functions.expr;
-import static org.apache.spark.sql.types.DataTypes.StringType;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
-import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
@@ -82,14 +79,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public DatasetProfile computeProfileOfDataset() {
-    return computeProfileOfDataset(new UserDefinedSettings());
-  }
-
-  @Override
-  public DatasetProfile computeProfileOfDataset(UserDefinedSettings settings) {
     computeDescriptiveStats();
     computeAllPairsCorrelations();
-    extractAllDecisionTrees(settings);
+    extractAllDecisionTrees();
     return datasetProfile;
   }
 
@@ -135,43 +127,16 @@ public class DatasetProfiler implements IDatasetProfiler {
     logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
   }
 
-  private void extractAllDecisionTrees(UserDefinedSettings settings) {
-    HashMap<String, DecisionTreeParams> decisionTreeAllParams = new HashMap<>();
-    for (DecisionTreeParams dtParams : settings.getDecisionTreeParams()) {
-      decisionTreeAllParams.put(dtParams.getLabeledColumnName(), dtParams);
+  private void extractAllDecisionTrees() {
+    List<LabeledColumn> labeledColumns = new DecisionTreeManager(
+            ruleSets, dataset, datasetProfile.getColumns().size())
+            .extractAllDecisionTrees();
+
+    datasetProfile.getColumns().addAll(labeledColumns);
+    for (LabeledColumn labeledColumn : labeledColumns) {
+      logger.info(String.format("Computed Decision Tree for labeled column %s",
+              labeledColumn.getName()));
     }
-
-    for (RuleSet ruleSet : ruleSets) {
-      String labeledColumnName = ruleSet.getNewColumnName();
-      if (decisionTreeAllParams.containsKey(labeledColumnName)) {
-        extractDecisionTree(decisionTreeAllParams.get(labeledColumnName));
-      } else {
-        extractDecisionTree(new DecisionTreeParams
-                .Builder(labeledColumnName, ruleSet.getTargetColumns())
-                .build());
-      }
-    }
-  }
-
-  private void extractDecisionTree(DecisionTreeParams decisionTreeParams) {
-    // Make decision tree
-    DecisionTree dt = new DecisionTreeEngineFactory(decisionTreeParams, dataset)
-            .getDefaultEngine()
-            .computeDecisionTree();
-
-    // Add column data
-    List<Column> columns = datasetProfile.getColumns();
-    columns.add(
-            new LabeledColumn(
-                    columns.size(),
-                    StringType.toString(),
-                    decisionTreeParams.getLabeledColumnName(),
-                    dt.getAccuracy(),
-                    dt.getFeatureColumnNames(),
-                    dt.getDecisionTreeVisualization(),
-                    dt.getNonGeneratorAttributes()));
-    logger.info(String.format("Computed Decision Tree for labeled column %s",
-            decisionTreeParams.getLabeledColumnName()));
   }
 
   @Override

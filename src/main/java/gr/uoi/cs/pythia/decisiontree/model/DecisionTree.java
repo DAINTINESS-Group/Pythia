@@ -28,8 +28,8 @@ public class DecisionTree {
         return accuracy;
     }
 
-    public String[] getFeatureColumnNames() {
-        return featureColumnNames.toArray(new String[0]);
+    public List<String> getFeatureColumnNames() {
+        return featureColumnNames;
     }
 
     public List<String> getNonGeneratorAttributes() {
@@ -42,5 +42,23 @@ public class DecisionTree {
 
     public String getDecisionTreeVisualization() {
         return decisionTreeVisualization;
+    }
+
+    @Override
+    public String toString() {
+        return "DecisionTree"
+                + "\n"
+                + "featureColumnNames="
+                + String.join(", ", featureColumnNames)
+                + "\n"
+                + "accuracy="
+                + accuracy
+                + "\n"
+                + "decisionTreeVisualization='"
+                + decisionTreeVisualization
+                + "\n"
+                + "Non generator columns="
+                + String.join(", ", nonGeneratorAttributes)
+                + "\n";
     }
 }

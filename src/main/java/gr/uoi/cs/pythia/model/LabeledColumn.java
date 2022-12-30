@@ -1,45 +1,24 @@
 package gr.uoi.cs.pythia.model;
 
-import java.util.Arrays;
-import java.util.List;
+import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 
 public class LabeledColumn extends Column {
 
-  private double decisionTreeAccuracy;
-  private String[] featureColumnNames;
-  private String decisionTreeVisualization;
-  private List<String> nonGeneratorColumns;
+  private final DecisionTree decisionTree;
 
   public LabeledColumn(
           int position,
-          String datatype,
           String newColumnName,
-          double decisionTreeAccuracy,
-          String[] featureColumnNames,
-          String decisionTreeVisualization,
-          List<String> nonGeneratorColumns) {
+          String datatype,
+          DecisionTree decisionTree) {
     super(position, newColumnName, datatype);
-    this.decisionTreeAccuracy = decisionTreeAccuracy;
-    this.featureColumnNames = featureColumnNames;
-    this.decisionTreeVisualization = decisionTreeVisualization;
-    this.nonGeneratorColumns = nonGeneratorColumns;
+    this.decisionTree = decisionTree;
   }
 
   @Override
   public String toString() {
     return super.toString()
-        + "\nDecisionTree\n"
-        + "featureColumnNames="
-        + Arrays.toString(featureColumnNames)
-        + "\n"
-        + "accuracy="
-        + decisionTreeAccuracy
-        + "\n"
-        + "decisionTreeVisualization='"
-        + decisionTreeVisualization
-        + "\n"
-        + "Non generator columns="
-        + String.join(", ", nonGeneratorColumns)
-        + "\n";
+            + "\n"
+            + decisionTree.toString();
   }
 }
