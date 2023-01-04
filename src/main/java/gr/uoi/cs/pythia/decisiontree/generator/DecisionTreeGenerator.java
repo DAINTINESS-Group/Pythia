@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.decisiontree.engine;
+package gr.uoi.cs.pythia.decisiontree.generator;
 
 import gr.uoi.cs.pythia.decisiontree.dataprepararion.DecisionTreeDataProcessor;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
@@ -12,12 +12,12 @@ import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-public class DecisionTreeEngine implements IDecisionTreeEngine {
+public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
 
-    public DecisionTreeEngine(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
+    public DecisionTreeGenerator(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
         this.dataset = dataset;
     }

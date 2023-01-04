@@ -21,7 +21,7 @@ public class DecisionTreeVisualizationTests {
 
         String directory = getDecisionTreeTestFilePath();
         String fileName = "graphvizTest";
-        dtVisualizer.createPng(directory, "graphvizTest");
+        dtVisualizer.exportDecisionTreeToPNG(directory, "graphvizTest");
 
         File decisionTreeImage = new File(directory + File.separator + fileName + ".png");
         assertTrue("The graphvizTest.png file does not exist.", decisionTreeImage.isFile());

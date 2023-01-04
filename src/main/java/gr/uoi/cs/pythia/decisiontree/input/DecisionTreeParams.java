@@ -72,7 +72,9 @@ public class DecisionTreeParams {
         }
 
         public Builder impurity(Impurity impurity) {
-            this.impurity = impurity.toString().toLowerCase();
+            if (impurity != null) {
+                this.impurity = impurity.toString().toLowerCase();
+            }
             return this;
         }
 
@@ -82,7 +84,7 @@ public class DecisionTreeParams {
         }
 
         public Builder trainingToTestDataSplitRatio(double[] ratio) {
-            if (ratio != null)
+            if (ratio != null && ratio.length == 2)
                 this.trainingToTestDataSplitRatio = ratio;
             return this;
         }
@@ -103,10 +105,10 @@ public class DecisionTreeParams {
             return new DecisionTreeParams(this);
         }
 
+        // TODO: Removes only not null elements. Maybe throw an error instead?
         private List<String> validateSelectedFeatures(List<String> selectedFeatures) {
             if (selectedFeatures == null)
                 return new ArrayList<>();
-            // TODO: Removes only not null elements (?) maybe throw error?
             if (selectedFeatures.contains(null))
                 return selectedFeatures.stream()
                         .filter(Objects::nonNull)

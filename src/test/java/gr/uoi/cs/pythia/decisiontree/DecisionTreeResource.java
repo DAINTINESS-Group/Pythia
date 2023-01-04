@@ -1,7 +1,7 @@
 package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
+import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
@@ -97,8 +97,8 @@ public class DecisionTreeResource extends ExternalResource {
                 .selectedFeatures(selectedFeatures)
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .build();
-        return new DecisionTreeEngineFactory(decisionTreeParams, dataset)
-                .getDefaultEngine()
+        return new DecisionTreeGeneratorFactory(decisionTreeParams, dataset)
+                .getDefaultGenerator()
                 .computeDecisionTree();
     }
 

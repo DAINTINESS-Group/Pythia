@@ -1,8 +1,8 @@
-package gr.uoi.cs.pythia.decisiontree.engine;
+package gr.uoi.cs.pythia.decisiontree.generator;
 
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 
-public interface IDecisionTreeEngine {
+public interface IDecisionTreeGenerator {
     /**
      * Computes and returns a DecisionTree object,
      * based on the given DecisionTreeParams and dataset,

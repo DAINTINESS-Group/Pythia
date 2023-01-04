@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
+import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.labeling.RuleSet;
@@ -39,8 +39,8 @@ public class DecisionTreeManager {
         DecisionTreeParams decisionTreeParams = new DecisionTreeParams
                 .Builder(ruleSet.getNewColumnName(), ruleSet.getTargetColumns())
                 .build();
-        return new DecisionTreeEngineFactory(decisionTreeParams, dataset)
-                .getDefaultEngine()
+        return new DecisionTreeGeneratorFactory(decisionTreeParams, dataset)
+                .getDefaultGenerator()
                 .computeDecisionTree();
     }
 

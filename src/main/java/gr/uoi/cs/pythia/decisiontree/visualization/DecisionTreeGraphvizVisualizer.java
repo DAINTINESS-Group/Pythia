@@ -63,7 +63,7 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     }
 
     @Override
-    public void createPng(String directory, String fileName) throws IOException {
+    public void exportDecisionTreeToPNG(String directory, String fileName) throws IOException {
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
                 .toFile(new File(directory + File.separator + fileName + ".png"));

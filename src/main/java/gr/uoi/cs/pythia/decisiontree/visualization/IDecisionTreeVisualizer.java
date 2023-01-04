@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public interface IDecisionTreeVisualizer {
     /**
-     * Creates a new PNG image with the specified name,
-     * at the specified directory.
+     * Creates a new PNG image of Decision Tree as a top-down graph,
+     * with the specified file name and at the specified directory.
      * @param directory the directory where the image will be created
      * @param fileName the name of the image file
-     * @throws IOException
+     * @throws IOException the IOException
      */
-    void createPng(String directory, String fileName) throws IOException;
+    void exportDecisionTreeToPNG(String directory, String fileName) throws IOException;
 }

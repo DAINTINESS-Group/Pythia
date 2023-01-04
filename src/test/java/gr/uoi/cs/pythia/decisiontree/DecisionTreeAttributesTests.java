@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.decisiontree.engine.DecisionTreeEngineFactory;
+import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import org.junit.Test;
@@ -87,8 +87,8 @@ public class DecisionTreeAttributesTests {
                 .selectedFeatures(selectedFeatures)
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .build();
-        return new DecisionTreeEngineFactory(decisionTreeParams, AllDecisionTreeTests.dtResource.getDataset())
-                .getDefaultEngine()
+        return new DecisionTreeGeneratorFactory(decisionTreeParams, AllDecisionTreeTests.dtResource.getDataset())
+                .getDefaultGenerator()
                 .computeDecisionTree();
     }
 }

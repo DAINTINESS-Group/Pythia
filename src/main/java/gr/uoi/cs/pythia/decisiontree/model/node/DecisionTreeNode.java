@@ -61,7 +61,7 @@ public class DecisionTreeNode {
         } else {
             sb.append(" in ");
             sb.append("(");
-            sb.append(String.join(", ", split.getCategories()));;
+            sb.append(String.join(", ", split.getCategories()));
             sb.append(")");
         }
         return sb.toString();
