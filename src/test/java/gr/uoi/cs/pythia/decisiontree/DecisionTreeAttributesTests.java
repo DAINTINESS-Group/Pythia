@@ -83,7 +83,7 @@ public class DecisionTreeAttributesTests {
     private DecisionTree getDecisionTree(List<String> selectedFeatures) {
         DecisionTreeParams decisionTreeParams = new DecisionTreeParams
                 .Builder(AllDecisionTreeTests.dtResource.getRuleSet().getNewColumnName(),
-                AllDecisionTreeTests.dtResource.getRuleSet().getTargetColumns())
+                AllDecisionTreeTests.dtResource.getTargetColumns())
                 .selectedFeatures(selectedFeatures)
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .build();

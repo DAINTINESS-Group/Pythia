@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.decisiontree;
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import org.apache.spark.sql.Dataset;
@@ -10,6 +11,7 @@ import org.apache.spark.sql.Row;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.types.DataTypes.StringType;
 
@@ -36,12 +38,18 @@ public class DecisionTreeManager {
     }
 
     private DecisionTree extractDecisionTree(RuleSet ruleSet) {
-        DecisionTreeParams decisionTreeParams = new DecisionTreeParams
-                .Builder(ruleSet.getNewColumnName(), ruleSet.getTargetColumns())
-                .build();
-        return new DecisionTreeGeneratorFactory(decisionTreeParams, dataset)
+        return new DecisionTreeGeneratorFactory(getDefaultDtParams(ruleSet), dataset)
                 .getDefaultGenerator()
                 .computeDecisionTree();
+    }
+
+    private DecisionTreeParams getDefaultDtParams(RuleSet ruleSet) {
+        List<String> targetColumns = ruleSet.getRules().stream()
+                .map(Rule::getTargetColumnName)
+                .collect(Collectors.toList());
+        return new DecisionTreeParams
+                .Builder(ruleSet.getNewColumnName(), targetColumns)
+                .build();
     }
 
     private LabeledColumn createLabeledColumn(DecisionTree decisionTree, RuleSet ruleSet) {

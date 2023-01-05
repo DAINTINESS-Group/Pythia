@@ -21,7 +21,7 @@ public class DecisionTreeNodesTests {
         String[] selectedFeatures = {"Income", "Price", "Age", "ShelveLoc"};
         DecisionTreeParams decisionTreeParams = new DecisionTreeParams
                 .Builder(AllDecisionTreeTests.dtResource.getRuleSet().getNewColumnName(),
-                AllDecisionTreeTests.dtResource.getRuleSet().getTargetColumns())
+                AllDecisionTreeTests.dtResource.getTargetColumns())
                 .selectedFeatures(Arrays.asList(selectedFeatures))
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .maxDepth(2)

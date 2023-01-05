@@ -25,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DecisionTreeResource extends ExternalResource {
     private static SparkSession sparkSession;
@@ -93,13 +94,19 @@ public class DecisionTreeResource extends ExternalResource {
 
     public DecisionTree getDecisionTree(List<String> selectedFeatures) {
         DecisionTreeParams decisionTreeParams = new DecisionTreeParams
-                .Builder(ruleSet.getNewColumnName(), ruleSet.getTargetColumns())
+                .Builder(ruleSet.getNewColumnName(), getTargetColumns())
                 .selectedFeatures(selectedFeatures)
                 .trainingToTestDataSplitRatio(new double[]{1, 0})
                 .build();
         return new DecisionTreeGeneratorFactory(decisionTreeParams, dataset)
                 .getDefaultGenerator()
                 .computeDecisionTree();
+    }
+
+    public List<String> getTargetColumns() {
+        return ruleSet.getRules().stream()
+                .map(Rule::getTargetColumnName)
+                .collect(Collectors.toList());
     }
 
     @Override
