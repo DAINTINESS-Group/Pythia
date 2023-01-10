@@ -21,6 +21,7 @@ import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
@@ -69,12 +70,21 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void computeLabeledColumn(RuleSet ruleSet) {
-    // Add new labeledColumn
+    // Add new column to the dataset
+    String columnName = ruleSet.getNewColumnName();
     String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
-    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
-    logger.info(String.format("Computed labeled column %s", ruleSet.getNewColumnName()));
-
+    dataset = dataset.withColumn(columnName, expr(labelingRulesAsExpression));
     ruleSets.add(ruleSet);
+
+    // Create new LabeledColumn
+    int index = (int) dataset.schema().getFieldIndex(columnName).get();
+    DataType dataType = dataset.schema().fields()[index].dataType();
+    datasetProfile.getColumns().add(new LabeledColumn(
+            datasetProfile.getColumns().size(),
+            columnName,
+            dataType.toString()
+    ));
+    logger.info(String.format("Added labeled column %s", columnName));
   }
 
   @Override
@@ -128,14 +138,12 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void extractAllDecisionTrees() {
-    List<LabeledColumn> labeledColumns = new DecisionTreeManager(
-            ruleSets, dataset, datasetProfile.getColumns().size())
+    List<String> labeledColumnNames = new DecisionTreeManager(
+            ruleSets, dataset, datasetProfile.getColumns())
             .extractAllDecisionTrees();
 
-    datasetProfile.getColumns().addAll(labeledColumns);
-    for (LabeledColumn labeledColumn : labeledColumns) {
-      logger.info(String.format("Computed Decision Tree for labeled column %s",
-              labeledColumn.getName()));
+    for (String labeledColumnName : labeledColumnNames) {
+      logger.info(String.format("Computed Decision Tree for labeled column %s", labeledColumnName));
     }
   }
 

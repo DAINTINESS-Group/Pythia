@@ -4,14 +4,20 @@ import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 
 public class LabeledColumn extends Column {
 
-  private final DecisionTree decisionTree;
+  private DecisionTree decisionTree;
 
   public LabeledColumn(
           int position,
           String newColumnName,
-          String datatype,
-          DecisionTree decisionTree) {
+          String datatype) {
     super(position, newColumnName, datatype);
+  }
+
+  public DecisionTree getDecisionTree() {
+    return decisionTree;
+  }
+
+  public void setDecisionTree(DecisionTree decisionTree) {
     this.decisionTree = decisionTree;
   }
 

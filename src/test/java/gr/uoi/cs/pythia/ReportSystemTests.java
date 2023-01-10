@@ -66,7 +66,7 @@ public class ReportSystemTests {
   }
 
   @Test
-  public void testNaiveDatasetWriter2() throws AnalysisException, IOException {
+  public void testNaiveDatasetWriter() throws AnalysisException, IOException {
     StructType schema =
             new StructType(
                     new StructField[] {

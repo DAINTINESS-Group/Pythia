@@ -12,6 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
         DecisionTreeVisualizationTests.class
 })
 public class AllDecisionTreeTests {
+
     @ClassRule
     public static DecisionTreeResource dtResource = new DecisionTreeResource();
 }
