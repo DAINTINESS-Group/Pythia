@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -34,9 +33,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
-    Logger.getRootLogger().setLevel(Level.ERROR);
-    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR);
-    Logger.getLogger("org.spark-project").setLevel(Level.ERROR);
     this.dataFrameReaderFactory =
         new IDatasetReaderFactory(
             SparkSession.builder()
