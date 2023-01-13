@@ -1,27 +1,28 @@
 package gr.uoi.cs.pythia.decisiontree.model;
 
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
+import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
+import gr.uoi.cs.pythia.decisiontree.paths.DecisionTreePathsFinder;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DecisionTree {
     private final double accuracy;
     private final List<String> featureColumnNames;
     private final List<String> nonGeneratorAttributes;
     private final DecisionTreeNode rootNode;
-
-    private final String decisionTreeVisualization;
+    private final List<DecisionTreePath> paths;
 
     public DecisionTree(double accuracy,
                         List<String> featureColumnNames,
                         List<String> nonGeneratorAttributes,
-                        DecisionTreeNode rootNode,
-                        String decisionTreeVisualization) {
+                        DecisionTreeNode rootNode) {
         this.accuracy = accuracy;
         this.featureColumnNames = featureColumnNames;
         this.nonGeneratorAttributes = nonGeneratorAttributes;
         this.rootNode = rootNode;
-        this.decisionTreeVisualization = decisionTreeVisualization;
+        this.paths = new DecisionTreePathsFinder(rootNode).getPaths();
     }
 
     public double getAccuracy() {
@@ -40,12 +41,16 @@ public class DecisionTree {
         return rootNode;
     }
 
-    public String getDecisionTreeVisualization() {
-        return decisionTreeVisualization;
+    public List<DecisionTreePath> getPaths() {
+        return paths;
     }
 
     @Override
     public String toString() {
+        String allPaths = paths.stream()
+                .map(DecisionTreePath::toString)
+                .collect(Collectors.joining("\n"));
+
         return "DecisionTree"
                 + "\n"
                 + "featureColumnNames="
@@ -54,11 +59,11 @@ public class DecisionTree {
                 + "accuracy="
                 + accuracy
                 + "\n"
-                + "decisionTreeVisualization='"
-                + decisionTreeVisualization
-                + "\n"
                 + "Non generator columns="
                 + String.join(", ", nonGeneratorAttributes)
-                + "\n";
+                + "\n"
+                + "Paths="
+                + "\n"
+                + allPaths;
     }
 }

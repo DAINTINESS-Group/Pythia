@@ -7,9 +7,9 @@ import org.apache.spark.sql.types.StructType;
 
 public class JsonDatasetReader implements IDatasetReader {
 
-  private SparkSession sparkSession;
-  private String path;
-  private StructType schema;
+  private final SparkSession sparkSession;
+  private final String path;
+  private final StructType schema;
 
   public JsonDatasetReader(SparkSession sparkSession, String path, StructType schema) {
     this.sparkSession = sparkSession;
@@ -19,6 +19,8 @@ public class JsonDatasetReader implements IDatasetReader {
 
   @Override
   public Dataset<Row> read() {
-    return sparkSession.read().option("header", "true").schema(schema).json(path);
+    return sparkSession.read()
+            .schema(schema)
+            .json(path);
   }
 }

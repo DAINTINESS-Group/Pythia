@@ -1,6 +1,8 @@
 package gr.uoi.cs.pythia;
 
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
+import gr.uoi.cs.pythia.report.AllReportTests;
+import gr.uoi.cs.pythia.writer.AllWriterTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -10,6 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
         UtilTests.class,
         LabelingSystemTests.class,
         AllDecisionTreeTests.class,
-        ReportSystemTests.class
+        AllReportTests.class,
+        AllWriterTests.class
 })
 public class AllTests {}

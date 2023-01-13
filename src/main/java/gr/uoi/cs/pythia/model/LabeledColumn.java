@@ -1,30 +1,46 @@
 package gr.uoi.cs.pythia.model;
 
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LabeledColumn extends Column {
 
-  private DecisionTree decisionTree;
+  private final List<DecisionTree> decisionTrees = new ArrayList<>();
+  private final RuleSet ruleSet;
 
   public LabeledColumn(
           int position,
           String newColumnName,
-          String datatype) {
+          String datatype,
+          RuleSet ruleSet) {
     super(position, newColumnName, datatype);
+    this.ruleSet = ruleSet;
   }
 
-  public DecisionTree getDecisionTree() {
-    return decisionTree;
+  public List<DecisionTree> getDecisionTrees() {
+    return decisionTrees;
   }
 
-  public void setDecisionTree(DecisionTree decisionTree) {
-    this.decisionTree = decisionTree;
+  public RuleSet getRuleSet() {
+    return ruleSet;
+  }
+
+  public void addDecisionTree(DecisionTree decisionTree) {
+    decisionTrees.add(decisionTree);
   }
 
   @Override
   public String toString() {
+    String allDecisionTrees = decisionTrees.stream()
+            .map(DecisionTree::toString)
+            .collect(Collectors.joining("\n"));
+
     return super.toString()
             + "\n"
-            + decisionTree.toString();
+            + allDecisionTrees;
   }
 }

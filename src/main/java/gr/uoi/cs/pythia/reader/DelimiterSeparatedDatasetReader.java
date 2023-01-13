@@ -7,10 +7,10 @@ import org.apache.spark.sql.types.StructType;
 
 public class DelimiterSeparatedDatasetReader implements IDatasetReader {
 
-  private SparkSession sparkSession;
-  private String path;
-  private String separator;
-  private StructType schema;
+  private final SparkSession sparkSession;
+  private final String path;
+  private final String separator;
+  private final StructType schema;
 
   public DelimiterSeparatedDatasetReader(SparkSession sparkSession, String path, String separator, StructType schema) {
     this.sparkSession = sparkSession;

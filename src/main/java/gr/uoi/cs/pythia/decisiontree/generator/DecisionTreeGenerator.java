@@ -58,7 +58,6 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
         return new DecisionTree(accuracy,
                 attributesFinder.getAllFeatures(),
                 attributesFinder.getNonGeneratingAttributes(),
-                new DecisionTreeNode(nodeParams),
-                model.toDebugString());
+                new DecisionTreeNode(nodeParams));
     }
 }

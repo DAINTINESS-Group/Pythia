@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
         DecisionTreeNodesTests.class,
         DecisionTreeAttributesTests.class,
-        DecisionTreeVisualizationTests.class
+        DecisionTreeVisualizationTests.class,
+        DecisionTreePathsTests.class
 })
 public class AllDecisionTreeTests {
 

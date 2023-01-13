@@ -6,67 +6,73 @@ import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
+import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DecisionTreeManager {
 
-    private final List<RuleSet> ruleSets;
     private final Dataset<Row> dataset;
-    private final List<Column> columns;
+    private final DatasetProfile datasetProfile;
 
-    public DecisionTreeManager(List<RuleSet> ruleSets, Dataset<Row> dataset, List<Column> columns) {
-        this.ruleSets = ruleSets;
+    public DecisionTreeManager(Dataset<Row> dataset, DatasetProfile datasetProfile) {
         this.dataset = dataset;
-        this.columns = columns;
-    }
-
-    public List<String> extractAllDecisionTrees(List<DecisionTreeParams> userDecisionTreeParams) {
-        Map<String, DecisionTreeParams> labeledColumnNameToParams = userDecisionTreeParams
-                .stream()
-                .collect(Collectors.toMap(
-                        DecisionTreeParams::getLabeledColumnName,
-                        DecisionTreeParams -> DecisionTreeParams)
-                );
-
-        List<String> labeledColumnNames = new ArrayList<>();
-        for (RuleSet ruleSet : ruleSets) {
-            DecisionTreeParams decisionTreeParams = getDecisionTreeParams(labeledColumnNameToParams, ruleSet);
-            DecisionTree dt = extractDecisionTree(decisionTreeParams);
-            String columnName = ruleSet.getNewColumnName();
-            getColumn(columnName).setDecisionTree(dt);
-            labeledColumnNames.add(columnName);
-        }
-        return labeledColumnNames;
-    }
-
-    private DecisionTreeParams getDecisionTreeParams(Map<String, DecisionTreeParams> labeledColumnNamesToParams,
-                                                     RuleSet ruleSet) {
-        String labeledColumnName = ruleSet.getNewColumnName();
-        if (labeledColumnNamesToParams.containsKey(labeledColumnName)) {
-            return labeledColumnNamesToParams.get(labeledColumnName);
-        }
-        else {
-            return getDefaultDtParams(ruleSet);
-        }
+        this.datasetProfile = datasetProfile;
     }
 
     public List<String> extractAllDecisionTrees() {
-        List<String> labeledColumnNames = new ArrayList<>();
-        for (RuleSet ruleSet : ruleSets) {
-            DecisionTreeParams decisionTreeParams = getDefaultDtParams(ruleSet);
-            DecisionTree dt = extractDecisionTree(decisionTreeParams);
-            String columnName = ruleSet.getNewColumnName();
-            getColumn(columnName).setDecisionTree(dt);
-            labeledColumnNames.add(columnName);
+        List<LabeledColumn> labeledColumns = getLabeledColumns();
+        for (LabeledColumn column : labeledColumns) {
+            extractAllDecisionTreesForColumn(column, new ArrayList<>());
         }
-        return labeledColumnNames;
+        return labeledColumns.stream()
+                .map(Column::getName)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * @param allDecisionTreeParams All the user given DecisionTreeParams
+     *                              (even multiple for each column).
+     */
+    public List<String> extractAllDecisionTrees(List<DecisionTreeParams> allDecisionTreeParams) {
+        List<LabeledColumn> labeledColumns = getLabeledColumns();
+        for (LabeledColumn column : labeledColumns) {
+            List<DecisionTreeParams> columnParams = getColumnSpecificParams(column, allDecisionTreeParams);
+            extractAllDecisionTreesForColumn(column, columnParams);
+        }
+        return labeledColumns.stream()
+                .map(Column::getName)
+                .collect(Collectors.toList());
+    }
+
+    private List<LabeledColumn> getLabeledColumns() {
+        return datasetProfile.getColumns().stream()
+                .filter(column -> column instanceof LabeledColumn)
+                .map(column -> (LabeledColumn) column)
+                .collect(Collectors.toList());
+    }
+
+    private List<DecisionTreeParams> getColumnSpecificParams(Column column,
+                                                             List<DecisionTreeParams> allDecisionTreeParams) {
+        return allDecisionTreeParams.stream()
+                .filter(params -> params.getLabeledColumnName().equals(column.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private void extractAllDecisionTreesForColumn(LabeledColumn column,
+                                                  List<DecisionTreeParams> allColumnParams) {
+        if (allColumnParams.isEmpty()) {
+            allColumnParams.add(getDefaultDtParams(column.getRuleSet()));
+        }
+        for (DecisionTreeParams decisionTreeParams : allColumnParams) {
+            DecisionTree dt = extractDecisionTree(decisionTreeParams);
+            column.addDecisionTree(dt);
+        }
     }
 
     private DecisionTreeParams getDefaultDtParams(RuleSet ruleSet) {
@@ -82,11 +88,5 @@ public class DecisionTreeManager {
         return new DecisionTreeGeneratorFactory(decisionTreeParams, dataset)
                 .getDefaultGenerator()
                 .computeDecisionTree();
-    }
-
-    private LabeledColumn getColumn(String columnName) {
-        return (LabeledColumn) columns.stream()
-                .filter(column -> column.getName().equals(columnName))
-                .findFirst().orElse(null);
     }
 }

@@ -31,7 +31,6 @@ public class DatasetProfiler implements IDatasetProfiler {
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
-  private final List<RuleSet> ruleSets = new ArrayList<>();
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
@@ -74,7 +73,6 @@ public class DatasetProfiler implements IDatasetProfiler {
     String columnName = ruleSet.getNewColumnName();
     String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
     dataset = dataset.withColumn(columnName, expr(labelingRulesAsExpression));
-    ruleSets.add(ruleSet);
 
     // Create new LabeledColumn
     int index = (int) dataset.schema().getFieldIndex(columnName).get();
@@ -82,7 +80,8 @@ public class DatasetProfiler implements IDatasetProfiler {
     datasetProfile.getColumns().add(new LabeledColumn(
             datasetProfile.getColumns().size(),
             columnName,
-            dataType.toString()
+            dataType.toString(),
+            ruleSet
     ));
     logger.info(String.format("Added labeled column %s", columnName));
   }
@@ -138,12 +137,10 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void extractAllDecisionTrees() {
-    List<String> labeledColumnNames = new DecisionTreeManager(
-            ruleSets, dataset, datasetProfile.getColumns())
+    List<String> labeledColumnNames = new DecisionTreeManager(dataset, datasetProfile)
             .extractAllDecisionTrees();
-
     for (String labeledColumnName : labeledColumnNames) {
-      logger.info(String.format("Computed Decision Tree for labeled column %s", labeledColumnName));
+        logger.info(String.format("Computed Decision Trees for labeled column %s", labeledColumnName));
     }
   }
 

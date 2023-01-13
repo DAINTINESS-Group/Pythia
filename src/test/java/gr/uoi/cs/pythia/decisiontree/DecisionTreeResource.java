@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DecisionTreeResource extends ExternalResource {
-    private static SparkSession sparkSession;
+    private SparkSession sparkSession;
     private RuleSet ruleSet;
 
     private Dataset<Row> dataset;
