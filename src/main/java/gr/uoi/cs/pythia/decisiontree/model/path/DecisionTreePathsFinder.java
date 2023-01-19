@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.decisiontree.paths;
+package gr.uoi.cs.pythia.decisiontree.model.path;
 
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;

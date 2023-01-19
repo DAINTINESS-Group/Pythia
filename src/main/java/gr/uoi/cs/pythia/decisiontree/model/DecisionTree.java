@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.decisiontree.model;
 
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
-import gr.uoi.cs.pythia.decisiontree.paths.DecisionTreePathsFinder;
+import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePathsFinder;
 
 import java.util.List;
 import java.util.stream.Collectors;

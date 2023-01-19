@@ -21,7 +21,7 @@ public class DecisionTreeManager {
     private final DatasetProfile datasetProfile;
 
     public DecisionTreeManager(Dataset<Row> dataset, DatasetProfile datasetProfile) {
-        this.dataset = dataset;
+        this.dataset = new DecisionTreeOptimizer(dataset).getOptimizedDataset();
         this.datasetProfile = datasetProfile;
     }
 

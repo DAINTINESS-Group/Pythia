@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+        DecisionTreeOptimizerTests.class,
         DecisionTreeNodesTests.class,
         DecisionTreeAttributesTests.class,
         DecisionTreeVisualizationTests.class,
