@@ -50,13 +50,13 @@ public class DecisionTreeNode {
                         nodeParams.getNode().rightNode().get()));
     }
 
-    public String toVisualizationString() {
+    public String getBasicInfo() {
         if (isLeaf)
             return predict.getPrediction();
         StringBuilder sb = new StringBuilder();
         sb.append(split.getFeature());
         if (split.getFeatureType() == FeatureType.CONTINUOUS) {
-            sb.append("  <= ");
+            sb.append(" <= ");
             sb.append(split.getThreshold());
         } else {
             sb.append(" in ");

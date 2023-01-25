@@ -6,10 +6,8 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 
 public class DecisionTreeDataProcessor {
 
@@ -68,14 +66,14 @@ public class DecisionTreeDataProcessor {
                 .transform(dataset);
     }
 
-    public HashMap<String, HashMap<Double, String>> getIndexedToActualValuesForEachIndexedColumn() {
-        HashMap<String, HashMap<Double, String>> indexedColumnsToIndexedAndActualValues = new HashMap<>();
+    public Map<String, Map<Double, String>> getIndexedToActualValuesForEachIndexedColumn() {
+        Map<String, Map<Double, String>> indexedColumnsToIndexedAndActualValues = new HashMap<>();
 
         List<String> indexedColumns = new ArrayList<>();
         indexedColumns.add(labeledColumnName);
         indexedColumns.addAll(attributesFinder.getCategoricalFeatures());
         for (String indexedColumn : indexedColumns) {
-            HashMap<Double, String> indexedToActualValues = new HashMap<>();
+            Map<Double, String> indexedToActualValues = new HashMap<>();
             Iterator<Row> rows = dataset
                     .select(indexedColumn, indexedColumn + "_indexed")
                     .distinct()

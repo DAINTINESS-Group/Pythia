@@ -5,13 +5,14 @@ import gr.uoi.cs.pythia.decisiontree.model.node.FeatureType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DecisionTreePath {
 
     private final List<String> nodes = new ArrayList<>();
 
-    public DecisionTreePath(Map<DecisionTreeNode, Boolean> nodesToInvertedThreshold) {
+    public DecisionTreePath(LinkedHashMap<DecisionTreeNode, Boolean> nodesToInvertedThreshold) {
         for (Map.Entry<DecisionTreeNode, Boolean> entry : nodesToInvertedThreshold.entrySet()) {
             this.nodes.add(getNodeInfo(entry.getKey(), entry.getValue()));
         }

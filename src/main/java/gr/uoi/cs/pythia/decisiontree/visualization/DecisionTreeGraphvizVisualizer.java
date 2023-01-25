@@ -15,14 +15,16 @@ import static guru.nidi.graphviz.model.Factory.*;
 
 
 public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
-
-    private final Color rootNodeColor = Color.RED4;
+    private final Color rootNodeColor = Color.BROWN2;
     private final Color internalNodeColor = Color.LIGHTSKYBLUE;
-    private final Color leafNodeColor = Color.GREEN;
-    private final Graph graph;
+    private final Color leafNodeColor = Color.PALEGREEN2;
 
-    public DecisionTreeGraphvizVisualizer(DecisionTree dt) {
-        this.graph = getGraph(dt.getRootNode());
+    @Override
+    public void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException {
+        Graph graph = getGraph(decisionTree.getRootNode());
+        Graphviz.fromGraph(graph).height(1000)
+                .render(Format.PNG)
+                .toFile(new File(directory + File.separator + fileName + ".png"));
     }
 
     private Graph getGraph(DecisionTreeNode dtNode) {
@@ -59,13 +61,10 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
 
     private Node createNode(DecisionTreeNode dtNode) {
         return node(Integer.toString(dtNode.getId()))
-                .with(Style.FILLED, Label.of(dtNode.toVisualizationString()));
+                .with(Style.FILLED, Label.of(getNodeInfo(dtNode)));
     }
 
-    @Override
-    public void exportDecisionTreeToPNG(String directory, String fileName) throws IOException {
-        Graphviz.fromGraph(graph).height(1000)
-                .render(Format.PNG)
-                .toFile(new File(directory + File.separator + fileName + ".png"));
+    private String getNodeInfo(DecisionTreeNode dtNode) {
+        return dtNode.getBasicInfo().replace("<", " <");
     }
 }

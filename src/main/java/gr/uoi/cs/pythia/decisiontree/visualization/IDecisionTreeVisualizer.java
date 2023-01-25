@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.decisiontree.visualization;
 
+import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+
 import java.io.IOException;
 
 public interface IDecisionTreeVisualizer {
@@ -10,5 +12,5 @@ public interface IDecisionTreeVisualizer {
      * @param fileName the name of the image file
      * @throws IOException the IOException
      */
-    void exportDecisionTreeToPNG(String directory, String fileName) throws IOException;
+    void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException;
 }

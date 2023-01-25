@@ -4,8 +4,6 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
-import scala.collection.immutable.Seq;
-import scala.jdk.javaapi.CollectionConverters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +23,7 @@ public class DecisionTreeOptimizer {
         return dataset.drop(getColumnsToDrop());
     }
 
-    private Seq<String> getColumnsToDrop() {
+    private String[] getColumnsToDrop() {
         List<String> columnsToDrop = new ArrayList<>();
         List<String> categoricalColumns = getCategoricalColumns();
         for (String column : categoricalColumns) {
@@ -33,7 +31,7 @@ public class DecisionTreeOptimizer {
                 columnsToDrop.add(column);
             }
         }
-        return CollectionConverters.asScala(columnsToDrop).toSeq();
+        return columnsToDrop.toArray(new String[0]);
     }
 
     private List<String> getCategoricalColumns() {

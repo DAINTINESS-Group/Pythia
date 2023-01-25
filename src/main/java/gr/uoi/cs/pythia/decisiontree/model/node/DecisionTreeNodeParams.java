@@ -2,17 +2,17 @@ package gr.uoi.cs.pythia.decisiontree.model.node;
 
 import org.apache.spark.mllib.tree.model.Node;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 public class DecisionTreeNodeParams {
 
-    private final HashMap<String, HashMap<Double, String>> indexedToActualValuesForEachIndexedColumn;
+    private final Map<String, Map<Double, String>> indexedToActualValuesForEachIndexedColumn;
     private final String labeledColumnName;
     private final List<String> features;
     private final Node node;
 
-    public DecisionTreeNodeParams(HashMap<String, HashMap<Double, String>> indexedToActualValuesForEachIndexedColumn,
+    public DecisionTreeNodeParams(Map<String, Map<Double, String>> indexedToActualValuesForEachIndexedColumn,
                                   String labeledColumnName, List<String> features, Node node) {
         this.indexedToActualValuesForEachIndexedColumn = indexedToActualValuesForEachIndexedColumn;
         this.labeledColumnName = labeledColumnName;
@@ -27,7 +27,7 @@ public class DecisionTreeNodeParams {
         this.node = node;
     }
 
-    public HashMap<String, HashMap<Double, String>> getIndexedToActualValuesForEachIndexedColumn() {
+    public Map<String, Map<Double, String>> getIndexedToActualValuesForEachIndexedColumn() {
         return indexedToActualValuesForEachIndexedColumn;
     }
 

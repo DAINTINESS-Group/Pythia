@@ -1,15 +1,21 @@
 package gr.uoi.cs.pythia.decisiontree.visualization;
 
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DecisionTreeVisualizerFactory {
-    private final DecisionTree decisionTree;
 
-    public DecisionTreeVisualizerFactory(DecisionTree decisionTree) {
-        this.decisionTree = decisionTree;
+    private final Map<DecisionTreeVisualizerType, IDecisionTreeVisualizer> visualizers = new HashMap<>();
+
+    public DecisionTreeVisualizerFactory() {
+        createVisualizers();
     }
 
-    public IDecisionTreeVisualizer getGraphvizVisualizer() {
-        return new DecisionTreeGraphvizVisualizer(decisionTree);
+    private void createVisualizers() {
+        visualizers.put(DecisionTreeVisualizerType.GRAPH_VIZ, new DecisionTreeGraphvizVisualizer());
+    }
+
+    public IDecisionTreeVisualizer getVisualizer(DecisionTreeVisualizerType type) {
+        return visualizers.get(type);
     }
 }

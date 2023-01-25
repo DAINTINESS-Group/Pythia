@@ -1,9 +1,11 @@
 package gr.uoi.cs.pythia.decisiontree.model.path;
 
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
-import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 
 public class DecisionTreePathsFinder {
 
@@ -21,7 +23,7 @@ public class DecisionTreePathsFinder {
         return paths;
     }
 
-    private void traverseTreeDFS(Map<DecisionTreeNode, Boolean> nodes, DecisionTreeNode node) {
+    private void traverseTreeDFS(LinkedHashMap<DecisionTreeNode, Boolean> nodes, DecisionTreeNode node) {
         nodes.put(node, false);
         if (node.isLeaf()) {
             paths.add(new DecisionTreePath(nodes));
