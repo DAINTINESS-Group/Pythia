@@ -78,6 +78,22 @@ public class ColumnSelectorTests {
 	}
 	
 	@Test
+	public void testSelectColumnsWithUserSpecifiedOnlyModeAndNoColumnsSpecified() {
+		ColumnSelector columnSelector = new ColumnSelector(
+				ColumnSelectionMode.USER_SPECIFIED_ONLY, 
+				new String[] {}, new String[] {});
+		
+		List<String> expectedMeasureCols = Arrays.asList(new String[] {});
+		List<String> expectedCoordCols = Arrays.asList(new String[] {});
+		
+		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		
+		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
+		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
+	}
+	
+	@Test
 	public void testSelectColumnsWithExhaustiveModeAndPartialUserInput() {
 		ColumnSelector columnSelector = new ColumnSelector(
 				ColumnSelectionMode.EXHAUSTIVE, 

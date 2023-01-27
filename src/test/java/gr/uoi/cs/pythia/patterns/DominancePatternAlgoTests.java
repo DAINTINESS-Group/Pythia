@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -37,7 +38,7 @@ public class DominancePatternAlgoTests {
 				.createPattern(PatternConstants.DOMINANCE);
 		
 		// set column names
-		measurementColName = "mileage";
+		measurementColName = "price";
 		xCoordinateColName = "model";
 		yCoordinateColName = "year";
 		
@@ -58,26 +59,42 @@ public class DominancePatternAlgoTests {
 	}
 	
 	@Test
-	public void testIdentifyWithOneCoordinate() {		
+	public void testIdentifyWithOneCoordinate() {
+		DominancePatternResult expectedHighDominanceResults = 
+				createExpectedHighDominanceResultsForOneCoordinate();
+		DominancePatternResult expectedLowDominanceResults = 
+				createExpectedLowDominanceResultsForOneCoordinate();
+		
 		dominancePatternAlgo.identifyPatternWithOneCoordinate(
 				dataset, measurementColName, xCoordinateColName);
 		
-		DominancePatternResult expected = createExpectedHighlightsForOneCoordinate();
-		DominancePatternResult actual = dominancePatternAlgo.getLatestResult();
+		DominancePatternResult actualHighDominanceResults = 
+				dominancePatternAlgo.getResults().get(dominancePatternAlgo.getResults().size()-2);
+		DominancePatternResult actualLowDominanceResults = 
+				dominancePatternAlgo.getLatestResult();
 		
-		assertResultsAreEqual(expected, actual);
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
 	
 	@Test
 	public void testIdentifyWithTwoCoordinates() {
+		DominancePatternResult expectedHighDominanceResults = 
+				createExpectedHighDominanceResultsForTwoCoordinates();
+		DominancePatternResult expectedLowDominanceResults = 
+				createExpectedLowDominanceResultsForTwoCoordinates();
+		
 		dominancePatternAlgo.identifyPatternWithTwoCoordinates(
 				dataset, measurementColName, 
 				xCoordinateColName, yCoordinateColName);
 		
-		DominancePatternResult expected = createExpectedHighlightsForTwoCoordinates();
-		DominancePatternResult actual = dominancePatternAlgo.getLatestResult();
+		DominancePatternResult actualHighDominanceResults = 
+				dominancePatternAlgo.getResults().get(dominancePatternAlgo.getResults().size()-2);
+		DominancePatternResult actualLowDominanceResults = 
+				dominancePatternAlgo.getLatestResult();
 		
-		assertResultsAreEqual(expected, actual);
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
 	
 	@Test
@@ -109,64 +126,102 @@ public class DominancePatternAlgoTests {
 	private void assertResultsAreEqual(
 			DominancePatternResult expected,
 			DominancePatternResult actual) {
+		assertEquals(expected.getNumOfCoordinates(), actual.getNumOfCoordinates());
+		assertEquals(expected.getDominanceType(), actual.getDominanceType());
 		assertEquals(expected.getAggregationMethod(), actual.getAggregationMethod());
 		assertEquals(expected.getMeasurementColName(), actual.getMeasurementColName());
 		assertEquals(expected.getXCoordinateColName(), actual.getXCoordinateColName());
 		assertEquals(expected.getYCoordinateColName(), actual.getYCoordinateColName());
-		assertArrayEquals(expected.getHighlights().toArray(), actual.getHighlights().toArray());
 		assertArrayEquals(expected.getIdentificationResults().toArray(), actual.getIdentificationResults().toArray());
 	}
 
-	private DominancePatternResult createExpectedHighlightsForOneCoordinate() {
+	private DominancePatternResult createExpectedHighDominanceResultsForOneCoordinate() {
 		DominancePatternResult expected = new DominancePatternResult(
-				"avg", measurementColName, xCoordinateColName);
-		expected.addIdentificationResult("A1", 27769.058, 25.0, 75.0, true, "partial low");
-		expected.addIdentificationResult("A3", 31739.59, 50.0, 50.0, false, "-");
-		expected.addIdentificationResult("A4", 31529.538, 37.5, 62.5, false, "-");
-		expected.addIdentificationResult("A5", 34838.333, 62.5, 37.5, false, "-");
-		expected.addIdentificationResult("A6", 40924.5, 87.5, 12.5, true, "partial high");
-		expected.addIdentificationResult("Q2", 6080.5, 0.0, 100.0, true, "total low");
-		expected.addIdentificationResult("Q3", 35638.0, 75.0, 25.0, true, "partial high");
-		expected.addIdentificationResult("Q5", 40967.8, 100.0, 0.0, true, "total high");
-		expected.addIdentificationResult("S4", 20278.0, 12.5, 87.5, true, "partial low");
+				PatternConstants.HIGH, "sum", 
+				measurementColName, xCoordinateColName);
+		expected.addIdentificationResult("Q3", 9956610.0, 100.0, true, "total high");
+		expected.addIdentificationResult("Q5", 2865320.0, 87.5, true, "partial high");
+		expected.addIdentificationResult("A3", 1897299.0, 75.0, true, "partial high");
+		expected.addIdentificationResult("A1", 197000.0, 62.5, false, "-");
+		expected.addIdentificationResult("A5", 94570.0, 50.0, false, "-");
+		expected.addIdentificationResult("Q2", 56499.0, 37.5, false, "-");
+
 		return expected;
 	}
 	
-	private DominancePatternResult createExpectedHighlightsForTwoCoordinates() {
+	private DominancePatternResult createExpectedLowDominanceResultsForOneCoordinate() {
 		DominancePatternResult expected = new DominancePatternResult(
-				"avg", measurementColName, xCoordinateColName, yCoordinateColName);
-		expected.addIdentificationResult("A1", "2013", 76269.0, 100.0, 0.0, true, "total high");
-		expected.addIdentificationResult("A3", "2013", 51441.0, 0.0, 100.0, true, "total low");
-		expected.addIdentificationResult("A1", "2014", 31319.5, 33.333, 66.666, false, "-");
-		expected.addIdentificationResult("A3", "2014", 30516.0, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("A5", "2014", 83872.0, 100.0, 0.0, true, "total high");        
-		expected.addIdentificationResult("Q3", "2014", 38831.666, 66.666, 33.333, false, "-");                 
-		expected.addIdentificationResult("A1", "2015",54754.0, 50.0, 50.0, false, "-");                 
-		expected.addIdentificationResult("A3", "2015", 59340.666, 75.0, 25.0, true, "partial high");      
-		expected.addIdentificationResult("A6", "2015", 50719.0, 25.0, 75.0, true, "partial low");       
-		expected.addIdentificationResult("Q3", "2015", 30075.0, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("Q5", "2015", 89483.0, 100.0, 0.0, true, "total high");        
-		expected.addIdentificationResult("A1", "2016", 22752.142, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("A3", "2016", 41334.0, 80.0, 20.0,  true, "partial high");      
-		expected.addIdentificationResult("A4", "2016", 75062.0, 100.0, 0.0,  true, "total high");        
-		expected.addIdentificationResult("A6", "2016", 40637.6, 60.0, 40.0,  false, "-");                 
-		expected.addIdentificationResult("Q3", "2016", 37497.0, 40.0, 60.0, false, "-");                 
-		expected.addIdentificationResult("Q5", "2016", 28839.0, 20.0, 80.0, true, "partial low");       
-		expected.addIdentificationResult("A1", "2017", 21670.8, 16.666, 83.333, true, "partial low");       
-		expected.addIdentificationResult("A3", "2017", 26427.5, 83.333, 16.666, true, "partial high");      
-		expected.addIdentificationResult("A4", "2017", 21725.5, 33.333, 66.666, false, "-");                 
-		expected.addIdentificationResult("A5", "2017", 25031.6, 66.666, 33.333, false, "-");                 
-		expected.addIdentificationResult("A6", "2017", 22582.0, 50.0, 50.0, false, "-");                 
-		expected.addIdentificationResult("Q3", "2017", 37231.5, 100.0, 0.0, true, "total high");        
-		expected.addIdentificationResult("S4", "2017", 20278.0, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("A1", "2018", 10793.0, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("A3", "2018", 17992.0, 33.333, 66.666, false, "-");                 
-		expected.addIdentificationResult("A4", "2018", 20172.5, 66.666, 33.333, false, "-");                 
-		expected.addIdentificationResult("A6", "2018", 22958.0, 100.0, 0.0, true, "total high");        
-		expected.addIdentificationResult("A3", "2019", 3432.75, 0.0, 100.0, true, "total low");         
-		expected.addIdentificationResult("A4", "2019", 7000.0, 100.0, 0.0, true, "total high");        
-		expected.addIdentificationResult("Q2", "2019", 6080.5, 66.666, 33.333, false, "-");                 
-		expected.addIdentificationResult("Q3", "2019", 4000.0, 33.333, 66.666, false, "-");                 
+				PatternConstants.LOW, "sum", 
+				measurementColName, xCoordinateColName);
+		
+		expected.addIdentificationResult("A4", 6500.0, 100.0, true, "total low");
+		expected.addIdentificationResult("S4", 23700.0, 87.5, true, "partial low");
+		expected.addIdentificationResult("A6", 40465.0, 75.0, true, "partial low");
+		expected.addIdentificationResult("Q2", 56499.0, 62.5, false, "-");
+		expected.addIdentificationResult("A5", 94570.0, 50.0, false, "-");
+		expected.addIdentificationResult("A1", 197000.0, 37.5, false, "-");
+		return expected;
+	}
+	
+	private DominancePatternResult createExpectedHighDominanceResultsForTwoCoordinates() {
+		DominancePatternResult expected = new DominancePatternResult(
+				PatternConstants.HIGH, "sum", 
+				measurementColName, xCoordinateColName, yCoordinateColName);
+		expected.addIdentificationResult(
+				"Q3", Arrays.asList("A1", "A3", "A4", "A5", "A6", "Q2", "Q5", "S4"), 
+				Arrays.asList("2014", "2015", "2016", "2017", "2019"),
+				100.0, true, "total high", 9956610.0);
+		expected.addIdentificationResult(
+				"A3", Arrays.asList("A1", "A4", "A5", "A6", "Q2", "S4"), 
+				Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018", "2019"),
+				75.0, true, "partial high", 1897299.0);
+		expected.addIdentificationResult(
+				"Q5", Arrays.asList("A1", "A3", "A4", "A6"), 
+				Arrays.asList("2015", "2016"),
+				50.0, false, "-", 2865320.0);
+		expected.addIdentificationResult(
+				"A1", Arrays.asList("A4", "A6", "S4"), 
+				Arrays.asList("2016", "2017", "2018", "2014", "2015"),
+				37.5, false, "-", 197000.0);
+		expected.addIdentificationResult(
+				"A5", Arrays.asList("A4", "A6", "S4"), 
+				Arrays.asList("2017"),
+				37.5, false, "-", 94570.0);
+		expected.addIdentificationResult(
+				"S4", Arrays.asList("A4", "A6"), 
+				Arrays.asList("2017"),
+				25.0, false, "-", 23700.0);
+		return expected;
+	}
+	
+	private DominancePatternResult createExpectedLowDominanceResultsForTwoCoordinates() {
+		DominancePatternResult expected = new DominancePatternResult(
+				PatternConstants.LOW, "sum", 
+				measurementColName, xCoordinateColName, yCoordinateColName);
+		expected.addIdentificationResult(
+				"A4", Arrays.asList("A1", "A3", "A5", "A6", "Q2", "Q3", "Q5", "S4"), 
+				Arrays.asList("2016", "2017", "2018", "2019"),
+				100.0, true, "total low", 6500.0);
+		expected.addIdentificationResult(
+				"A6", Arrays.asList("A1", "A3", "A5", "Q3", "Q5", "S4"), 
+				Arrays.asList("2015", "2016", "2017", "2018"),
+				75.0, true, "partial low", 40465.0);
+		expected.addIdentificationResult(
+				"S4", Arrays.asList("A1", "A3", "A5", "Q3"), 
+				Arrays.asList("2017"),
+				50.0, false, "-", 23700.0);
+		expected.addIdentificationResult(
+				"A1", Arrays.asList("A3", "Q3", "Q5"), 
+				Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018"),
+				37.5, false, "-", 197000.0);
+		expected.addIdentificationResult(
+				"A3", Arrays.asList("Q3", "Q5"), 
+				Arrays.asList("2014", "2015", "2016", "2017", "2019"),
+				25.0, false, "-", 1897299.0);
+		expected.addIdentificationResult(
+				"A5", Arrays.asList("A3", "Q3"), 
+				Arrays.asList("2014", "2017"),
+				25.0, false, "-", 94570.0);
 		return expected;
 	}
 	

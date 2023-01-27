@@ -50,7 +50,7 @@ public interface IPatternAlgo {
 	 * identification results to the overall report. Therefore, it will most likely get 
 	 * deleted or moved in a future commit.
 	 * 
-	 * @param path	a string corresponding the absolute path of the file to be created
+	 * @param path a string corresponding to the absolute path of the file to be created
 	 * @throws IOException	in case something goes wrong with creating or writing to the file
 	 */
 	void exportResultsToFile(String path) throws IOException;

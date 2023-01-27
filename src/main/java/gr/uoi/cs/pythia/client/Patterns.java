@@ -29,9 +29,8 @@ public class Patterns {
 		datasetProfiler.registerDataset(alias, path, schema);
         datasetProfiler.identifyPatternHighlights(
         		ColumnSelectionMode.USER_SPECIFIED_ONLY, 
-        		new String[] {"mileage", "price"}, 
-        		new String[] {"manufacturer", "model", "year"});        
-        
+        		new String[] {"price"}, 
+        		new String[] {"model", "year"});
 	}
 	
 	public static StructType createInternetUsageDatasetSchema() {

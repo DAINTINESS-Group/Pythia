@@ -12,125 +12,111 @@ import org.apache.spark.sql.RowFactory;
 
 public class DominancePatternResult {
 
+	private int numOfCoordinates;
+	private String dominanceType;
 	private String aggregationMethod;
 	private String measurementColName;
 	private String xCoordinateColName;
 	private String yCoordinateColName;
-	private List<String> highlights; 
 	private List<Row> identificationResults;
 	
 	private DecimalFormat decimalFormat = new DecimalFormat("#.###", 
 			new DecimalFormatSymbols(Locale.ENGLISH));
 	
+	public int getNumOfCoordinates() { return numOfCoordinates; }
+	public String getDominanceType() { return dominanceType;  }
 	public String getAggregationMethod() { return aggregationMethod; }
 	public String getMeasurementColName() { return measurementColName; }
 	public String getXCoordinateColName() { return xCoordinateColName; }
 	public String getYCoordinateColName() { return yCoordinateColName; }
-	public List<String> getHighlights() { return highlights; }
 	public List<Row> getIdentificationResults() { return identificationResults; }
 
 	public DominancePatternResult(
+			String dominanceType,
 			String aggregationMethod,
 			String measurementColumnName, 
 			String firstCoordinateColumnName) {
+		this.numOfCoordinates = 1;
+		this.dominanceType = dominanceType;
 		this.aggregationMethod = aggregationMethod;
 		this.measurementColName = measurementColumnName;
 		this.xCoordinateColName = firstCoordinateColumnName;
-		this.highlights = new ArrayList<String>();
 		this.identificationResults = new ArrayList<Row>();
 		identificationResults.add(RowFactory.create(
 				xCoordinateColName, 
 				measurementColName + " (" + aggregationMethod + ")", 
-				"High%", 
-				"Low%", 
+				"Dominance%", 
 				"Is highlight?", 
 				"Highlight Type"));
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 	}
 
 	public DominancePatternResult(
+			String dominanceType,
 			String aggregationMethod,
 			String measurementColumnName, 
 			String firstCoordinateColumnName, 
 			String secondCoordinateColumnName) {
+		this.numOfCoordinates = 2;
+		this.dominanceType = dominanceType;
 		this.aggregationMethod = aggregationMethod;
 		this.measurementColName = measurementColumnName;
 		this.xCoordinateColName = firstCoordinateColumnName;
 		this.yCoordinateColName = secondCoordinateColumnName;
-		this.highlights = new ArrayList<String>();
 		this.identificationResults = new ArrayList<Row>();
 		identificationResults.add(RowFactory.create(
 				xCoordinateColName, 
-				yCoordinateColName,
-				measurementColName + " (" + aggregationMethod + ")", 
-				"High%", 
-				"Low%", 
+				"Dominates the " + xCoordinateColName + "(s)",
+				"for the " + yCoordinateColName + "(s)",
+				"Dominance%", 
 				"Is highlight?", 
-				"Highlight Type"));
+				"Highlight Type",
+				"Aggr. Marginal Sum (" + measurementColName + ")"));
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 	}
 
 	public void addIdentificationResult(
 			String xCoordinate, 
 			double aggValue, 
-			double highDominancePercentage, 
-			double lowDominancePercentage, 
+			double dominancePercentage, 
 			boolean isHighlight, 
 			String highlightType) {
 
-		if(isHighlight) {
-			double dominancePercentage = lowDominancePercentage;
-			if  (highlightType.equals("partial high") || highlightType.equals("total high")) {
-				dominancePercentage = highDominancePercentage;
-			}
-			highlights.add(String.format("- Coordinate: %s (%s) has an aggregate (%s) value of %s (%s)" + 
-					"\nand a %s dominance of %s%% over the other aggregate values of the query results.",
-					xCoordinate, xCoordinateColName, aggregationMethod, decimalFormat.format(aggValue), 
-					measurementColName, highlightType, decimalFormat.format(dominancePercentage)
-			));
-		}
 		identificationResults.add(RowFactory.create(
 				xCoordinate, 
 				Double.parseDouble(decimalFormat.format(aggValue)),
-				Double.parseDouble(decimalFormat.format(highDominancePercentage)),
-				Double.parseDouble(decimalFormat.format(lowDominancePercentage)), 
+				Double.parseDouble(decimalFormat.format(dominancePercentage)),
 				isHighlight, 
-				highlightType));	
+				highlightType
+		));	
 	}
 	
-	public void addIdentificationResult(
+	public void addIdentificationResult(			
 			String xCoordinate, 
-			String yCoordinate, 
-			double aggValue,
-			double highDominancePercentage, 
-			double lowDominancePercentage, 
-			boolean isHighlight,
-			String highlightType) {
-
-		if (isHighlight) {
-			double dominancePercentage = lowDominancePercentage;
-			if  (highlightType.equals("partial high") || highlightType.equals("total high")) {
-				dominancePercentage = highDominancePercentage;
-			}
-			highlights.add(String.format("- Coordinate X: %s (%s) has an aggregate (%s) value of %s (%s)" +
-					"\nand a %s dominance of %s%% over the other aggregate values of the query results" +
-					"\nfor the coordinate Y: %s (%s).", 
-					xCoordinate, xCoordinateColName, aggregationMethod, decimalFormat.format(aggValue),
-					measurementColName, highlightType, decimalFormat.format(dominancePercentage),
-					yCoordinate, yCoordinateColName));
-		}
+			List<String> dominatedXValues, 
+			List<String> onYValues, 
+			double dominancePercentage, 
+			boolean isHighlight, 
+			String highlightType,
+			double aggValuesMarginalSum) {
+		
 		identificationResults.add(RowFactory.create(
-				xCoordinate,
-				yCoordinate,
-				Double.parseDouble(decimalFormat.format(aggValue)),
-				Double.parseDouble(decimalFormat.format(highDominancePercentage)),
-				Double.parseDouble(decimalFormat.format(lowDominancePercentage)), 
+				xCoordinate, 
+				dominatedXValues,
+				onYValues,
+				Double.parseDouble(decimalFormat.format(dominancePercentage)),
 				isHighlight, 
-				highlightType));
+				highlightType,
+				Double.parseDouble(decimalFormat.format(aggValuesMarginalSum))
+		));	
 	}
 	
-	private boolean hasSecondCoordinate() {
-		return yCoordinateColName != null;
+	private boolean hasOneCoordinate() {
+		return numOfCoordinates == 1;
+	}
+	
+	private boolean hasTwoCoordinates() {
+		return numOfCoordinates == 2;
 	}
 	
 	@Override
@@ -138,17 +124,19 @@ public class DominancePatternResult {
 		return "\n\n-----------------------------------------------" + 
 				"-----------------------------------------------------\n\n" +
 				"\n### Metadata:\n" + metadataToString() +
-				"\n### Detailed Results:\n" + identificationResultsToString() + 
+				"\n### Detailed Results:\n" + identificationResultsToString() +
 				"\n### Identified Highlights:" + highlightsToString();	
 	}
 	
 	private String metadataToString() {
-		String str = String.format("%-30s%s\n%-30s%s\n%-30s%s\n",
+		String str = String.format("%-30s%s\n%-30s%s\n%-30s%s\n%-30s%s\n%-30s%s\n",
+				"- Dominance Type: ", dominanceType + " dominance",
+				"- Num. of Coordinates: ", numOfCoordinates,
 				"- Aggregation Method: ", aggregationMethod,
 				"- Measurement Column Name: ", measurementColName,
 				"- Coordinate X Column Name: ", xCoordinateColName);
-		if (hasSecondCoordinate()) {
-			str += String.format("%-30s%s\n", "- Aggregation Method: ", yCoordinateColName);
+		if (hasTwoCoordinates()) {
+			str += String.format("%-30s%s\n", "- Coordinate Y Column Name: ", yCoordinateColName);
 		}	
 		return str;
 	}
@@ -160,7 +148,7 @@ public class DominancePatternResult {
 			for (int i=0; i<row.length(); i++) {
 				if (row.get(i) == null) continue;
 				str += String.format(
-						"%-" + String.valueOf(identificationResults.get(0).get(i).toString().length() + 4) + "s", 
+						"%-" + String.valueOf(getLongestStringLength(i) + 3) + "s", 
 						row.get(i).toString());
 			}
 			str += "\n";
@@ -168,14 +156,56 @@ public class DominancePatternResult {
 		return str;
 	}
 	
-	private String highlightsToString() {
-		if (highlights.isEmpty()) return "\nNo highlights identified.\n";
-		String str = "";
-		for (String highlight : highlights) {
-			str += "\n" + highlight + "\n";
+	private int getLongestStringLength(int index) {
+		int length = identificationResults.get(0).get(index).toString().length();
+		for (Row row : identificationResults) {
+			int itemLength = row.get(index).toString().length();
+			if (itemLength > length) length = itemLength;
 		}
+		return length;
+	}
+	
+	private String highlightsToString() {
+		String str = "";
+		for (Row row : identificationResults) {
+			if (identificationResults.indexOf(row) == 0) continue;
+				if (hasOneCoordinate()) {
+					if (row.getBoolean(3)) {
+						str += "\n" + buildHighlightStringWithOneCoord(row) + "\n";	
+					}
+				}
+				else if (hasTwoCoordinates()) {
+					if (row.getBoolean(4)) {
+						str += "\n" + buildHighlightStringWithTwoCoords(row) + "\n";
+					}
+				}
+		}
+		if (str.isBlank()) return "\nNo highlights identified.\n";
 		return str;
 	}
 	
+	private String buildHighlightStringWithOneCoord(Row row) {
+		return String.format("- Coordinate: %s (%s) has an aggregate (%s) value of %s (%s)" + 
+				"\nand a %s dominance of %s%% over the aggregate values of the other %ss.",
+				row.getString(0), xCoordinateColName, aggregationMethod, 
+				decimalFormat.format(row.getDouble(1)), 
+				measurementColName, row.getString(4), 
+				decimalFormat.format(row.getDouble(2)), xCoordinateColName
+		);
+	}
 	
+	private String buildHighlightStringWithTwoCoords(Row row) {
+		return String.format("- Coordinate X: %s (%s) presents a %s dominance over the other %ss of the dataset." +
+				"\nIn detail, the aggregate values of %s for the %ss (Y coordinate): %s" +
+				"\ndominate the aggregate values of the %ss: %s" +
+				"\nOverall, %s has a dominance percentage score of %s%% " +
+				"and an aggregate marginal sum of %s (%s).",
+				row.getString(0), xCoordinateColName, row.getString(5), xCoordinateColName,
+				row.getString(0), yCoordinateColName, row.get(2).toString(),
+				xCoordinateColName, row.get(1).toString(),
+				row.getString(0), decimalFormat.format(row.getDouble(3)),
+				decimalFormat.format(row.getDouble(6)), measurementColName
+		);
+	}
+		
 }
