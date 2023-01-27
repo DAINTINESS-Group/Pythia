@@ -9,6 +9,7 @@ import guru.nidi.graphviz.model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import static guru.nidi.graphviz.attribute.Attributes.attr;
 import static guru.nidi.graphviz.model.Factory.*;
@@ -21,13 +22,14 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
 
     @Override
     public void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException {
-        Graph graph = getGraph(decisionTree.getRootNode());
+        Graph graph = getGraph(decisionTree);
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
                 .toFile(new File(directory + File.separator + fileName + ".png"));
     }
 
-    private Graph getGraph(DecisionTreeNode dtNode) {
+    private Graph getGraph(DecisionTree decisionTree) {
+        DecisionTreeNode dtNode = decisionTree.getRootNode();
         return graph("decisionTree").directed()
                 .nodeAttr().with(Font.name("Arial"))
                 .linkAttr().with("class", "link-class")
@@ -35,7 +37,8 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
                         getRootNode(dtNode)
                                 .link(to(getNodes(dtNode.getLeftNode())).with(attr("label", "Yes")))
                                 .link(to(getNodes(dtNode.getRightNode())).with(attr("label", "No")))
-                );
+                )
+                .graphAttr().with(getCaption(decisionTree));
     }
 
     private Node getRootNode(DecisionTreeNode dtNode) {
@@ -65,6 +68,12 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     }
 
     private String getNodeInfo(DecisionTreeNode dtNode) {
-        return dtNode.getBasicInfo().replace("<", " <");
+        return dtNode.getSimpleRepresentation().replace("<", " <");
+    }
+
+    private Label getCaption(DecisionTree decisionTree) {
+        String averageImpurity = new DecimalFormat("#.###")
+                .format(decisionTree.getAverageImpurity());
+        return Label.of("\nThe average impurity is " + averageImpurity);
     }
 }

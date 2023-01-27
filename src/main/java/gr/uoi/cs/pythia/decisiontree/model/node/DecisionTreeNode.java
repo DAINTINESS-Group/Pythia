@@ -1,9 +1,12 @@
 package gr.uoi.cs.pythia.decisiontree.model.node;
 
+import java.text.DecimalFormat;
+
 public class DecisionTreeNode {
     private final DecisionTreeNodeParams nodeParams;
     private final int id;
     private final boolean isLeaf;
+    private final double impurity;
     private final Predict predict;
     private final Split split;
     private final InformationGainStats stats;
@@ -13,6 +16,7 @@ public class DecisionTreeNode {
         // data
         this.id = nodeParams.getNode().id();
         this.isLeaf = nodeParams.getNode().isLeaf();
+        this.impurity = nodeParams.getNode().impurity();
         this.predict = new Predict(nodeParams);
         this.split = new Split(nodeParams);
         this.stats = new InformationGainStats(nodeParams);
@@ -24,6 +28,10 @@ public class DecisionTreeNode {
 
     public boolean isLeaf() {
         return isLeaf;
+    }
+
+    public double getImpurity() {
+        return impurity;
     }
 
     public Predict getPredict() {
@@ -50,9 +58,10 @@ public class DecisionTreeNode {
                         nodeParams.getNode().rightNode().get()));
     }
 
-    public String getBasicInfo() {
+    public String getSimpleRepresentation() {
+        String formattedImpurity = new DecimalFormat("#.###").format(impurity);
         if (isLeaf)
-            return predict.getPrediction();
+            return predict.getPrediction() + "\nImpurity = " + formattedImpurity;
         StringBuilder sb = new StringBuilder();
         sb.append(split.getFeature());
         if (split.getFeatureType() == FeatureType.CONTINUOUS) {
@@ -64,6 +73,8 @@ public class DecisionTreeNode {
             sb.append(String.join(", ", split.getCategories()));
             sb.append(")");
         }
+        sb.append("\nImpurity = ");
+        sb.append(formattedImpurity);
         return sb.toString();
     }
 
@@ -71,6 +82,7 @@ public class DecisionTreeNode {
     public String toString() {
         return "Node = [" +
                 "isLeaf = " + isLeaf +
+                ", impurity = " + impurity +
                 ", " + predict +
                 ", "  + split +
                 ", "  + stats + "]";
