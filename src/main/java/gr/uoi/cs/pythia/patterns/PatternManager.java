@@ -15,7 +15,8 @@ public class PatternManager implements IPatternManager {
 	
 	// TODO Is this the best way to keep track of all supported pattern algos?
 	private final IPatternAlgo[] patternAlgos = { 
-			new IPatternAlgoFactory().createPattern(PatternConstants.DOMINANCE),
+			new IPatternAlgoFactory().createPattern(PatternConstants.HIGH_DOMINANCE),
+			new IPatternAlgoFactory().createPattern(PatternConstants.LOW_DOMINANCE),
 			new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
 	};
 	
