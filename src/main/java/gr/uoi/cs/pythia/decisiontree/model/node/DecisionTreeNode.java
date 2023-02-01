@@ -61,7 +61,7 @@ public class DecisionTreeNode {
     public String getSimpleRepresentation() {
         String formattedImpurity = new DecimalFormat("#.###").format(impurity);
         if (isLeaf)
-            return predict.getPrediction() + "\nImpurity = " + formattedImpurity;
+            return predict.getPrediction() + "\nImpurity: " + formattedImpurity;
         StringBuilder sb = new StringBuilder();
         sb.append(split.getFeature());
         if (split.getFeatureType() == FeatureType.CONTINUOUS) {
@@ -73,7 +73,7 @@ public class DecisionTreeNode {
             sb.append(String.join(", ", split.getCategories()));
             sb.append(")");
         }
-        sb.append("\nImpurity = ");
+        sb.append("\nImpurity: ");
         sb.append(formattedImpurity);
         return sb.toString();
     }

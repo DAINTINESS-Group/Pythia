@@ -12,7 +12,7 @@ public interface IDatasetProfiler {
 
   void computeLabeledColumn(RuleSet ruleSet);
 
-  DatasetProfile computeProfileOfDataset();
+  DatasetProfile computeProfileOfDataset() throws IOException;
 
   void generateReport(String reportGeneratorType, String path) throws IOException;
 

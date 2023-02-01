@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.report;
 
+import gr.uoi.cs.pythia.report.md.MdReportGenerator;
+
 public class IReportGeneratorFactory {
 
   public IReportGenerator createReportGenerator(String type) {
@@ -8,6 +10,8 @@ public class IReportGeneratorFactory {
         return new TxtReportGenerator();
       case ReportGeneratorConstants.JSON_REPORT:
         return new JsonReportGenerator();
+      case ReportGeneratorConstants.MD_REPORT:
+        return new MdReportGenerator();
     }
     throw new IllegalArgumentException(
         String.format("Report system %s is not a supported report system type.", type));

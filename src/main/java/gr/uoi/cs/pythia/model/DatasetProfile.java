@@ -7,6 +7,7 @@ public class DatasetProfile {
   private final String alias;
   private final String path;
   private final List<Column> columns;
+  private String outputDirectory;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
     this.alias = alias;
@@ -26,6 +27,14 @@ public class DatasetProfile {
     return columns;
   }
 
+  public String getOutputDirectory() {
+    return outputDirectory;
+  }
+
+  public void setOutputDirectory(String outputDirectory) {
+    this.outputDirectory = outputDirectory;
+  }
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
@@ -38,7 +47,7 @@ public class DatasetProfile {
         + '\n'
         + "path: "
         + path
-        + '\n'
+        + "\n\n"
         + "Column Profiles:"
         + '\n'
         + stringBuilder

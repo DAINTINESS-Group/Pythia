@@ -2,9 +2,7 @@ package gr.uoi.cs.pythia.decisiontree.model;
 
 import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
 import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
-import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePathsFinder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,13 +17,16 @@ public class DecisionTree {
     public DecisionTree(double accuracy,
                         List<String> featureColumnNames,
                         List<String> nonGeneratorAttributes,
-                        DecisionTreeNode rootNode) {
+                        DecisionTreeNode rootNode,
+                        double averageImpurity,
+                        List<DecisionTreePath> paths
+                        ) {
         this.accuracy = accuracy;
         this.featureColumnNames = featureColumnNames;
         this.nonGeneratorAttributes = nonGeneratorAttributes;
         this.rootNode = rootNode;
-        this.averageImpurity = calculateAverageImpurity();
-        this.paths = new DecisionTreePathsFinder(rootNode).getPaths();
+        this.averageImpurity = averageImpurity;
+        this.paths = paths;
     }
 
     public double getAccuracy() {
@@ -52,41 +53,29 @@ public class DecisionTree {
         return paths;
     }
 
-    private double calculateAverageImpurity() {
-        List<Double> impurities = traverseNodes(new ArrayList<>(), rootNode);
-        double impuritySum = impurities.stream().mapToDouble(x -> x).sum();
-        return impuritySum / impurities.size();
-    }
-
-    private List<Double> traverseNodes(List<Double> impurities, DecisionTreeNode dtNode) {
-        if (dtNode.isLeaf()) {
-            impurities.add(dtNode.getImpurity());
-            return impurities;
-        }
-        traverseNodes(impurities, dtNode.getLeftNode());
-        traverseNodes(impurities, dtNode.getRightNode());
-        return impurities;
-    }
-
     @Override
     public String toString() {
         String allPaths = paths.stream()
                 .map(DecisionTreePath::toString)
                 .collect(Collectors.joining("\n"));
 
-        return "DecisionTree"
+        return "DecisionTree info: "
                 + "\n"
-                + "featureColumnNames="
+                + "featureColumnNames: "
                 + String.join(", ", featureColumnNames)
                 + "\n"
-                + "accuracy="
+                + "accuracy: "
                 + accuracy
                 + "\n"
-                + "Non generator columns="
+                + "Non generator columns: "
                 + String.join(", ", nonGeneratorAttributes)
                 + "\n"
-                + "Paths="
+                + "Average impurity: "
+                + averageImpurity
                 + "\n"
-                + allPaths;
+                + "Paths: "
+                + "\n"
+                + allPaths
+                + "\n";
     }
 }

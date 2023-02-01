@@ -40,27 +40,25 @@ public class Column {
 
   @Override
   public String toString() {
-    String descriptiveStatisticsProfileString =
-        descriptiveStatisticsProfile != null ? descriptiveStatisticsProfile.toString() : "";
-    String correlationsProfileString =
-        correlationsProfile != null ? correlationsProfile.toString() : "";
-    return "=============================================================================\n"
-        + "Column"
-        + "\n"
-        + "position: "
-        + position
-        + "\n"
-        + "name: "
-        + name
-        + "\n"
-        + "datatype: "
-        + datatype
-        + "\n"
-        + "descriptiveStatisticsProfile:\n"
-        + descriptiveStatisticsProfileString
-        + "\n"
-        + "correlationsProfile:\n"
-        + correlationsProfileString
-        + "\n";
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("=============================================================================\n");
+    stringBuilder.append("Column\n");
+    stringBuilder.append(String.format("position: %d\n", position));
+    stringBuilder.append(String.format("name: %s\n", name));
+    stringBuilder.append(String.format("datatype: %s\n", datatype));
+    stringBuilder.append("\n");
+
+    if (descriptiveStatisticsProfile != null) {
+      stringBuilder.append("DescriptiveStatisticsProfile:\n");
+      stringBuilder.append(descriptiveStatisticsProfile);
+      stringBuilder.append("\n");
+    }
+
+    if (correlationsProfile != null && !correlationsProfile.toString().isEmpty()) {
+      stringBuilder.append("CorrelationsProfile:\n");
+      stringBuilder.append(correlationsProfile);
+      stringBuilder.append("\n");
+    }
+    return stringBuilder.toString();
   }
 }

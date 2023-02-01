@@ -8,18 +8,22 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
+
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
@@ -83,11 +87,22 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public DatasetProfile computeProfileOfDataset() {
+  public DatasetProfile computeProfileOfDataset() throws IOException {
+    createOutputFolder();
     computeDescriptiveStats();
     computeAllPairsCorrelations();
     extractAllDecisionTrees();
     return datasetProfile;
+  }
+
+  private void createOutputFolder() throws IOException {
+    String outputDirectoryParent = new File(datasetProfile.getPath()).getParent();
+    String currentDateTime = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
+    String outputDirectory = outputDirectoryParent + File.separator + datasetProfile.getAlias() +
+                             "_report_" + currentDateTime;
+    Files.createDirectories(Paths.get(outputDirectory));
+    datasetProfile.setOutputDirectory(outputDirectory);
   }
 
   private void computeDescriptiveStats() {
@@ -132,7 +147,7 @@ public class DatasetProfiler implements IDatasetProfiler {
     logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
   }
 
-  private void extractAllDecisionTrees() {
+  private void extractAllDecisionTrees() throws IOException {
     List<String> labeledColumnNames = new DecisionTreeManager(dataset, datasetProfile)
             .extractAllDecisionTrees();
     for (String labeledColumnName : labeledColumnNames) {

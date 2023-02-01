@@ -40,7 +40,7 @@ public class LabeledColumn extends Column {
             .collect(Collectors.joining("\n"));
 
     return super.toString()
-            + "\n"
-            + allDecisionTrees;
+            + allDecisionTrees
+            + "\n";
   }
 }

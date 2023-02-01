@@ -39,7 +39,7 @@ public class WriterResource extends ExternalResource {
     }
 
     private void initializeProfile() throws AnalysisException {
-        String filePath = TestsUtilities.getResourcePath("people.json");
+        String filePath = TestsUtilities.getDatasetPath("people.json");
         StructType schema = TestsUtilities.getPeopleJsonSchema();
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetProfiler.registerDataset("people", filePath, schema);

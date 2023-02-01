@@ -9,6 +9,8 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
+import java.io.IOException;
+
 public class ReportResource extends ExternalResource {
     private SparkSession sparkSession;
     private IDatasetProfiler datasetProfiler;
@@ -39,10 +41,10 @@ public class ReportResource extends ExternalResource {
                         .getOrCreate();
     }
 
-    private void initializeProfile() throws AnalysisException {
+    private void initializeProfile() throws AnalysisException, IOException {
         StructType schema = TestsUtilities.getPeopleJsonSchema();
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        datasetPath = TestsUtilities.getResourcePath("people.json");
+        datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         datasetProfiler.computeProfileOfDataset();
     }

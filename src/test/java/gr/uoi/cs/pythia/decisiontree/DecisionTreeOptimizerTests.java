@@ -21,7 +21,7 @@ public class DecisionTreeOptimizerTests {
     @Before
     public void init() {
         StructType schema = TestsUtilities.getTweetsCsvSchema();
-        String filePath = TestsUtilities.getResourcePath("tweets.csv");
+        String filePath = TestsUtilities.getDatasetPath("tweets.csv");
         dataset = AllDecisionTreeTests.dtResource.getSparkSession()
                 .read()
                 .option("header", "true")
