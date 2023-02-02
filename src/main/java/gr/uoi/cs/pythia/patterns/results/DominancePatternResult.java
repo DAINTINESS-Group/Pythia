@@ -180,7 +180,7 @@ public class DominancePatternResult {
 					}
 				}
 		}
-		if (str.isBlank()) return "\nNo highlights identified.\n";
+		if (str.isEmpty()) return "\nNo highlights identified.\n";	//isBlank() is Java11. We have java 8.
 		return str;
 	}
 	

@@ -8,12 +8,12 @@ public class HighDominancePatternAlgo extends DominancePatternAlgo {
 	public String getPatternName() {
 		return PatternConstants.HIGH_DOMINANCE;
 	}
-	
+	@Override
 	protected String getDominanceType() {
 		return PatternConstants.HIGH;
 	}
-	
-	protected boolean isDominance(double valueA, double valueB) {
+	@Override
+	protected boolean isDominant(double valueA, double valueB) {
 		return valueA > valueB;
 	}
 

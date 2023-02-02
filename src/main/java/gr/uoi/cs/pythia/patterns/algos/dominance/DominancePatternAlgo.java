@@ -26,7 +26,7 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 	
 	public abstract String getPatternName();
 	protected abstract String getDominanceType();
-	protected abstract boolean isDominance(double valueA, double valueB);
+	protected abstract boolean isDominant(double valueA, double valueB);
 	
 	public DominancePatternAlgo() {
 		this.results = new ArrayList<DominancePatternResult>();
@@ -97,7 +97,7 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 				double aggValueB = parseAggregateValue(rowB);
 				if (Double.isNaN(aggValueB)) continue;
 				if (isSameRow(rowA, rowB)) continue;
-				if (isDominance(aggValueA, aggValueB)) dominatedValues++;
+				if (isDominant(aggValueA, aggValueB)) dominatedValues++;
 			}
 			
 			double dominancePercentage = (double) dominatedValues 
@@ -135,8 +135,9 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 					double aggValueB = getAggValue(xCoordinateB, yCoordinate, queryResult);
 					if (Double.isNaN(aggValueA)) continue;
 					if (Double.isNaN(aggValueB)) continue;
-					if (isDominance(aggValueA, aggValueB)) {
-						if (!onYValues.contains(yCoordinate)) onYValues.add(yCoordinate);
+					if (isDominant(aggValueA, aggValueB)) {
+						if (!onYValues.contains(yCoordinate)) 
+							onYValues.add(yCoordinate);
 						isADominatesB = true;
 					}
 					else {
