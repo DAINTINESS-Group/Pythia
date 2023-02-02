@@ -18,6 +18,30 @@ public class DescriptiveStatisticsProfile {
     this.max = max;
   }
 
+  public String getCount() {
+    return count;
+  }
+
+  public String getMean() {
+    return mean;
+  }
+
+  public String getStandardDeviation() {
+    return standardDeviation;
+  }
+
+  public String getMedian() {
+    return median;
+  }
+
+  public String getMin() {
+    return min;
+  }
+
+  public String getMax() {
+    return max;
+  }
+
   @Override
   public String toString() {
     return "count: "

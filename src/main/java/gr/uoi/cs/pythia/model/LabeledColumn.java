@@ -1,38 +1,46 @@
 package gr.uoi.cs.pythia.model;
 
-import java.util.Arrays;
+import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LabeledColumn extends Column {
 
-  private double decisionTreeAccuracy;
-  private String[] featureColumnNames;
-  private String decisionTreeVisualization;
+  private final List<DecisionTree> decisionTrees = new ArrayList<>();
+  private final RuleSet ruleSet;
 
   public LabeledColumn(
-      int position,
-      String datatype,
-      String newColumnName,
-      double decisionTreeAccuracy,
-      String[] featureColumnNames,
-      String decisionTreeVisualization) {
+          int position,
+          String newColumnName,
+          String datatype,
+          RuleSet ruleSet) {
     super(position, newColumnName, datatype);
-    this.decisionTreeAccuracy = decisionTreeAccuracy;
-    this.featureColumnNames = featureColumnNames;
-    this.decisionTreeVisualization = decisionTreeVisualization;
+    this.ruleSet = ruleSet;
+  }
+
+  public List<DecisionTree> getDecisionTrees() {
+    return decisionTrees;
+  }
+
+  public RuleSet getRuleSet() {
+    return ruleSet;
+  }
+
+  public void addDecisionTree(DecisionTree decisionTree) {
+    decisionTrees.add(decisionTree);
   }
 
   @Override
   public String toString() {
+    String allDecisionTrees = decisionTrees.stream()
+            .map(DecisionTree::toString)
+            .collect(Collectors.joining("\n"));
+
     return super.toString()
-        + "\nDecisionTree\n"
-        + "featureColumnNames="
-        + Arrays.toString(featureColumnNames)
-        + "\n"
-        + "accuracy="
-        + decisionTreeAccuracy
-        + "\n"
-        + "decisionTreeVisualization='"
-        + decisionTreeVisualization
-        + "\n";
+            + "\n"
+            + allDecisionTrees;
   }
 }

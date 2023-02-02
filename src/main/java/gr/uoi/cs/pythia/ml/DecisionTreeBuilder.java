@@ -16,6 +16,7 @@ import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+@Deprecated
 public class DecisionTreeBuilder {
 
   private final String[] featureColumnNames;

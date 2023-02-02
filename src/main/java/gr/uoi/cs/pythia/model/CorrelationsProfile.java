@@ -10,6 +10,10 @@ public class CorrelationsProfile {
     this.allCorrelations = allCorrelations;
   }
 
+  public Map<String, Double> getAllCorrelations() {
+    return allCorrelations;
+  }
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();

@@ -4,9 +4,9 @@ import java.util.List;
 
 public class DatasetProfile {
 
-  private String alias;
-  private String path;
-  private List<Column> columns;
+  private final String alias;
+  private final String path;
+  private final List<Column> columns;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
     this.alias = alias;

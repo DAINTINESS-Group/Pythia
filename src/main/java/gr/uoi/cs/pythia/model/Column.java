@@ -2,9 +2,9 @@ package gr.uoi.cs.pythia.model;
 
 public class Column {
 
-  private int position;
-  private String name;
-  private String datatype;
+  private final int position;
+  private final String name;
+  private final String datatype;
   private CorrelationsProfile correlationsProfile;
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
 
@@ -20,6 +20,14 @@ public class Column {
 
   public String getDatatype() {
     return datatype;
+  }
+
+  public CorrelationsProfile getCorrelationsProfile() {
+    return correlationsProfile;
+  }
+
+  public DescriptiveStatisticsProfile getDescriptiveStatisticsProfile() {
+    return descriptiveStatisticsProfile;
   }
 
   public void setCorrelationsProfile(CorrelationsProfile correlationsProfile) {

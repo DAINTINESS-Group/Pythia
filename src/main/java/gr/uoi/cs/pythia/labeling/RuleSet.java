@@ -3,8 +3,8 @@ package gr.uoi.cs.pythia.labeling;
 import java.util.List;
 
 public class RuleSet {
-  private String newColumnName;
-  private List<Rule> rules;
+  private final String newColumnName;
+  private final List<Rule> rules;
 
   public RuleSet(String newColumnName, List<Rule> rules) {
     this.newColumnName = newColumnName;
@@ -13,6 +13,10 @@ public class RuleSet {
 
   public String getNewColumnName() {
     return newColumnName;
+  }
+
+  public List<Rule> getRules() {
+    return rules;
   }
 
   public String generateSparkSqlExpression() {

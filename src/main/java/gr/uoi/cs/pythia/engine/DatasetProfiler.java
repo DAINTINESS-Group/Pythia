@@ -1,14 +1,18 @@
 package gr.uoi.cs.pythia.engine;
 
 import static org.apache.spark.sql.functions.expr;
-import static org.apache.spark.sql.types.DataTypes.StringType;
+
+import gr.uoi.cs.pythia.config.SparkConfig;
+import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
+import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
+import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
+import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
+import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -16,23 +20,16 @@ import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
-import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.ml.DecisionTreeBuilder;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
-import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
-import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
-import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 
 public class DatasetProfiler implements IDatasetProfiler {
 
@@ -77,9 +74,29 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
+  public void computeLabeledColumn(RuleSet ruleSet) {
+    // Add new column to the dataset
+    String columnName = ruleSet.getNewColumnName();
+    String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
+    dataset = dataset.withColumn(columnName, expr(labelingRulesAsExpression));
+
+    // Create new LabeledColumn
+    int index = (int) dataset.schema().getFieldIndex(columnName).get();
+    DataType dataType = dataset.schema().fields()[index].dataType();
+    datasetProfile.getColumns().add(new LabeledColumn(
+            datasetProfile.getColumns().size(),
+            columnName,
+            dataType.toString(),
+            ruleSet
+    ));
+    logger.info(String.format("Added labeled column %s", columnName));
+  }
+
+  @Override
   public DatasetProfile computeProfileOfDataset() {
     computeDescriptiveStats();
     computeAllPairsCorrelations();
+    extractAllDecisionTrees();
     return datasetProfile;
   }
 
@@ -125,26 +142,12 @@ public class DatasetProfiler implements IDatasetProfiler {
     logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
   }
 
-  @Override
-  public void computeLabeledColumn(RuleSet ruleSet) {
-    String newColumnName = ruleSet.getNewColumnName();
-    String labelingRulesAsExpression = ruleSet.generateSparkSqlExpression();
-    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(labelingRulesAsExpression));
-    logger.info(String.format("Computed labeled column %s", newColumnName));
-
-    DecisionTreeBuilder decisionTreeBuilder =
-        new DecisionTreeBuilder(dataset, datasetProfile, newColumnName);
-    logger.info(String.format("Computed Decision Tree for labeled column %s", newColumnName));
-
-    List<Column> columns = datasetProfile.getColumns();
-    columns.add(
-        new LabeledColumn(
-            columns.size(),
-            StringType.toString(),
-            newColumnName,
-            decisionTreeBuilder.getAccuracy(),
-            decisionTreeBuilder.getFeatureColumnNames(),
-            decisionTreeBuilder.getDecisionTreeVisualization()));
+  private void extractAllDecisionTrees() {
+    List<String> labeledColumnNames = new DecisionTreeManager(dataset, datasetProfile)
+            .extractAllDecisionTrees();
+    for (String labeledColumnName : labeledColumnNames) {
+        logger.info(String.format("Computed Decision Trees for labeled column %s", labeledColumnName));
+    }
   }
 
   @Override
