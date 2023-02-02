@@ -31,42 +31,48 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     public DecisionTree computeDecisionTree() {
+        initializeVariables();
+        trainDecisionTreeModel();
+        calculateAccuracy();
+        return createDecisionTree();
+    }
+
+    private void initializeVariables() {
         attributesFinder = new AttributesFinder(decisionTreeParams, dataset);
         decisionTreeDataProcessor = new DecisionTreeDataProcessor(decisionTreeParams, attributesFinder, dataset);
+    }
 
-        // Train a DecisionTree model.
+    private void trainDecisionTreeModel() {
         DecisionTreeClassifier decisionTreeClassifier = new DecisionTreeClassifier()
                 .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
                 .setImpurity(decisionTreeParams.getImpurity())
                 .setMaxDepth(decisionTreeParams.getMaxDepth())
                 .setMinInfoGain(decisionTreeParams.getMinInfoGain());
-
         model = decisionTreeClassifier.fit(decisionTreeDataProcessor.getTrainingData());
-        Dataset<Row> predictions = model.transform(decisionTreeDataProcessor.getTestData());
+    }
 
-        // Calculate accuracy
+    private void calculateAccuracy() {
+        Dataset<Row> predictions = model.transform(decisionTreeDataProcessor.getTestData());
         MulticlassClassificationEvaluator evaluator =
                 new MulticlassClassificationEvaluator()
                         .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
                         .setPredictionCol("prediction")
                         .setMetricName("accuracy");
         accuracy = evaluator.evaluate(predictions);
-
-        return createDecisionTree();
     }
 
     private DecisionTree createDecisionTree() {
-        DecisionTreeNode rootNode = getDecisionTreeRootNode();
+        DecisionTreeNode rootNode = createDecisionTreeRootNode();
         return new DecisionTree(
                 accuracy,
                 attributesFinder.getAllFeatures(),
                 attributesFinder.getNonGeneratingAttributes(),
-                getDecisionTreeRootNode(),
+                rootNode,
                 calculateAverageImpurity(rootNode),
                 new DecisionTreePathsFinder(rootNode).getPaths());
     }
 
-    private DecisionTreeNode getDecisionTreeRootNode() {
+    private DecisionTreeNode createDecisionTreeRootNode() {
         DecisionTreeNodeParams nodeParams = new DecisionTreeNodeParams(
                 decisionTreeDataProcessor.getIndexedToActualValuesForEachIndexedColumn(),
                 decisionTreeParams.getLabeledColumnName(),

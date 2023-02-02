@@ -38,8 +38,11 @@ public class DecisionTreeManager {
     }
 
     public List<String> extractAllDecisionTrees() throws IOException {
-        createDirectory(outputDirectory);
         List<LabeledColumn> labeledColumns = getLabeledColumns();
+        if (labeledColumns.isEmpty()) {
+            return new ArrayList<>();
+        }
+        createDirectory(outputDirectory);
         for (LabeledColumn column : labeledColumns) {
             extractAllDecisionTreesForColumn(column, new ArrayList<>());
         }
@@ -53,8 +56,11 @@ public class DecisionTreeManager {
      *                              (even multiple for each column).
      */
     public List<String> extractAllDecisionTrees(List<DecisionTreeParams> allDecisionTreeParams) throws IOException {
-        createDirectory(outputDirectory);
         List<LabeledColumn> labeledColumns = getLabeledColumns();
+        if (labeledColumns.isEmpty()) {
+            return new ArrayList<>();
+        }
+        createDirectory(outputDirectory);
         for (LabeledColumn column : labeledColumns) {
             List<DecisionTreeParams> columnParams = getColumnSpecificParams(column, allDecisionTreeParams);
             extractAllDecisionTreesForColumn(column, columnParams);
