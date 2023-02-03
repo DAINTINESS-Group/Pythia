@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
@@ -10,6 +10,7 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -59,7 +60,7 @@ public class DecisionTreeResource extends ExternalResource {
     }
 
     private void initializeProfile() throws AnalysisException, IllegalAccessException {
-        StructType schema = TestsUtilities.getCarseatsCsvSchema();
+        StructType schema = TestsDatasetSchemas.getCarseatsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetProfiler.registerDataset("carseats", TestsUtilities.getDatasetPath("carseats.csv"), schema);
         // Get rules

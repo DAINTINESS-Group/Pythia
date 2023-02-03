@@ -1,9 +1,10 @@
 package gr.uoi.cs.pythia.report;
 
-import gr.uoi.cs.pythia.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
@@ -42,7 +43,7 @@ public class ReportResource extends ExternalResource {
     }
 
     private void initializeProfile() throws AnalysisException, IOException {
-        StructType schema = TestsUtilities.getPeopleJsonSchema();
+        StructType schema = TestsDatasetSchemas.getPeopleJsonSchema();
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);

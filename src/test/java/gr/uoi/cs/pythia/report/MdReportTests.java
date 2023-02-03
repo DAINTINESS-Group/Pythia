@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.report;
 
-import gr.uoi.cs.pythia.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -22,7 +22,7 @@ public class MdReportTests {
                 .generateReport(ReportGeneratorConstants.MD_REPORT,
                         reportFile.getAbsolutePath());
 
-        String expectedText = TestsUtilities.getExpectedFileAsString("expected_people_md_report.md");
+        String expectedText = TestsUtilities.getExpectedDatasetReport("people/expected_people_md_report.md");
         String actualString = TestsUtilities.getTextFromFile(reportFile);
         assertEquals(expectedText, actualString);
     }

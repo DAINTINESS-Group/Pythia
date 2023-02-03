@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructField;
@@ -20,7 +21,7 @@ public class DecisionTreeOptimizerTests {
 
     @Before
     public void init() {
-        StructType schema = TestsUtilities.getTweetsCsvSchema();
+        StructType schema = TestsDatasetSchemas.getTweetsCsvSchema();
         String filePath = TestsUtilities.getDatasetPath("tweets.csv");
         dataset = AllDecisionTreeTests.dtResource.getSparkSession()
                 .read()
