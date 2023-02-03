@@ -29,8 +29,6 @@ public class Bin {
     }
 
     public String getBoundsLabel() {
-        if (Double.isNaN(lowerBound))
-            return "NaN";
         DecimalFormat df = new DecimalFormat("0.###");
         return String.format("[%s,%s%s", df.format(lowerBound),
                                          df.format(upperBound),
@@ -39,8 +37,6 @@ public class Bin {
 
     @Override
     public String toString() {
-        if (Double.isNaN(lowerBound))
-            return String.format("NaN: %d values", count);
         DecimalFormat df = new DecimalFormat("0.###");
         return String.format("[%s,%s%s: %d values", df.format(lowerBound),
                                                     df.format(upperBound),

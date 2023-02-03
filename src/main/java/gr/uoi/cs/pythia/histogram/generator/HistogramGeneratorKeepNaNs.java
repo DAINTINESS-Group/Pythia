@@ -2,6 +2,7 @@ package gr.uoi.cs.pythia.histogram.generator;
 
 import gr.uoi.cs.pythia.histogram.model.Bin;
 import gr.uoi.cs.pythia.histogram.model.Histogram;
+import gr.uoi.cs.pythia.histogram.model.NaNBin;
 import gr.uoi.cs.pythia.model.Column;
 import org.apache.spark.ml.feature.Bucketizer;
 import org.apache.spark.sql.Dataset;
@@ -64,7 +65,7 @@ public class HistogramGeneratorKeepNaNs {
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
             if (row.isNullAt(0)) {
-                histogram.addBin(new Bin(Double.NaN,Double.NaN,row.getLong(1), true));
+                histogram.addBin(new NaNBin(row.getLong(1)));
                 continue;
             }
             int binNumber = new Double(row.getDouble(0)).intValue();
