@@ -1,19 +1,17 @@
 package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
-import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
 import java.io.IOException;
 
 public class ReportResource extends ExternalResource {
-    private SparkSession sparkSession;
+
     private IDatasetProfiler datasetProfiler;
     private String datasetPath;
 
@@ -28,18 +26,7 @@ public class ReportResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
-        initializeSpark();
         initializeProfile();
-    }
-
-    private void initializeSpark() {
-        SparkConfig sparkConfig = new SparkConfig();
-        sparkSession =
-                SparkSession.builder()
-                        .appName(sparkConfig.getAppName())
-                        .master(sparkConfig.getMaster())
-                        .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
-                        .getOrCreate();
     }
 
     private void initializeProfile() throws AnalysisException, IOException {
@@ -48,11 +35,5 @@ public class ReportResource extends ExternalResource {
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         datasetProfiler.computeProfileOfDataset();
-    }
-
-    @Override
-    protected void after() {
-        super.after();
-        sparkSession.stop();
     }
 }

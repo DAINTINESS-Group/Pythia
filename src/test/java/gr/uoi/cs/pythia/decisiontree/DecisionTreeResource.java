@@ -1,7 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
-import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
@@ -15,7 +14,6 @@ import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
@@ -25,14 +23,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DecisionTreeResource extends ExternalResource {
-    private SparkSession sparkSession;
+
     private RuleSet ruleSet;
 
     private Dataset<Row> dataset;
-
-    public SparkSession getSparkSession() {
-        return sparkSession;
-    }
 
     public RuleSet getRuleSet() {
         return ruleSet;
@@ -45,18 +39,7 @@ public class DecisionTreeResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
-        initializeSpark();
         initializeProfile();
-    }
-
-    private void initializeSpark() {
-        SparkConfig sparkConfig = new SparkConfig();
-        sparkSession =
-                SparkSession.builder()
-                        .appName(sparkConfig.getAppName())
-                        .master(sparkConfig.getMaster())
-                        .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
-                        .getOrCreate();
     }
 
     private void initializeProfile() throws AnalysisException, IllegalAccessException {
@@ -90,11 +73,5 @@ public class DecisionTreeResource extends ExternalResource {
         return ruleSet.getRules().stream()
                 .map(Rule::getTargetColumnName)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    protected void after() {
-        super.after();
-        sparkSession.stop();
     }
 }
