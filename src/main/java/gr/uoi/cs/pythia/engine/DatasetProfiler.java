@@ -30,7 +30,7 @@ import org.apache.spark.sql.types.StructType;
 
 public class DatasetProfiler implements IDatasetProfiler {
 
-  private final Logger logger = Logger.getLogger(DatasetProfile.class);
+  private final Logger logger = Logger.getLogger(DatasetProfiler.class);
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
@@ -64,7 +64,7 @@ public class DatasetProfiler implements IDatasetProfiler {
       columnProperties.add(new Column(i, columnNames.get(i), dataTypes.get(i)));
     }
     datasetProfile = new DatasetProfile(alias, path, columnProperties);
-    logger.info(String.format("Registered Dataset file with alias %s at %s", alias, path));
+    logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
   }
 
   @Override
@@ -83,7 +83,7 @@ public class DatasetProfiler implements IDatasetProfiler {
             dataType.toString(),
             ruleSet
     ));
-    logger.info(String.format("Added labeled column %s", columnName));
+    logger.info(String.format("Added labeled column: %s", columnName));
   }
 
   @Override
@@ -136,7 +136,7 @@ public class DatasetProfiler implements IDatasetProfiler {
       }
       logger.info(
           String.format(
-              "Computed Descriptive Statistics Profile for %s", datasetProfile.getPath()));
+              "Computed Descriptive Statistics Profile for column: %s", column.getName()));
     }
   }
 
@@ -151,7 +151,7 @@ public class DatasetProfiler implements IDatasetProfiler {
     List<String> labeledColumnNames = new DecisionTreeManager(dataset, datasetProfile)
             .extractAllDecisionTrees();
     for (String labeledColumnName : labeledColumnNames) {
-        logger.info(String.format("Computed Decision Trees for labeled column %s", labeledColumnName));
+        logger.info(String.format("Computed Decision Tree(s) for labeled column: %s", labeledColumnName));
     }
   }
 
