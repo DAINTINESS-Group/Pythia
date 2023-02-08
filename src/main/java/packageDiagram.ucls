@@ -13,7 +13,7 @@
   </package>  
   <package id="3" language="java" name="gr.uoi.cs.pythia.histogram" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/histogram" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="788" y="558"/>    
+    <position height="-1" width="-1" x="809" y="504"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
   <package id="4" language="java" name="gr.uoi.cs.pythia.decisiontree" project="Pythia" 
@@ -43,7 +43,7 @@
   </package>  
   <package id="9" language="java" name="gr.uoi.cs.pythia.labeling" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/labeling" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1128" y="491"/>    
+    <position height="-1" width="-1" x="1143" y="332"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
   <package id="10" language="java" name="gr.uoi.cs.pythia.writer" project="Pythia" 
@@ -83,12 +83,12 @@
   </package>  
   <package id="17" language="java" name="gr.uoi.cs.pythia.histogram.generator" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/histogram/generator" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="50" width="229" x="326" y="499"/>    
+    <position height="-1" width="-1" x="620" y="580"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
   <package id="18" language="java" name="gr.uoi.cs.pythia.histogram.model" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/histogram/model" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="50" width="208" x="326" y="589"/>    
+    <position height="-1" width="-1" x="747" y="713"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
   <package id="19" language="java" name="gr.uoi.cs.pythia.report.md" project="Pythia" 
@@ -97,147 +97,152 @@
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
   <dependency id="20">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="11"/>  
-  </dependency>  
-  <dependency id="21">    
     <end type="SOURCE" refId="15"/>    
     <end type="TARGET" refId="12"/>  
   </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
   <dependency id="22">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="18"/>  
+    <bendpoint x="574" y="321"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="23">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="15"/>  
+    <bendpoint x="1209" y="199"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
   </dependency>  
   <dependency id="24">    
-    <bendpoint x="1773" y="372"/>    
-    <bendpoint x="1777" y="785"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="13"/>  
-  </dependency>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <dependency id="26">    
-    <bendpoint x="940" y="649"/>    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <dependency id="27">    
-    <bendpoint x="1110" y="198"/>    
-    <bendpoint x="1091" y="288"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="28">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="30">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="13"/>  
-  </dependency>  
-  <dependency id="31">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="32">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="33">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="34">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="35">    
+  <dependency id="25">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="17"/>  
   </dependency>  
-  <dependency id="36">    
+  <dependency id="26">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="28">    
     <bendpoint x="1343" y="681"/>    
     <end type="SOURCE" refId="15"/>    
     <end type="TARGET" refId="14"/>  
   </dependency>  
-  <dependency id="37">    
-    <bendpoint x="1335" y="198"/>    
-    <bendpoint x="1335" y="288"/>    
-    <bendpoint x="1335" y="378"/>    
-    <end type="SOURCE" refId="6"/>    
+  <dependency id="29">    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="30">    
+    <bendpoint x="1109" y="459"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="31">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="32">    
+    <bendpoint x="940" y="649"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="33">    
+    <bendpoint x="1011" y="288"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="34">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="35">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="37">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="38">    
     <end type="SOURCE" refId="19"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="39">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <dependency id="40">    
-    <bendpoint x="1128" y="364"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="41">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="42">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="16"/>  
-  </dependency>  
-  <dependency id="43">    
-    <end type="SOURCE" refId="19"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <dependency id="44">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="45">    
-    <end type="SOURCE" refId="17"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="18"/>  
   </dependency>  
-  <dependency id="46">    
+  <dependency id="40">    
+    <bendpoint x="1179" y="378"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="41">    
+    <bendpoint x="1110" y="198"/>    
+    <bendpoint x="1091" y="288"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="42">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="43">    
+    <bendpoint x="632" y="440"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="44">    
     <bendpoint x="1450" y="676"/>    
     <end type="SOURCE" refId="15"/>    
     <end type="TARGET" refId="13"/>  
   </dependency>  
-  <dependency id="47">    
-    <bendpoint x="1011" y="288"/>    
-    <end type="SOURCE" refId="11"/>    
+  <dependency id="45">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="46">    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
+  <dependency id="47">    
+    <bendpoint x="1773" y="372"/>    
+    <bendpoint x="1777" y="785"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
   <dependency id="48">    
-    <bendpoint x="1131" y="198"/>    
     <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="4"/>  
+    <end type="TARGET" refId="2"/>  
   </dependency>  
   <dependency id="49">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="50">    
     <bendpoint x="739" y="195"/>    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <dependency id="50">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
   <dependency id="51">    
-    <bendpoint x="1179" y="378"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="9"/>  
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="52">    
+    <bendpoint x="1245" y="130"/>    
+    <bendpoint x="1355" y="213"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
