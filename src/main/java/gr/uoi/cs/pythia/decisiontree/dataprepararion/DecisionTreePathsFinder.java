@@ -1,6 +1,7 @@
-package gr.uoi.cs.pythia.decisiontree.model.path;
+package gr.uoi.cs.pythia.decisiontree.dataprepararion;
 
-import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNode;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTreePath;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -41,6 +41,6 @@ public class HistogramResource extends ExternalResource {
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        datasetProfile = datasetProfiler.computeProfileOfDataset();
+        datasetProfile = datasetProfiler.computeProfileOfDataset("");
     }
 }

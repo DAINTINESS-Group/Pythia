@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.histogram;
 
-import gr.uoi.cs.pythia.histogram.model.Histogram;
+import gr.uoi.cs.pythia.model.histogram.Histogram;
 import org.junit.Test;
 
 import java.io.IOException;

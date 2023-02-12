@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.histogram.model;
+package gr.uoi.cs.pythia.model.histogram;
 
 public class NaNBin extends Bin{
 

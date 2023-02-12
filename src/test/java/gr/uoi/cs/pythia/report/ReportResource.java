@@ -34,6 +34,6 @@ public class ReportResource extends ExternalResource {
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        datasetProfiler.computeProfileOfDataset();
+        datasetProfiler.computeProfileOfDataset("");
     }
 }

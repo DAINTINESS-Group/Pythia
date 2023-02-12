@@ -1,15 +1,15 @@
 package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -17,6 +17,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

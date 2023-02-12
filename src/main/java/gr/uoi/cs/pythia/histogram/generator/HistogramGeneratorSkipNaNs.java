@@ -1,7 +1,7 @@
 package gr.uoi.cs.pythia.histogram.generator;
 
-import gr.uoi.cs.pythia.histogram.model.Bin;
-import gr.uoi.cs.pythia.histogram.model.Histogram;
+import gr.uoi.cs.pythia.model.histogram.Bin;
+import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
 import org.apache.spark.ml.feature.Bucketizer;
 import org.apache.spark.sql.Dataset;

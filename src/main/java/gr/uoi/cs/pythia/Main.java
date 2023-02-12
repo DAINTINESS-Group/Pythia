@@ -59,7 +59,7 @@ public class Main {
                 new Rule("user_followers", LabelingSystemConstants.GEQ, 500000, "super_high")));
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
-    datasetProfiler.computeProfileOfDataset();
+    datasetProfiler.computeProfileOfDataset("");
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "test.txt");
   }
 }

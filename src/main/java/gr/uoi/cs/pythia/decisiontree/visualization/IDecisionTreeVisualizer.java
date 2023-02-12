@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.decisiontree.visualization;
 
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 
 import java.io.IOException;
 

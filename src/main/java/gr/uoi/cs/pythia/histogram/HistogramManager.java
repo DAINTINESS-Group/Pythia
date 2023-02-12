@@ -1,12 +1,12 @@
 package gr.uoi.cs.pythia.histogram;
 
 import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorKeepNaNs;
-import gr.uoi.cs.pythia.histogram.model.Histogram;
+import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.util.DatatypeFilterer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataTypes;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,18 +33,8 @@ public class HistogramManager {
     }
 
     private List<Column> getNumericalColumns() {
-        Set<String> numericDatatypes = new HashSet<>(
-                Arrays.asList(
-                        DataTypes.ByteType.toString(),
-                        DataTypes.ShortType.toString(),
-                        DataTypes.IntegerType.toString(),
-                        DataTypes.LongType.toString(),
-                        DataTypes.FloatType.toString(),
-                        DataTypes.DoubleType.toString(),
-                        DataTypes.createDecimalType().toString()));
-
         return datasetProfile.getColumns().stream()
-                .filter(column -> numericDatatypes.contains(column.getDatatype()))
+                .filter(column -> DatatypeFilterer.isNumerical(column.getDatatype()))
                 .collect(Collectors.toList());
     }
 }

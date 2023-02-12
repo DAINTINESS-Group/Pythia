@@ -6,6 +6,7 @@ import gr.uoi.cs.pythia.report.md.structures.MdTable;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class MdCorrelations {
 
     private String getCorrelationsTable() {
         List<String> columnNames = getColumnNames();
-        String table = new MdTable(getTableHeaders(columnNames), getTableData(columnNames),
+        String table = new MdTable(getTableHeaders(columnNames), getTableData(),
                 MdTable.ALIGNMENT_TYPE.CENTER)
                 .getTable();
         return MdBasicStructures.center(table);
@@ -52,21 +53,24 @@ public class MdCorrelations {
         return headers;
     }
 
-    private List<List<String>> getTableData(List<String> columnNames) {
+    private List<List<String>> getTableData() {
         List<List<String>> data = new ArrayList<>();
         for (Column column : columns) {
-            data.add(getColumnData(column, columnNames));
+            data.add(getColumnData(column));
         }
         return data;
     }
 
-    private List<String> getColumnData(Column column, List<String> columnNames) {
-        Map<String, Double> correlations = column.getCorrelationsProfile().getAllCorrelations();
+    private List<String> getColumnData(Column column) {
+        Map<String, Double> correlations = new HashMap<>();
+        if (column.getCorrelationsProfile() != null)
+            correlations = column.getCorrelationsProfile().getAllCorrelations();
+
         List<String> data = new ArrayList<>();
         data.add(MdBasicStructures.bold(column.getName()));
-        for (String columnName : columnNames) {
-            if (correlations.containsKey(columnName))
-                data.add(decimalFormat.format(correlations.get(columnName)));
+        for (Column corrColumn : columns) {
+            if (correlations.containsKey(corrColumn.getName()))
+                data.add(decimalFormat.format(correlations.get(corrColumn.getName())));
             else
                 data.add(null);
         }

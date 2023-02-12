@@ -54,7 +54,7 @@ public class Column {
       stringBuilder.append("\n");
     }
 
-    if (correlationsProfile != null && !correlationsProfile.toString().isEmpty()) {
+    if (correlationsProfile != null) {
       stringBuilder.append("CorrelationsProfile:\n");
       stringBuilder.append(correlationsProfile);
       stringBuilder.append("\n");

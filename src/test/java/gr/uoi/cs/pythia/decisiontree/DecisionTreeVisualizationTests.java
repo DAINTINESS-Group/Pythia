@@ -1,8 +1,8 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
 import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizerFactory;
 import gr.uoi.cs.pythia.decisiontree.visualization.DecisionTreeVisualizerType;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;

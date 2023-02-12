@@ -6,6 +6,7 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
+import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.model.Column;
@@ -65,6 +66,15 @@ public class DatasetProfiler implements IDatasetProfiler {
     }
     datasetProfile = new DatasetProfile(alias, path, columnProperties);
     logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
+
+    // TODO: from alexxarisis - Maybe do this instead?
+//    List<Column> columns = new ArrayList<>();
+//    StructField[] fields = dataset.schema().fields();
+//    for (int i = 0; i < fields.length; ++i) {
+//      columns.add(new Column(i, fields[i].name(), fields[i].dataType().toString()));
+//    }
+//    datasetProfile = new DatasetProfile(alias, path, columns);
+//    logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
   }
 
   @Override
@@ -87,64 +97,39 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public DatasetProfile computeProfileOfDataset() throws IOException {
-    createOutputFolder();
+  public DatasetProfile computeProfileOfDataset(String path) throws IOException {
+    createOutputFolder(path);
     computeDescriptiveStats();
     computeAllPairsCorrelations();
     extractAllDecisionTrees();
     return datasetProfile;
   }
 
-  private void createOutputFolder() throws IOException {
-    String outputDirectoryParent = new File(datasetProfile.getPath()).getParent();
+  private void createOutputFolder(String path) throws IOException {
+    if (path == null || !new File(path).isDirectory()) {
+      path = new File(datasetProfile.getPath()).getParent();
+    }
+
     String currentDateTime = LocalDateTime.now()
             .format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
-    String outputDirectory = outputDirectoryParent + File.separator + datasetProfile.getAlias() +
+    String outputDirectory = path + File.separator + datasetProfile.getAlias() +
                              "_report_" + currentDateTime;
     Files.createDirectories(Paths.get(outputDirectory));
     datasetProfile.setOutputDirectory(outputDirectory);
   }
 
   private void computeDescriptiveStats() {
-    Dataset<Row> descriptiveStatistics =
-        dataset.summary(
-            DatasetProfilerConstants.COUNT,
-            DatasetProfilerConstants.MEAN,
-            DatasetProfilerConstants.STANDARD_DEVIATION,
-            DatasetProfilerConstants.MEDIAN,
-            DatasetProfilerConstants.MIN,
-            DatasetProfilerConstants.MAX);
-
-    List<Column> columns = datasetProfile.getColumns();
-    Set<String> summaryColumns = new HashSet<>(Arrays.asList(descriptiveStatistics.columns()));
-    for (Column column : columns) {
-      if (summaryColumns.contains(column.getName())) {
-        List<Row> columnNames = descriptiveStatistics.select(column.getName()).collectAsList();
-        List<Object> descriptiveStatisticsRow =
-            columnNames.stream().map(col -> col.get(0)).collect(Collectors.toList());
-
-        String count = (String) descriptiveStatisticsRow.get(0);
-        String mean = (String) descriptiveStatisticsRow.get(1);
-        String standardDeviation = (String) descriptiveStatisticsRow.get(2);
-        String median = (String) descriptiveStatisticsRow.get(3);
-        String min = (String) descriptiveStatisticsRow.get(4);
-        String max = (String) descriptiveStatisticsRow.get(5);
-
-        DescriptiveStatisticsProfile columnDescriptiveStatisticsProfile =
-            new DescriptiveStatisticsProfile(count, mean, standardDeviation, median, min, max);
-        column.setDescriptiveStatisticsProfile(columnDescriptiveStatisticsProfile);
-      }
-      logger.info(
-          String.format(
-              "Computed Descriptive Statistics Profile for column: %s", column.getName()));
-    }
+    new DescriptiveStatisticsFactory()
+        .getDefaultGenerator()
+        .computeDescriptiveStats(dataset, datasetProfile);
+    logger.info(String.format("Computed Descriptive Statistics Profile for dataset: '%s'", datasetProfile.getAlias()));
   }
 
   private void computeAllPairsCorrelations() {
     new ICorrelationsCalculatorFactory()
         .createCorrelationsCalculator(CorrelationsSystemConstants.PEARSON)
         .calculateAllPairsCorrelations(dataset, datasetProfile);
-    logger.info(String.format("Computed Correlations Profile for %s", datasetProfile.getPath()));
+    logger.info(String.format("Computed Correlations Profile for dataset: '%s'", datasetProfile.getAlias()));
   }
 
   private void extractAllDecisionTrees() throws IOException {
@@ -162,7 +147,7 @@ public class DatasetProfiler implements IDatasetProfiler {
         .produceReport(datasetProfile, path);
     logger.info(
         String.format(
-            "Generated %s report for %s: %s.",
+            "Generated %s report for dataset '%s': %s.",
             reportGeneratorType, datasetProfile.getAlias(), path));
   }
 

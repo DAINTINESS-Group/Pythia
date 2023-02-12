@@ -2,8 +2,8 @@ package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
-import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTreePath;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

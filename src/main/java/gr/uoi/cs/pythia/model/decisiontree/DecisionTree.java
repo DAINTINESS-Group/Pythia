@@ -1,7 +1,6 @@
-package gr.uoi.cs.pythia.decisiontree.model;
+package gr.uoi.cs.pythia.model.decisiontree;
 
-import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
-import gr.uoi.cs.pythia.decisiontree.model.path.DecisionTreePath;
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNode;
 
 import java.util.List;
 import java.util.stream.Collectors;

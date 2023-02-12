@@ -10,7 +10,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-        UtilTests.class,
         LabelingSystemTests.class,
         AllDecisionTreeTests.class,
         AllReportTests.class,

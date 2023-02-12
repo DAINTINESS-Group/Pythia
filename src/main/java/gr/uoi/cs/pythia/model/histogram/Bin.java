@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.histogram.model;
+package gr.uoi.cs.pythia.model.histogram;
 
 import java.text.DecimalFormat;
 

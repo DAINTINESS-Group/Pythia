@@ -16,7 +16,7 @@ public class MdReportTests {
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Test
-    public void testProduceReportTxt() throws IOException {
+    public void testProduceReportMd() throws IOException {
         File reportFile = tempFolder.newFile("test.md");
         AllReportTests.reportResource.getDatasetProfiler()
                 .generateReport(ReportGeneratorConstants.MD_REPORT,

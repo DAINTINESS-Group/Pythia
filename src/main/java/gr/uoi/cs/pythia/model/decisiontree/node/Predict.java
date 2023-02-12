@@ -1,4 +1,6 @@
-package gr.uoi.cs.pythia.decisiontree.model.node;
+package gr.uoi.cs.pythia.model.decisiontree.node;
+
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNodeParams;
 
 public class Predict {
     private final String prediction;
