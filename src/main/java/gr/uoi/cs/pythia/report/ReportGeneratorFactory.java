@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.report.md.MdReportGenerator;
 
-public class IReportGeneratorFactory {
+public class ReportGeneratorFactory {
 
   public IReportGenerator createReportGenerator(String type) {
     switch (type) {

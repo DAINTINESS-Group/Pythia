@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.histogram;
 
-import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorKeepNaNs;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorFactory;
+import gr.uoi.cs.pythia.histogram.generator.IHistogramGenerator;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -34,11 +35,13 @@ public class HistogramManager {
 //        Path outputDirectory = Paths.get(datasetProfile.getOutputDirectory(), "histograms");
 //        createDirectory(outputDirectory);
 
+        HistogramGeneratorFactory histogramGeneratorFactory = new HistogramGeneratorFactory();
         List<Histogram> histograms = new ArrayList<>();
 
         for (Column column : columns) {
-            Histogram histogram = new HistogramGeneratorKeepNaNs(dataset, column)
-                    .generateHistogram(10);
+            IHistogramGenerator histogramGenerator = histogramGeneratorFactory
+                    .createGenerator(dataset, column, HistogramGeneratorType.KEEP_NANS);
+            Histogram histogram = histogramGenerator.generateHistogram(10);
             column.setHistogram(histogram);
             histograms.add(histogram);
             // for visualization

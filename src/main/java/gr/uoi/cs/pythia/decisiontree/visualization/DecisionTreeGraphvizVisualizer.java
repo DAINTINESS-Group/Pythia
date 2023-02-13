@@ -2,17 +2,21 @@ package gr.uoi.cs.pythia.decisiontree.visualization;
 
 import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNode;
-import guru.nidi.graphviz.attribute.*;
+import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.attribute.Font;
+import guru.nidi.graphviz.attribute.Label;
+import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.model.*;
+import guru.nidi.graphviz.model.Graph;
+import guru.nidi.graphviz.model.Node;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 import static guru.nidi.graphviz.attribute.Attributes.attr;
 import static guru.nidi.graphviz.model.Factory.*;
+import static guru.nidi.graphviz.model.Factory.graph;
 
 
 public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
@@ -33,19 +37,7 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
         return graph("decisionTree").directed()
                 .nodeAttr().with(Font.name("Arial"))
                 .linkAttr().with("class", "link-class")
-                .with(
-                        getRootNode(dtNode)
-                                .link(to(getNodes(dtNode.getLeftNode())).with(attr("label", "Yes")))
-                                .link(to(getNodes(dtNode.getRightNode())).with(attr("label", "No")))
-                )
-                .graphAttr().with(getCaption(decisionTree));
-    }
-
-    private Node getRootNode(DecisionTreeNode dtNode) {
-        Node graphNode = createNode(dtNode);
-        if (dtNode.isLeaf())
-            return graphNode.with(leafNodeColor);
-        return graphNode.with(rootNodeColor);
+                .with(getNodes(dtNode));
     }
 
     private Node getNodes(DecisionTreeNode dtNode) {
@@ -53,7 +45,11 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
         if (dtNode.isLeaf())
             return graphNode.with(leafNodeColor);
 
-        graphNode = graphNode.with(internalNodeColor);
+        if (dtNode.getId() == 1) {
+            graphNode = graphNode.with(rootNodeColor);
+        } else {
+            graphNode = graphNode.with(internalNodeColor);
+        }
         Node leftNode = getNodes(dtNode.getLeftNode());
         Node rightNode = getNodes(dtNode.getRightNode());
 
@@ -69,11 +65,5 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
 
     private String getNodeInfo(DecisionTreeNode dtNode) {
         return dtNode.getSimpleRepresentation().replace("<", " <");
-    }
-
-    private Label getCaption(DecisionTree decisionTree) {
-        String averageImpurity = new DecimalFormat("#.###")
-                .format(decisionTree.getAverageImpurity());
-        return Label.of("\nThe average impurity is " + averageImpurity);
     }
 }

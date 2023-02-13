@@ -1,10 +1,10 @@
-package gr.uoi.cs.pythia.descriptivestatistics.generator;
+package gr.uoi.cs.pythia.descriptivestatistics.calculator;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-public interface IDescriptiveStatisticsGenerator {
+public interface IDescriptiveStatisticsCalculator {
 
      /**
       * Computes the min, max, mean, median, count and standard deviation for each column

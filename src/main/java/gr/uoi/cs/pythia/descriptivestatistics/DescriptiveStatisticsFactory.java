@@ -1,11 +1,11 @@
 package gr.uoi.cs.pythia.descriptivestatistics;
 
-import gr.uoi.cs.pythia.descriptivestatistics.generator.DescriptiveStatisticsGenerator;
-import gr.uoi.cs.pythia.descriptivestatistics.generator.IDescriptiveStatisticsGenerator;
+import gr.uoi.cs.pythia.descriptivestatistics.calculator.DescriptiveStatisticsCalculator;
+import gr.uoi.cs.pythia.descriptivestatistics.calculator.IDescriptiveStatisticsCalculator;
 
 public class DescriptiveStatisticsFactory {
 
-    public IDescriptiveStatisticsGenerator getDefaultGenerator() {
-        return new DescriptiveStatisticsGenerator();
+    public IDescriptiveStatisticsCalculator getDefaultCalculator() {
+        return new DescriptiveStatisticsCalculator();
     }
 }

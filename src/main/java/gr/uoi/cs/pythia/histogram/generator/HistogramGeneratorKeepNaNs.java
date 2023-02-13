@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia.histogram.generator;
 
+import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;
 import gr.uoi.cs.pythia.model.histogram.Bin;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.histogram.NaNBin;
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * Keeps null and NaN values and counts them to an extra bin.
  */
-public class HistogramGeneratorKeepNaNs {
+public class HistogramGeneratorKeepNaNs implements IHistogramGenerator {
 
     private final Dataset<Row> dataset;
     private final Column column;
@@ -30,8 +31,9 @@ public class HistogramGeneratorKeepNaNs {
     }
 
     private double[] getSplits(int totalBins) {
-        double max = Double.parseDouble(column.getDescriptiveStatisticsProfile().getMax());
-        double min = Double.parseDouble(column.getDescriptiveStatisticsProfile().getMin());
+        DescriptiveStatisticsProfile descriptiveStatistics = column.getDescriptiveStatisticsProfile();
+        double max = Double.parseDouble(descriptiveStatistics.getMax());
+        double min = Double.parseDouble(descriptiveStatistics.getMin());
         double binSize = (max - min) / totalBins;
         double[] splits = new double[totalBins + 1];
         splits[0] = min;

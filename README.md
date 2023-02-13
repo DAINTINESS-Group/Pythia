@@ -177,7 +177,7 @@ public class Main {
         datasetProfiler.computeLabeledColumn(ruleSet);
 
         // Compute the profile of the Dataset (this will take a while for big datasets)
-        datasetProfiler.computeProfileOfDataset();
+        datasetProfiler.computeProfileOfDataset("");
 
         // Generate a report (txt report in this case)
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");

@@ -1,14 +1,18 @@
-package gr.uoi.cs.pythia.correlations;
+package gr.uoi.cs.pythia.correlations.calculator;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.CorrelationsProfile;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 
-import java.util.*;
 
 import gr.uoi.cs.pythia.util.DatatypeFilterer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PearsonCorrelationsCalculator implements ICorrelationsCalculator {
 

@@ -2,10 +2,12 @@ package gr.uoi.cs.pythia.report.md.components;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,7 @@ public class MdDecisionTrees {
         StringBuilder stringBuilder = new StringBuilder();
         String decisionTreesDirectory = datasetProfile.getOutputDirectory() + File.separator + "decisionTrees";
 
+        DecimalFormat decimalFormat = new DecimalFormat("#.###");
         for (LabeledColumn column : columns) {
             stringBuilder.append(
                     String.format("Decision Trees for '%s':\n", column.getName())
@@ -46,14 +49,15 @@ public class MdDecisionTrees {
             File[] decisionTreesImages = new File(
                     Paths.get(decisionTreesDirectory, column.getName()).toString())
                     .listFiles();
-
-            for (File decisionTreeImage : decisionTreesImages) {
+            List<DecisionTree> decisionTrees = column.getDecisionTrees();
+            for (int i=0; i< decisionTrees.size(); i++) {
                 stringBuilder.append(MdBasicStructures.center(
-                        MdBasicStructures.image(decisionTreeImage.getAbsolutePath(), ""))
-                );
-                stringBuilder.append("\n");
+                                     MdBasicStructures.image(
+                                             decisionTreesImages[i].getAbsolutePath(), "")));
+                stringBuilder.append(MdBasicStructures.center(
+                                     MdBasicStructures.heading4(
+                                decimalFormat.format(decisionTrees.get(i).getAverageImpurity()))));
             }
-            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }

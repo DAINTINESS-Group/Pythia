@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.descriptivestatistics.generator;
+package gr.uoi.cs.pythia.descriptivestatistics.calculator;
 
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsConstants;
 import gr.uoi.cs.pythia.model.Column;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class DescriptiveStatisticsGenerator implements IDescriptiveStatisticsGenerator {
+public class DescriptiveStatisticsCalculator implements IDescriptiveStatisticsCalculator {
 
     public void computeDescriptiveStats(Dataset<Row> dataset, DatasetProfile datasetProfile) {
         Dataset<Row> descriptiveStatistics =

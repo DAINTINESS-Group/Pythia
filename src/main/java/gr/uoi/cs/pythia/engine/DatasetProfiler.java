@@ -3,17 +3,20 @@ package gr.uoi.cs.pythia.engine;
 import static org.apache.spark.sql.functions.expr;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
-import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.correlations.CorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.correlations.calculator.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
+import gr.uoi.cs.pythia.descriptivestatistics.calculator.IDescriptiveStatisticsCalculator;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
-import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
-import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
+import gr.uoi.cs.pythia.report.IReportGenerator;
+import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
+import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import gr.uoi.cs.pythia.writer.IDatasetWriter;
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.DataType;
@@ -52,6 +56,8 @@ public class DatasetProfiler implements IDatasetProfiler {
   public void registerDataset(String alias, String path, StructType schema)
       throws AnalysisException {
     dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
+
+
     List<String> columnNames =
         Arrays.stream(dataset.schema().fields())
             .map(StructField::name)
@@ -121,9 +127,9 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void computeDescriptiveStats() {
-    new DescriptiveStatisticsFactory()
-        .getDefaultGenerator()
-        .computeDescriptiveStats(dataset, datasetProfile);
+    DescriptiveStatisticsFactory factory = new DescriptiveStatisticsFactory();
+    IDescriptiveStatisticsCalculator calculator = factory.getDefaultCalculator();
+    calculator.computeDescriptiveStats(dataset, datasetProfile);
     logger.info(String.format("Computed Descriptive Statistics Profile for dataset: '%s'", datasetProfile.getAlias()));
   }
 
@@ -134,15 +140,15 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void computeAllPairsCorrelations() {
-    new ICorrelationsCalculatorFactory()
-        .createCorrelationsCalculator(CorrelationsSystemConstants.PEARSON)
-        .calculateAllPairsCorrelations(dataset, datasetProfile);
+    CorrelationsCalculatorFactory factory = new CorrelationsCalculatorFactory();
+    ICorrelationsCalculator calculator = factory.createCorrelationsCalculator(CorrelationsMethod.PEARSON);
+    calculator.calculateAllPairsCorrelations(dataset, datasetProfile);
     logger.info(String.format("Computed Correlations Profile for dataset: '%s'", datasetProfile.getAlias()));
   }
 
   private void extractAllDecisionTrees() throws IOException {
-    List<String> labeledColumnNames = new DecisionTreeManager(dataset, datasetProfile)
-            .extractAllDecisionTrees();
+    DecisionTreeManager decisionTreeManager = new DecisionTreeManager(dataset, datasetProfile);
+    List<String> labeledColumnNames = decisionTreeManager.extractAllDecisionTrees();
     for (String labeledColumnName : labeledColumnNames) {
         logger.info(String.format("Computed Decision Tree(s) for labeled column: %s", labeledColumnName));
     }
@@ -150,9 +156,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void generateReport(String reportGeneratorType, String path) throws IOException {
-    new IReportGeneratorFactory()
-        .createReportGenerator(reportGeneratorType)
-        .produceReport(datasetProfile, path);
+    ReportGeneratorFactory factory = new ReportGeneratorFactory();
+    IReportGenerator generator = factory.createReportGenerator(reportGeneratorType);
+    generator.produceReport(datasetProfile, path);
     logger.info(
         String.format(
             "Generated %s report for dataset '%s': %s.",
@@ -161,7 +167,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void writeDataset(String datasetWriterType, String path) throws IOException {
-    new IDatasetWriterFactory().createDatasetWriter(datasetWriterType).write(dataset, path);
+    DatasetWriterFactory factory = new DatasetWriterFactory();
+    IDatasetWriter datasetWriter = factory.createDatasetWriter(datasetWriterType);
+    datasetWriter.write(dataset, path);
     logger.info(
         String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
   }

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.correlations;
+package gr.uoi.cs.pythia.correlations.calculator;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import org.apache.spark.sql.Dataset;

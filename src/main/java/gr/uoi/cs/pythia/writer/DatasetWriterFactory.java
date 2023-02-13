@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.writer;
 
-public class IDatasetWriterFactory {
+public class DatasetWriterFactory {
 
   public IDatasetWriter createDatasetWriter(String type) {
     switch (type) {
