@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia.histogram;
 
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import org.junit.Test;
 
@@ -12,17 +13,19 @@ public class HistogramTests {
 
     @Test
     public void test() throws IOException {
-        List<Histogram> histograms = new HistogramManager(
-                AllHistogramTests.histogramResource.getDatasetProfile(),
-                AllHistogramTests.histogramResource.getDataset())
-                .createAllHistograms();
+        List<Column> columns = AllHistogramTests.histogramResource.getDatasetProfile().getColumns();
+        List<Histogram> histograms = new ArrayList<>();
+        for (Column column : columns) {
+            if (column.getHistogram() == null)
+                continue;
+            histograms.add(column.getHistogram());
+        }
         assertEquals(histograms.get(0).toString(), getExpectedHistogramFromNoNaNsColumn());
         assertEquals(histograms.get(5).toString(), getExpectedHistogramFromNaNsColumn());
     }
 
     private String getExpectedHistogramFromNoNaNsColumn() {
-        return "----- Clump_Thickness -----\n" +
-                "[1,1.9): 145 values\n" +
+        return  "[1,1.9): 145 values\n" +
                 "[1.9,2.8): 50 values\n" +
                 "[2.8,3.7): 108 values\n" +
                 "[3.7,4.6): 80 values\n" +
@@ -35,8 +38,7 @@ public class HistogramTests {
     }
 
     private String getExpectedHistogramFromNaNsColumn() {
-        return "----- Bare_Nuclei -----\n" +
-                "NaN: 16 values\n" +
+        return  "NaN: 16 values\n" +
                 "[1,1.9): 402 values\n" +
                 "[1.9,2.8): 30 values\n" +
                 "[2.8,3.7): 28 values\n" +

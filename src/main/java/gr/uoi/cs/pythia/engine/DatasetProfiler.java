@@ -7,6 +7,7 @@ import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
+import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.*;
 import gr.uoi.cs.pythia.model.Column;
@@ -100,6 +101,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   public DatasetProfile computeProfileOfDataset(String path) throws IOException {
     createOutputFolder(path);
     computeDescriptiveStats();
+    computeAllHistograms();
     computeAllPairsCorrelations();
     extractAllDecisionTrees();
     return datasetProfile;
@@ -123,6 +125,12 @@ public class DatasetProfiler implements IDatasetProfiler {
         .getDefaultGenerator()
         .computeDescriptiveStats(dataset, datasetProfile);
     logger.info(String.format("Computed Descriptive Statistics Profile for dataset: '%s'", datasetProfile.getAlias()));
+  }
+
+  private void computeAllHistograms() throws IOException {
+    HistogramManager histogramManager = new HistogramManager(datasetProfile, dataset);
+    histogramManager.createAllHistograms();
+    logger.info(String.format("Computed Histogram(s) for dataset: '%s'", datasetProfile.getAlias()));
   }
 
   private void computeAllPairsCorrelations() {

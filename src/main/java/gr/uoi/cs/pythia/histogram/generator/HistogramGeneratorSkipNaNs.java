@@ -7,9 +7,7 @@ import org.apache.spark.ml.feature.Bucketizer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Skips null and NaN values.
@@ -58,7 +56,7 @@ public class HistogramGeneratorSkipNaNs {
     }
 
     private Histogram createHistogram(Dataset<Row> binsToCounts, double[] splits) {
-        Histogram histogram = new Histogram(column.getName());
+        List<Bin> bins = new ArrayList<>();
         Map<Double, Long> lowerBoundToCount = new HashMap<>();
         Iterator<Row> rowIterator = binsToCounts.toLocalIterator();
 
@@ -75,8 +73,8 @@ public class HistogramGeneratorSkipNaNs {
             }
             boolean isUpperBoundIncluded = i == splits.length - 2;
             Bin bin = new Bin(splits[i], splits[i+1], count, isUpperBoundIncluded);
-            histogram.addBin(bin);
+            bins.add(bin);
         }
-        return histogram;
+        return new Histogram(column.getName(), bins);
     }
 }

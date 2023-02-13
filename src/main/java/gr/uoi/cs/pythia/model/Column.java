@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.model;
 
+import gr.uoi.cs.pythia.model.histogram.Histogram;
+
 public class Column {
 
   private final int position;
@@ -7,6 +9,7 @@ public class Column {
   private final String datatype;
   private CorrelationsProfile correlationsProfile;
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
+  private Histogram histogram;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -30,12 +33,20 @@ public class Column {
     return descriptiveStatisticsProfile;
   }
 
+  public Histogram getHistogram() {
+    return histogram;
+  }
+
   public void setCorrelationsProfile(CorrelationsProfile correlationsProfile) {
     this.correlationsProfile = correlationsProfile;
   }
 
   public void setDescriptiveStatisticsProfile(DescriptiveStatisticsProfile descriptiveStatisticsProfile) {
     this.descriptiveStatisticsProfile = descriptiveStatisticsProfile;
+  }
+
+  public void setHistogram(Histogram histogram) {
+    this.histogram = histogram;
   }
 
   @Override
@@ -57,6 +68,12 @@ public class Column {
     if (correlationsProfile != null) {
       stringBuilder.append("CorrelationsProfile:\n");
       stringBuilder.append(correlationsProfile);
+      stringBuilder.append("\n");
+    }
+
+    if (histogram != null) {
+      stringBuilder.append("Histogram:\n");
+      stringBuilder.append(histogram);
       stringBuilder.append("\n");
     }
     return stringBuilder.toString();

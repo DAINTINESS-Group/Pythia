@@ -8,7 +8,12 @@ import gr.uoi.cs.pythia.util.DatatypeFilterer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class HistogramManager {
@@ -20,14 +25,25 @@ public class HistogramManager {
         this.dataset = dataset;
     }
 
-    public List<Histogram> createAllHistograms() {
+    public List<Histogram> createAllHistograms() throws IOException {
         List<Column> columns = getNumericalColumns();
+        if (columns.isEmpty()) {
+            return new ArrayList<>();
+        }
+        // for visualization
+//        Path outputDirectory = Paths.get(datasetProfile.getOutputDirectory(), "histograms");
+//        createDirectory(outputDirectory);
+
         List<Histogram> histograms = new ArrayList<>();
 
         for (Column column : columns) {
             Histogram histogram = new HistogramGeneratorKeepNaNs(dataset, column)
                     .generateHistogram(10);
+            column.setHistogram(histogram);
             histograms.add(histogram);
+            // for visualization
+//            createDirectory(Paths.get(outputDirectory.toString(), column.getName()));
+            // histogramVisualizer etc...
         }
         return histograms;
     }
@@ -36,5 +52,9 @@ public class HistogramManager {
         return datasetProfile.getColumns().stream()
                 .filter(column -> DatatypeFilterer.isNumerical(column.getDatatype()))
                 .collect(Collectors.toList());
+    }
+
+    private void createDirectory(Path path) throws IOException {
+        Files.createDirectories(path);
     }
 }

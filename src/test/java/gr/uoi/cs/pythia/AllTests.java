@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia;
 
+import gr.uoi.cs.pythia.correlations.AllCorrelationsTests;
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
 import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.report.AllReportTests;
@@ -11,9 +12,10 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
         LabelingSystemTests.class,
+        AllHistogramTests.class,
+        AllCorrelationsTests.class,
         AllDecisionTreeTests.class,
         AllReportTests.class,
-        AllWriterTests.class,
-        AllHistogramTests.class
+        AllWriterTests.class
 })
 public class AllTests {}
