@@ -1,6 +1,5 @@
-package gr.uoi.cs.pythia.descriptivestatistics.calculator;
+package gr.uoi.cs.pythia.descriptivestatistics;
 
-import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsConstants;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;

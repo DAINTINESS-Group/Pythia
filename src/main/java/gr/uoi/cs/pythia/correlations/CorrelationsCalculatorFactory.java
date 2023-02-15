@@ -1,8 +1,5 @@
 package gr.uoi.cs.pythia.correlations;
 
-import gr.uoi.cs.pythia.correlations.calculator.ICorrelationsCalculator;
-import gr.uoi.cs.pythia.correlations.calculator.PearsonCorrelationsCalculator;
-
 public class CorrelationsCalculatorFactory {
 
   public ICorrelationsCalculator createCorrelationsCalculator(CorrelationsMethod type) {
