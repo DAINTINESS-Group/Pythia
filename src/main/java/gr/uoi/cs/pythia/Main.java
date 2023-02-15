@@ -46,7 +46,8 @@ public class Main {
     datasetProfiler.registerDataset(
         "tweets",
         String.format(
-            "src%stest%sresources%stweets.csv", File.separator, File.separator, File.separator),
+            "src%stest%sresources%sdatasets%stweets.csv",
+                File.separator, File.separator, File.separator, File.separator),
         schema);
 
     List<Rule> rules =
