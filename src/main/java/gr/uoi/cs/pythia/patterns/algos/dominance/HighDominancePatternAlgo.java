@@ -17,6 +17,4 @@ public class HighDominancePatternAlgo extends DominancePatternAlgo {
 		return valueA > valueB;
 	}
 
-
-
 }

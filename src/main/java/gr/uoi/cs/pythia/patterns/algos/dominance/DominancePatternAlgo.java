@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,7 +77,8 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 		// Add a new pattern result object to the results list 
 		results.add(new DominancePatternResult(
 				getDominanceType(), "sum", 
-				measurementColName, xCoordinateColName, yCoordinateColName));
+				measurementColName, xCoordinateColName, yCoordinateColName,
+				queryResult));
 		
 		// Check for dominance
 		identifyDominanceWithTwoCoordinates(queryResult, xCoordinates, yCoordinates);
@@ -126,9 +128,10 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 		if (queryResult.size() <= 1) return;
 		for (String xCoordinateA: xCoordinates) {
 			List<String> dominatedXValues = new ArrayList<String>();
-			List<String> onYValues = new ArrayList<String>();
+			HashMap<String, List<String>> onYValues = new HashMap<>();
 			for (String xCoordinateB : xCoordinates) {
 				if (xCoordinateA.equals(xCoordinateB)) continue;
+				List<String> onYValuesForCurrentXCoordinate = new ArrayList<String>();
 				boolean isADominatesB = false;
 				for (String yCoordinate : yCoordinates) {
 					double aggValueA = getAggValue(xCoordinateA, yCoordinate, queryResult);
@@ -136,8 +139,7 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 					if (Double.isNaN(aggValueA)) continue;
 					if (Double.isNaN(aggValueB)) continue;
 					if (isDominant(aggValueA, aggValueB)) {
-						if (!onYValues.contains(yCoordinate)) 
-							onYValues.add(yCoordinate);
+						onYValuesForCurrentXCoordinate.add(yCoordinate);
 						isADominatesB = true;
 					}
 					else {
@@ -145,7 +147,10 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 						break;
 					}
 				}
-				if (isADominatesB) dominatedXValues.add(xCoordinateB);
+				if (isADominatesB) {
+					dominatedXValues.add(xCoordinateB);
+					onYValues.put(xCoordinateB, onYValuesForCurrentXCoordinate);
+				}
 			}
 			double dominancePercentage = (double) dominatedXValues.size() 
 					/ (double) (xCoordinates.size() - 1) * 100;
@@ -321,11 +326,5 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 		}
 		System.out.println(str);
 	}
-
-	// This is just a note. Please ignore.
-	// Convert column in List<Row> to List<Double>:
-	// queryResult.stream()
-	// .map(s -> Double.parseDouble(s.get(1).toString()))
-	// .collect(Collectors.toList());
 	
 }

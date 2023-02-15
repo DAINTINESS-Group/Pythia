@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThrows;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -202,64 +204,141 @@ public class DominancePatternAlgoTests {
 		return expected;
 	}
 	
+	@SuppressWarnings("serial")
 	private DominancePatternResult createExpectedHighDominanceResultsForTwoCoordinates() {
 		DominancePatternResult expected = new DominancePatternResult(
 				PatternConstants.HIGH, "sum", 
-				measurementColName, xCoordinateColName, yCoordinateColName);
+				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"Q3", Arrays.asList("A1", "A3", "A4", "A5", "A6", "Q2", "Q5", "S4"), 
-				Arrays.asList("2014", "2015", "2016", "2017", "2019"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A1", Arrays.asList("2014", "2015", "2016", "2017"));
+				     put("A3", Arrays.asList("2014", "2015", "2016", "2017", "2019"));
+				     put("A4", Arrays.asList("2016", "2017", "2019"));
+				     put("A5", Arrays.asList("2014", "2017"));
+				     put("A6", Arrays.asList("2015", "2016", "2017"));
+				     put("Q2", Arrays.asList("2019"));
+				     put("Q5", Arrays.asList("2015", "2016"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				100.0, true, "total high", 9956610.0);
 		expected.addIdentificationResult(
 				"A3", Arrays.asList("A1", "A4", "A5", "A6", "Q2", "S4"), 
-				Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018", "2019"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A1", Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018"));
+				     put("A4", Arrays.asList("2016", "2017", "2018", "2019"));
+				     put("A5", Arrays.asList("2014", "2017"));
+				     put("A6", Arrays.asList("2015", "2016", "2017", "2018"));
+				     put("Q2", Arrays.asList("2019"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				75.0, true, "partial high", 1897299.0);
 		expected.addIdentificationResult(
 				"Q5", Arrays.asList("A1", "A3", "A4", "A6"), 
-				Arrays.asList("2015", "2016"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A1", Arrays.asList("2015", "2016"));
+				     put("A3", Arrays.asList("2015", "2016"));
+				     put("A4", Arrays.asList("2016"));
+				     put("A6", Arrays.asList("2015", "2016"));
+				}},
 				50.0, false, "-", 2865320.0);
 		expected.addIdentificationResult(
 				"A1", Arrays.asList("A4", "A6", "S4"), 
-				Arrays.asList("2016", "2017", "2018", "2014", "2015"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A4", Arrays.asList("2016", "2017", "2018"));
+				     put("A6", Arrays.asList("2015", "2016", "2017", "2018"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				37.5, false, "-", 197000.0);
 		expected.addIdentificationResult(
 				"A5", Arrays.asList("A4", "A6", "S4"), 
-				Arrays.asList("2017"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A4", Arrays.asList("2017"));
+				     put("A6", Arrays.asList("2017"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				37.5, false, "-", 94570.0);
 		expected.addIdentificationResult(
 				"S4", Arrays.asList("A4", "A6"), 
-				Arrays.asList("2017"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A4", Arrays.asList("2017"));
+				     put("A6", Arrays.asList("2017"));
+				}},
 				25.0, false, "-", 23700.0);
 		return expected;
 	}
 	
+	@SuppressWarnings("serial")
 	private DominancePatternResult createExpectedLowDominanceResultsForTwoCoordinates() {
 		DominancePatternResult expected = new DominancePatternResult(
 				PatternConstants.LOW, "sum", 
-				measurementColName, xCoordinateColName, yCoordinateColName);
+				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"A4", Arrays.asList("A1", "A3", "A5", "A6", "Q2", "Q3", "Q5", "S4"), 
-				Arrays.asList("2016", "2017", "2018", "2019"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A1", Arrays.asList("2016", "2017", "2018"));
+				     put("A3", Arrays.asList("2016", "2017", "2018", "2019"));
+				     put("A5", Arrays.asList("2017"));
+				     put("A6", Arrays.asList("2016", "2017", "2018"));
+				     put("Q2", Arrays.asList("2019"));
+				     put("Q3", Arrays.asList("2016", "2017", "2019"));
+				     put("Q5", Arrays.asList("2016"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				100.0, true, "total low", 6500.0);
 		expected.addIdentificationResult(
 				"A6", Arrays.asList("A1", "A3", "A5", "Q3", "Q5", "S4"), 
-				Arrays.asList("2015", "2016", "2017", "2018"),
+				new HashMap<String, List<String>>()
+				{{
+				     put("A1", Arrays.asList("2015", "2016", "2017", "2018"));
+				     put("A3", Arrays.asList("2015", "2016", "2017", "2018"));
+				     put("A5", Arrays.asList("2017"));
+				     put("Q3", Arrays.asList("2015", "2016", "2017"));
+				     put("Q5", Arrays.asList("2015", "2016"));
+				     put("S4", Arrays.asList("2017"));
+				}},
 				75.0, true, "partial low", 40465.0);
 		expected.addIdentificationResult(
 				"S4", Arrays.asList("A1", "A3", "A5", "Q3"), 
-				Arrays.asList("2017"),
+				new HashMap<String, List<String>>()
+				{{
+					put("A1", Arrays.asList("2017"));
+					put("A3", Arrays.asList("2017"));
+				    put("A5", Arrays.asList("2017"));
+				    put("Q3", Arrays.asList("2017"));
+				}},
 				50.0, false, "-", 23700.0);
 		expected.addIdentificationResult(
 				"A1", Arrays.asList("A3", "Q3", "Q5"), 
-				Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018"),
+				new HashMap<String, List<String>>()
+				{{
+					put("A3", Arrays.asList("2013", "2014", "2015", "2016", "2017", "2018"));
+				    put("Q3", Arrays.asList("2014", "2015", "2016", "2017"));
+				    put("Q5", Arrays.asList("2015", "2016"));
+				}},
 				37.5, false, "-", 197000.0);
 		expected.addIdentificationResult(
 				"A3", Arrays.asList("Q3", "Q5"), 
-				Arrays.asList("2014", "2015", "2016", "2017", "2019"),
+				new HashMap<String, List<String>>()
+				{{
+				    put("Q3", Arrays.asList("2014", "2015", "2016", "2017", "2019"));
+				    put("Q5", Arrays.asList("2015", "2016"));
+				}},
 				25.0, false, "-", 1897299.0);
 		expected.addIdentificationResult(
 				"A5", Arrays.asList("A3", "Q3"), 
-				Arrays.asList("2014", "2017"),
+				new HashMap<String, List<String>>()
+				{{
+				    put("A3", Arrays.asList("2014", "2017"));
+				    put("Q3", Arrays.asList("2014", "2017"));
+				}},
 				25.0, false, "-", 94570.0);
 		return expected;
 	}

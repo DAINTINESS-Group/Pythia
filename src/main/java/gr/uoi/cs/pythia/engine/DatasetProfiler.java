@@ -2,17 +2,12 @@ package gr.uoi.cs.pythia.engine;
 
 import static org.apache.spark.sql.functions.expr;
 
-import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
-import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
-import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
-import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
-import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
-import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
-
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
@@ -24,16 +19,24 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import gr.uoi.cs.pythia.config.SparkConfig;
+import gr.uoi.cs.pythia.correlations.CorrelationsSystemConstants;
+import gr.uoi.cs.pythia.correlations.ICorrelationsCalculatorFactory;
+import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
+import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
+import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
+import gr.uoi.cs.pythia.report.IReportGeneratorFactory;
+import gr.uoi.cs.pythia.writer.IDatasetWriterFactory;
 
 public class DatasetProfiler implements IDatasetProfiler {
 
-  private final Logger logger = Logger.getLogger(DatasetProfile.class);
+  private final Logger logger = Logger.getLogger(DatasetProfiler.class);
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
@@ -97,6 +100,7 @@ public class DatasetProfiler implements IDatasetProfiler {
     computeDescriptiveStats();
     computeAllPairsCorrelations();
     extractAllDecisionTrees();
+    // TODO add identifyPatternHighlights method call here
     return datasetProfile;
   }
 
@@ -178,6 +182,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 			.createPatternManager(columnSelectionMode,  measurementColNames, coordinateColNames)
 			.identifyPatternHighlights(dataset, datasetProfile);
 		logger.info(
-				String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
+			String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
 	}
+	
 }

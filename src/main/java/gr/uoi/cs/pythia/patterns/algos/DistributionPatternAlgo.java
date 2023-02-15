@@ -48,7 +48,7 @@ public class DistributionPatternAlgo implements IPatternAlgo {
 		// Find density estimates for the given values
 		double[] densities = kd.estimate(new double[]{-1.0, 2.0, 5.0});
 
-		System.out.println(Arrays.toString(densities));
+//		System.out.println(Arrays.toString(densities));
 		
 	}
 

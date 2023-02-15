@@ -11,6 +11,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.patterns.algos.IPatternAlgo;
 import gr.uoi.cs.pythia.patterns.algos.IPatternAlgoFactory;
 
+// TODO maybe add logging here
 public class PatternManager implements IPatternManager {
 	
 	// TODO Is this the best way to keep track of all supported pattern algos?

@@ -4,6 +4,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,6 +20,7 @@ public class DominancePatternResult {
 	private String xCoordinateColName;
 	private String yCoordinateColName;
 	private List<Row> identificationResults;
+	private List<Row> queryResult;
 	
 	private DecimalFormat decimalFormat = new DecimalFormat("#.###", 
 			new DecimalFormatSymbols(Locale.ENGLISH));
@@ -56,7 +58,8 @@ public class DominancePatternResult {
 			String aggregationMethod,
 			String measurementColumnName, 
 			String firstCoordinateColumnName, 
-			String secondCoordinateColumnName) {
+			String secondCoordinateColumnName,
+			List<Row> queryResult) {
 		this.numOfCoordinates = 2;
 		this.dominanceType = dominanceType;
 		this.aggregationMethod = aggregationMethod;
@@ -72,6 +75,7 @@ public class DominancePatternResult {
 				"Is highlight?", 
 				"Highlight Type",
 				"Aggr. Marginal Sum (" + measurementColName + ")"));
+		this.queryResult = queryResult;
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 	}
 
@@ -94,7 +98,7 @@ public class DominancePatternResult {
 	public void addIdentificationResult(			
 			String xCoordinate, 
 			List<String> dominatedXValues, 
-			List<String> onYValues, 
+			HashMap<String, List<String>> onYValues, 
 			double dominancePercentage, 
 			boolean isHighlight, 
 			String highlightType,
@@ -121,11 +125,30 @@ public class DominancePatternResult {
 	
 	@Override
 	public String toString() {
+		String queryResultToString = "";
+		if (hasTwoCoordinates()) {
+			queryResultToString = "\n### Query Results:\n" +
+					queryResultToString();
+		}
 		return "\n\n-----------------------------------------------" + 
 				"-----------------------------------------------------\n\n" +
 				"\n### Metadata:\n" + metadataToString() +
 				"\n### Detailed Results:\n" + identificationResultsToString() +
-				"\n### Identified Highlights:" + highlightsToString();	
+				"\n### Identified Highlights:" + highlightsToString() + 
+				queryResultToString;
+	}
+	
+	private String queryResultToString() {
+		String str = String.format("%-10s%-10s%-10s\n",
+				xCoordinateColName, yCoordinateColName, measurementColName);
+		for (Row row : queryResult) {
+			for (int i = 0; i < row.length(); i++) {
+				if (row.get(i) == null) continue;
+				str += String.format("%-10s", row.get(i).toString());
+			}
+			str += "\n";
+		}
+		return str;
 	}
 	
 	private String metadataToString() {
@@ -147,6 +170,7 @@ public class DominancePatternResult {
 		for (Row row : identificationResults) {
 			for (int i=0; i<row.length(); i++) {
 				if (row.get(i) == null) continue;
+				if (hasTwoCoordinates() && i == 2) continue;
 				str += String.format(
 						"%-" + String.valueOf(getLongestStringLength(i) + 3) + "s", 
 						row.get(i).toString());
@@ -180,7 +204,7 @@ public class DominancePatternResult {
 					}
 				}
 		}
-		if (str.isEmpty()) return "\nNo highlights identified.\n";	//isBlank() is Java11. We have java 8.
+		if (str.isEmpty()) return "\nNo highlights identified.\n";
 		return str;
 	}
 	
@@ -195,17 +219,27 @@ public class DominancePatternResult {
 	}
 	
 	private String buildHighlightStringWithTwoCoords(Row row) {
-		return String.format("- Coordinate X: %s (%s) presents a %s dominance over the other %ss of the dataset." +
-				"\nIn detail, the aggregate values of %s for the %ss (Y coordinate): %s" +
-				"\ndominate the aggregate values of the %ss: %s" +
-				"\nOverall, %s has a dominance percentage score of %s%% " +
+		return String.format("- Coordinate X: %s (%s) presents a %s dominance over the %ss: %s." +
+				"\nIn detail, the aggregate values of %s dominate the %ss:" +
+				"\n%s" +
+				"Overall, %s has a dominance percentage score of %s%% " +
 				"and an aggregate marginal sum of %s (%s).",
-				row.getString(0), xCoordinateColName, row.getString(5), xCoordinateColName,
-				row.getString(0), yCoordinateColName, row.get(2).toString(),
-				xCoordinateColName, row.get(1).toString(),
+				row.getString(0), xCoordinateColName, row.getString(5), xCoordinateColName, 
+				row.get(1).toString(), row.getString(0), xCoordinateColName,
+				buildDominatedOnYValuesString(row), 
 				row.getString(0), decimalFormat.format(row.getDouble(3)),
 				decimalFormat.format(row.getDouble(6)), measurementColName
 		);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String buildDominatedOnYValuesString(Row row) {
+		HashMap<String, List<String>> hash = (HashMap<String, List<String>>) row.get(2);
+		String str = "";
+		for (String key : (List<String>) row.get(1)) {
+			str +=  key + " on the " + yCoordinateColName +"(s): " + hash.get(key) + ".\n";
+		}
+		return str;
 	}
 		
 }
