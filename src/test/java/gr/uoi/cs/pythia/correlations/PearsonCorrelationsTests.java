@@ -28,11 +28,13 @@ public class PearsonCorrelationsTests {
                 case "age": {
                     Map<String, Double> correlations = correlationsProfile.getAllCorrelations();
                     assertEquals(correlations.get("money"), -0.9862413826124555, 0.01);
+                    assertNull(correlations.get("name"));
                     break;
                 }
                 case "money": {
                     Map<String, Double> correlations = correlationsProfile.getAllCorrelations();
                     assertEquals(correlations.get("age"), -0.9862413826124555, 0.01);
+                    assertNull(correlations.get("name"));
                     break;
                 }
             }
