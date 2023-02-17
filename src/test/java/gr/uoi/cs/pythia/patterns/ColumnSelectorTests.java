@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
@@ -25,6 +26,8 @@ public class ColumnSelectorTests {
 	
 	@Before
 	public void init() throws AnalysisException, IOException {
+		// TODO: move this elsewhere?
+		TestsUtilities.setupResultsDir("patterns");
 		// Register the cars dataset (100 records version)
 		StructType schema = Patterns.createCarsDatasetSchema();
 		String path = String.format(
@@ -32,7 +35,8 @@ public class ColumnSelectorTests {
 				File.separator, File.separator, File.separator, File.separator);
 		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 	    datasetProfiler.registerDataset("cars", path, schema);
-	    datasetProfile = datasetProfiler.computeProfileOfDataset("");
+		datasetProfile = datasetProfiler.computeProfileOfDataset(
+				TestsUtilities.getResultsDir("patterns"));
 	}
 	
 	@Test

@@ -19,6 +19,7 @@ public class WriterResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
+        TestsUtilities.setupResultsDir("writer");
         initializeProfile();
     }
 

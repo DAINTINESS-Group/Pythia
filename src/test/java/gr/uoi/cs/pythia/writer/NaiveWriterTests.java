@@ -1,12 +1,11 @@
 package gr.uoi.cs.pythia.writer;
 
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,12 +17,10 @@ import static org.junit.Assert.assertEquals;
 
 public class NaiveWriterTests {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
     @Test
     public void testNaiveDatasetWriter() throws IOException {
-        File testCsv = tempFolder.newFile("test.csv");
+        String reportPath = TestsUtilities.getResultsDir("writer") + File.separator + "test.csv";
+        File testCsv = new File(reportPath);
         AllWriterTests.writerResource.getDatasetProfiler()
                 .writeDataset(DatasetWriterConstants.NAIVE, testCsv.getAbsolutePath());
         Dataset<Row> dataset = SparkSession.builder()

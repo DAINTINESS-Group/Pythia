@@ -17,7 +17,6 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +39,7 @@ public class DecisionTreeResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
+        TestsUtilities.setupResultsDir("decisiontree");
         initializeProfile();
     }
 

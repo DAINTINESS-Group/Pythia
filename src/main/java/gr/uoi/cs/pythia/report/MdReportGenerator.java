@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.report.md;
+package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.report.IReportGenerator;

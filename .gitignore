@@ -40,3 +40,6 @@ build/
 
 ### LOGS ###
 /logs/
+
+### Results ###
+/results/
