@@ -26,6 +26,7 @@ public class ReportResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
+        TestsUtilities.setupResultsDir("report");
         initializeProfile();
     }
 
@@ -34,6 +35,6 @@ public class ReportResource extends ExternalResource {
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        datasetProfiler.computeProfileOfDataset("");
+        datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("report"));
     }
 }

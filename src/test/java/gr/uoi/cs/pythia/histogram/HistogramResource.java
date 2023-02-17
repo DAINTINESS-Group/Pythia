@@ -31,6 +31,7 @@ public class HistogramResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
+        TestsUtilities.setupResultsDir("histogram");
         initializeProfile();
     }
 
@@ -41,6 +42,6 @@ public class HistogramResource extends ExternalResource {
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        datasetProfile = datasetProfiler.computeProfileOfDataset("");
+        datasetProfile = datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("histogram"));
     }
 }

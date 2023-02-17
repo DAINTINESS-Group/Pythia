@@ -125,14 +125,17 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   private void createOutputFolder(String path) throws IOException {
-    if (path == null || !new File(path).isDirectory()) {
+    if (path == null || path.isEmpty()) {
       path = new File(datasetProfile.getPath()).getParent();
+    } else {
+      // TODO: Maybe try and catch, and if exception -> set to default
+      Files.createDirectories(Paths.get(path));
     }
 
     String currentDateTime = LocalDateTime.now()
             .format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
     String outputDirectory = path + File.separator + datasetProfile.getAlias() +
-                             "_report_" + currentDateTime;
+                             "_results_" + currentDateTime;
     Files.createDirectories(Paths.get(outputDirectory));
     datasetProfile.setOutputDirectory(outputDirectory);
   }

@@ -22,6 +22,7 @@ public class CorrelationsResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
+        TestsUtilities.setupResultsDir("correlations");
         initializeProfile();
     }
 
@@ -30,6 +31,7 @@ public class CorrelationsResource extends ExternalResource {
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         String datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        datasetProfile = datasetProfiler.computeProfileOfDataset("");
+        datasetProfile = datasetProfiler.computeProfileOfDataset(
+                TestsUtilities.getResultsDir("correlations"));
     }
 }

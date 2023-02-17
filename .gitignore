@@ -40,3 +40,7 @@ build/
 
 ### LOGS ###
 /logs/
+
+### Results ###
+/results/
+/src/test/resources/results
