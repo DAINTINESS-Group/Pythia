@@ -1,24 +1,26 @@
 package gr.uoi.cs.pythia.report.md.components;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
 import gr.uoi.cs.pythia.report.md.structures.MdTable;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class MdCorrelations {
 
     private final List<Column> columns;
-    private final DecimalFormat decimalFormat;
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.###", 
+    		new DecimalFormatSymbols(Locale.ENGLISH));;
 
     public MdCorrelations(List<Column> columns) {
         this.columns = columns;
-        this.decimalFormat = new DecimalFormat("#.###");
     }
 
     @Override

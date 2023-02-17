@@ -1,7 +1,6 @@
-package gr.uoi.cs.pythia.report.md;
+package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.md.components.MdCorrelations;
 import gr.uoi.cs.pythia.report.md.components.MdDecisionTrees;
 import gr.uoi.cs.pythia.report.md.components.MdDescriptiveStatistics;

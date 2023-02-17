@@ -1,6 +1,8 @@
 package gr.uoi.cs.pythia.model.histogram;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class Bin {
 
@@ -8,7 +10,9 @@ public class Bin {
     private final double upperBound;
     private final long count;
     private final String upperBoundIncludedText;
-
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.###",
+    		new DecimalFormatSymbols(Locale.ENGLISH));
+    
     public Bin(double lowerBound, double upperBound, long count, boolean isUpperBoundIncluded) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
@@ -29,18 +33,16 @@ public class Bin {
     }
 
     public String getBoundsLabel() {
-        DecimalFormat df = new DecimalFormat("0.###");
-        return String.format("[%s,%s%s", df.format(lowerBound),
-                                         df.format(upperBound),
+        return String.format("[%s,%s%s", decimalFormat.format(lowerBound),
+        		decimalFormat.format(upperBound),
                                          upperBoundIncludedText);
     }
 
     @Override
     public String toString() {
-        DecimalFormat df = new DecimalFormat("0.###");
-        return String.format("[%s,%s%s: %d values", df.format(lowerBound),
-                                                    df.format(upperBound),
-                                                    upperBoundIncludedText,
-                                                    count);
+        return String.format("[%s,%s%s: %d values", decimalFormat.format(lowerBound),
+        		decimalFormat.format(upperBound),
+        		upperBoundIncludedText,
+        		count);
     }
 }

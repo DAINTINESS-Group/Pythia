@@ -1,15 +1,17 @@
 package gr.uoi.cs.pythia.report.md.components;
 
+import java.io.File;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
-
-import java.io.File;
-import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MdDecisionTrees {
 
@@ -41,7 +43,8 @@ public class MdDecisionTrees {
         StringBuilder stringBuilder = new StringBuilder();
         String decisionTreesDirectory = datasetProfile.getOutputDirectory() + File.separator + "decisionTrees";
 
-        DecimalFormat decimalFormat = new DecimalFormat("#.###");
+        DecimalFormat decimalFormat = new DecimalFormat("#.###", 
+        		new DecimalFormatSymbols(Locale.ENGLISH));;
         for (LabeledColumn column : columns) {
             stringBuilder.append(MdBasicStructures.bold(String.format(
                     "~ Column: %s", column.getName()
