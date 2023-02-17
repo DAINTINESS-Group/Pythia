@@ -17,13 +17,16 @@ public class MdReportTests {
 
     @Test
     public void testProduceReportMd() throws IOException {
-        File reportFile = tempFolder.newFile("test.md");
-        AllReportTests.reportResource.getDatasetProfiler()
+        //File reportFile = tempFolder.newFile("test.md");
+        File reportFile = new File(System.getProperties().getProperty("user.dir")+ "/src/test/resources/testGenerated_people_md_report.md");
+    	AllReportTests.reportResource.getDatasetProfiler()
                 .generateReport(ReportGeneratorConstants.MD_REPORT,
                         reportFile.getAbsolutePath());
 
+        
+        
         String expectedText = TestsUtilities.getExpectedDatasetReport("people/expected_people_md_report.md");
-        String actualString = TestsUtilities.getTextFromFile(reportFile);
+        String actualString = TestsUtilities.getTextFromFile(reportFile);        
         assertEquals(expectedText, actualString);
     }
 }

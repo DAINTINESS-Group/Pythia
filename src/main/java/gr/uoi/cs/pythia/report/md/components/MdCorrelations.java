@@ -29,7 +29,7 @@ public class MdCorrelations {
     }
 
     private String getTitle() {
-        return MdBasicStructures.center(MdBasicStructures.heading3("Correlations"));
+        return MdBasicStructures.center(MdBasicStructures.heading2("Correlations"));
     }
 
     private String getCorrelationsTable() {

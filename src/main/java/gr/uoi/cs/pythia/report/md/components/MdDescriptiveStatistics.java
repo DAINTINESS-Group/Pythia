@@ -26,7 +26,7 @@ public class MdDescriptiveStatistics {
     }
 
     private String getTitle() {
-        return MdBasicStructures.center(MdBasicStructures.heading3("Descriptive Statistics"));
+        return MdBasicStructures.center(MdBasicStructures.heading2("Descriptive Statistics"));
     }
 
     private String getDescriptiveStatisticsTable() {

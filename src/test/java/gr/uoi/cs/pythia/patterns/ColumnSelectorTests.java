@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class ColumnSelectorTests {
 	private  DatasetProfile datasetProfile;
 	
 	@Before
-	public void init() throws AnalysisException {
+	public void init() throws AnalysisException, IOException {
 		// Register the cars dataset (100 records version)
 		StructType schema = Patterns.createCarsDatasetSchema();
 		String path = String.format(
@@ -31,7 +32,7 @@ public class ColumnSelectorTests {
 				File.separator, File.separator, File.separator, File.separator);
 		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 	    datasetProfiler.registerDataset("cars", path, schema);
-	    datasetProfile = datasetProfiler.computeProfileOfDataset();
+	    datasetProfile = datasetProfiler.computeProfileOfDataset("");
 	}
 	
 	@Test
