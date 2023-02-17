@@ -1,7 +1,9 @@
 package gr.uoi.cs.pythia.writer;
 
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -24,10 +26,11 @@ public class NaiveWriterTests {
         File testCsv = tempFolder.newFile("test.csv");
         AllWriterTests.writerResource.getDatasetProfiler()
                 .writeDataset(DatasetWriterConstants.NAIVE, testCsv.getAbsolutePath());
-        Dataset<Row> dataset = AllWriterTests.writerResource.getSparkSession()
+        Dataset<Row> dataset = SparkSession.builder()
+                .getOrCreate()
                 .read()
                 .option("header", "true")
-                .option("inferSchema", "true")
+                .schema(TestsDatasetSchemas.getPeopleJsonSchema())
                 .csv(testCsv.getAbsolutePath());
 
         List<Object> actualFirstColumn = dataset.select("name").toJavaRDD().map(row -> row.get(0)).collect();

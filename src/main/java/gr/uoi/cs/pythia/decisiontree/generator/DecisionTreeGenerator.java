@@ -3,19 +3,27 @@ package gr.uoi.cs.pythia.decisiontree.generator;
 import gr.uoi.cs.pythia.decisiontree.dataprepararion.DecisionTreeDataProcessor;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
 import gr.uoi.cs.pythia.decisiontree.dataprepararion.AttributesFinder;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
-import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
-import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNodeParams;
+import gr.uoi.cs.pythia.decisiontree.dataprepararion.DecisionTreePathsFinder;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNode;
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNodeParams;
 import org.apache.spark.ml.classification.DecisionTreeClassificationModel;
 import org.apache.spark.ml.classification.DecisionTreeClassifier;
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DecisionTreeGenerator implements IDecisionTreeGenerator {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
+    private AttributesFinder attributesFinder;
+    private DecisionTreeDataProcessor decisionTreeDataProcessor;
+    private DecisionTreeClassificationModel model;
+    private double accuracy;
 
     public DecisionTreeGenerator(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
@@ -23,41 +31,69 @@ public class DecisionTreeGenerator implements IDecisionTreeGenerator {
     }
 
     public DecisionTree computeDecisionTree() {
-        AttributesFinder attributesFinder = new AttributesFinder(decisionTreeParams, dataset);
-        DecisionTreeDataProcessor decisionTreeDataProcessor =
-                new DecisionTreeDataProcessor(decisionTreeParams, attributesFinder, dataset);
+        initializeVariables();
+        trainDecisionTreeModel();
+        calculateAccuracy();
+        return createDecisionTree();
+    }
 
-        // Train a DecisionTree model.
+    private void initializeVariables() {
+        attributesFinder = new AttributesFinder(decisionTreeParams, dataset);
+        decisionTreeDataProcessor = new DecisionTreeDataProcessor(decisionTreeParams, attributesFinder, dataset);
+    }
+
+    private void trainDecisionTreeModel() {
         DecisionTreeClassifier decisionTreeClassifier = new DecisionTreeClassifier()
                 .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
                 .setImpurity(decisionTreeParams.getImpurity())
                 .setMaxDepth(decisionTreeParams.getMaxDepth())
                 .setMinInfoGain(decisionTreeParams.getMinInfoGain());
+        model = decisionTreeClassifier.fit(decisionTreeDataProcessor.getTrainingData());
+    }
 
-        DecisionTreeClassificationModel model = decisionTreeClassifier
-                .fit(decisionTreeDataProcessor.getTrainingData());
-        Dataset<Row> predictions = model
-                .transform(decisionTreeDataProcessor.getTestData());
-
-        // Calculate accuracy
+    private void calculateAccuracy() {
+        Dataset<Row> predictions = model.transform(decisionTreeDataProcessor.getTestData());
         MulticlassClassificationEvaluator evaluator =
                 new MulticlassClassificationEvaluator()
                         .setLabelCol(decisionTreeParams.getLabeledColumnName() + "_indexed")
                         .setPredictionCol("prediction")
                         .setMetricName("accuracy");
-        double accuracy = evaluator.evaluate(predictions);
+        accuracy = evaluator.evaluate(predictions);
+    }
 
-        // Get node parameters
+    private DecisionTree createDecisionTree() {
+        DecisionTreeNode rootNode = createDecisionTreeRootNode();
+        return new DecisionTree(
+                accuracy,
+                attributesFinder.getAllFeatures(),
+                attributesFinder.getNonGeneratingAttributes(),
+                rootNode,
+                calculateAverageImpurity(rootNode),
+                new DecisionTreePathsFinder(rootNode).getPaths());
+    }
+
+    private DecisionTreeNode createDecisionTreeRootNode() {
         DecisionTreeNodeParams nodeParams = new DecisionTreeNodeParams(
                 decisionTreeDataProcessor.getIndexedToActualValuesForEachIndexedColumn(),
                 decisionTreeParams.getLabeledColumnName(),
                 attributesFinder.getAllFeatures(),
-                model.toOld().topNode()
-        );
+                model.toOld().topNode());
+        return new DecisionTreeNode(nodeParams);
+    }
 
-        return new DecisionTree(accuracy,
-                attributesFinder.getAllFeatures(),
-                attributesFinder.getNonGeneratingAttributes(),
-                new DecisionTreeNode(nodeParams));
+    private double calculateAverageImpurity(DecisionTreeNode rootNode) {
+        List<Double> impurities = traverseNodesDFS(new ArrayList<>(), rootNode);
+        double impuritySum = impurities.stream().mapToDouble(x -> x).sum();
+        return impuritySum / impurities.size();
+    }
+
+    private List<Double> traverseNodesDFS(List<Double> impurities, DecisionTreeNode dtNode) {
+        if (dtNode.isLeaf()) {
+            impurities.add(dtNode.getImpurity());
+            return impurities;
+        }
+        traverseNodesDFS(impurities, dtNode.getLeftNode());
+        traverseNodesDFS(impurities, dtNode.getRightNode());
+        return impurities;
     }
 }

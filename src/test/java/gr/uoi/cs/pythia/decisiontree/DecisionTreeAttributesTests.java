@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.decisiontree;
 
 import gr.uoi.cs.pythia.decisiontree.generator.DecisionTreeGeneratorFactory;
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import org.junit.Test;
 
 import java.util.ArrayList;

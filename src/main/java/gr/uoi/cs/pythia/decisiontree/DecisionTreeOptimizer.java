@@ -1,14 +1,12 @@
 package gr.uoi.cs.pythia.decisiontree;
 
+import gr.uoi.cs.pythia.util.DatatypeFilterer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DecisionTreeOptimizer {
 
@@ -35,10 +33,14 @@ public class DecisionTreeOptimizer {
     }
 
     private List<String> getCategoricalColumns() {
-        return Arrays.stream(dataset.schema().fields())
-                .filter(field -> field.dataType() == DataTypes.StringType)
-                .map(StructField::name)
-                .collect(Collectors.toList());
+        List<String> categoricalColumns = new ArrayList<>();
+        StructField[] fields = dataset.schema().fields();
+        for (StructField field : fields) {
+            if (DatatypeFilterer.isStringType(field.dataType())) {
+                categoricalColumns.add(field.name());
+            }
+        }
+        return categoricalColumns;
     }
 
     private boolean hasTooManyDistinctValues(String column) {

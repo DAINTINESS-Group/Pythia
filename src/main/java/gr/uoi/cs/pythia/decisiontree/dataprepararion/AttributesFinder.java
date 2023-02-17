@@ -1,23 +1,23 @@
 package gr.uoi.cs.pythia.decisiontree.dataprepararion;
 
 import gr.uoi.cs.pythia.decisiontree.input.DecisionTreeParams;
+import gr.uoi.cs.pythia.util.DatatypeFilterer;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataType;
-import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AttributesFinder {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
-    private List<String> numericalFeatures = new ArrayList<>();
-    private List<String> categoricalFeatures = new ArrayList<>();
-    private List<String> categoricalFeaturesIndexed = new ArrayList<>();
-    private List<String> nonGeneratingAttributes = new ArrayList<>();
+    private final List<String> numericalFeatures = new ArrayList<>();
+    private final List<String> categoricalFeatures = new ArrayList<>();
+    private final List<String> categoricalFeaturesIndexed = new ArrayList<>();
+    private final List<String> nonGeneratingAttributes = new ArrayList<>();
 
     public AttributesFinder(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
@@ -54,34 +54,31 @@ public class AttributesFinder {
     }
 
     private void findNumericalFeatures() {
-        Set<DataType> numericDatatypes = new HashSet<>(
-                Arrays.asList(
-                        DataTypes.ByteType,
-                        DataTypes.ShortType,
-                        DataTypes.IntegerType,
-                        DataTypes.LongType,
-                        DataTypes.FloatType,
-                        DataTypes.DoubleType,
-                        DataTypes.createDecimalType()));
-
-        numericalFeatures = Arrays.stream(dataset.schema().fields())
-                .filter(field ->
-                        numericDatatypes.contains(field.dataType())
-                        && featureIsValid(field.name())
-                        && featureIsSelected(field.name()))
-                .map(StructField::name).collect(Collectors.toList());
+        StructField[] fields = dataset.schema().fields();
+        for (StructField field : fields) {
+            if (DatatypeFilterer.isNumerical(field.dataType())
+                && shouldBeIncluded(field.name())) {
+                numericalFeatures.add(field.name());
+            }
+        }
     }
 
     private void findCategoricalFeatures() {
-        categoricalFeatures = Arrays.stream(dataset.schema().fields())
-                .filter(field ->
-                        field.dataType() == DataTypes.StringType
-                        && featureIsValid(field.name())
-                        && featureIsSelected(field.name()))
-                .map(StructField::name).collect(Collectors.toList());
-        categoricalFeaturesIndexed = categoricalFeatures.stream()
-                .map(s -> s + "_indexed")
-                .collect(Collectors.toList());
+        StructField[] fields = dataset.schema().fields();
+        for (StructField field : fields) {
+            if (DatatypeFilterer.isStringType(field.dataType())
+                && shouldBeIncluded(field.name())) {
+                categoricalFeatures.add(field.name());
+            }
+        }
+
+        for (String categoricalFeature : categoricalFeatures) {
+            categoricalFeaturesIndexed.add(categoricalFeature + "_indexed");
+        }
+    }
+
+    private boolean shouldBeIncluded(String feature) {
+        return featureIsValid(feature) && featureIsSelected(feature);
     }
 
     private boolean featureIsValid(String feature) {
@@ -95,16 +92,17 @@ public class AttributesFinder {
     }
 
     private void findNonGeneratingAttributes() {
-        nonGeneratingAttributes = Arrays.stream(dataset.schema().fields())
-                .filter(field ->
-                        !numericalFeatures.contains(field.name()) &&
-                        !categoricalFeatures.contains(field.name())
-//                        // uncomment if we want the labeled column to not be included
-//                        && !field.name().equals(decisionTreeParams.getLabeledColumnName())
-//                        // uncomment if we want the target column names to not be included
-//                        && !decisionTreeParams.getNonGeneratorAttributes().contains(field.name()
-                )
-                .map(StructField::name)
-                .collect(Collectors.toList());
+        StructField[] fields = dataset.schema().fields();
+        for (StructField field : fields) {
+            if (!numericalFeatures.contains(field.name()) &&
+                !categoricalFeatures.contains(field.name())
+//                // uncomment if we want the labeled column to not be included
+//                && !field.name().equals(decisionTreeParams.getLabeledColumnName())
+//                // uncomment if we want the target column names to not be included
+//                && !decisionTreeParams.getNonGeneratorAttributes().contains(field.name())
+            ) {
+                nonGeneratingAttributes.add(field.name());
+            }
+        }
     }
 }

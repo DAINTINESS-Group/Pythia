@@ -3,9 +3,10 @@ package gr.uoi.cs.pythia.writer;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
+@SuiteClasses({
         NaiveWriterTests.class
 })
 public class AllWriterTests {

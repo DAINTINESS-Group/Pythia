@@ -81,13 +81,12 @@ public class LabelingSystemTests {
               new StructField("IQ", DataTypes.IntegerType, false, Metadata.empty()),
             });
 
-    Dataset<Row> df = sparkSession.createDataFrame(data, schema);
+    Dataset<Row> dataset = sparkSession.createDataFrame(data, schema);
 
     RuleSet ruleSet = new RuleSet("age_labeled", rules);
     String expression = ruleSet.generateSparkSqlExpression();
-    df = df.withColumn(ruleSet.getNewColumnName(), expr(expression));
-    df.show();
-    List<Object> actual = df.select("age_labeled").toJavaRDD().map(row -> row.get(0)).collect();
+    dataset = dataset.withColumn(ruleSet.getNewColumnName(), expr(expression));
+    List<Object> actual = dataset.select("age_labeled").toJavaRDD().map(row -> row.get(0)).collect();
 
     List<Object> expected =
         new ArrayList<>(Arrays.asList("very old", "adult", "adult", "mid", "mid", "kid"));

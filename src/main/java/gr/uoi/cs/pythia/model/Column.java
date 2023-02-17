@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.model;
 
+import gr.uoi.cs.pythia.model.histogram.Histogram;
+
 public class Column {
 
   private final int position;
@@ -7,6 +9,7 @@ public class Column {
   private final String datatype;
   private CorrelationsProfile correlationsProfile;
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
+  private Histogram histogram;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -30,6 +33,10 @@ public class Column {
     return descriptiveStatisticsProfile;
   }
 
+  public Histogram getHistogram() {
+    return histogram;
+  }
+
   public void setCorrelationsProfile(CorrelationsProfile correlationsProfile) {
     this.correlationsProfile = correlationsProfile;
   }
@@ -38,29 +45,37 @@ public class Column {
     this.descriptiveStatisticsProfile = descriptiveStatisticsProfile;
   }
 
+  public void setHistogram(Histogram histogram) {
+    this.histogram = histogram;
+  }
+
   @Override
   public String toString() {
-    String descriptiveStatisticsProfileString =
-        descriptiveStatisticsProfile != null ? descriptiveStatisticsProfile.toString() : "";
-    String correlationsProfileString =
-        correlationsProfile != null ? correlationsProfile.toString() : "";
-    return "=============================================================================\n"
-        + "Column"
-        + "\n"
-        + "position: "
-        + position
-        + "\n"
-        + "name: "
-        + name
-        + "\n"
-        + "datatype: "
-        + datatype
-        + "\n"
-        + "descriptiveStatisticsProfile:\n"
-        + descriptiveStatisticsProfileString
-        + "\n"
-        + "correlationsProfile:\n"
-        + correlationsProfileString
-        + "\n";
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("=============================================================================\n");
+    stringBuilder.append("Column\n");
+    stringBuilder.append(String.format("position: %d\n", position));
+    stringBuilder.append(String.format("name: %s\n", name));
+    stringBuilder.append(String.format("datatype: %s\n", datatype));
+    stringBuilder.append("\n");
+
+    if (descriptiveStatisticsProfile != null) {
+      stringBuilder.append("DescriptiveStatisticsProfile:\n");
+      stringBuilder.append(descriptiveStatisticsProfile);
+      stringBuilder.append("\n");
+    }
+
+    if (correlationsProfile != null) {
+      stringBuilder.append("CorrelationsProfile:\n");
+      stringBuilder.append(correlationsProfile);
+      stringBuilder.append("\n");
+    }
+
+    if (histogram != null) {
+      stringBuilder.append("Histogram:\n");
+      stringBuilder.append(histogram);
+      stringBuilder.append("\n");
+    }
+    return stringBuilder.toString();
   }
 }

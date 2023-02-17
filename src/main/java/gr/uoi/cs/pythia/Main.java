@@ -49,7 +49,7 @@ public class Main {
         String.format(
             "src%stest%sresources%sdatasets%stweets.csv", 
             File.separator, File.separator, File.separator, File.separator),
-        schema);
+        	schema);
 
     List<Rule> rules =
         new ArrayList<>(
@@ -61,7 +61,7 @@ public class Main {
                 new Rule("user_followers", LabelingSystemConstants.GEQ, 500000, "super_high")));
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
-    datasetProfiler.computeProfileOfDataset();
+    datasetProfiler.computeProfileOfDataset("");
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "test.txt");
   }
 }

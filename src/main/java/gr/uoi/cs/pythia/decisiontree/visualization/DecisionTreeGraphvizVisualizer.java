@@ -1,17 +1,22 @@
 package gr.uoi.cs.pythia.decisiontree.visualization;
 
-import gr.uoi.cs.pythia.decisiontree.model.DecisionTree;
-import gr.uoi.cs.pythia.decisiontree.model.node.DecisionTreeNode;
-import guru.nidi.graphviz.attribute.*;
+import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
+import gr.uoi.cs.pythia.model.decisiontree.node.DecisionTreeNode;
+import guru.nidi.graphviz.attribute.Color;
+import guru.nidi.graphviz.attribute.Font;
+import guru.nidi.graphviz.attribute.Label;
+import guru.nidi.graphviz.attribute.Style;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.model.*;
+import guru.nidi.graphviz.model.Graph;
+import guru.nidi.graphviz.model.Node;
 
 import java.io.File;
 import java.io.IOException;
 
 import static guru.nidi.graphviz.attribute.Attributes.attr;
 import static guru.nidi.graphviz.model.Factory.*;
+import static guru.nidi.graphviz.model.Factory.graph;
 
 
 public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
@@ -21,28 +26,18 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
 
     @Override
     public void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException {
-        Graph graph = getGraph(decisionTree.getRootNode());
+        Graph graph = getGraph(decisionTree);
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
                 .toFile(new File(directory + File.separator + fileName + ".png"));
     }
 
-    private Graph getGraph(DecisionTreeNode dtNode) {
+    private Graph getGraph(DecisionTree decisionTree) {
+        DecisionTreeNode dtNode = decisionTree.getRootNode();
         return graph("decisionTree").directed()
                 .nodeAttr().with(Font.name("Arial"))
                 .linkAttr().with("class", "link-class")
-                .with(
-                        getRootNode(dtNode)
-                                .link(to(getNodes(dtNode.getLeftNode())).with(attr("label", "Yes")))
-                                .link(to(getNodes(dtNode.getRightNode())).with(attr("label", "No")))
-                );
-    }
-
-    private Node getRootNode(DecisionTreeNode dtNode) {
-        Node graphNode = createNode(dtNode);
-        if (dtNode.isLeaf())
-            return graphNode.with(leafNodeColor);
-        return graphNode.with(rootNodeColor);
+                .with(getNodes(dtNode));
     }
 
     private Node getNodes(DecisionTreeNode dtNode) {
@@ -50,7 +45,11 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
         if (dtNode.isLeaf())
             return graphNode.with(leafNodeColor);
 
-        graphNode = graphNode.with(internalNodeColor);
+        if (dtNode.getId() == 1) {
+            graphNode = graphNode.with(rootNodeColor);
+        } else {
+            graphNode = graphNode.with(internalNodeColor);
+        }
         Node leftNode = getNodes(dtNode.getLeftNode());
         Node rightNode = getNodes(dtNode.getRightNode());
 
@@ -65,6 +64,6 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     }
 
     private String getNodeInfo(DecisionTreeNode dtNode) {
-        return dtNode.getBasicInfo().replace("<", " <");
+        return dtNode.getSimpleRepresentation().replace("<", " <");
     }
 }

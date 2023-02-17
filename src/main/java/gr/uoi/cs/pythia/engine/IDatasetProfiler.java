@@ -15,7 +15,16 @@ public interface IDatasetProfiler {
 
   void computeLabeledColumn(RuleSet ruleSet);
 
-  DatasetProfile computeProfileOfDataset();
+  // TODO: Update. For now used to specify path parameter usage
+  /**
+   * Computes the statistics of the profile
+   * @param path The directory where the auxiliary data,
+   *             for example: images of the decision trees,
+   *             will be generated, to later be used by the report system
+   * @return A DatasetProfile object that contains all the statistical info
+   * @throws IOException
+   */
+  DatasetProfile computeProfileOfDataset(String path) throws IOException;
 
   void generateReport(String reportGeneratorType, String path) throws IOException;
 

@@ -24,11 +24,6 @@ profile of the dataset and generates a report of the findings.
 - Install [**Eclipse**](https://www.eclipse.org/downloads/)
 - Import the project as a Maven project.
 
-_Note_: This project uses [**lombok**](https://projectlombok.org/) to generate boilerplate code at compile time
-
-- Follow the instructions at [**Lombok's official website**](https://projectlombok.org/setup/eclipse)
-  in the `Via eclipse plugin installer` section to install it in Eclipse
-
 #### Maven
 
 The project uses a Maven wrapper so there is no need to install it to your system as long as you have the JAVA_HOME
@@ -182,7 +177,7 @@ public class Main {
         datasetProfiler.computeLabeledColumn(ruleSet);
 
         // Compute the profile of the Dataset (this will take a while for big datasets)
-        datasetProfiler.computeProfileOfDataset();
+        datasetProfiler.computeProfileOfDataset("");
 
         // Generate a report (txt report in this case)
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");

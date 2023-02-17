@@ -1,8 +1,10 @@
 package gr.uoi.cs.pythia.decisiontree;
 
-import gr.uoi.cs.pythia.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
@@ -20,9 +22,10 @@ public class DecisionTreeOptimizerTests {
 
     @Before
     public void init() {
-        StructType schema = TestsUtilities.getTweetsCsvSchema();
-        String filePath = TestsUtilities.getResourcePath("datasets/tweets.csv");
-        dataset = AllDecisionTreeTests.dtResource.getSparkSession()
+        StructType schema = TestsDatasetSchemas.getTweetsCsvSchema();
+        String filePath = TestsUtilities.getDatasetPath("tweets.csv");
+        dataset = SparkSession.builder()
+                .getOrCreate()
                 .read()
                 .option("header", "true")
                 .schema(schema)
@@ -30,7 +33,7 @@ public class DecisionTreeOptimizerTests {
     }
 
     @Test
-    public void testRemoveTooManyDistinctValuesCountCategoricalColumns() {
+    public void testRemoveCategoricalColumnsWithTooManyDistinctValues() {
         dataset = new DecisionTreeOptimizer(dataset).getOptimizedDataset();
 
         List<String> expectedColumns = Arrays.asList("user_created", "user_followers", "user_friends",
@@ -41,3 +44,4 @@ public class DecisionTreeOptimizerTests {
         assertEquals(expectedColumns, actualColumns);
     }
 }
+
