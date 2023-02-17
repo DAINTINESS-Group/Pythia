@@ -7,6 +7,7 @@ import gr.uoi.cs.pythia.report.md.structures.MdTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MdDescriptiveStatistics {
@@ -49,6 +50,12 @@ public class MdDescriptiveStatistics {
 
     private List<String> getColumnData(Column column) {
         DescriptiveStatisticsProfile stats = column.getDescriptiveStatisticsProfile();
+        if (stats == null) {
+            List<String> data = new ArrayList<>();
+            data.add(column.getName());
+            data.addAll(Collections.nCopies(6, null));
+            return data;
+        }
         return Arrays.asList(column.getName(),
                 stats.getCount(),
                 stats.getMean(),

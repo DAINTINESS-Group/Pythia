@@ -43,21 +43,26 @@ public class MdDecisionTrees {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.###");
         for (LabeledColumn column : columns) {
-            stringBuilder.append(
-                    String.format("Decision Trees for '%s':\n", column.getName())
-            );
+            stringBuilder.append(MdBasicStructures.bold(String.format(
+                    "~ Column: %s", column.getName()
+            )));
+            stringBuilder.append("\n\n");
             File[] decisionTreesImages = new File(
                     Paths.get(decisionTreesDirectory, column.getName()).toString())
                     .listFiles();
             List<DecisionTree> decisionTrees = column.getDecisionTrees();
             for (int i=0; i< decisionTrees.size(); i++) {
+                stringBuilder.append(String.format("Decision tree #%d:\n",  i+1));
                 stringBuilder.append(MdBasicStructures.center(
                                      MdBasicStructures.image(
                                              decisionTreesImages[i].getAbsolutePath(), "")));
                 stringBuilder.append(MdBasicStructures.center(
-                                     MdBasicStructures.heading4(
-                                decimalFormat.format(decisionTrees.get(i).getAverageImpurity()))));
+                                     MdBasicStructures.bold(String.format("The average impurity is %s",
+                                        decimalFormat.format(decisionTrees.get(i).getAverageImpurity())))
+                ));
+                stringBuilder.append("\n");
             }
+            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }

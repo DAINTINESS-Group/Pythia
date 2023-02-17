@@ -24,11 +24,11 @@ public class MdBasicStructures {
     }
 
     public static String heading3(String text) {
-        return String.format("## %s", text);
+        return String.format("### %s", text);
     }
 
     public static String heading4(String text) {
-        return String.format("## %s", text);
+        return String.format("#### %s", text);
     }
 
     public static String bold(String text) {
