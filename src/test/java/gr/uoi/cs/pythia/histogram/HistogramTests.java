@@ -20,8 +20,8 @@ public class HistogramTests {
                 continue;
             histograms.add(column.getHistogram());
         }
-        assertEquals(histograms.get(0).toString(), getExpectedHistogramFromNoNaNsColumn());
-        assertEquals(histograms.get(5).toString(), getExpectedHistogramFromNaNsColumn());
+        assertEquals(getExpectedHistogramFromNoNaNsColumn(), histograms.get(0).toString());
+        assertEquals(getExpectedHistogramFromNaNsColumn(), histograms.get(5).toString());
     }
 
     private String getExpectedHistogramFromNoNaNsColumn() {
@@ -50,5 +50,4 @@ public class HistogramTests {
                 "[8.2,9.1): 9 values\n" +
                 "[9.1,10]: 132 values\n";
     }
-
 }
