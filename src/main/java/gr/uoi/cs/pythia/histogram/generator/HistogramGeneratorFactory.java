@@ -1,6 +1,5 @@
 package gr.uoi.cs.pythia.histogram.generator;
 
-import gr.uoi.cs.pythia.histogram.HistogramGeneratorType;
 import gr.uoi.cs.pythia.model.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;

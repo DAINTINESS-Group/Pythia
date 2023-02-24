@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.histogram;
 
 import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorFactory;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
 import gr.uoi.cs.pythia.histogram.generator.IHistogramGenerator;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
