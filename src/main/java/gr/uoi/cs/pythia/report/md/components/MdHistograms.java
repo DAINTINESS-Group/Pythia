@@ -36,7 +36,7 @@ public class MdHistograms {
     }
 
     private String getTitle() {
-        return MdBasicStructures.center(MdBasicStructures.heading3("Decision Trees"));
+        return MdBasicStructures.center(MdBasicStructures.heading3("Histograms"));
     }
 
     private String getAllHistograms() {
