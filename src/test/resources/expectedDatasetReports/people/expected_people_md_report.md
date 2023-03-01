@@ -48,7 +48,7 @@
 
 <div align="center">
 
-### Decision Trees
+### Histograms
 
 </div>
 

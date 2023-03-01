@@ -7,6 +7,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructField;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -14,6 +15,7 @@ public class AttributesFinder {
 
     private final Dataset<Row> dataset;
     private final DecisionTreeParams decisionTreeParams;
+    private final List<String> datasetColumns = new ArrayList<>();
     private final List<String> numericalFeatures = new ArrayList<>();
     private final List<String> categoricalFeatures = new ArrayList<>();
     private final List<String> categoricalFeaturesIndexed = new ArrayList<>();
@@ -22,6 +24,9 @@ public class AttributesFinder {
     public AttributesFinder(DecisionTreeParams decisionTreeParams, Dataset<Row> dataset) {
         this.decisionTreeParams = decisionTreeParams;
         this.dataset = dataset;
+        for (StructField field : dataset.schema().fields()) {
+            this.datasetColumns.add(field.name());
+        }
         discernFeatures();
     }
 
@@ -83,7 +88,8 @@ public class AttributesFinder {
 
     private boolean featureIsValid(String feature) {
         return !decisionTreeParams.getNonGeneratorAttributes().contains(feature) &&
-                !feature.equals(decisionTreeParams.getLabeledColumnName());
+                !feature.equals(decisionTreeParams.getLabeledColumnName()) &&
+                datasetColumns.contains(feature);
     }
 
     private boolean featureIsSelected(String feature) {
