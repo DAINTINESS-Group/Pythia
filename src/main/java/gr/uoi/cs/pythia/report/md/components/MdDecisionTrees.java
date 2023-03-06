@@ -34,7 +34,7 @@ public class MdDecisionTrees {
     }
 
     private String getTitle() {
-        return MdBasicStructures.center(MdBasicStructures.heading3("Decision Trees"));
+        return MdBasicStructures.center(MdBasicStructures.heading2("Decision Trees"));
     }
 
     private String getAllDecisionTrees() {

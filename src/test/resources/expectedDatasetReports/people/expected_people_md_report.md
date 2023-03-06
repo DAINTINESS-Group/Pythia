@@ -48,7 +48,7 @@
 
 <div align="center">
 
-### Histograms
+## Histograms
 
 </div>
 
