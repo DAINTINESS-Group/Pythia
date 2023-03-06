@@ -12,5 +12,5 @@ public interface IDecisionTreeVisualizer {
      * @param fileName the name of the image file
      * @throws IOException the IOException
      */
-    void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException;
+    String exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException;
 }

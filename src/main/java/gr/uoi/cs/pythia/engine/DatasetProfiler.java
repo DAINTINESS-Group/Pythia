@@ -67,24 +67,6 @@ public class DatasetProfiler implements IDatasetProfiler {
       throws AnalysisException {
     dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
 
-
-//    List<String> columnNames =
-//        Arrays.stream(dataset.schema().fields())
-//            .map(StructField::name)
-//            .collect(Collectors.toList());
-//    List<String> dataTypes =
-//        Arrays.stream(dataset.schema().fields())
-//            .map(field -> field.dataType().toString())
-//            .collect(Collectors.toList());
-//
-//    List<Column> columnProperties = new ArrayList<>();
-//    for (int i = 0; i < dataTypes.size(); ++i) {
-//      columnProperties.add(new Column(i, columnNames.get(i), dataTypes.get(i)));
-//    }
-//    datasetProfile = new DatasetProfile(alias, path, columnProperties);
-//    logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
-
-    // TODO: from alexxarisis - Maybe do this instead?
     List<Column> columns = new ArrayList<>();
     StructField[] fields = dataset.schema().fields();
     for (int i = 0; i < fields.length; ++i) {
@@ -170,6 +152,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
   @Override
   public void generateReport(String reportGeneratorType, String path) throws IOException {
+    if (path == null || path.isEmpty()) {
+      path = datasetProfile.getOutputDirectory() + File.separator + "report." + reportGeneratorType;
+    }
     ReportGeneratorFactory factory = new ReportGeneratorFactory();
     IReportGenerator generator = factory.createReportGenerator(reportGeneratorType);
     generator.produceReport(datasetProfile, path);
@@ -188,17 +173,16 @@ public class DatasetProfiler implements IDatasetProfiler {
         String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
   }
 
-	@Override
-	public void identifyPatternHighlights(
-			ColumnSelectionMode columnSelectionMode,
-			String[] measurementColNames,
-			String[] coordinateColNames) 
-					throws IOException {
-		new IPatternManagerFactory()
-			.createPatternManager(columnSelectionMode,  measurementColNames, coordinateColNames)
-			.identifyPatternHighlights(dataset, datasetProfile);
-		logger.info(
-			String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
-	}
-	
+  @Override
+  public void identifyPatternHighlights(
+          ColumnSelectionMode columnSelectionMode,
+          String[] measurementColNames,
+          String[] coordinateColNames)
+                  throws IOException {
+      new IPatternManagerFactory()
+          .createPatternManager(columnSelectionMode,  measurementColNames, coordinateColNames)
+          .identifyPatternHighlights(dataset, datasetProfile);
+      logger.info(
+          String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
+  }
 }

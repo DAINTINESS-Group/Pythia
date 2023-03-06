@@ -62,6 +62,7 @@ public class Main {
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
     datasetProfiler.computeProfileOfDataset("results");
-    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "test.txt");
+    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
+    datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
   }
 }

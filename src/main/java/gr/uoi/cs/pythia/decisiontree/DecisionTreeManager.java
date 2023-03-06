@@ -34,7 +34,7 @@ public class DecisionTreeManager {
         this.datasetProfile = datasetProfile;
         this.decisionTreeVisualizer = new DecisionTreeVisualizerFactory()
                 .getVisualizer(DecisionTreeVisualizerType.GRAPH_VIZ);
-        this.outputDirectory = Paths.get(datasetProfile.getOutputDirectory(), "decisionTrees");
+        this.outputDirectory = Paths.get(datasetProfile.getOutputDirectory(), "decision_trees");
     }
 
     public List<String> extractAllDecisionTrees() throws IOException {
@@ -101,11 +101,12 @@ public class DecisionTreeManager {
             column.addDecisionTree(dt);
         }
         List<DecisionTree> decisionTrees = column.getDecisionTrees();
-        Path columnOutputDirectory = Paths.get(outputDirectory.toString(), column.getName());
-        createDirectory(columnOutputDirectory);
         for (int i=0; i < decisionTrees.size(); i++) {
-            decisionTreeVisualizer.exportDecisionTreeToPNG(decisionTrees.get(i),
-                    columnOutputDirectory.toString(), String.format("%s_%d", column.getName(), i));
+            String outputPath = decisionTreeVisualizer.exportDecisionTreeToPNG(decisionTrees.get(i),
+                                    outputDirectory.toString(),
+                                    String.format("%s_%d", column.getName(), i+1)
+            );
+            decisionTrees.get(i).setOutputPath(outputPath);
         }
     }
 
