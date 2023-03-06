@@ -20,13 +20,16 @@ public interface IDatasetProfiler {
    * Computes the statistics of the profile
    * @param path The directory where the auxiliary data,
    *             for example: images of the decision trees,
-   *             will be generated, to later be used by the report
+   *             will be generated, to later be used by the report.
+   *             If it is empty or null, it will be generated in the dataset's folder.
    * @return A DatasetProfile object that contains all the statistical info
    * @throws IOException
    */
   DatasetProfile computeProfileOfDataset(String path) throws IOException;
 
     /**
+     * Generates the report of the statistical analysis in a file of a specific format,
+     * at the designated location.
      * @param reportGeneratorType The output type of the report e.g. txt or md
      * @param path The output path of the report. If it is null or empty,
      *             the report will be generated inside the folder with the auxiliary data.
