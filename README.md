@@ -93,38 +93,12 @@ run in the command line_
 ---
 Suppose we want to generate a statistical profile of the following file:
 
-<table>
-<thead>
-	<tr>
-		<th>name</th>
-		<th>age</th>
-		<th>money</th>
-	</tr>
-</thead>
-<tbody>
-	<tr>
-		<td>Michael</td>
-		<td>25</td>
-		<td>20</td>
-	</tr>
-    <tr>
-		<td>John</td>
-		<td>21</td>
-		<td>15</td>
-	</tr>
-	<tr>
-		<td>Andy</td>
-		<td>30</td>
-		<td>1000</td>
-	</tr>
-    <tr>
-		<td>Justin</td>
-		<td>65</td>
-		<td>10000</td>
-	</tr>
-</tbody>
-</table>
-
+|  name   | age | money |
+|:-------:|:---:|:-----:|
+| Michael | 25  |  20   |
+|  John   | 21  |  15   |
+|  Andy   | 30  | 1000  |
+| Justin  | 65  | 10000 |
 
 Sample Main class with API usage for the file above
 
@@ -179,8 +153,14 @@ public class Main {
         // Compute the profile of the Dataset (this will take a while for big datasets)
         datasetProfiler.computeProfileOfDataset("");
 
-        // Generate a report (txt report in this case)
+        // Generate a report in plain text and markdown format
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
+        datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "report.md");
     }
 }
 ```
+
+### <div align="center"> Contributors </div>
+- Alexiou Alexandros
+- Charisis Alexandros ([Youtube](https://youtu.be/QhAO9OIl6Cg))
+- Christodoulos Antoniou
