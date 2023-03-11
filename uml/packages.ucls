@@ -1,188 +1,186 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <package id="1" language="java" name="gr.uoi.cs.pythia" project="Pythia" file="/Pythia/src/main/java/gr/uoi/cs/pythia" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="129" y="188"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="2" language="java" name="gr.uoi.cs.pythia.client" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/client" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="146" y="114"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="3" language="java" name="gr.uoi.cs.pythia.config" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/config" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="250" y="332"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="4" language="java" name="gr.uoi.cs.pythia.correlations" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/correlations" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="820" y="366"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="5" language="java" name="gr.uoi.cs.pythia.engine" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/engine" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="504" y="272"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="6" language="java" name="gr.uoi.cs.pythia.labeling" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/labeling" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="392" y="83"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="7" language="java" name="gr.uoi.cs.pythia.ml" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/ml" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="793" y="289"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="8" language="java" name="gr.uoi.cs.pythia.model" project="Pythia" 
+  <package id="1" language="java" name="gr.uoi.cs.pythia.model" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/model" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="506" y="439"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+    <position height="-1" width="-1" x="1332" y="663"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="9" language="java" name="gr.uoi.cs.pythia.patterns" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="810" y="209"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="10" language="java" name="gr.uoi.cs.pythia.patterns.algos" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/algos" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1027" y="155"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="11" language="java" name="gr.uoi.cs.pythia.reader" project="Pythia" 
+  <package id="2" language="java" name="gr.uoi.cs.pythia.reader" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/reader" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="580" y="83"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+    <position height="-1" width="-1" x="748" y="150"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="12" language="java" name="gr.uoi.cs.pythia.report" project="Pythia" 
+  <package id="3" language="java" name="gr.uoi.cs.pythia.histogram" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/histogram" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1233" y="295"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="gr.uoi.cs.pythia.decisiontree" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/decisiontree" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="984" y="296"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="gr.uoi.cs.pythia.report" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/report" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="130" y="572"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+    <position height="-1" width="-1" x="1672" y="333"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="13" language="java" name="gr.uoi.cs.pythia.util" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/util" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="743" y="566"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  <package id="6" language="java" name="gr.uoi.cs.pythia.engine" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/engine" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1333" y="54"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="14" language="java" name="gr.uoi.cs.pythia.writer" project="Pythia" 
+  <package id="7" language="java" name="gr.uoi.cs.pythia.config" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/config" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="746" y="98"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="gr.uoi.cs.pythia.writer" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/writer" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="315" y="572"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+    <position height="-1" width="-1" x="1672" y="239"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="15" language="java" name="gr.uoi.cs.pythia.patterns.results" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/results" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1026" y="70"/>    
-    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  <package id="9" language="java" name="gr.uoi.cs.pythia.descriptivestatistics" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/descriptivestatistics" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="985" y="390"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
+  <package id="10" language="java" name="gr.uoi.cs.pythia.patterns" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1470" y="343"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="11" language="java" name="gr.uoi.cs.pythia.util" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/util" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1074" y="667"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="12" language="java" name="gr.uoi.cs.pythia.labeling" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/labeling" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="751" y="212"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="13" language="java" name="gr.uoi.cs.pythia.correlations" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/correlations" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1233" y="390"/>    
+    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
+  </package>  
+  <dependency id="14">    
+    <bendpoint x="797" y="306"/>    
+    <bendpoint x="803" y="674"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="15">    
+    <bendpoint x="1134" y="302"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
   <dependency id="16">    
-    <end type="SOURCE" refId="1"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="17">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="8"/>  
+    <bendpoint x="1327" y="726"/>    
+    <bendpoint x="750" y="729"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="18">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="9"/>  
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="19">    
-    <bendpoint x="317" y="444"/>    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="8"/>  
+    <bendpoint x="782" y="301"/>    
+    <bendpoint x="789" y="715"/>    
+    <bendpoint x="1320" y="715"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="20">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="21">    
-    <bendpoint x="940" y="344"/>    
-    <bendpoint x="901" y="518"/>    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="13"/>  
-  </dependency>  
-  <dependency id="22">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <dependency id="23">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="24">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="11"/>  
-  </dependency>  
-  <dependency id="26">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="27">    
-    <bendpoint x="371" y="397"/>    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <dependency id="28">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
-  <dependency id="30">    
-    <bendpoint x="915" y="406"/>    
-    <bendpoint x="893" y="511"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="13"/>  
-  </dependency>  
-  <dependency id="31">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
-  <dependency id="32">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="33">    
-    <bendpoint x="805" y="337"/>    
-    <end type="SOURCE" refId="5"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <dependency id="34">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="15"/>  
+  <dependency id="21">    
+    <bendpoint x="991" y="705"/>    
+    <bendpoint x="1309" y="705"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="35">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="36">    
-    <end type="SOURCE" refId="5"/>    
+  <dependency id="22">    
+    <bendpoint x="840" y="216"/>    
+    <bendpoint x="844" y="393"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="9"/>  
   </dependency>  
-  <dependency id="37">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
   </dependency>  
-  <dependency id="38">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
   </dependency>  
-  <dependency id="39">    
+  <dependency id="25">    
+    <bendpoint x="944" y="261"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="27">    
+    <bendpoint x="1672" y="668"/>    
     <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="28">    
+    <bendpoint x="1253" y="589"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="7"/>  
   </dependency>  
-  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+  <dependency id="31">    
+    <bendpoint x="1138" y="306"/>    
+    <bendpoint x="1121" y="419"/>    
+    <bendpoint x="1165" y="653"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="32">    
+    <bendpoint x="1649" y="211"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="33">    
+    <bendpoint x="1323" y="367"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="34">    
+    <bendpoint x="1239" y="594"/>    
+    <bendpoint x="1170" y="673"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="35">    
+    <bendpoint x="1418" y="634"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
     <operations public="true" package="true" protected="true" private="true" static="true"/>  
   </classifier-display>  
-  <association-display labels="true" multiplicity="true"/>
+  <association-display labels="false" multiplicity="true"/>
 </class-diagram>
