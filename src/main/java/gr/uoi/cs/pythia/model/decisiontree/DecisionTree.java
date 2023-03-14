@@ -12,6 +12,7 @@ public class DecisionTree {
     private final DecisionTreeNode rootNode;
     private final double averageImpurity;
     private final List<DecisionTreePath> paths;
+    private String outputPath;
 
     public DecisionTree(double accuracy,
                         List<String> featureColumnNames,
@@ -50,6 +51,14 @@ public class DecisionTree {
 
     public List<DecisionTreePath> getPaths() {
         return paths;
+    }
+
+    public String getOutputPath() {
+        return outputPath;
+    }
+
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
     }
 
     @Override

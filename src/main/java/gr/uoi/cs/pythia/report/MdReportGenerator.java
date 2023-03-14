@@ -1,10 +1,7 @@
 package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.report.md.components.MdCorrelations;
-import gr.uoi.cs.pythia.report.md.components.MdDecisionTrees;
-import gr.uoi.cs.pythia.report.md.components.MdDescriptiveStatistics;
-import gr.uoi.cs.pythia.report.md.components.MdHeader;
+import gr.uoi.cs.pythia.report.md.components.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,6 +21,7 @@ public class MdReportGenerator implements IReportGenerator {
         bobOMastoras.append(new MdDescriptiveStatistics(datasetProfile.getColumns()));
         bobOMastoras.append(new MdCorrelations(datasetProfile.getColumns()));
         bobOMastoras.append(new MdDecisionTrees(datasetProfile));
+        bobOMastoras.append(new MdHistograms(datasetProfile.getColumns()));
         return bobOMastoras.toString();
     }
 }

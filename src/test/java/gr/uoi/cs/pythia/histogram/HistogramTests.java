@@ -4,15 +4,16 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
 public class HistogramTests {
 
     @Test
-    public void test() throws IOException {
+    public void testBins() {
         List<Column> columns = AllHistogramTests.histogramResource.getDatasetProfile().getColumns();
         List<Histogram> histograms = new ArrayList<>();
         for (Column column : columns) {
@@ -20,8 +21,19 @@ public class HistogramTests {
                 continue;
             histograms.add(column.getHistogram());
         }
-        assertEquals(histograms.get(0).toString(), getExpectedHistogramFromNoNaNsColumn());
-        assertEquals(histograms.get(5).toString(), getExpectedHistogramFromNaNsColumn());
+        assertEquals(getExpectedHistogramFromNoNaNsColumn(), histograms.get(0).toString());
+        assertEquals(getExpectedHistogramFromNaNsColumn(), histograms.get(5).toString());
+    }
+
+    @Test
+    public void testProducedHistograms() {
+        List<Column> columns = AllHistogramTests.histogramResource.getDatasetProfile().getColumns();
+        List<String> numericalColumns = Arrays.asList("Clump_Thickness", "Cell_Size_Uniformity",
+                "Cell_Shape_Uniformity", "Marginal_Adhesion", "Single_Epi_Cell_Size",
+                "Bare_Nuclei", "Bland_Chromatin", "Normal_Nucleoli", "Mitoses");
+        for (int i=0; i < numericalColumns.size(); i++) {
+            assertEquals(numericalColumns.get(i), columns.get(i).getName());
+        }
     }
 
     private String getExpectedHistogramFromNoNaNsColumn() {
@@ -50,5 +62,4 @@ public class HistogramTests {
                 "[8.2,9.1): 9 values\n" +
                 "[9.1,10]: 132 values\n";
     }
-
 }

@@ -25,11 +25,13 @@ public class DecisionTreeGraphvizVisualizer implements IDecisionTreeVisualizer {
     private final Color leafNodeColor = Color.PALEGREEN2;
 
     @Override
-    public void exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException {
+    public String exportDecisionTreeToPNG(DecisionTree decisionTree, String directory, String fileName) throws IOException {
         Graph graph = getGraph(decisionTree);
+        File image = new File(directory + File.separator + fileName + ".png");
         Graphviz.fromGraph(graph).height(1000)
                 .render(Format.PNG)
-                .toFile(new File(directory + File.separator + fileName + ".png"));
+                .toFile(image);
+        return image.getAbsolutePath();
     }
 
     private Graph getGraph(DecisionTree decisionTree) {

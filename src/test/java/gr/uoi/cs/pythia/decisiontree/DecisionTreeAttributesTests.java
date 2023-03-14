@@ -47,6 +47,14 @@ public class DecisionTreeAttributesTests {
     }
 
     @Test
+    public void testNonExistingFeatures() {
+        List<String> someNotValidFeatures = Arrays.asList("Test", "Price", "Test2", "ShelveLoc");
+        DecisionTree decisionTree = getDecisionTree(someNotValidFeatures);
+        List<String> expectedFeatures = Arrays.asList("Price", "ShelveLoc");
+        assertEquals(expectedFeatures, decisionTree.getFeatureColumnNames());
+    }
+
+    @Test
     public void testNullSelectedFeaturesList() {
         List<String> expectedFeatures = Arrays.asList("CompPrice", "Income", "Advertising",
                 "Population", "Price", "Age", "Education",
