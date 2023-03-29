@@ -20,6 +20,7 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
@@ -32,7 +33,6 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
-import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
@@ -47,6 +47,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
+  private AnalysisParameters analysisParameters;
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
@@ -151,6 +152,16 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
+  public void identifyHighlightPatterns(AnalysisParameters analysisParameters)
+		  throws IOException {
+	  new IPatternManagerFactory()
+			  .createPatternManager(dataset, datasetProfile, analysisParameters)
+			  .identifyHighlightPatterns();
+	  logger.info(String.format("Identified highlight patterns for %s",
+			  datasetProfile.getPath()));
+  }
+  
+  @Override
   public void generateReport(String reportGeneratorType, String path) throws IOException {
     if (path == null || path.isEmpty()) {
       path = datasetProfile.getOutputDirectory() + File.separator + "report." + reportGeneratorType;
@@ -173,16 +184,4 @@ public class DatasetProfiler implements IDatasetProfiler {
         String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
   }
 
-  @Override
-  public void identifyPatternHighlights(
-          ColumnSelectionMode columnSelectionMode,
-          String[] measurementColNames,
-          String[] coordinateColNames)
-                  throws IOException {
-      new IPatternManagerFactory()
-          .createPatternManager(columnSelectionMode,  measurementColNames, coordinateColNames)
-          .identifyPatternHighlights(dataset, datasetProfile);
-      logger.info(
-          String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
-  }
 }

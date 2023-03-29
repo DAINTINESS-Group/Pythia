@@ -7,88 +7,104 @@ import java.util.List;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.algos.IPatternAlgo;
-import gr.uoi.cs.pythia.patterns.algos.IPatternAlgoFactory;
+import gr.uoi.cs.pythia.patterns.algos.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.algos.dominance.HighDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.algos.dominance.LowDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.algos.outlier.ZScoreOutlierAlgo;
 
 // TODO maybe add logging here
 public class PatternManager implements IPatternManager {
 	
-	// TODO Is this the best way to keep track of all supported pattern algos?
-	private final IPatternAlgo[] patternAlgos = { 
-			new IPatternAlgoFactory().createPattern(PatternConstants.HIGH_DOMINANCE),
-			new IPatternAlgoFactory().createPattern(PatternConstants.LOW_DOMINANCE),
-			new IPatternAlgoFactory().createPattern(PatternConstants.DISTRIBUTION)
-	};
+	private Dataset<Row> dataset;
+	private DatasetProfile datasetProfile;
+	private AnalysisParameters analysisParameters;
 	
-	private ColumnSelector columnSelector;
-	private List<String> measurementColumns;
-	private List<String> coordinateColumns;
+	private HighDominanceAlgo highDominanceAlgo;
+	private LowDominanceAlgo lowDominanceAlgo;
+	private ZScoreOutlierAlgo zScoreOutlierAlgo;
 	
 	public PatternManager(
-			ColumnSelectionMode columnSelectionMode, 
-			String[] measurementColumns, 
-			String[] coordinateColumns) {
-		this.columnSelector = new ColumnSelector(
-				columnSelectionMode, 
-				measurementColumns, 
-				coordinateColumns);
+			Dataset<Row> dataset,
+			DatasetProfile datasetProfile,
+			AnalysisParameters analysisParameters) {
+		this.dataset = dataset;
+		this.datasetProfile = datasetProfile;
+		this.analysisParameters = analysisParameters;
+		initializePatternAlgos();
+	}
+	
+	private void initializePatternAlgos() {
+		highDominanceAlgo = new HighDominanceAlgo(dataset);
+		lowDominanceAlgo = new LowDominanceAlgo(dataset);
+		zScoreOutlierAlgo = new ZScoreOutlierAlgo();
 	}
 	
 	@Override
-	public void identifyPatternHighlights(Dataset<Row> dataset, DatasetProfile datasetProfile) 
-			throws IOException {
-		// Select the measurement & coordinate columns for pattern identification
-		measurementColumns = columnSelector.selectMeasurementColumns(datasetProfile);
-		coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile);
+	public void identifyHighlightPatterns() throws IOException {
+		identifyDominance();
+		identifyZScoreOutlier();
+	}
+
+	private void identifyDominance() throws IOException {
+		DominanceColumnSelector columnSelector = new DominanceColumnSelector(analysisParameters);
+		
+		// Select the measurement & coordinate columns for dominance highlight identification
+		List<String> measurementColumns = columnSelector.selectMeasurementColumns(datasetProfile);
+		List<String> coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile);
 		
 		// Highlight identification can not proceed with no measurement/coordinate
 		if (measurementColumns.isEmpty()) return;
 		if (coordinateColumns.isEmpty()) return;
 		
 		// Pass all the measurement & coordinate column combinations 
-		// through each of the highlight extractor modules (pattern algorithms)
+		// through low & high dominance identification algorithms
 		// for one & two coordinates respectively.
-		identifyPatternHighlightsWithOneCoordinate(dataset);				
-		identifyPatternHighlightsWithTwoCoordinates(dataset);
-				
+		identifyDominanceWithOneCoordinate(measurementColumns, coordinateColumns);
+		identifyDominanceWithTwoCoordinates(measurementColumns, coordinateColumns);
+
 		// Once identification is done, export the results.
-		exportResultsToFile();
+		highDominanceAlgo.exportResultsToFile(new File(String.format(
+				"src%stest%sresources%s%s_results.md",
+				File.separator, File.separator, File.separator,
+				highDominanceAlgo.getPatternName())).getAbsolutePath());
+		lowDominanceAlgo.exportResultsToFile(new File(String.format(
+				"src%stest%sresources%s%s_results.md",
+				File.separator, File.separator, File.separator,
+				lowDominanceAlgo.getPatternName())).getAbsolutePath());
 		
 		// TODO do we want to keep pattern results objects here?
 	}
-
-	private void identifyPatternHighlightsWithOneCoordinate(Dataset<Row> dataset) {
+	
+	private void identifyDominanceWithOneCoordinate(
+			List<String> measurementColumns, List<String> coordinateColumns) {
 		for (String measurement : measurementColumns) {
 			for (String xCoordinate : coordinateColumns) {
-				for (IPatternAlgo algo : patternAlgos) {
-					algo.identifyPatternWithOneCoordinate(dataset, measurement, xCoordinate);
-				}
+				highDominanceAlgo.identifyDominanceWithOneCoordinate(measurement, xCoordinate);
+				lowDominanceAlgo.identifyDominanceWithOneCoordinate(measurement, xCoordinate);
 			}
 		}
 	}
 	
-	private void identifyPatternHighlightsWithTwoCoordinates(Dataset<Row> dataset) {
+	private void identifyDominanceWithTwoCoordinates(
+			List<String> measurementColumns, List<String> coordinateColumns) {
 		for (String measurement : measurementColumns) {
 			for (String xCoordinate : coordinateColumns) {
 				for (String yCoordinate : coordinateColumns) {
 					if (xCoordinate.equals(yCoordinate)) continue;
-					for (IPatternAlgo algo : patternAlgos) {
-						algo.identifyPatternWithTwoCoordinates(
-								dataset, measurement, xCoordinate, yCoordinate);
-					}
+					highDominanceAlgo.identifyDominanceWithTwoCoordinates(
+							measurement, xCoordinate, yCoordinate);
+					lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
+							measurement, xCoordinate, yCoordinate);
 				}
 			}
 		}
 	}
 
-	private void exportResultsToFile() throws IOException {
-		for (IPatternAlgo algo : patternAlgos) {
-			algo.exportResultsToFile(new File(String.format(
-				"src%stest%sresources%s%s_results.md",
-				File.separator, File.separator, File.separator,
-				algo.getPatternName())).getAbsolutePath());
-		}
+	private void identifyZScoreOutlier() {
+		// TODO
+		zScoreOutlierAlgo.identifyZScoreOutliers();
 	}
 	
 }

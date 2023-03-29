@@ -1,9 +1,16 @@
 package gr.uoi.cs.pythia.patterns.algos.dominance;
 
-import gr.uoi.cs.pythia.patterns.PatternConstants;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 
-public class HighDominancePatternAlgo extends DominancePatternAlgo {
+import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
 
+public class HighDominanceAlgo extends DominanceAlgo {
+
+	public HighDominanceAlgo(Dataset<Row> dataset) {
+		super(dataset);
+	}
+	
 	@Override
 	public String getPatternName() {
 		return PatternConstants.HIGH_DOMINANCE;

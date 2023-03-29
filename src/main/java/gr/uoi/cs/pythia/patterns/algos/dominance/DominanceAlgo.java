@@ -13,37 +13,36 @@ import java.util.stream.Collectors;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.patterns.PatternConstants;
-import gr.uoi.cs.pythia.patterns.algos.IPatternAlgo;
-import gr.uoi.cs.pythia.patterns.results.DominancePatternResult;
+import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
+import gr.uoi.cs.pythia.patterns.results.DominanceResult;
 
-public abstract class DominancePatternAlgo implements IPatternAlgo {
+public abstract class DominanceAlgo {
 
 	private static final double TOTAL_DOMINANCE_THRESHOLD = 100.0;
 	private static final double PARTIAL_DOMINANCE_THRESHOLD = 75.0;
 	private static final int TOP_K_FILTERING_AMOUNT = 6;
 	
-	private List<DominancePatternResult> results;
+	private List<DominanceResult> results;
+	private Dataset<Row> dataset;
 	
 	public abstract String getPatternName();
 	protected abstract String getDominanceType();
 	protected abstract boolean isDominant(double valueA, double valueB);
 	
-	public DominancePatternAlgo() {
-		this.results = new ArrayList<DominancePatternResult>();
+	public DominanceAlgo(Dataset<Row> dataset) {
+		this.results = new ArrayList<DominanceResult>();
+		this.dataset = dataset;
 	}
 	
-	public DominancePatternResult getLatestResult() {
+	public DominanceResult getLatestResult() {
 		return results.get(results.size()-1);
 	}
 	
-	public List<DominancePatternResult> getResults() {
+	public List<DominanceResult> getResults() {
 		return results;
 	}
 	
-	@Override
-	public void identifyPatternWithOneCoordinate(
-			Dataset<Row> dataset, 
+	public void identifyDominanceWithOneCoordinate(
 			String measurementColName,
 			String xCoordinateColName) {
 
@@ -51,17 +50,15 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 		List<Row> queryResult = runAggregateQuery(dataset, measurementColName, xCoordinateColName);
 				
 		// Add a new pattern result object to the results list
-		results.add(new DominancePatternResult(
+		results.add(new DominanceResult(
 				getDominanceType(), "sum", 
 				measurementColName, xCoordinateColName));
 			
 		// Check for dominance
-		identifyDominanceWithOneCoordinate(queryResult);
+		executeDominanceAlgoWithOneCoordinate(queryResult);
 	}
 	
-	@Override
-	public void identifyPatternWithTwoCoordinates(
-			Dataset<Row> dataset, 
+	public void identifyDominanceWithTwoCoordinates(
 			String measurementColName,
 			String xCoordinateColName, 
 			String yCoordinateColName) {
@@ -75,19 +72,19 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 				xCoordinateColName, yCoordinateColName);
 		
 		// Add a new pattern result object to the results list 
-		results.add(new DominancePatternResult(
+		results.add(new DominanceResult(
 				getDominanceType(), "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName,
 				queryResult));
 		
 		// Check for dominance
-		identifyDominanceWithTwoCoordinates(queryResult, xCoordinates, yCoordinates);
+		executeDominanceAlgoWithTwoCoordinates(queryResult, xCoordinates, yCoordinates);
 	}
 	
 	// This method actually performs the check for dominance with 1 coordinate.
 	// Identified results are added to the results list.
 	// Finally, identified results are sorted and filtered based on dominance percentage score.
-	private void identifyDominanceWithOneCoordinate(List<Row> queryResult) {
+	private void executeDominanceAlgoWithOneCoordinate(List<Row> queryResult) {
 		if (queryResult.size() <= 1) return;
 		for (Row rowA : queryResult) {
 			String xCoordinate = parseCoordinateValue(rowA, 0);
@@ -121,7 +118,7 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 	// This method actually performs the check for dominance with 2 coordinates.
 	// Identified results are added to the results list.
 	// Finally, identified results are sorted and filtered based on dominance percentage score.
-	private void identifyDominanceWithTwoCoordinates(
+	private void executeDominanceAlgoWithTwoCoordinates(
 			List<Row> queryResult, 
 			List<String> xCoordinates, 
 			List<String> yCoordinates) {
@@ -293,12 +290,11 @@ public abstract class DominancePatternAlgo implements IPatternAlgo {
 		return PatternConstants.EMPTY;
 	}
 	
-	@Override
 	public void exportResultsToFile(String path) throws IOException {
 		String str = String.format("## %s Dominance Pattern Results\n", 
 				getDominanceType().substring(0, 1).toUpperCase() +
 				getDominanceType().substring(1));
-		for (DominancePatternResult result : results) {
+		for (DominanceResult result : results) {
 			str += result.toString();
 		}
 		writeToFile(path, str);

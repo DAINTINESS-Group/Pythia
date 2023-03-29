@@ -19,37 +19,29 @@ import org.junit.Test;
 
 import gr.uoi.cs.pythia.client.Patterns;
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.patterns.algos.IPatternAlgoFactory;
-import gr.uoi.cs.pythia.patterns.algos.dominance.HighDominancePatternAlgo;
-import gr.uoi.cs.pythia.patterns.algos.dominance.LowDominancePatternAlgo;
-import gr.uoi.cs.pythia.patterns.results.DominancePatternResult;
+import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
+import gr.uoi.cs.pythia.patterns.algos.dominance.HighDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.algos.dominance.LowDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.results.DominanceResult;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 
-public class DominancePatternAlgoTests {
+public class DominanceAlgoTests {
 
 	private Dataset<Row> dataset;
-	private HighDominancePatternAlgo highDominancePatternAlgo;
-	private LowDominancePatternAlgo lowDominancePatternAlgo;
+	private HighDominanceAlgo highDominanceAlgo;
+	private LowDominanceAlgo lowDominanceAlgo;
 	private String measurementColName;
 	private String xCoordinateColName;
 	private String yCoordinateColName;
 	
 	@Before
 	public void init() throws AnalysisException {
-		// Create high & low dominance pattern algo objects
-		highDominancePatternAlgo = (HighDominancePatternAlgo) 
-				new IPatternAlgoFactory()
-				.createPattern(PatternConstants.HIGH_DOMINANCE);
-		lowDominancePatternAlgo = (LowDominancePatternAlgo) 
-				new IPatternAlgoFactory()
-				.createPattern(PatternConstants.LOW_DOMINANCE);
-		
-		// set column names
+		// Set column names
 		measurementColName = "price";
 		xCoordinateColName = "model";
 		yCoordinateColName = "year";
 		
-		// and load the cars dataset (100 records version)
+		// Load the cars dataset (100 records version)
 		StructType schema = Patterns.createCarsDatasetSchema();
 		String path = String.format(
 				"src%stest%sresources%sdatasets%scars_100.csv", 
@@ -63,18 +55,22 @@ public class DominancePatternAlgoTests {
                 .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
                 .getOrCreate())
 			.createDataframeReader(path, schema).read();
+		
+		// Create high & low dominance pattern algo objects
+		highDominanceAlgo = new HighDominanceAlgo(dataset);
+		lowDominanceAlgo = new LowDominanceAlgo(dataset);
 	}
 	
 	@Test
 	public void testIdentifyHighDominanceWithOneCoordinate() {
-		DominancePatternResult expectedHighDominanceResults = 
+		DominanceResult expectedHighDominanceResults = 
 				createExpectedHighDominanceResultsForOneCoordinate();
 
-		highDominancePatternAlgo.identifyPatternWithOneCoordinate(
-				dataset, measurementColName, xCoordinateColName);
+		highDominanceAlgo.identifyDominanceWithOneCoordinate(
+				measurementColName, xCoordinateColName);
 		
-		DominancePatternResult actualHighDominanceResults = 
-				highDominancePatternAlgo.getLatestResult();
+		DominanceResult actualHighDominanceResults = 
+				highDominanceAlgo.getLatestResult();
 		
 		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
 		
@@ -82,44 +78,42 @@ public class DominancePatternAlgoTests {
 	
 	@Test
 	public void testIdentifyLowDominanceWithOneCoordinate() {
-		DominancePatternResult expectedLowDominanceResults = 
+		DominanceResult expectedLowDominanceResults = 
 				createExpectedLowDominanceResultsForOneCoordinate();
 		
-		lowDominancePatternAlgo.identifyPatternWithOneCoordinate(
-				dataset, measurementColName, xCoordinateColName);
+		lowDominanceAlgo.identifyDominanceWithOneCoordinate(
+				measurementColName, xCoordinateColName);
 		
-		DominancePatternResult actualLowDominanceResults = 
-				lowDominancePatternAlgo.getLatestResult();
+		DominanceResult actualLowDominanceResults = 
+				lowDominanceAlgo.getLatestResult();
 		
 		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
 	
 	@Test
 	public void testIdentifyHighDominanceWithTwoCoordinates() {
-		DominancePatternResult expectedHighDominanceResults = 
+		DominanceResult expectedHighDominanceResults = 
 				createExpectedHighDominanceResultsForTwoCoordinates();
 		
-		highDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-				dataset, measurementColName, 
-				xCoordinateColName, yCoordinateColName);
+		highDominanceAlgo.identifyDominanceWithTwoCoordinates(
+				measurementColName, xCoordinateColName, yCoordinateColName);
 		
-		DominancePatternResult actualHighDominanceResults = 
-				highDominancePatternAlgo.getLatestResult();
+		DominanceResult actualHighDominanceResults = 
+				highDominanceAlgo.getLatestResult();
 
 		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
 	}
 	
 	@Test
 	public void testIdentifyLowDominanceWithTwoCoordinates() {
-		DominancePatternResult expectedLowDominanceResults = 
+		DominanceResult expectedLowDominanceResults = 
 				createExpectedLowDominanceResultsForTwoCoordinates();
 		
-		lowDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-				dataset, measurementColName, 
-				xCoordinateColName, yCoordinateColName);
+		lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
+				measurementColName, xCoordinateColName, yCoordinateColName);
 		
-		DominancePatternResult actualLowDominanceResults = 
-				lowDominancePatternAlgo.getLatestResult();
+		DominanceResult actualLowDominanceResults = 
+				lowDominanceAlgo.getLatestResult();
 		
 		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
@@ -127,46 +121,42 @@ public class DominancePatternAlgoTests {
 	@Test
 	public void testIdentifyWithInvalidXCoordinate() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominancePatternAlgo.identifyPatternWithOneCoordinate(
-					dataset, measurementColName, "INVALID_COORDINATE");
+			highDominanceAlgo.identifyDominanceWithOneCoordinate(
+					measurementColName, "INVALID_COORDINATE");
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominancePatternAlgo.identifyPatternWithOneCoordinate(
-					dataset, measurementColName, "INVALID_COORDINATE");
+			lowDominanceAlgo.identifyDominanceWithOneCoordinate(
+					measurementColName, "INVALID_COORDINATE");
 		});
 	}
 	
 	@Test
 	public void testIdentifyWithInvalidYCoordinate() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-					dataset, measurementColName, 
-					xCoordinateColName, "INVALID_COORDINATE");
+			highDominanceAlgo.identifyDominanceWithTwoCoordinates(
+					measurementColName, xCoordinateColName, "INVALID_COORDINATE");
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-					dataset, measurementColName, 
-					xCoordinateColName, "INVALID_COORDINATE");
+			lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
+					measurementColName, xCoordinateColName, "INVALID_COORDINATE");
 		});
 	}
 	
 	@Test
 	public void testIdentifyWithInvalidMeasurement() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-					dataset, "INVALID_MEASUREMENT", 
-					xCoordinateColName, yCoordinateColName);
+			highDominanceAlgo.identifyDominanceWithTwoCoordinates(
+					"INVALID_MEASUREMENT", xCoordinateColName, yCoordinateColName);
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominancePatternAlgo.identifyPatternWithTwoCoordinates(
-					dataset, "INVALID_MEASUREMENT", 
-					xCoordinateColName, yCoordinateColName);
+			lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
+					"INVALID_MEASUREMENT", xCoordinateColName, yCoordinateColName);
 		});
 	}
 	
 	private void assertResultsAreEqual(
-			DominancePatternResult expected,
-			DominancePatternResult actual) {
+			DominanceResult expected,
+			DominanceResult actual) {
 		assertEquals(expected.getNumOfCoordinates(), actual.getNumOfCoordinates());
 		assertEquals(expected.getDominanceType(), actual.getDominanceType());
 		assertEquals(expected.getAggregationMethod(), actual.getAggregationMethod());
@@ -176,8 +166,8 @@ public class DominancePatternAlgoTests {
 		assertArrayEquals(expected.getIdentificationResults().toArray(), actual.getIdentificationResults().toArray());
 	}
 
-	private DominancePatternResult createExpectedHighDominanceResultsForOneCoordinate() {
-		DominancePatternResult expected = new DominancePatternResult(
+	private DominanceResult createExpectedHighDominanceResultsForOneCoordinate() {
+		DominanceResult expected = new DominanceResult(
 				PatternConstants.HIGH, "sum", 
 				measurementColName, xCoordinateColName);
 		expected.addIdentificationResult("Q3", 9956610.0, 100.0, true, "total high");
@@ -190,8 +180,8 @@ public class DominancePatternAlgoTests {
 		return expected;
 	}
 	
-	private DominancePatternResult createExpectedLowDominanceResultsForOneCoordinate() {
-		DominancePatternResult expected = new DominancePatternResult(
+	private DominanceResult createExpectedLowDominanceResultsForOneCoordinate() {
+		DominanceResult expected = new DominanceResult(
 				PatternConstants.LOW, "sum", 
 				measurementColName, xCoordinateColName);
 		
@@ -205,8 +195,8 @@ public class DominancePatternAlgoTests {
 	}
 	
 	@SuppressWarnings("serial")
-	private DominancePatternResult createExpectedHighDominanceResultsForTwoCoordinates() {
-		DominancePatternResult expected = new DominancePatternResult(
+	private DominanceResult createExpectedHighDominanceResultsForTwoCoordinates() {
+		DominanceResult expected = new DominanceResult(
 				PatternConstants.HIGH, "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
@@ -275,8 +265,8 @@ public class DominancePatternAlgoTests {
 	}
 	
 	@SuppressWarnings("serial")
-	private DominancePatternResult createExpectedLowDominanceResultsForTwoCoordinates() {
-		DominancePatternResult expected = new DominancePatternResult(
+	private DominanceResult createExpectedLowDominanceResultsForTwoCoordinates() {
+		DominanceResult expected = new DominanceResult(
 				PatternConstants.LOW, "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(

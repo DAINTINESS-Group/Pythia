@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.algos;
+package gr.uoi.cs.pythia.patterns.algos.distribution;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,16 +12,14 @@ import org.apache.spark.mllib.stat.KernelDensity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.patterns.PatternConstants;
+import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
 
-public class DistributionPatternAlgo implements IPatternAlgo {
+public class DistributionAlgo {
 
-	@Override
 	public String getPatternName() {
 		return PatternConstants.DISTRIBUTION;
 	}
 	
-	@Override
 	public void identifyPatternWithOneCoordinate(
 			Dataset<Row> dataset, 
 			String measurementColName, 
@@ -35,7 +33,7 @@ public class DistributionPatternAlgo implements IPatternAlgo {
 		JavaRDD<Double> data = jsc.parallelize(
 				  Arrays.asList(1.0, 1.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.0, 6.0, 7.0, 8.0, 9.0, 9.0));
 		
-		List<Double> datasetColumn = dataset.select("mileage")
+		List<Double> datasetColumn = dataset.select("price")
 				.collectAsList().stream()
 				.map(s -> Double.parseDouble(s.get(0) == null ? "0"  : s.get(0).toString()))
 				.collect(Collectors.toList());
@@ -52,7 +50,6 @@ public class DistributionPatternAlgo implements IPatternAlgo {
 		
 	}
 
-	@Override
 	public void identifyPatternWithTwoCoordinates(
 			Dataset<Row> dataset, 
 			String measurementColName, 
@@ -62,7 +59,6 @@ public class DistributionPatternAlgo implements IPatternAlgo {
 		
 	}
 
-	@Override
 	public void exportResultsToFile(String path) throws IOException {
 		// TODO Auto-generated method stub
 		

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns;
+package gr.uoi.cs.pythia.patterns.algos;
 
 public enum ColumnSelectionMode {
 	EXHAUSTIVE,

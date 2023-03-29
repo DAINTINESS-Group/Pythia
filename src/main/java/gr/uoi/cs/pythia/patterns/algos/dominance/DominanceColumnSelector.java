@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns;
+package gr.uoi.cs.pythia.patterns.algos.dominance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,13 +6,13 @@ import java.util.List;
 
 import org.apache.spark.sql.types.DataTypes;
 
+import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
 
 // TODO maybe add interface-factory for the different selection modes.
-// TODO Column selection might have to be performed separately for each pattern algo,
-// depending on whether each algo has specific needs for column selection or not.
-public class ColumnSelector {
+public class DominanceColumnSelector {
 
 	// Default column selection mode is SMART.
 	private ColumnSelectionMode columnSelectionMode = ColumnSelectionMode.SMART;
@@ -31,21 +31,20 @@ public class ColumnSelector {
 			DataTypes.DateType.toString()
 	};
 	
-	public ColumnSelector(
-			ColumnSelectionMode columnSelectionMode, 
-			String[] measurementColumns, 
-			String[] coordinateColumns) {
+	public DominanceColumnSelector(AnalysisParameters analysisParameters) {
 		this.measurementColumns = new ArrayList<String>();
 		this.coordinateColumns = new ArrayList<String>();
 		
-		if (columnSelectionMode != null) {
-			this.columnSelectionMode = columnSelectionMode;			
+		if (analysisParameters.getColumnSelectionMode() != null) {
+			this.columnSelectionMode = analysisParameters.getColumnSelectionMode();			
 		}
-		if (measurementColumns != null) {
-			this.measurementColumns.addAll(Arrays.asList(measurementColumns));
+		if (analysisParameters.getMeasurementColumns() != null) {
+			this.measurementColumns.addAll(Arrays.asList(
+					analysisParameters.getMeasurementColumns()));
 		}
-		if (coordinateColumns != null) {
-			this.coordinateColumns.addAll(Arrays.asList(coordinateColumns));
+		if (analysisParameters.getCoordinateColumns() != null) {
+			this.coordinateColumns.addAll(Arrays.asList(
+					analysisParameters.getCoordinateColumns()));
 		}
 	}
 

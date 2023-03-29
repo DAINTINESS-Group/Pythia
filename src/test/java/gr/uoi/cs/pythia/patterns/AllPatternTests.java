@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ColumnSelectorTests.class, DominancePatternAlgoTests.class })
+@SuiteClasses({ DominanceColumnSelectorTests.class, DominanceAlgoTests.class })
 public class AllPatternTests {
 
 }

@@ -11,7 +11,7 @@ import java.util.Locale;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
 
-public class DominancePatternResult {
+public class DominanceResult {
 
 	private int numOfCoordinates;
 	private String dominanceType;
@@ -33,7 +33,7 @@ public class DominancePatternResult {
 	public String getYCoordinateColName() { return yCoordinateColName; }
 	public List<Row> getIdentificationResults() { return identificationResults; }
 
-	public DominancePatternResult(
+	public DominanceResult(
 			String dominanceType,
 			String aggregationMethod,
 			String measurementColumnName, 
@@ -53,7 +53,7 @@ public class DominancePatternResult {
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 	}
 
-	public DominancePatternResult(
+	public DominanceResult(
 			String dominanceType,
 			String aggregationMethod,
 			String measurementColumnName, 

@@ -9,9 +9,10 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
 
 public class Patterns {
 
@@ -27,10 +28,13 @@ public class Patterns {
 				File.separator, File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
-        datasetProfiler.identifyPatternHighlights(
-        		ColumnSelectionMode.USER_SPECIFIED_ONLY, 
-        		new String[] {"price"}, 
-        		new String[] {"model", "year"});
+        datasetProfiler.identifyHighlightPatterns(
+        		new AnalysisParameters(
+        				ColumnSelectionMode.USER_SPECIFIED_ONLY, 
+                		new String[] {"price"}, 
+                		new String[] {"model", "year"},
+                		"results")
+        		);
 	}
 	
 	public static StructType createInternetUsageDatasetSchema() {
