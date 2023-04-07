@@ -122,8 +122,8 @@ public class DatasetProfiler implements IDatasetProfiler {
     Files.createDirectories(Paths.get(outputDirectory));
     datasetProfile.setOutputDirectory(outputDirectory);
   }
-
-  private void computeDescriptiveStats() {
+  // TODO change to private
+  public void computeDescriptiveStats() {
     DescriptiveStatisticsFactory factory = new DescriptiveStatisticsFactory();
     IDescriptiveStatisticsCalculator calculator = factory.getDefaultCalculator();
     calculator.computeDescriptiveStats(dataset, datasetProfile);

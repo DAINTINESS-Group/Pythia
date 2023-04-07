@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.config;
 
-import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.outlier.OutlierType;
 
 // TODO is this ok for input paramaters?
 // TODO maybe apply effective java builder pattern
@@ -8,6 +9,7 @@ public class AnalysisParameters {
 	
 	// Default column selection mode is SMART.
 	private ColumnSelectionMode columnSelectionMode = ColumnSelectionMode.SMART;
+	private OutlierType outlierType = OutlierType.Z_SCORE;
 	private String[] measurementColumns;
 	private String[] coordinateColumns;
 	private String outputFolderPath;
@@ -55,6 +57,14 @@ public class AnalysisParameters {
 
 	public void setOutputFolderPath(String outputFolderPath) {
 		this.outputFolderPath = outputFolderPath;
+	}
+
+	public OutlierType getOutlierType() {
+		return outlierType;
+	}
+
+	public void setOutlierType(OutlierType outlierType) {
+		this.outlierType = outlierType;
 	}
 
 }

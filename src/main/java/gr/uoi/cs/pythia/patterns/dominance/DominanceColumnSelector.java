@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.algos.dominance;
+package gr.uoi.cs.pythia.patterns.dominance;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import org.apache.spark.sql.types.DataTypes;
 import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 
 // TODO maybe add interface-factory for the different selection modes.
 public class DominanceColumnSelector {

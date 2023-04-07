@@ -10,16 +10,16 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 import gr.uoi.cs.pythia.config.AnalysisParameters;
-import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.DatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 
 public class Patterns {
 
 	// This is a dummy main method
 	// Its purpose is to assist with the development of highlight pattern identification
 	public static void main(String[] args) throws AnalysisException, IOException {
-		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+		DatasetProfiler datasetProfiler = (DatasetProfiler) new IDatasetProfilerFactory().createDatasetProfiler();
 		
 		StructType schema = createCarsDatasetSchema();
         String alias = "cars";
@@ -28,6 +28,7 @@ public class Patterns {
 				File.separator, File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
+		datasetProfiler.computeDescriptiveStats();
         datasetProfiler.identifyHighlightPatterns(
         		new AnalysisParameters(
         				ColumnSelectionMode.USER_SPECIFIED_ONLY, 

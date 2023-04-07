@@ -19,8 +19,7 @@ import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.algos.ColumnSelectionMode;
-import gr.uoi.cs.pythia.patterns.algos.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 
 public class DominanceColumnSelectorTests {
@@ -30,14 +29,20 @@ public class DominanceColumnSelectorTests {
 	@Before
 	public void init() throws AnalysisException, IOException {
 		// TODO: move this elsewhere?
+		
+		// TODO is this necessary here? 
 		TestsUtilities.setupResultsDir("patterns");
+		
 		// Register the cars dataset (100 records version)
 		StructType schema = Patterns.createCarsDatasetSchema();
-		String path = String.format(
-				"src%stest%sresources%sdatasets%scars_100.csv", 
+		String path = String.format("src%stest%sresources%sdatasets%scars_100.csv",
 				File.separator, File.separator, File.separator, File.separator);
 		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 	    datasetProfiler.registerDataset("cars", path, schema);
+	    
+		// TODO identify highlight patterns (including dominance column selection) 
+		// will eventually be performed internally within computeProfileOfDataset 
+	    // so we can't call this method here - how do we solve this?
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				TestsUtilities.getResultsDir("patterns"));
 	}

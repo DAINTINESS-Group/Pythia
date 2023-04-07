@@ -1,45 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <package id="1" language="java" name="gr.uoi.cs.pythia.patterns" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="508" y="317"/>    
-    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="2" language="java" name="gr.uoi.cs.pythia.patterns.algos" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/algos" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="400" y="439"/>    
-    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="3" language="java" name="gr.uoi.cs.pythia.patterns.algos.dominance" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/algos/dominance" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="399" y="610"/>    
-    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="4" language="java" name="gr.uoi.cs.pythia.patterns.results" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/results" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="642" y="439"/>    
-    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
-  </package>  
-  <dependency id="5">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="6">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="7">    
-    <bendpoint x="642" y="617"/>    
-    <end type="SOURCE" refId="3"/>    
+  <class id="1" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceAlgo" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceAlgo.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="304" y="320"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceColumnSelector.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="516" y="320"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="3" language="java" name="gr.uoi.cs.pythia.patterns.ColumnSelectionMode" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/ColumnSelectionMode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1027" y="321"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="4" language="java" name="gr.uoi.cs.pythia.patterns.PatternManager" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/PatternManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="839" y="272"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="gr.uoi.cs.pythia.patterns.IPatternManagerFactory" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/IPatternManagerFactory.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1024" y="224"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" language="java" name="gr.uoi.cs.pythia.patterns.IPatternManager" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/IPatternManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="838" y="178"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceConstants" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceConstants.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="305" y="827"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceResult" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceResult.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="41" y="320"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/LowDominanceAlgo.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="198" y="614"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/HighDominanceAlgo.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="398" y="614"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <dependency id="8">    
-    <bendpoint x="250" y="612"/>    
-    <bendpoint x="250" y="323"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
+  <association id="12">    
+    <bendpoint x="638" y="615"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="13" name="highDominanceAlgo"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="15">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="16" name="columnSelectionMode">        
+        <position height="0" width="0" x="290" y="-303"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1">        
+        <position height="0" width="0" x="290" y="-303"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="7"/>  
   </dependency>  
+  <association id="19">    
+    <bendpoint x="-13" y="589"/>    
+    <bendpoint x="-13" y="616"/>    
+    <bendpoint x="94" y="616"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="20" name="lowDominanceAlgo"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="23">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="24" name="results"/>      
+      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="27">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="28">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <generalization id="31">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

@@ -9,10 +9,11 @@ import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.algos.dominance.DominanceColumnSelector;
-import gr.uoi.cs.pythia.patterns.algos.dominance.HighDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.algos.dominance.LowDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.algos.outlier.ZScoreOutlierAlgo;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
+import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
 
 // TODO maybe add logging here
 public class PatternManager implements IPatternManager {
@@ -23,7 +24,7 @@ public class PatternManager implements IPatternManager {
 	
 	private HighDominanceAlgo highDominanceAlgo;
 	private LowDominanceAlgo lowDominanceAlgo;
-	private ZScoreOutlierAlgo zScoreOutlierAlgo;
+	private IOutlierAlgo outlierAlgo;
 	
 	public PatternManager(
 			Dataset<Row> dataset,
@@ -38,13 +39,14 @@ public class PatternManager implements IPatternManager {
 	private void initializePatternAlgos() {
 		highDominanceAlgo = new HighDominanceAlgo(dataset);
 		lowDominanceAlgo = new LowDominanceAlgo(dataset);
-		zScoreOutlierAlgo = new ZScoreOutlierAlgo();
+		outlierAlgo = new OutlierAlgoFactory()
+				.createOutlierAlgo(analysisParameters.getOutlierType());
 	}
 	
 	@Override
 	public void identifyHighlightPatterns() throws IOException {
 		identifyDominance();
-		identifyZScoreOutlier();
+		identifyOutliers();
 	}
 
 	private void identifyDominance() throws IOException {
@@ -65,14 +67,14 @@ public class PatternManager implements IPatternManager {
 		identifyDominanceWithTwoCoordinates(measurementColumns, coordinateColumns);
 
 		// Once identification is done, export the results.
-		highDominanceAlgo.exportResultsToFile(new File(String.format(
-				"src%stest%sresources%s%s_results.md",
-				File.separator, File.separator, File.separator,
-				highDominanceAlgo.getPatternName())).getAbsolutePath());
-		lowDominanceAlgo.exportResultsToFile(new File(String.format(
-				"src%stest%sresources%s%s_results.md",
-				File.separator, File.separator, File.separator,
-				lowDominanceAlgo.getPatternName())).getAbsolutePath());
+		highDominanceAlgo.exportResultsToFile(
+				new File(String.format("src%stest%sresources%s%s_results.md",
+						File.separator, File.separator, File.separator,
+						highDominanceAlgo.getPatternName())).getAbsolutePath());
+		lowDominanceAlgo.exportResultsToFile(
+				new File(String.format("src%stest%sresources%s%s_results.md",
+						File.separator, File.separator, File.separator,
+						lowDominanceAlgo.getPatternName())).getAbsolutePath());
 		
 		// TODO do we want to keep pattern results objects here?
 	}
@@ -102,9 +104,12 @@ public class PatternManager implements IPatternManager {
 		}
 	}
 
-	private void identifyZScoreOutlier() {
-		// TODO
-		zScoreOutlierAlgo.identifyZScoreOutliers();
+	private void identifyOutliers() throws IOException {
+		outlierAlgo.identifyOutliers(dataset, datasetProfile, analysisParameters);
+		outlierAlgo.exportResultsToFile(
+				new File(String.format("src%stest%sresources%s%s_results.md",
+				File.separator, File.separator, File.separator,
+				outlierAlgo.getPatternName())).getAbsolutePath());
 	}
 	
 }

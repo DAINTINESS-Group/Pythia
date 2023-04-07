@@ -19,10 +19,10 @@ import org.junit.Test;
 
 import gr.uoi.cs.pythia.client.Patterns;
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
-import gr.uoi.cs.pythia.patterns.algos.dominance.HighDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.algos.dominance.LowDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.results.DominanceResult;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceConstants;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
+import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 
 public class DominanceAlgoTests {
@@ -43,8 +43,7 @@ public class DominanceAlgoTests {
 		
 		// Load the cars dataset (100 records version)
 		StructType schema = Patterns.createCarsDatasetSchema();
-		String path = String.format(
-				"src%stest%sresources%sdatasets%scars_100.csv", 
+		String path = String.format("src%stest%sresources%sdatasets%scars_100.csv",
 				File.separator, File.separator, File.separator, File.separator);
 		SparkConfig sparkConfig = new SparkConfig();
 		
@@ -168,7 +167,7 @@ public class DominanceAlgoTests {
 
 	private DominanceResult createExpectedHighDominanceResultsForOneCoordinate() {
 		DominanceResult expected = new DominanceResult(
-				PatternConstants.HIGH, "sum", 
+				DominanceConstants.HIGH, "sum", 
 				measurementColName, xCoordinateColName);
 		expected.addIdentificationResult("Q3", 9956610.0, 100.0, true, "total high");
 		expected.addIdentificationResult("Q5", 2865320.0, 87.5, true, "partial high");
@@ -182,7 +181,7 @@ public class DominanceAlgoTests {
 	
 	private DominanceResult createExpectedLowDominanceResultsForOneCoordinate() {
 		DominanceResult expected = new DominanceResult(
-				PatternConstants.LOW, "sum", 
+				DominanceConstants.LOW, "sum", 
 				measurementColName, xCoordinateColName);
 		
 		expected.addIdentificationResult("A4", 6500.0, 100.0, true, "total low");
@@ -197,7 +196,7 @@ public class DominanceAlgoTests {
 	@SuppressWarnings("serial")
 	private DominanceResult createExpectedHighDominanceResultsForTwoCoordinates() {
 		DominanceResult expected = new DominanceResult(
-				PatternConstants.HIGH, "sum", 
+				DominanceConstants.HIGH, "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"Q3", Arrays.asList("A1", "A3", "A4", "A5", "A6", "Q2", "Q5", "S4"), 
@@ -267,7 +266,7 @@ public class DominanceAlgoTests {
 	@SuppressWarnings("serial")
 	private DominanceResult createExpectedLowDominanceResultsForTwoCoordinates() {
 		DominanceResult expected = new DominanceResult(
-				PatternConstants.LOW, "sum", 
+				DominanceConstants.LOW, "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"A4", Arrays.asList("A1", "A3", "A5", "A6", "Q2", "Q3", "Q5", "S4"), 

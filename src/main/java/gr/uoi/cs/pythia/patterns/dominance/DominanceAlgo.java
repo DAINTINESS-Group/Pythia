@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.algos.dominance;
+package gr.uoi.cs.pythia.patterns.dominance;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-
-import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
-import gr.uoi.cs.pythia.patterns.results.DominanceResult;
 
 public abstract class DominanceAlgo {
 
@@ -235,7 +232,7 @@ public abstract class DominanceAlgo {
 	}
 	
 	private boolean isHighlight(String highlightType) {
-		return highlightType != PatternConstants.EMPTY;
+		return highlightType != DominanceConstants.EMPTY;
 	}
 	
 	// TODO is it ok to use collectAsList here?
@@ -282,12 +279,12 @@ public abstract class DominanceAlgo {
 	// that describes the type of the highlight.
 	private String determineHighlightType(double dominancePercentage, String dominanceType) {
 		if (dominancePercentage >= TOTAL_DOMINANCE_THRESHOLD) {
-			return String.format("%s %s", PatternConstants.TOTAL, dominanceType);
+			return String.format("%s %s", DominanceConstants.TOTAL, dominanceType);
 		}
 		if (dominancePercentage >= PARTIAL_DOMINANCE_THRESHOLD) {
-			return String.format("%s %s", PatternConstants.PARTIAL, dominanceType);
+			return String.format("%s %s", DominanceConstants.PARTIAL, dominanceType);
 		}
-		return PatternConstants.EMPTY;
+		return DominanceConstants.EMPTY;
 	}
 	
 	public void exportResultsToFile(String path) throws IOException {

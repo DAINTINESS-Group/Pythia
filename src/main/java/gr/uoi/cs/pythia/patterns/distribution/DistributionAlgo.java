@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.algos.distribution;
+package gr.uoi.cs.pythia.patterns.distribution;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,12 +12,12 @@ import org.apache.spark.mllib.stat.KernelDensity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.patterns.algos.PatternConstants;
-
 public class DistributionAlgo {
 
+	private static final String DISTRIBUTION = "distribution";
+	
 	public String getPatternName() {
-		return PatternConstants.DISTRIBUTION;
+		return DISTRIBUTION;
 	}
 	
 	public void identifyPatternWithOneCoordinate(

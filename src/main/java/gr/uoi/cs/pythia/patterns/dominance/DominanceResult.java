@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.results;
+package gr.uoi.cs.pythia.patterns.dominance;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
