@@ -33,6 +33,7 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
@@ -48,6 +49,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
   private AnalysisParameters analysisParameters;
+  private boolean hasComputedDescriptiveStats;
 
   public DatasetProfiler() {
     SparkConfig sparkConfig = new SparkConfig();
@@ -58,10 +60,8 @@ public class DatasetProfiler implements IDatasetProfiler {
                 .master(sparkConfig.getMaster())
                 .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
                 .getOrCreate());
+    hasComputedDescriptiveStats = false;
   }
-
-  public DatasetProfile getDatasetProfile() { return datasetProfile; }
-  public Dataset<Row> getDataset() { return dataset; }
 
 @Override
   public void registerDataset(String alias, String path, StructType schema)
@@ -103,7 +103,15 @@ public class DatasetProfiler implements IDatasetProfiler {
     computeAllHistograms();
     computeAllPairsCorrelations();
     extractAllDecisionTrees();
-    // TODO add identifyPatternHighlights method call here
+    // TODO add identifyHighlightPatterns method call here
+    // once we decide how we pass analysis input parameters
+//    identifyHighlightPatterns(
+//    		new AnalysisParameters(
+//    				ColumnSelectionMode.USER_SPECIFIED_ONLY, 
+//            		new String[] {"price"}, 
+//            		new String[] {"model", "year"},
+//            		"results")
+//    		);
     return datasetProfile;
   }
 
@@ -122,12 +130,13 @@ public class DatasetProfiler implements IDatasetProfiler {
     Files.createDirectories(Paths.get(outputDirectory));
     datasetProfile.setOutputDirectory(outputDirectory);
   }
-  // TODO change to private
-  public void computeDescriptiveStats() {
+  
+  private void computeDescriptiveStats() {
     DescriptiveStatisticsFactory factory = new DescriptiveStatisticsFactory();
     IDescriptiveStatisticsCalculator calculator = factory.getDefaultCalculator();
     calculator.computeDescriptiveStats(dataset, datasetProfile);
     logger.info(String.format("Computed Descriptive Statistics Profile for dataset: '%s'", datasetProfile.getAlias()));
+    hasComputedDescriptiveStats = true;
   }
 
   private void computeAllHistograms() throws IOException {
@@ -154,11 +163,12 @@ public class DatasetProfiler implements IDatasetProfiler {
   @Override
   public void identifyHighlightPatterns(AnalysisParameters analysisParameters)
 		  throws IOException {
-	  new IPatternManagerFactory()
-			  .createPatternManager(dataset, datasetProfile, analysisParameters)
-			  .identifyHighlightPatterns();
-	  logger.info(String.format("Identified highlight patterns for %s",
-			  datasetProfile.getPath()));
+	  if (!hasComputedDescriptiveStats) computeDescriptiveStats();
+	  IPatternManagerFactory factory = new IPatternManagerFactory();
+	  IPatternManager patternManager = factory.createPatternManager(
+			  dataset, datasetProfile, analysisParameters);
+	  patternManager.identifyHighlightPatterns();
+	  logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
   }
   
   @Override

@@ -4,47 +4,24 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.client.Patterns;
 import gr.uoi.cs.pythia.config.AnalysisParameters;
-import gr.uoi.cs.pythia.engine.IDatasetProfiler;
-import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
-import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 
 public class DominanceColumnSelectorTests {
-
-	private  DatasetProfile datasetProfile;
+	
+	private DatasetProfile datasetProfile;
 	
 	@Before
-	public void init() throws AnalysisException, IOException {
-		// TODO: move this elsewhere?
-		
-		// TODO is this necessary here? 
-		TestsUtilities.setupResultsDir("patterns");
-		
-		// Register the cars dataset (100 records version)
-		StructType schema = Patterns.createCarsDatasetSchema();
-		String path = String.format("src%stest%sresources%sdatasets%scars_100.csv",
-				File.separator, File.separator, File.separator, File.separator);
-		IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-	    datasetProfiler.registerDataset("cars", path, schema);
-	    
-		// TODO identify highlight patterns (including dominance column selection) 
-		// will eventually be performed internally within computeProfileOfDataset 
-	    // so we can't call this method here - how do we solve this?
-		datasetProfile = datasetProfiler.computeProfileOfDataset(
-				TestsUtilities.getResultsDir("patterns"));
+	public void init() throws AnalysisException {
+		datasetProfile = AllPatternTests.patternsResource.getDatasetProfile();
 	}
 	
 	@Test

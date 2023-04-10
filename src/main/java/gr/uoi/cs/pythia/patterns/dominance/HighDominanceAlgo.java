@@ -5,6 +5,7 @@ import org.apache.spark.sql.Row;
 
 public class HighDominanceAlgo extends DominanceAlgo {
 
+	private static final String HIGH = "high";
 	private static final String HIGH_DOMINANCE = "high_dominance";
 	
 	public HighDominanceAlgo(Dataset<Row> dataset) {
@@ -15,10 +16,12 @@ public class HighDominanceAlgo extends DominanceAlgo {
 	public String getPatternName() {
 		return HIGH_DOMINANCE;
 	}
+	
 	@Override
-	protected String getDominanceType() {
-		return DominanceConstants.HIGH;
+	public String getDominanceType() {
+		return HIGH;
 	}
+	
 	@Override
 	protected boolean isDominant(double valueA, double valueB) {
 		return valueA > valueB;

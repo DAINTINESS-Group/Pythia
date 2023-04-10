@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,18 +11,12 @@ import java.util.List;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.client.Patterns;
-import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceConstants;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
 import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
-import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 
 public class DominanceAlgoTests {
 
@@ -41,19 +34,8 @@ public class DominanceAlgoTests {
 		xCoordinateColName = "model";
 		yCoordinateColName = "year";
 		
-		// Load the cars dataset (100 records version)
-		StructType schema = Patterns.createCarsDatasetSchema();
-		String path = String.format("src%stest%sresources%sdatasets%scars_100.csv",
-				File.separator, File.separator, File.separator, File.separator);
-		SparkConfig sparkConfig = new SparkConfig();
-		
-		dataset = new IDatasetReaderFactory(
-			SparkSession.builder()
-				.appName(sparkConfig.getAppName())
-                .master(sparkConfig.getMaster())
-                .config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse())
-                .getOrCreate())
-			.createDataframeReader(path, schema).read();
+		// Get dataset
+		dataset = AllPatternTests.patternsResource.getDataset();
 		
 		// Create high & low dominance pattern algo objects
 		highDominanceAlgo = new HighDominanceAlgo(dataset);
@@ -167,7 +149,7 @@ public class DominanceAlgoTests {
 
 	private DominanceResult createExpectedHighDominanceResultsForOneCoordinate() {
 		DominanceResult expected = new DominanceResult(
-				DominanceConstants.HIGH, "sum", 
+				"high", "sum", 
 				measurementColName, xCoordinateColName);
 		expected.addIdentificationResult("Q3", 9956610.0, 100.0, true, "total high");
 		expected.addIdentificationResult("Q5", 2865320.0, 87.5, true, "partial high");
@@ -181,7 +163,7 @@ public class DominanceAlgoTests {
 	
 	private DominanceResult createExpectedLowDominanceResultsForOneCoordinate() {
 		DominanceResult expected = new DominanceResult(
-				DominanceConstants.LOW, "sum", 
+				"low", "sum", 
 				measurementColName, xCoordinateColName);
 		
 		expected.addIdentificationResult("A4", 6500.0, 100.0, true, "total low");
@@ -196,7 +178,7 @@ public class DominanceAlgoTests {
 	@SuppressWarnings("serial")
 	private DominanceResult createExpectedHighDominanceResultsForTwoCoordinates() {
 		DominanceResult expected = new DominanceResult(
-				DominanceConstants.HIGH, "sum", 
+				"high", "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"Q3", Arrays.asList("A1", "A3", "A4", "A5", "A6", "Q2", "Q5", "S4"), 
@@ -266,7 +248,7 @@ public class DominanceAlgoTests {
 	@SuppressWarnings("serial")
 	private DominanceResult createExpectedLowDominanceResultsForTwoCoordinates() {
 		DominanceResult expected = new DominanceResult(
-				DominanceConstants.LOW, "sum", 
+				"low", "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName, null);
 		expected.addIdentificationResult(
 				"A4", Arrays.asList("A1", "A3", "A5", "A6", "Q2", "Q3", "Q5", "S4"), 

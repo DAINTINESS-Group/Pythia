@@ -70,4 +70,66 @@ public class TestsDatasetSchemas {
                         new StructField("class", DataTypes.StringType, true, Metadata.empty()),
                 });
     }
+    
+	public static StructType getInternetUsageCsvSchema() {
+		return new StructType(
+                new StructField[]{
+                        new StructField("name", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("start_time", DataTypes.TimestampType, true, Metadata.empty()),
+                        new StructField("usage_time", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("IP", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("MAC", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("upload", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("download", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("total_transfer", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("session_break_reason", DataTypes.StringType, true, Metadata.empty()),
+                });
+	}
+	
+	public static StructType getGooglePlaystoreAppsCsvSchema() {
+		return new StructType(
+                new StructField[]{
+                        new StructField("App Name", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("App Id", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Category", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Rating", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("Rating Count", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("Installs", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Minimum Installs", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("Maximum Installs", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("Free", DataTypes.BooleanType, true, Metadata.empty()),
+                        new StructField("Price", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("Currency", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Size", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Minimum Android", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Developer Id", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Developer Website", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Developer Email", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Released", DataTypes.DateType, true, Metadata.empty()),
+                        new StructField("Last Updated", DataTypes.DateType, true, Metadata.empty()),
+                        new StructField("Content Rating", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Privacy Policy", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("Ad Supported", DataTypes.BooleanType, true, Metadata.empty()),
+                        new StructField("In App Purchases", DataTypes.BooleanType, true, Metadata.empty()),
+                        new StructField("Editors Choice", DataTypes.BooleanType, true, Metadata.empty()),
+                        new StructField("Scraped Time", DataTypes.DateType, true, Metadata.empty()),
+                });
+	}
+
+	public static StructType getCarsCsvSchema() {
+		return new StructType(
+                new StructField[]{
+                        new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("model", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("year", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("price", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("transmission", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("mileage", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("fuelType", DataTypes.StringType, true, Metadata.empty()),
+                        new StructField("tax", DataTypes.IntegerType, true, Metadata.empty()),
+                        new StructField("mpg", DataTypes.DoubleType, true, Metadata.empty()),
+                        new StructField("engineSize", DataTypes.DoubleType, true, Metadata.empty()),
+                });
+	}
+	
 }

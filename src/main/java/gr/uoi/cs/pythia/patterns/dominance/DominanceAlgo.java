@@ -15,6 +15,10 @@ import org.apache.spark.sql.Row;
 
 public abstract class DominanceAlgo {
 
+	private static final String TOTAL = "total";
+	private static final String PARTIAL = "partial";
+	private static final String EMPTY = "-";
+	
 	private static final double TOTAL_DOMINANCE_THRESHOLD = 100.0;
 	private static final double PARTIAL_DOMINANCE_THRESHOLD = 75.0;
 	private static final int TOP_K_FILTERING_AMOUNT = 6;
@@ -22,9 +26,9 @@ public abstract class DominanceAlgo {
 	private List<DominanceResult> results;
 	private Dataset<Row> dataset;
 	
-	public abstract String getPatternName();
-	protected abstract String getDominanceType();
 	protected abstract boolean isDominant(double valueA, double valueB);
+	public abstract String getDominanceType();
+	public abstract String getPatternName();
 	
 	public DominanceAlgo(Dataset<Row> dataset) {
 		this.results = new ArrayList<DominanceResult>();
@@ -232,7 +236,7 @@ public abstract class DominanceAlgo {
 	}
 	
 	private boolean isHighlight(String highlightType) {
-		return highlightType != DominanceConstants.EMPTY;
+		return highlightType != EMPTY;
 	}
 	
 	// TODO is it ok to use collectAsList here?
@@ -279,12 +283,12 @@ public abstract class DominanceAlgo {
 	// that describes the type of the highlight.
 	private String determineHighlightType(double dominancePercentage, String dominanceType) {
 		if (dominancePercentage >= TOTAL_DOMINANCE_THRESHOLD) {
-			return String.format("%s %s", DominanceConstants.TOTAL, dominanceType);
+			return String.format("%s %s", TOTAL, dominanceType);
 		}
 		if (dominancePercentage >= PARTIAL_DOMINANCE_THRESHOLD) {
-			return String.format("%s %s", DominanceConstants.PARTIAL, dominanceType);
+			return String.format("%s %s", PARTIAL, dominanceType);
 		}
-		return DominanceConstants.EMPTY;
+		return EMPTY;
 	}
 	
 	public void exportResultsToFile(String path) throws IOException {

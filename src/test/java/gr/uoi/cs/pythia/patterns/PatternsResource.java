@@ -1,0 +1,50 @@
+package gr.uoi.cs.pythia.patterns;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.types.StructType;
+import org.junit.rules.ExternalResource;
+
+import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+
+public class PatternsResource extends ExternalResource {
+
+    private Dataset<Row> dataset;
+    private DatasetProfile datasetProfile;
+    
+    public Dataset<Row> getDataset() {
+        return dataset;
+    }
+
+    public DatasetProfile getDatasetProfile() {
+        return datasetProfile;
+    }
+    
+    @Override
+    protected void before() throws Throwable {
+        super.before();
+        TestsUtilities.setupResultsDir("patterns");
+        initializeProfile();
+    }
+
+	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
+        StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
+        IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
+        datasetProfiler.registerDataset("cars", datasetPath, schema);
+        Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
+        dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
+        datasetProfile = datasetProfiler.computeProfileOfDataset(
+                TestsUtilities.getResultsDir("patterns"));
+	}
+    
+}
