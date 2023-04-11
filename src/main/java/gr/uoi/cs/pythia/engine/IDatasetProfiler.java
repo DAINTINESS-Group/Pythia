@@ -5,9 +5,9 @@ import java.io.IOException;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 
 public interface IDatasetProfiler {
 
@@ -41,5 +41,5 @@ public interface IDatasetProfiler {
   
   // TODO this method should be removed from here & set to private at DatasetProfiler
   // once it is determined that the dev patterns main method is no longer required
-  void identifyHighlightPatterns(AnalysisParameters analysisParameters) throws IOException;
+  void identifyHighlightPatterns(DominanceAnalysisParameters dominanceAnalysisParameters) throws IOException;
 }

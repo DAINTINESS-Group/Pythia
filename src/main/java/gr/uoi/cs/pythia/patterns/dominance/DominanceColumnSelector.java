@@ -6,16 +6,14 @@ import java.util.List;
 
 import org.apache.spark.sql.types.DataTypes;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
 
 // TODO maybe add interface-factory for the different selection modes.
 public class DominanceColumnSelector {
 
 	// Default column selection mode is SMART.
-	private ColumnSelectionMode columnSelectionMode = ColumnSelectionMode.SMART;
+	private DominanceColumnSelectionMode dominanceColumnSelectionMode = DominanceColumnSelectionMode.SMART;
 	private List<String> measurementColumns;
 	private List<String> coordinateColumns;
 	
@@ -31,28 +29,28 @@ public class DominanceColumnSelector {
 			DataTypes.DateType.toString()
 	};
 	
-	public DominanceColumnSelector(AnalysisParameters analysisParameters) {
+	public DominanceColumnSelector(DominanceAnalysisParameters dominanceAnalysisParameters) {
 		this.measurementColumns = new ArrayList<String>();
 		this.coordinateColumns = new ArrayList<String>();
 		
-		if (analysisParameters.getColumnSelectionMode() != null) {
-			this.columnSelectionMode = analysisParameters.getColumnSelectionMode();			
+		if (dominanceAnalysisParameters.getColumnSelectionMode() != null) {
+			this.dominanceColumnSelectionMode = dominanceAnalysisParameters.getColumnSelectionMode();			
 		}
-		if (analysisParameters.getMeasurementColumns() != null) {
+		if (dominanceAnalysisParameters.getMeasurementColumns() != null) {
 			this.measurementColumns.addAll(Arrays.asList(
-					analysisParameters.getMeasurementColumns()));
+					dominanceAnalysisParameters.getMeasurementColumns()));
 		}
-		if (analysisParameters.getCoordinateColumns() != null) {
+		if (dominanceAnalysisParameters.getCoordinateColumns() != null) {
 			this.coordinateColumns.addAll(Arrays.asList(
-					analysisParameters.getCoordinateColumns()));
+					dominanceAnalysisParameters.getCoordinateColumns()));
 		}
 	}
 
 	public List<String> selectMeasurementColumns(DatasetProfile datasetProfile) {
-		if (columnSelectionMode.equals(ColumnSelectionMode.EXHAUSTIVE)) {
+		if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.EXHAUSTIVE)) {
 			selectAllCandidateMeasurementColumns(datasetProfile);
 		}
-		else if (columnSelectionMode.equals(ColumnSelectionMode.SMART)) {
+		else if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.SMART)) {
 			selectInterestingMeasurementColumns(datasetProfile);
 		}
 		validateMeasurementColumns(datasetProfile);
@@ -60,10 +58,10 @@ public class DominanceColumnSelector {
 	}
 	
 	public List<String> selectCoordinateColumns(DatasetProfile datasetProfile) {
-		if (columnSelectionMode.equals(ColumnSelectionMode.EXHAUSTIVE)) {
+		if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.EXHAUSTIVE)) {
 			selectAllCandidateCoordinateColumns(datasetProfile);
 		}
-		else if (columnSelectionMode.equals(ColumnSelectionMode.SMART)) {
+		else if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.SMART)) {
 			selectInterestingCoordinateColumns(datasetProfile);
 		}
 		validateCoordinateColumns(datasetProfile);

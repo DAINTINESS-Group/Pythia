@@ -20,7 +20,6 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
@@ -35,6 +34,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
@@ -48,7 +48,7 @@ public class DatasetProfiler implements IDatasetProfiler {
   private final IDatasetReaderFactory dataFrameReaderFactory;
   private DatasetProfile datasetProfile;
   private Dataset<Row> dataset;
-  private AnalysisParameters analysisParameters;
+  private DominanceAnalysisParameters dominanceAnalysisParameters;
   private boolean hasComputedDescriptiveStats;
 
   public DatasetProfiler() {
@@ -106,8 +106,8 @@ public class DatasetProfiler implements IDatasetProfiler {
     // TODO add identifyHighlightPatterns method call here
     // once we decide how we pass analysis input parameters
 //    identifyHighlightPatterns(
-//    		new AnalysisParameters(
-//    				ColumnSelectionMode.USER_SPECIFIED_ONLY, 
+//    		new DominanceAnalysisParameters(
+//    				DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
 //            		new String[] {"price"}, 
 //            		new String[] {"model", "year"},
 //            		"results")
@@ -161,12 +161,12 @@ public class DatasetProfiler implements IDatasetProfiler {
   }
 
   @Override
-  public void identifyHighlightPatterns(AnalysisParameters analysisParameters)
+  public void identifyHighlightPatterns(DominanceAnalysisParameters dominanceAnalysisParameters)
 		  throws IOException {
 	  if (!hasComputedDescriptiveStats) computeDescriptiveStats();
 	  IPatternManagerFactory factory = new IPatternManagerFactory();
 	  IPatternManager patternManager = factory.createPatternManager(
-			  dataset, datasetProfile, analysisParameters);
+			  dataset, datasetProfile, dominanceAnalysisParameters);
 	  patternManager.identifyHighlightPatterns();
 	  logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
   }

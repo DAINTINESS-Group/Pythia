@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 
 public interface IOutlierAlgo {
 
@@ -16,7 +16,7 @@ public interface IOutlierAlgo {
 	void identifyOutliers(
 			Dataset<Row> dataset, 
 			DatasetProfile datasetProfile,
-			AnalysisParameters analysisParameters);
+			DominanceAnalysisParameters dominanceAnalysisParameters);
 
 	List<OutlierResult> getResults();
 	

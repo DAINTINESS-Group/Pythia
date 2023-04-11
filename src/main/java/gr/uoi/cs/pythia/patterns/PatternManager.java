@@ -7,20 +7,21 @@ import java.util.List;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
 import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
+import gr.uoi.cs.pythia.patterns.outlier.OutlierType;
 
 // TODO maybe add logging here
 public class PatternManager implements IPatternManager {
 	
 	private Dataset<Row> dataset;
 	private DatasetProfile datasetProfile;
-	private AnalysisParameters analysisParameters;
+	private DominanceAnalysisParameters dominanceAnalysisParameters;
 	
 	private HighDominanceAlgo highDominanceAlgo;
 	private LowDominanceAlgo lowDominanceAlgo;
@@ -29,10 +30,10 @@ public class PatternManager implements IPatternManager {
 	public PatternManager(
 			Dataset<Row> dataset,
 			DatasetProfile datasetProfile,
-			AnalysisParameters analysisParameters) {
+			DominanceAnalysisParameters dominanceAnalysisParameters) {
 		this.dataset = dataset;
 		this.datasetProfile = datasetProfile;
-		this.analysisParameters = analysisParameters;
+		this.dominanceAnalysisParameters = dominanceAnalysisParameters;
 		initializePatternAlgos();
 	}
 	
@@ -40,7 +41,7 @@ public class PatternManager implements IPatternManager {
 		highDominanceAlgo = new HighDominanceAlgo(dataset);
 		lowDominanceAlgo = new LowDominanceAlgo(dataset);
 		outlierAlgo = new OutlierAlgoFactory()
-				.createOutlierAlgo(analysisParameters.getOutlierType());
+				.createOutlierAlgo(OutlierType.Z_SCORE);
 	}
 	
 	@Override
@@ -50,7 +51,7 @@ public class PatternManager implements IPatternManager {
 	}
 
 	private void identifyDominance() throws IOException {
-		DominanceColumnSelector columnSelector = new DominanceColumnSelector(analysisParameters);
+		DominanceColumnSelector columnSelector = new DominanceColumnSelector(dominanceAnalysisParameters);
 		
 		// Select the measurement & coordinate columns for dominance highlight identification
 		List<String> measurementColumns = columnSelector.selectMeasurementColumns(datasetProfile);
@@ -105,7 +106,7 @@ public class PatternManager implements IPatternManager {
 	}
 
 	private void identifyOutliers() throws IOException {
-		outlierAlgo.identifyOutliers(dataset, datasetProfile, analysisParameters);
+		outlierAlgo.identifyOutliers(dataset, datasetProfile, dominanceAnalysisParameters);
 		outlierAlgo.exportResultsToFile(
 				new File(String.format("src%stest%sresources%s%s_results.md",
 				File.separator, File.separator, File.separator,

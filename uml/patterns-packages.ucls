@@ -21,9 +21,10 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="3" language="java" name="gr.uoi.cs.pythia.patterns.ColumnSelectionMode" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/ColumnSelectionMode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1027" y="321"/>    
+  <enumeration id="3" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode" 
+    project="Pythia" file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceColumnSelectionMode.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="784" y="275"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -32,7 +33,7 @@
   </enumeration>  
   <class id="4" language="java" name="gr.uoi.cs.pythia.patterns.PatternManager" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/PatternManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="839" y="272"/>    
+    <position height="-1" width="-1" x="770" y="439"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -42,7 +43,7 @@
   <class id="5" language="java" name="gr.uoi.cs.pythia.patterns.IPatternManagerFactory" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/IPatternManagerFactory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1024" y="224"/>    
+    <position height="-1" width="-1" x="955" y="391"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
@@ -51,24 +52,14 @@
   </class>  
   <interface id="6" language="java" name="gr.uoi.cs.pythia.patterns.IPatternManager" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/IPatternManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="838" y="178"/>    
+    <position height="-1" width="-1" x="769" y="345"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </interface>  
-  <class id="7" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceConstants" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceConstants.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="305" y="827"/>    
-    <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceResult" project="Pythia" 
+  <class id="7" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceResult" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceResult.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="41" y="320"/>    
@@ -78,102 +69,87 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo" project="Pythia" 
+  <class id="8" language="java" name="gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/LowDominanceAlgo.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="198" y="614"/>    
+    <position height="-1" width="-1" x="240" y="563"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo" project="Pythia" 
+  <class id="9" language="java" name="gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/HighDominanceAlgo.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="398" y="614"/>    
+    <position height="-1" width="-1" x="347" y="487"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <dependency id="11">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
   </dependency>  
-  <association id="12">    
-    <bendpoint x="638" y="615"/>    
+  <association id="11">    
+    <bendpoint x="369" y="563"/>    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="13" name="highDominanceAlgo"/>      
-      <multiplicity id="14" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="15">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="16" name="columnSelectionMode">        
-        <position height="0" width="0" x="290" y="-303"/>      
+      <attribute id="12" name="lowDominanceAlgo">        
+        <position height="0" width="0" x="-10" y="-50"/>      
       </attribute>      
-      <multiplicity id="17" minimum="0" maximum="1">        
-        <position height="0" width="0" x="290" y="-303"/>      
+      <multiplicity id="13" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-10" y="-50"/>      
       </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="18">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <association id="19">    
-    <bendpoint x="-13" y="589"/>    
-    <bendpoint x="-13" y="616"/>    
-    <bendpoint x="94" y="616"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="20" name="lowDominanceAlgo"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="22">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <association id="23">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="24" name="results"/>      
-      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="26">    
+  <association id="14">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="15" name="results">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="17">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="6"/>  
   </dependency>  
-  <dependency id="27">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <realization id="28">    
+  <generalization id="18">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <realization id="19">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="30">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <generalization id="31">    
+  <generalization id="20">    
     <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="22">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="23" name="highDominanceAlgo">        
+        <position height="0" width="0" x="-49" y="-72"/>      
+      </attribute>      
+      <multiplicity id="24" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-49" y="-72"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

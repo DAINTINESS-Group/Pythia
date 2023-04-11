@@ -1,38 +1,35 @@
-package gr.uoi.cs.pythia.config;
-
-import gr.uoi.cs.pythia.patterns.ColumnSelectionMode;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierType;
+package gr.uoi.cs.pythia.patterns.dominance;
 
 // TODO is this ok for input paramaters?
 // TODO maybe apply effective java builder pattern
-public class AnalysisParameters {
+public class DominanceAnalysisParameters {
 	
 	// Default column selection mode is SMART.
-	private ColumnSelectionMode columnSelectionMode = ColumnSelectionMode.SMART;
-	private OutlierType outlierType = OutlierType.Z_SCORE;
+	private DominanceColumnSelectionMode dominanceColumnSelectionMode = DominanceColumnSelectionMode.SMART;
+	//private OutlierType outlierType = OutlierType.Z_SCORE;
 	private String[] measurementColumns;
 	private String[] coordinateColumns;
 	private String outputFolderPath;
 
-	public AnalysisParameters(
-			ColumnSelectionMode columnSelectionMode,
+	public DominanceAnalysisParameters(
+			DominanceColumnSelectionMode dominanceColumnSelectionMode,
 			String[] measurementColumns, 
 			String[] coordinateColumns,
 			String outputFolderPath) {
-		this.columnSelectionMode = columnSelectionMode;
+		this.dominanceColumnSelectionMode = dominanceColumnSelectionMode;
 		this.measurementColumns = measurementColumns;
 		this.coordinateColumns = coordinateColumns;
 		this.outputFolderPath = outputFolderPath;
 	}
 
-	public AnalysisParameters() {}
+	public DominanceAnalysisParameters() {}
 
-	public ColumnSelectionMode getColumnSelectionMode() {
-		return columnSelectionMode;
+	public DominanceColumnSelectionMode getColumnSelectionMode() {
+		return dominanceColumnSelectionMode;
 	}
 
-	public void setColumnSelectionMode(ColumnSelectionMode columnSelectionMode) {
-		this.columnSelectionMode = columnSelectionMode;
+	public void setColumnSelectionMode(DominanceColumnSelectionMode dominanceColumnSelectionMode) {
+		this.dominanceColumnSelectionMode = dominanceColumnSelectionMode;
 	}
 
 	public String[] getMeasurementColumns() {
@@ -59,12 +56,12 @@ public class AnalysisParameters {
 		this.outputFolderPath = outputFolderPath;
 	}
 
-	public OutlierType getOutlierType() {
-		return outlierType;
-	}
-
-	public void setOutlierType(OutlierType outlierType) {
-		this.outlierType = outlierType;
-	}
+//	public OutlierType getOutlierType() {
+//		return outlierType;
+//	}
+//
+//	public void setOutlierType(OutlierType outlierType) {
+//		this.outlierType = outlierType;
+//	}
 
 }

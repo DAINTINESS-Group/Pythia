@@ -10,8 +10,8 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.config.AnalysisParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
@@ -22,7 +22,7 @@ public class ZScoreOutlierAlgoTests {
 	private IOutlierAlgo zScoreOutlierAlgo;
 	
 	// TODO not sure if we need this - to be discussed
-	private AnalysisParameters analysisParameters;
+	private DominanceAnalysisParameters dominanceAnalysisParameters;
 	
 	@Before
 	public void init() {
@@ -34,7 +34,7 @@ public class ZScoreOutlierAlgoTests {
 		Dataset<Row> dataset = AllPatternTests.patternsResource.getDataset();
 		DatasetProfile datasetProfile = AllPatternTests.patternsResource.getDatasetProfile();
 		List<OutlierResult> expected =  createExpectedZScoreOutlierResults();
-		zScoreOutlierAlgo.identifyOutliers(dataset, datasetProfile, analysisParameters);
+		zScoreOutlierAlgo.identifyOutliers(dataset, datasetProfile, dominanceAnalysisParameters);
 		List<OutlierResult> actual = zScoreOutlierAlgo.getResults();
 		
 		for (int i=0; i<actual.size(); i++) {
