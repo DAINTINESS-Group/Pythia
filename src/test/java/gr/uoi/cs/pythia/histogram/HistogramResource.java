@@ -2,6 +2,7 @@ package gr.uoi.cs.pythia.histogram;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.engine.DatasetProfilerExecParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
@@ -42,6 +43,12 @@ public class HistogramResource extends ExternalResource {
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        datasetProfile = datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("histogram"));
+        //datasetProfile = datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("histogram"));
+        boolean shouldRunDescriptiveStats = true; boolean shouldRunHistograms = true;
+    	boolean shouldRunAllPairsCorrelations= true; boolean shouldRunDecisionTrees= true; boolean shouldRunHighlightPatterns = false;
+
+    	datasetProfile = datasetProfiler.computeProfileOfDataset(new DatasetProfilerExecParameters(TestsUtilities.getResultsDir("histogram"), shouldRunDescriptiveStats,  
+        		 shouldRunHistograms, shouldRunAllPairsCorrelations,  shouldRunDecisionTrees,  shouldRunHighlightPatterns));
+
     }
 }

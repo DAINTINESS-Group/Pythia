@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.report;
 
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.engine.DatasetProfilerExecParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
@@ -35,6 +36,13 @@ public class ReportResource extends ExternalResource {
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("report"));
+        
+        boolean shouldRunDescriptiveStats = true; boolean shouldRunHistograms = true;
+    	boolean shouldRunAllPairsCorrelations= true; boolean shouldRunDecisionTrees= true; boolean shouldRunHighlightPatterns = false;
+
+    	datasetProfiler.computeProfileOfDataset(new DatasetProfilerExecParameters(TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,  
+        		 shouldRunHistograms, shouldRunAllPairsCorrelations,  shouldRunDecisionTrees,  shouldRunHighlightPatterns));
+        
+        
     }
 }
