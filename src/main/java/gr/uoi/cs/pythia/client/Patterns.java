@@ -9,11 +9,14 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 
+// TODO this class can most likely be deleted
+// dataset profiler parameters allow us to select which parts of the dataset profiling 
+// will be executed and therefore the normal main method could be used for patterns development.
 public class Patterns {
 
 	// This is a dummy main method
@@ -28,13 +31,26 @@ public class Patterns {
 				File.separator, File.separator, File.separator, File.separator);
 		
 		datasetProfiler.registerDataset(alias, path, schema);
-        datasetProfiler.identifyHighlightPatterns(
-        		new DominanceAnalysisParameters(
-        				DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
-                		new String[] {"price"}, 
-                		new String[] {"model", "year"},
-                		"results")
-        		);
+		datasetProfiler.declareDominanceParameters(
+				DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
+				new String[] { "price" }, 
+				new String[] { "model", "year" }
+				);
+		
+		boolean shouldRunDescriptiveStats = true;
+		boolean shouldRunHistograms = true;
+		boolean shouldRunAllPairsCorrelations = false;
+		boolean shouldRunDecisionTrees = false;
+		boolean shouldRunHighlightPatterns = true;
+
+		datasetProfiler.computeProfileOfDataset(
+				new DatasetProfilerParameters(
+						"results", 
+						shouldRunDescriptiveStats,
+						shouldRunHistograms, 
+						shouldRunAllPairsCorrelations,
+						shouldRunDecisionTrees, 
+						shouldRunHighlightPatterns));
 	}
 	
 	public static StructType getCarsCsvSchema() {

@@ -10,7 +10,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
-import gr.uoi.cs.pythia.engine.DatasetProfilerExecParameters;
+import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -42,16 +42,23 @@ public class PatternsResource extends ExternalResource {
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
+        
+        // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        //datasetProfile = datasetProfiler.computeProfileOfDataset(TestsUtilities.getResultsDir("patterns"));
         
-        boolean shouldRunDescriptiveStats = true; boolean shouldRunHistograms = true;
-    	boolean shouldRunAllPairsCorrelations= true; boolean shouldRunDecisionTrees= true; boolean shouldRunHighlightPatterns = false;
+		boolean shouldRunDescriptiveStats = true;
+		boolean shouldRunHistograms = false;
+		boolean shouldRunAllPairsCorrelations = false;
+		boolean shouldRunDecisionTrees = false;
+		boolean shouldRunHighlightPatterns = false;
 
-    	datasetProfile = datasetProfiler.computeProfileOfDataset(new DatasetProfilerExecParameters(TestsUtilities.getResultsDir("patterns"), shouldRunDescriptiveStats,  
-        		 shouldRunHistograms, shouldRunAllPairsCorrelations,  shouldRunDecisionTrees,  shouldRunHighlightPatterns));
-   
+		datasetProfile = datasetProfiler.computeProfileOfDataset(
+				new DatasetProfilerParameters(
+						TestsUtilities.getResultsDir("patterns"),
+						shouldRunDescriptiveStats, shouldRunHistograms,
+						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
+						shouldRunHighlightPatterns));
 	}
     
 }

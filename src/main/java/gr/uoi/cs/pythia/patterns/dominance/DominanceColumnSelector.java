@@ -12,8 +12,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 // TODO maybe add interface-factory for the different selection modes.
 public class DominanceColumnSelector {
 
-	// Default column selection mode is SMART.
-	private DominanceColumnSelectionMode dominanceColumnSelectionMode = DominanceColumnSelectionMode.SMART;
+	private DominanceColumnSelectionMode dominanceColumnSelectionMode;
 	private List<String> measurementColumns;
 	private List<String> coordinateColumns;
 	
@@ -29,20 +28,24 @@ public class DominanceColumnSelector {
 			DataTypes.DateType.toString()
 	};
 	
-	public DominanceColumnSelector(DominanceAnalysisParameters dominanceAnalysisParameters) {
+	public DominanceColumnSelector(DominanceParameters dominanceParameters) {
 		this.measurementColumns = new ArrayList<String>();
 		this.coordinateColumns = new ArrayList<String>();
 		
-		if (dominanceAnalysisParameters.getColumnSelectionMode() != null) {
-			this.dominanceColumnSelectionMode = dominanceAnalysisParameters.getColumnSelectionMode();			
+		if (dominanceParameters.getColumnSelectionMode() != null) {
+			this.dominanceColumnSelectionMode = dominanceParameters.getColumnSelectionMode();
 		}
-		if (dominanceAnalysisParameters.getMeasurementColumns() != null) {
+		else {
+			// Default column selection mode is SMART.
+			this.dominanceColumnSelectionMode = DominanceColumnSelectionMode.SMART;
+		}
+		if (dominanceParameters.getMeasurementColumns() != null) {
 			this.measurementColumns.addAll(Arrays.asList(
-					dominanceAnalysisParameters.getMeasurementColumns()));
+					dominanceParameters.getMeasurementColumns()));
 		}
-		if (dominanceAnalysisParameters.getCoordinateColumns() != null) {
+		if (dominanceParameters.getCoordinateColumns() != null) {
 			this.coordinateColumns.addAll(Arrays.asList(
-					dominanceAnalysisParameters.getCoordinateColumns()));
+					dominanceParameters.getCoordinateColumns()));
 		}
 	}
 

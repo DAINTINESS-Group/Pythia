@@ -8,8 +8,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
@@ -21,7 +21,7 @@ public class PatternManager implements IPatternManager {
 	
 	private Dataset<Row> dataset;
 	private DatasetProfile datasetProfile;
-	private DominanceAnalysisParameters dominanceAnalysisParameters;
+	private DominanceParameters dominanceAnalysisParameters;
 	
 	private HighDominanceAlgo highDominanceAlgo;
 	private LowDominanceAlgo lowDominanceAlgo;
@@ -30,7 +30,7 @@ public class PatternManager implements IPatternManager {
 	public PatternManager(
 			Dataset<Row> dataset,
 			DatasetProfile datasetProfile,
-			DominanceAnalysisParameters dominanceAnalysisParameters) {
+			DominanceParameters dominanceAnalysisParameters) {
 		this.dataset = dataset;
 		this.datasetProfile = datasetProfile;
 		this.dominanceAnalysisParameters = dominanceAnalysisParameters;
@@ -106,7 +106,7 @@ public class PatternManager implements IPatternManager {
 	}
 
 	private void identifyOutliers() throws IOException {
-		outlierAlgo.identifyOutliers(dataset, datasetProfile, dominanceAnalysisParameters);
+		outlierAlgo.identifyOutliers(dataset, datasetProfile);
 		outlierAlgo.exportResultsToFile(
 				new File(String.format("src%stest%sresources%s%s_results.md",
 				File.separator, File.separator, File.separator,

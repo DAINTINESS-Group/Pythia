@@ -13,7 +13,6 @@ import org.apache.spark.sql.types.DataTypes;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
 
 public class ZScoreOutlierAlgo implements IOutlierAlgo {
 
@@ -39,8 +38,7 @@ public class ZScoreOutlierAlgo implements IOutlierAlgo {
 	@Override
 	public void identifyOutliers(
 			Dataset<Row> dataset, 
-			DatasetProfile datasetProfile,
-			DominanceAnalysisParameters dominanceAnalysisParameters) {
+			DatasetProfile datasetProfile) {
 
 		for (Column column : datasetProfile.getColumns()) {
 			if (isNotNumericColumn(column)) continue;

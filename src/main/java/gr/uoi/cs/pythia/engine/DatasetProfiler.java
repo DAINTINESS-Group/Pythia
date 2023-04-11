@@ -34,7 +34,8 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
@@ -47,9 +48,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private final IDatasetReaderFactory dataFrameReaderFactory;
 	private DatasetProfile datasetProfile;
 	private Dataset<Row> dataset;
-	private DominanceAnalysisParameters dominanceAnalysisParameters;
+	private DominanceParameters dominanceParameters;
 	private boolean hasComputedDescriptiveStats;
-
+	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(
@@ -87,34 +88,31 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 
 	@Override
-	public DatasetProfile computeProfileOfDataset(DatasetProfilerExecParameters execParameters) throws IOException {
-		String path = execParameters.getOutputPath();
+	public void declareDominanceParameters(
+			DominanceColumnSelectionMode dominanceColumnSelectionMode,
+			String[] measurementColumns, String[] coordinateColumns) {
+		this.dominanceParameters = new DominanceParameters(
+				dominanceColumnSelectionMode,
+				measurementColumns, coordinateColumns);
+	}
+	
+	@Override
+	public DatasetProfile computeProfileOfDataset(DatasetProfilerParameters parameters) 
+			throws IOException {
+		String path = parameters.getOutputPath();
 		createOutputFolder(path);
 				
-		if(execParameters.shouldRunDescriptiveStats())
-			computeDescriptiveStats();
-		if(execParameters.shouldRunHistograms())
-			computeAllHistograms();
-		if(execParameters.shouldRunAllPairsCorrelations())
-			computeAllPairsCorrelations();
-		if(execParameters.shouldRunDecisionTrees())
-			extractAllDecisionTrees();
-
-		// TODO add identifyHighlightPatterns method call here
-		// once we decide how we pass analysis input parameters
-		//if(execParameters.shouldRunHighlightPatterns())
-			//    identifyHighlightPatterns(
-//    		new DominanceAnalysisParameters(
-//    				DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
-//            		new String[] {"price"}, 
-//            		new String[] {"model", "year"},
-//            		"results")
-//    		);
+		if (parameters.shouldRunDescriptiveStats()) computeDescriptiveStats();
+		if (parameters.shouldRunHistograms()) computeAllHistograms();
+		if (parameters.shouldRunAllPairsCorrelations()) computeAllPairsCorrelations();
+		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
+		if(parameters.shouldRunHighlightPatterns()) identifyHighlightPatterns();
+		
 		return datasetProfile;
 	}
 
 	private void createOutputFolder(String path) throws IOException {
-		if (path == null || path.isEmpty()) {
+		if (isInvalidPath(path)) {
 			path = new File(datasetProfile.getPath()).getParent();
 		} else {
 			// TODO: Maybe try and catch, and if exception -> set to default
@@ -157,20 +155,24 @@ public class DatasetProfiler implements IDatasetProfiler {
 		}
 	}
 
-	@Override
-	public void identifyHighlightPatterns(DominanceAnalysisParameters dominanceAnalysisParameters) throws IOException {
-		if (!hasComputedDescriptiveStats)
-			computeDescriptiveStats();
+	private void identifyHighlightPatterns() throws IOException {
+		if (!hasDeclaredDominanceParameters()) {
+			logger.info(String.format(
+					"Dominance parameters not declared. " +
+					"Skipped highlight pattern identification for dataset %s", datasetProfile.getAlias()));
+			return;
+		}
+		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
 		IPatternManagerFactory factory = new IPatternManagerFactory();
-		IPatternManager patternManager = factory.createPatternManager(dataset, datasetProfile,
-				dominanceAnalysisParameters);
+		IPatternManager patternManager = factory.createPatternManager(
+				dataset, datasetProfile, dominanceParameters);
 		patternManager.identifyHighlightPatterns();
-		logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getPath()));
+		logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getAlias()));
 	}
 
 	@Override
 	public void generateReport(String reportGeneratorType, String path) throws IOException {
-		if (path == null || path.isEmpty()) {
+		if (isInvalidPath(path)) {
 			path = datasetProfile.getOutputDirectory() + File.separator + "report." + reportGeneratorType;
 		}
 		ReportGeneratorFactory factory = new ReportGeneratorFactory();
@@ -188,4 +190,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
 	}
 
+	private boolean isInvalidPath(String path) {
+		return path == null || path.isEmpty();
+	}
+	
+	private boolean hasDeclaredDominanceParameters() {
+		return dominanceParameters != null;
+	}
+	
 }

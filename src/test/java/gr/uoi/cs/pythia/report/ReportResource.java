@@ -1,15 +1,16 @@
 package gr.uoi.cs.pythia.report;
 
-import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
-import gr.uoi.cs.pythia.engine.DatasetProfilerExecParameters;
-import gr.uoi.cs.pythia.engine.IDatasetProfiler;
-import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import java.io.IOException;
+
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
-import java.io.IOException;
+import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
+import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 
 public class ReportResource extends ExternalResource {
 
@@ -37,12 +38,16 @@ public class ReportResource extends ExternalResource {
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         
-        boolean shouldRunDescriptiveStats = true; boolean shouldRunHistograms = true;
-    	boolean shouldRunAllPairsCorrelations= true; boolean shouldRunDecisionTrees= true; boolean shouldRunHighlightPatterns = false;
+		boolean shouldRunDescriptiveStats = true;
+		boolean shouldRunHistograms = true;
+		boolean shouldRunAllPairsCorrelations = true;
+		boolean shouldRunDecisionTrees = true;
+		boolean shouldRunHighlightPatterns = false;
 
-    	datasetProfiler.computeProfileOfDataset(new DatasetProfilerExecParameters(TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,  
-        		 shouldRunHistograms, shouldRunAllPairsCorrelations,  shouldRunDecisionTrees,  shouldRunHighlightPatterns));
-        
-        
+		datasetProfiler.computeProfileOfDataset(new DatasetProfilerParameters(
+				TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
+				shouldRunHistograms, shouldRunAllPairsCorrelations,
+				shouldRunDecisionTrees, shouldRunHighlightPatterns));
     }
+    
 }

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceAnalysisParameters;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
 
@@ -28,10 +28,9 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithExhaustiveMode() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.EXHAUSTIVE, 
-						new String[] {}, new String[] {},
-						"")
+						new String[] {}, new String[] {})
 				);
 		
 		List<String> expectedMeasureCols = Arrays.asList(
@@ -55,11 +54,10 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithUserSpecifiedOnlyMode() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
 						new String[] {"mileage", "mpg", "price"}, 
-						new String[] {"manufacturer", "model", "year"},
-                		"")
+						new String[] {"manufacturer", "model", "year"})
 				);
 		
 		List<String> expectedMeasureCols = Arrays.asList(
@@ -77,10 +75,9 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithUserSpecifiedOnlyModeAndNoColumnsSpecified() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
-						new String[] {}, new String[] {},
-                		"")
+						new String[] {}, new String[] {})
 				);
 		
 		List<String> expectedMeasureCols = Arrays.asList(new String[] {});
@@ -96,11 +93,10 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithExhaustiveModeAndPartialUserInput() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.EXHAUSTIVE, 
 						new String[] {"mileage", "mpg"}, 
-						new String[] {"model"},
-                		"")
+						new String[] {"model"})
 				);
 		
 		List<String> expectedMeasureCols = Arrays.asList(
@@ -118,11 +114,10 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithInvalidColumnDataTypes() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
 						new String[] {"manufacturer", "mpg", "price"}, 
-						new String[] {"mileage", "model", "year"},
-                		"")
+						new String[] {"mileage", "model", "year"})
 				);
 		
 		assertThrows(IllegalArgumentException.class, () -> {
@@ -136,11 +131,10 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithInvalidColumnNames() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(
+				new DominanceParameters(
 						DominanceColumnSelectionMode.USER_SPECIFIED_ONLY, 
 						new String[] {"manufacturer", "mpgG", "price"}, 
-						new String[] {"mileage2", "model", "year"},
-                		"")
+						new String[] {"mileage2", "model", "year"})
 				);
 		
 		assertThrows(IllegalArgumentException.class, () -> {
@@ -154,7 +148,7 @@ public class DominanceColumnSelectorTests {
 	@Test
 	public void testSelectColumnsWithNullColumnParams() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(DominanceColumnSelectionMode.EXHAUSTIVE, null, null,""));
+				new DominanceParameters(DominanceColumnSelectionMode.EXHAUSTIVE, null, null));
 		
 		List<String> expectedMeasureCols = Arrays.asList(
 				new String[] {"price", "mileage", "tax", "mpg", "engineSize"});
@@ -173,7 +167,7 @@ public class DominanceColumnSelectorTests {
 		// TODO write this when smart mode gets implemented
 		// as smart mode is the default mode.
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
-				new DominanceAnalysisParameters(null, null, null, ""));
+				new DominanceParameters(null, null, null));
 		
 		assertEquals(true, true);
 	}

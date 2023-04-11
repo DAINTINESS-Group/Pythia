@@ -12,7 +12,7 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-import gr.uoi.cs.pythia.engine.DatasetProfilerExecParameters;
+import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
@@ -63,11 +63,28 @@ public class Main {
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
     
-    boolean shouldRunDescriptiveStats = true; boolean shouldRunHistograms = true;
-	boolean shouldRunAllPairsCorrelations= true; boolean shouldRunDecisionTrees= true; boolean shouldRunHighlightPatterns = false;
+    // TODO add declareDominanceParameters here
+    // once pattern results are exported to the correct directory
+//	datasetProfiler.declareDominanceParameters(
+//			DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
+//			new String[] { "price" }, 
+//			new String[] { "model", "year" }
+//			);
+	
+	boolean shouldRunDescriptiveStats = true;
+	boolean shouldRunHistograms = true;
+	boolean shouldRunAllPairsCorrelations = true;
+	boolean shouldRunDecisionTrees = true;
+	boolean shouldRunHighlightPatterns = true;
 
-     datasetProfiler.computeProfileOfDataset(new DatasetProfilerExecParameters("results", shouldRunDescriptiveStats,  
-    		 shouldRunHistograms, shouldRunAllPairsCorrelations,  shouldRunDecisionTrees,  shouldRunHighlightPatterns));
+	datasetProfiler.computeProfileOfDataset(
+			new DatasetProfilerParameters(
+					"results", 
+					shouldRunDescriptiveStats,
+					shouldRunHistograms, 
+					shouldRunAllPairsCorrelations,
+					shouldRunDecisionTrees, 
+					shouldRunHighlightPatterns));
      
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
