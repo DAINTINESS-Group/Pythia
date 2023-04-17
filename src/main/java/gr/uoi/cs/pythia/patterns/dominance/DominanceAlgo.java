@@ -1,8 +1,5 @@
 package gr.uoi.cs.pythia.patterns.dominance;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,43 +20,34 @@ public abstract class DominanceAlgo {
 	private static final double PARTIAL_DOMINANCE_THRESHOLD = 75.0;
 	private static final int TOP_K_FILTERING_AMOUNT = 6;
 	
-	private List<DominanceResult> results;
 	private Dataset<Row> dataset;
 	
 	protected abstract boolean isDominant(double valueA, double valueB);
 	public abstract String getDominanceType();
-	public abstract String getPatternName();
 	
 	public DominanceAlgo(Dataset<Row> dataset) {
-		this.results = new ArrayList<DominanceResult>();
 		this.dataset = dataset;
 	}
 	
-	public DominanceResult getLatestResult() {
-		return results.get(results.size()-1);
-	}
-	
-	public List<DominanceResult> getResults() {
-		return results;
-	}
-	
-	public void identifyDominanceWithOneCoordinate(
+	public DominanceResult identifyDominanceWithOneCoordinate(
 			String measurementColName,
 			String xCoordinateColName) {
 
 		// Run aggregate measurement query on the dataset
 		List<Row> queryResult = runAggregateQuery(dataset, measurementColName, xCoordinateColName);
-				
-		// Add a new pattern result object to the results list
-		results.add(new DominanceResult(
+		
+		// Initialize a dominance result object
+		DominanceResult dominanceResult = new DominanceResult(
 				getDominanceType(), "sum", 
-				measurementColName, xCoordinateColName));
+				measurementColName, xCoordinateColName);
 			
 		// Check for dominance
-		executeDominanceAlgoWithOneCoordinate(queryResult);
+		executeDominanceAlgoWithOneCoordinate(queryResult, dominanceResult);
+		
+		return dominanceResult;
 	}
 	
-	public void identifyDominanceWithTwoCoordinates(
+	public DominanceResult identifyDominanceWithTwoCoordinates(
 			String measurementColName,
 			String xCoordinateColName, 
 			String yCoordinateColName) {
@@ -72,20 +60,24 @@ public abstract class DominanceAlgo {
 		List<Row> queryResult = runAggregateQuery(dataset, measurementColName, 
 				xCoordinateColName, yCoordinateColName);
 		
-		// Add a new pattern result object to the results list 
-		results.add(new DominanceResult(
+		// Initialize a dominance result object
+		DominanceResult dominanceResult = new DominanceResult(
 				getDominanceType(), "sum", 
 				measurementColName, xCoordinateColName, yCoordinateColName,
-				queryResult));
+				queryResult);
 		
 		// Check for dominance
-		executeDominanceAlgoWithTwoCoordinates(queryResult, xCoordinates, yCoordinates);
+		executeDominanceAlgoWithTwoCoordinates(
+				queryResult, xCoordinates, yCoordinates, dominanceResult);
+		
+		return dominanceResult;
 	}
 	
 	// This method actually performs the check for dominance with 1 coordinate.
 	// Identified results are added to the results list.
 	// Finally, identified results are sorted and filtered based on dominance percentage score.
-	private void executeDominanceAlgoWithOneCoordinate(List<Row> queryResult) {
+	private void executeDominanceAlgoWithOneCoordinate(
+			List<Row> queryResult, DominanceResult dominanceResult) {
 		if (queryResult.size() <= 1) return;
 		for (Row rowA : queryResult) {
 			String xCoordinate = parseCoordinateValue(rowA, 0);
@@ -105,15 +97,15 @@ public abstract class DominanceAlgo {
 			String highlightType = determineHighlightType(
 					dominancePercentage, getDominanceType());
 			
-			getLatestResult().addIdentificationResult(
+			dominanceResult.addIdentificationResult(
 					xCoordinate, 
 					aggValueA, 
 					dominancePercentage,
 					isHighlight(highlightType), 
 					highlightType);
 		}
-		sortDescendingIdentificationResults();
-		filterTopKIdentificationResults();
+		sortDescendingIdentificationResults(dominanceResult);
+		filterTopKIdentificationResults(dominanceResult);
 	}
 	
 	// This method actually performs the check for dominance with 2 coordinates.
@@ -122,7 +114,8 @@ public abstract class DominanceAlgo {
 	private void executeDominanceAlgoWithTwoCoordinates(
 			List<Row> queryResult, 
 			List<String> xCoordinates, 
-			List<String> yCoordinates) {
+			List<String> yCoordinates,
+			DominanceResult dominanceResult) {
 		if (queryResult.size() <= 1) return;
 		for (String xCoordinateA: xCoordinates) {
 			List<String> dominatedXValues = new ArrayList<String>();
@@ -155,7 +148,7 @@ public abstract class DominanceAlgo {
 			String highlightType = determineHighlightType(
 					dominancePercentage, getDominanceType());
 			
-			getLatestResult().addIdentificationResult(
+			dominanceResult.addIdentificationResult(
 					xCoordinateA, 
 					dominatedXValues, 
 					onYValues,
@@ -164,17 +157,17 @@ public abstract class DominanceAlgo {
 					highlightType,
 					calculateAggValuesMarginalSum(xCoordinateA, queryResult));
 		}
-		sortDescendingIdentificationResults();
-		filterTopKIdentificationResults();
+		sortDescendingIdentificationResults(dominanceResult);
+		filterTopKIdentificationResults(dominanceResult);
 	}
 	
 	// Sort the latest identification results in descending order based on dominance percentage.
-	private void sortDescendingIdentificationResults() {
-		Collections.sort(getLatestResult().getIdentificationResults(), new Comparator<Row>() {
+	private void sortDescendingIdentificationResults(DominanceResult dominanceResult) {
+		Collections.sort(dominanceResult.getIdentificationResults(), new Comparator<Row>() {
 		     public int compare(Row row1, Row row2) {
 		    	 double row1Score, row2Score;
 		    	 try {
-		    		 int domPercentageIndex = getLatestResult().getNumOfCoordinates() + 1;
+		    		 int domPercentageIndex = dominanceResult.getNumOfCoordinates() + 1;
 		    		 row1Score = Double.parseDouble(row1.get(domPercentageIndex).toString());
 		    		 row2Score = Double.parseDouble(row2.get(domPercentageIndex).toString());
 		    	 } catch(Exception e) {
@@ -186,8 +179,8 @@ public abstract class DominanceAlgo {
 		});
 	}
 	
-	private void filterTopKIdentificationResults() {
-		List<Row> identificationResults = getLatestResult().getIdentificationResults();
+	private void filterTopKIdentificationResults(DominanceResult dominanceResult) {
+		List<Row> identificationResults = dominanceResult.getIdentificationResults();
 		if (identificationResults.size()-1 <= TOP_K_FILTERING_AMOUNT) return;
 		identificationResults.removeIf(row -> 
 			identificationResults.indexOf(row) != 0 &&
@@ -274,8 +267,13 @@ public abstract class DominanceAlgo {
 				.orderBy(colName)
 				.collectAsList()
 				.stream()
-				.map(s -> s.get(0).toString())
+				.map(s -> parseStringValue(s.get(0)))
 				.collect(Collectors.toList());
+	}
+	
+	private String parseStringValue(Object object) {
+		if (object == null) return "";
+		return object.toString();
 	}
 	
 	// This method checks if the given dominance percentages
@@ -289,27 +287,6 @@ public abstract class DominanceAlgo {
 			return String.format("%s %s", PARTIAL, dominanceType);
 		}
 		return EMPTY;
-	}
-	
-	public void exportResultsToFile(String path) throws IOException {
-		String str = String.format("## %s Dominance Pattern Results\n", 
-				getDominanceType().substring(0, 1).toUpperCase() +
-				getDominanceType().substring(1));
-		for (DominanceResult result : results) {
-			str += result.toString();
-		}
-		writeToFile(path, str);
-		
-		// TODO eventually we want to write the results to the overall report
-		// so we might need the DatasetProfile object here 
-		// or alternatively maybe return results object to PatternManager instead (?)
-	}
-	
-	private void writeToFile(String path, String str) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new FileWriter(path));
-	    printWriter.write(str);
-	    printWriter.flush();
-	    printWriter.close();
 	}
 	
 	public void debugPrintList(List<Row> list, String title) {

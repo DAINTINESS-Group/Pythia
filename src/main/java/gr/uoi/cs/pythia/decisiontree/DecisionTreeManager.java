@@ -34,7 +34,7 @@ public class DecisionTreeManager {
         this.datasetProfile = datasetProfile;
         this.decisionTreeVisualizer = new DecisionTreeVisualizerFactory()
                 .getVisualizer(DecisionTreeVisualizerType.GRAPH_VIZ);
-        this.outputDirectory = Paths.get(datasetProfile.getOutputDirectory(), "decision_trees");
+        this.outputDirectory = Paths.get(datasetProfile.getAuxiliaryDataOutputDirectory(), "decision_trees");
     }
 
     public List<String> extractAllDecisionTrees() throws IOException {

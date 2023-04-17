@@ -47,11 +47,8 @@ public class DominanceAlgoTests {
 		DominanceResult expectedHighDominanceResults = 
 				createExpectedHighDominanceResultsForOneCoordinate();
 
-		highDominanceAlgo.identifyDominanceWithOneCoordinate(
-				measurementColName, xCoordinateColName);
-		
-		DominanceResult actualHighDominanceResults = 
-				highDominanceAlgo.getLatestResult();
+		DominanceResult actualHighDominanceResults = highDominanceAlgo
+				.identifyDominanceWithOneCoordinate(measurementColName, xCoordinateColName);
 		
 		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
 		
@@ -62,11 +59,9 @@ public class DominanceAlgoTests {
 		DominanceResult expectedLowDominanceResults = 
 				createExpectedLowDominanceResultsForOneCoordinate();
 		
-		lowDominanceAlgo.identifyDominanceWithOneCoordinate(
-				measurementColName, xCoordinateColName);
-		
-		DominanceResult actualLowDominanceResults = 
-				lowDominanceAlgo.getLatestResult();
+		DominanceResult actualLowDominanceResults = lowDominanceAlgo
+				.identifyDominanceWithOneCoordinate(
+						measurementColName, xCoordinateColName);
 		
 		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
@@ -76,12 +71,10 @@ public class DominanceAlgoTests {
 		DominanceResult expectedHighDominanceResults = 
 				createExpectedHighDominanceResultsForTwoCoordinates();
 		
-		highDominanceAlgo.identifyDominanceWithTwoCoordinates(
-				measurementColName, xCoordinateColName, yCoordinateColName);
+		DominanceResult actualHighDominanceResults = highDominanceAlgo
+				.identifyDominanceWithTwoCoordinates(
+						measurementColName, xCoordinateColName, yCoordinateColName);
 		
-		DominanceResult actualHighDominanceResults = 
-				highDominanceAlgo.getLatestResult();
-
 		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
 	}
 	
@@ -90,11 +83,9 @@ public class DominanceAlgoTests {
 		DominanceResult expectedLowDominanceResults = 
 				createExpectedLowDominanceResultsForTwoCoordinates();
 		
-		lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
-				measurementColName, xCoordinateColName, yCoordinateColName);
-		
-		DominanceResult actualLowDominanceResults = 
-				lowDominanceAlgo.getLatestResult();
+		DominanceResult actualLowDominanceResults = lowDominanceAlgo
+				.identifyDominanceWithTwoCoordinates(
+						measurementColName, xCoordinateColName, yCoordinateColName);
 		
 		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}

@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface IReportGenerator {
 
-  void produceReport(DatasetProfile datasetProfile, String path) throws IOException;
+  void produceReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException;
 }

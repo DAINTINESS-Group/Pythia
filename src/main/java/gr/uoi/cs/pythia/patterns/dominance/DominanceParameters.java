@@ -15,8 +15,6 @@ public class DominanceParameters {
 		this.coordinateColumns = coordinateColumns;
 	}
 
-	public DominanceParameters() {}
-
 	public DominanceColumnSelectionMode getColumnSelectionMode() {
 		return dominanceColumnSelectionMode;
 	}

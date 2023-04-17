@@ -1,11 +1,5 @@
 package gr.uoi.cs.pythia.report.md.components;
 
-import gr.uoi.cs.pythia.model.Column;
-import gr.uoi.cs.pythia.model.histogram.Bin;
-import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
-import gr.uoi.cs.pythia.report.md.structures.MdTable;
-import gr.uoi.cs.pythia.util.DatatypeFilterer;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -13,6 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
+import gr.uoi.cs.pythia.model.Column;
+import gr.uoi.cs.pythia.model.histogram.Bin;
+import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
+import gr.uoi.cs.pythia.report.md.structures.MdTable;
+import gr.uoi.cs.pythia.util.DatatypeFilterer;
 
 public class MdHistograms {
 
@@ -42,6 +42,7 @@ public class MdHistograms {
     private String getAllHistograms() {
         StringBuilder stringBuilder = new StringBuilder();
         for (Column column : columns) {
+        	if (column.getHistogram() == null) continue;
             stringBuilder.append(MdBasicStructures.bold(String.format(
                     "~ Column: %s", column.getName())));
             stringBuilder.append("\n\n");

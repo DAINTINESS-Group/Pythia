@@ -30,8 +30,7 @@ public class ZScoreOutlierAlgoTests {
 		Dataset<Row> dataset = AllPatternTests.patternsResource.getDataset();
 		DatasetProfile datasetProfile = AllPatternTests.patternsResource.getDatasetProfile();
 		List<OutlierResult> expected =  createExpectedZScoreOutlierResults();
-		zScoreOutlierAlgo.identifyOutliers(dataset, datasetProfile);
-		List<OutlierResult> actual = zScoreOutlierAlgo.getResults();
+		List<OutlierResult> actual = zScoreOutlierAlgo.identifyOutliers(dataset, datasetProfile);
 		
 		for (int i=0; i<actual.size(); i++) {
 			assertEquals(expected.get(i).getColumnName(), actual.get(i).getColumnName());
@@ -43,11 +42,11 @@ public class ZScoreOutlierAlgoTests {
 
 	private List<OutlierResult> createExpectedZScoreOutlierResults() {
 		return Arrays.asList(
-				new OutlierResult("mileage", 97440.0, 3.1075171338770025, 67),
-				new OutlierResult("engineSize", 3.0, 3.0317626369169393, 23),
-				new OutlierResult("engineSize", 3.0, 3.0317626369169393, 24),
-				new OutlierResult("engineSize", 3.0, 3.0317626369169393, 50),
-				new OutlierResult("engineSize", 3.0, 3.0317626369169393, 93)
+				new OutlierResult(OutlierType.Z_SCORE, "mileage", 97440.0, 3.1075171338770025, 67),
+				new OutlierResult(OutlierType.Z_SCORE, "engineSize", 3.0, 3.0317626369169393, 23),
+				new OutlierResult(OutlierType.Z_SCORE, "engineSize", 3.0, 3.0317626369169393, 24),
+				new OutlierResult(OutlierType.Z_SCORE, "engineSize", 3.0, 3.0317626369169393, 50),
+				new OutlierResult(OutlierType.Z_SCORE, "engineSize", 3.0, 3.0317626369169393, 93)
 				);
 	}
 }

@@ -18,6 +18,7 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 public class Main {
@@ -63,13 +64,11 @@ public class Main {
     RuleSet ruleSet = new RuleSet("user_followers_labeled", rules);
     datasetProfiler.computeLabeledColumn(ruleSet);
     
-    // TODO add declareDominanceParameters here
-    // once pattern results are exported to the correct directory
-//	datasetProfiler.declareDominanceParameters(
-//			DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
-//			new String[] { "price" }, 
-//			new String[] { "model", "year" }
-//			);
+	datasetProfiler.declareDominanceParameters(
+			DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
+			new String[] { "retweets" }, 
+			new String[] { "user_followers_labeled", "source" }
+			);
 	
 	boolean shouldRunDescriptiveStats = true;
 	boolean shouldRunHistograms = true;

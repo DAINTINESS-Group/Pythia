@@ -8,6 +8,6 @@ public class OutlierAlgoFactory {
 		        return new ZScoreOutlierAlgo();
 		    }
 		    throw new IllegalArgumentException(
-		        String.format("Report system %s is not a supported report system type.", type));
+		        String.format("Outlier %s is not a supported outlier type.", type));
 		  }
 }

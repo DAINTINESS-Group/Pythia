@@ -64,11 +64,11 @@ public interface IDatasetProfiler {
      * at the designated path.
      * 
      * @param reportGeneratorType - The output type of the report (e.g. txt or md).
-     * @param path - The output path of the report. If it is null or empty,
-     *             the report will be generated inside the folder with the auxiliary data.
+     * @param outputDirectoryPath - The output path of the directory where report files will be generated. 
+     * If it is null or empty, the report will be generated inside the directory with the auxiliary data.
      * @throws IOException
      */
-  void generateReport(String reportGeneratorType, String path) throws IOException;
+  void generateReport(String reportGeneratorType, String outputDirectoryPath) throws IOException;
 
   /**
    * Writes a registered dataset back to the drive at the designated path.

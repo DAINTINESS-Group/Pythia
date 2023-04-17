@@ -9,6 +9,7 @@ import org.junit.rules.ExternalResource;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 
@@ -38,16 +39,21 @@ public class ReportResource extends ExternalResource {
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         
+		datasetProfiler.declareDominanceParameters(
+				DominanceColumnSelectionMode.EXHAUSTIVE,
+				null, null);
+		
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = true;
 		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = true;
-		boolean shouldRunHighlightPatterns = false;
+		boolean shouldRunHighlightPatterns = true;
 
-		datasetProfiler.computeProfileOfDataset(new DatasetProfilerParameters(
-				TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
-				shouldRunHistograms, shouldRunAllPairsCorrelations,
-				shouldRunDecisionTrees, shouldRunHighlightPatterns));
+		datasetProfiler.computeProfileOfDataset(
+				new DatasetProfilerParameters(
+						TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
+						shouldRunHistograms, shouldRunAllPairsCorrelations,
+						shouldRunDecisionTrees, shouldRunHighlightPatterns));
     }
     
 }

@@ -3,7 +3,7 @@ package gr.uoi.cs.pythia.engine;
 
 public class DatasetProfilerParameters{
 	
-	private String outputPath;
+	private String auxiliaryDataOutputDirectory;
 	private boolean shouldRunDescriptiveStats = false;
 	private boolean shouldRunHistograms = false;
 	private boolean shouldRunAllPairsCorrelations = false;
@@ -13,24 +13,29 @@ public class DatasetProfilerParameters{
     /**
      * Determines the dataset analysis parts that should be executed.
      * 
-     * @param outputPath The directory where the auxiliary data,
+     * @param auxiliaryDataOutputDirectory - The directory where the auxiliary data,
      *             for example: images of the decision trees,
      *             will be generated, to later be used by the report.
      *             If it is empty or null, it will be generated in the dataset's folder.
-     * @param shouldRunDescriptiveStats
-     * @param shouldRunHistograms
-     * @param shouldRunAllPairsCorrelations
-     * @param shouldRunDecisionTrees
-     * @param shouldRunHighlightPatterns
+     * @param shouldRunDescriptiveStats - Boolean value that defines whether descriptive 
+     * statistics should be calculated as part of the dataset profiling analysis.
+     * @param shouldRunHistograms - Boolean value that defines whether histograms should be
+     * calculated as part of the dataset profiling analysis.
+     * @param shouldRunAllPairsCorrelations - Boolean value that defines whether all pairs correlations
+     * should be calculated as part of the dataset profiling analysis.
+     * @param shouldRunDecisionTrees - Boolean value that defines whether decision trees should
+     * be calculated as part of the dataset profiling analysis.
+     * @param shouldRunHighlightPatterns - Boolean value that defines whether the dataset should be
+     * evaluated for highlight patterns as part of the dataset profiling analysis.
      */
 	public DatasetProfilerParameters(
-			String outputPath,
+			String auxiliaryDataOutputPath,
 			boolean shouldRunDescriptiveStats, 
 			boolean shouldRunHistograms,
 			boolean shouldRunAllPairsCorrelations, 
 			boolean shouldRunDecisionTrees,
 			boolean shouldRunHighlightPatterns) {
-		this.outputPath = outputPath;
+		this.auxiliaryDataOutputDirectory = auxiliaryDataOutputPath;
 		this.shouldRunDescriptiveStats = shouldRunDescriptiveStats;
 		this.shouldRunHistograms = shouldRunHistograms;
 		this.shouldRunAllPairsCorrelations = shouldRunAllPairsCorrelations;
@@ -38,8 +43,8 @@ public class DatasetProfilerParameters{
 		this.shouldRunHighlightPatterns = shouldRunHighlightPatterns;
 	}
 
-	public String getOutputPath() {
-		return this.outputPath;
+	public String getAuxiliaryDataOutputDirectory() {
+		return this.auxiliaryDataOutputDirectory;
 	}
 	public boolean shouldRunDescriptiveStats() {
 		return shouldRunDescriptiveStats;

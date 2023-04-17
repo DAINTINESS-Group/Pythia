@@ -13,6 +13,7 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 // TODO this class can most likely be deleted
 // dataset profiler parameters allow us to select which parts of the dataset profiling 
@@ -38,7 +39,7 @@ public class Patterns {
 				);
 		
 		boolean shouldRunDescriptiveStats = true;
-		boolean shouldRunHistograms = true;
+		boolean shouldRunHistograms = false;
 		boolean shouldRunAllPairsCorrelations = false;
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunHighlightPatterns = true;
@@ -51,11 +52,13 @@ public class Patterns {
 						shouldRunAllPairsCorrelations,
 						shouldRunDecisionTrees, 
 						shouldRunHighlightPatterns));
+		
+		datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
 	}
 	
 	public static StructType getCarsCsvSchema() {
 		return new StructType(
-                new StructField[]{
+                new StructField[] {
                         new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
                         new StructField("model", DataTypes.StringType, true, Metadata.empty()),
                         new StructField("year", DataTypes.StringType, true, Metadata.empty()),

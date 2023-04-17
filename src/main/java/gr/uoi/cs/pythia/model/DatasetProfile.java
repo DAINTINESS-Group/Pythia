@@ -7,12 +7,14 @@ public class DatasetProfile {
   private final String alias;
   private final String path;
   private final List<Column> columns;
-  private String outputDirectory;
+  private PatternsProfile patternsProfile;
+  private String auxiliaryDataOutputDirectory;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
     this.alias = alias;
     this.path = path;
     this.columns = columns;
+    this.patternsProfile = new PatternsProfile();
   }
 
   public String getAlias() {
@@ -27,12 +29,20 @@ public class DatasetProfile {
     return columns;
   }
 
-  public String getOutputDirectory() {
-    return outputDirectory;
+  public PatternsProfile getPatternsProfile() {
+	  return patternsProfile;
   }
 
-  public void setOutputDirectory(String outputDirectory) {
-    this.outputDirectory = outputDirectory;
+  public void setPatternsProfile(PatternsProfile patternsProfile) {
+	  this.patternsProfile = patternsProfile;
+  }
+
+public String getAuxiliaryDataOutputDirectory() {
+    return auxiliaryDataOutputDirectory;
+  }
+
+  public void setAuxiliaryDataOutputDirectory(String outputDirectory) {
+    this.auxiliaryDataOutputDirectory = outputDirectory;
   }
 
   @Override

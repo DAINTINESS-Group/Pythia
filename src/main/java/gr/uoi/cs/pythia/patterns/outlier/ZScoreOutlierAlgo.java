@@ -1,8 +1,5 @@
 package gr.uoi.cs.pythia.patterns.outlier;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,30 +13,20 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 
 public class ZScoreOutlierAlgo implements IOutlierAlgo {
 
-	private static final String Z_SCORE_OUTLIER = "z_score_outlier";
+	private static final String Z_SCORE = "Z_Score";
 	private static final double Z_SCORE_THRESHOLD = 3.0;
-	
-	private List<OutlierResult> results;
-	
-	public ZScoreOutlierAlgo() {
-		this.results = new ArrayList<OutlierResult>();
-	}
-	
-	@Override
-	public List<OutlierResult> getResults() {
-		return results;
-	}
 
 	@Override
-	public String getPatternName() {
-		return Z_SCORE_OUTLIER;
+	public String getOutlierType() {
+		return Z_SCORE;
 	}
 	
 	@Override
-	public void identifyOutliers(
+	public List<OutlierResult> identifyOutliers(
 			Dataset<Row> dataset, 
 			DatasetProfile datasetProfile) {
-
+		List<OutlierResult> results = new ArrayList<OutlierResult>();
+		
 		for (Column column : datasetProfile.getColumns()) {
 			if (isNotNumericColumn(column)) continue;
 			Double mean = getColumnMean(column);
@@ -52,10 +39,13 @@ public class ZScoreOutlierAlgo implements IOutlierAlgo {
 				Double zScore = (value - mean) / standardDeviation;
 				
 				if (Math.abs(zScore) >= Z_SCORE_THRESHOLD) {
-					results.add(new OutlierResult(column.getName(), value, zScore, index+1));
+					results.add(new OutlierResult(
+							OutlierType.Z_SCORE, column.getName(), value, zScore, index+1));
 				}
 			}
 		}
+		return results;
+		
 		// Debug print
 //		System.out.println(results);
 	}
@@ -82,30 +72,9 @@ public class ZScoreOutlierAlgo implements IOutlierAlgo {
 	private Double getColumnMean(Column column) {
 		return Double.parseDouble(column.getDescriptiveStatisticsProfile().getMean());
 	}
-	
 
 	private Double getColumnStandardDeviation(Column column) {
 		return Double.parseDouble(column.getDescriptiveStatisticsProfile().getStandardDeviation());
-	}
-	
-	@Override
-	public void exportResultsToFile(String path) throws IOException {
-		String str = String.format("## Z Score Outlier Pattern Results\n\n" +
-				"Total outliers found: %s\n", results.size());
-		for (OutlierResult result : results) {
-			str += result.toString();
-		}
-		writeToFile(path, str);
-		
-		// TODO eventually we want to write the results to the overall report
-		// we probably need a PatternsProfile model class
-	}
-
-	private void writeToFile(String path, String str) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new FileWriter(path));
-	    printWriter.write(str);
-	    printWriter.flush();
-	    printWriter.close();
 	}
 
 }

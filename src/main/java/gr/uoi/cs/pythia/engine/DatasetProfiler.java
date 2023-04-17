@@ -94,12 +94,14 @@ public class DatasetProfiler implements IDatasetProfiler {
 		this.dominanceParameters = new DominanceParameters(
 				dominanceColumnSelectionMode,
 				measurementColumns, coordinateColumns);
+		logger.info(String.format("Declared dominance parameters with \"%s\" column selection mode", 
+				dominanceColumnSelectionMode.toString()));
 	}
 	
 	@Override
 	public DatasetProfile computeProfileOfDataset(DatasetProfilerParameters parameters) 
 			throws IOException {
-		String path = parameters.getOutputPath();
+		String path = parameters.getAuxiliaryDataOutputDirectory();
 		createOutputFolder(path);
 				
 		if (parameters.shouldRunDescriptiveStats()) computeDescriptiveStats();
@@ -122,7 +124,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
 		String outputDirectory = path + File.separator + datasetProfile.getAlias() + "_results_" + currentDateTime;
 		Files.createDirectories(Paths.get(outputDirectory));
-		datasetProfile.setOutputDirectory(outputDirectory);
+		datasetProfile.setAuxiliaryDataOutputDirectory(outputDirectory);
 	}
 
 	private void computeDescriptiveStats() {
@@ -167,19 +169,20 @@ public class DatasetProfiler implements IDatasetProfiler {
 		IPatternManager patternManager = factory.createPatternManager(
 				dataset, datasetProfile, dominanceParameters);
 		patternManager.identifyHighlightPatterns();
-		logger.info(String.format("Identified highlight patterns for %s", datasetProfile.getAlias()));
+		logger.info(String.format("Identified highlight patterns for dataset %s", datasetProfile.getAlias()));
 	}
 
 	@Override
-	public void generateReport(String reportGeneratorType, String path) throws IOException {
-		if (isInvalidPath(path)) {
-			path = datasetProfile.getOutputDirectory() + File.separator + "report." + reportGeneratorType;
+	public void generateReport(String reportGeneratorType, String outputDirectoryPath) 
+			throws IOException {
+		if (isInvalidPath(outputDirectoryPath)) {
+			outputDirectoryPath = datasetProfile.getAuxiliaryDataOutputDirectory();
 		}
 		ReportGeneratorFactory factory = new ReportGeneratorFactory();
 		IReportGenerator generator = factory.createReportGenerator(reportGeneratorType);
-		generator.produceReport(datasetProfile, path);
-		logger.info(String.format("Generated %s report for dataset '%s': %s.", reportGeneratorType,
-				datasetProfile.getAlias(), path));
+		generator.produceReport(datasetProfile, outputDirectoryPath);
+		logger.info(String.format("Generated %s report for dataset '%s' under the directory: %s.", 
+				reportGeneratorType, datasetProfile.getAlias(), outputDirectoryPath));
 	}
 
 	@Override
