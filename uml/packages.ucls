@@ -3,143 +3,135 @@
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <package id="1" language="java" name="gr.uoi.cs.pythia.model" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/model" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1332" y="663"/>    
+    <position height="-1" width="-1" x="633" y="707"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="2" language="java" name="gr.uoi.cs.pythia.reader" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/reader" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1538" y="63"/>    
+    <position height="-1" width="-1" x="1054" y="118"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="3" language="java" name="gr.uoi.cs.pythia.histogram" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/histogram" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1233" y="295"/>    
+    <position height="-1" width="-1" x="520" y="380"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="4" language="java" name="gr.uoi.cs.pythia.decisiontree" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/decisiontree" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="984" y="296"/>    
+    <position height="-1" width="-1" x="229" y="380"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="5" language="java" name="gr.uoi.cs.pythia.report" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/report" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1428" y="299"/>    
+    <position height="-1" width="-1" x="1012" y="536"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="6" language="java" name="gr.uoi.cs.pythia.engine" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/engine" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1333" y="54"/>    
+    <position height="-1" width="-1" x="634" y="46"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="7" language="java" name="gr.uoi.cs.pythia.config" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/config" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1580" y="202"/>    
+    <position height="-1" width="-1" x="1054" y="257"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="8" language="java" name="gr.uoi.cs.pythia.writer" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/writer" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1549" y="123"/>    
+    <position height="-1" width="-1" x="1052" y="188"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="9" language="java" name="gr.uoi.cs.pythia.descriptivestatistics" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/descriptivestatistics" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="985" y="390"/>    
+    <position height="-1" width="-1" x="764" y="380"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="10" language="java" name="gr.uoi.cs.pythia.patterns" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1582" y="348"/>    
+    <position height="-1" width="-1" x="993" y="380"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="11" language="java" name="gr.uoi.cs.pythia.util" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/util" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1074" y="667"/>    
+    <position height="-1" width="-1" x="289" y="203"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="12" language="java" name="gr.uoi.cs.pythia.labeling" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/labeling" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1316" y="807"/>    
+    <position height="-1" width="-1" x="312" y="707"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <package id="13" language="java" name="gr.uoi.cs.pythia.correlations" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/correlations" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1233" y="390"/>    
+    <position height="-1" width="-1" x="399" y="429"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
   <dependency id="14">    
-    <bendpoint x="733" y="209"/>    
-    <bendpoint x="737" y="825"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <dependency id="16">    
-    <bendpoint x="758" y="289"/>    
-    <bendpoint x="764" y="804"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="12"/>  
-  </dependency>  
-  <dependency id="17">    
-    <bendpoint x="1253" y="589"/>    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="18">    
-    <bendpoint x="991" y="705"/>    
-    <bendpoint x="1309" y="705"/>    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="19">    
-    <bendpoint x="1584" y="670"/>    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="20">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="21">    
-    <bendpoint x="1134" y="302"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="11"/>  
-  </dependency>  
-  <dependency id="22">    
-    <bendpoint x="1106" y="310"/>    
-    <bendpoint x="1064" y="378"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="23">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="24">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="26">    
-    <bendpoint x="1333" y="790"/>    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="12"/>  
   </dependency>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="16">    
+    <bendpoint x="938" y="192"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="17">    
+    <bendpoint x="520" y="322"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="19">    
+    <bendpoint x="634" y="671"/>    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="20">    
+    <bendpoint x="399" y="333"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="21">    
+    <bendpoint x="942" y="124"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="22">    
+    <bendpoint x="949" y="261"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="23">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="24">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="25">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="26">    
+    <bendpoint x="380" y="206"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
   <dependency id="27">    
-    <bendpoint x="1440" y="653"/>    
-    <end type="SOURCE" refId="5"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="28">    
-    <bendpoint x="1138" y="306"/>    
-    <bendpoint x="1121" y="419"/>    
-    <bendpoint x="1165" y="653"/>    
-    <end type="SOURCE" refId="3"/>    
+    <bendpoint x="634" y="668"/>    
+    <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="29">    
@@ -147,40 +139,35 @@
     <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="30">    
-    <bendpoint x="1239" y="594"/>    
-    <bendpoint x="1170" y="673"/>    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="11"/>  
+    <bendpoint x="82" y="152"/>    
+    <bendpoint x="80" y="712"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="31">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="2"/>  
+    <bendpoint x="634" y="671"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="32">    
-    <bendpoint x="797" y="306"/>    
-    <bendpoint x="803" y="674"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="11"/>  
+    <bendpoint x="634" y="673"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="33">    
-    <bendpoint x="1323" y="367"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="13"/>  
+    <bendpoint x="634" y="671"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="34">    
-    <bendpoint x="782" y="301"/>    
-    <bendpoint x="789" y="715"/>    
-    <bendpoint x="1320" y="715"/>    
+    <bendpoint x="261" y="452"/>    
+    <bendpoint x="634" y="671"/>    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="35">    
     <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="36">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="4"/>  
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="false" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
