@@ -7,7 +7,7 @@ public class DatasetProfile {
   private final String alias;
   private final String path;
   private final List<Column> columns;
-  private PatternsProfile patternsProfile;
+  private final PatternsProfile patternsProfile;
   private String auxiliaryDataOutputDirectory;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
@@ -30,14 +30,10 @@ public class DatasetProfile {
   }
 
   public PatternsProfile getPatternsProfile() {
-	  return patternsProfile;
+    return patternsProfile;
   }
 
-  public void setPatternsProfile(PatternsProfile patternsProfile) {
-	  this.patternsProfile = patternsProfile;
-  }
-
-public String getAuxiliaryDataOutputDirectory() {
+  public String getAuxiliaryDataOutputDirectory() {
     return auxiliaryDataOutputDirectory;
   }
 
@@ -52,15 +48,15 @@ public String getAuxiliaryDataOutputDirectory() {
       stringBuilder.append(column.toString());
     }
     return "DatasetProfile\n"
-        + "alias: "
-        + alias
-        + '\n'
-        + "path: "
-        + path
-        + "\n\n"
-        + "Column Profiles:"
-        + '\n'
-        + stringBuilder
-        + "\n";
+            + "alias: "
+            + alias
+            + '\n'
+            + "path: "
+            + path
+            + "\n\n"
+            + "Column Profiles:"
+            + '\n'
+            + stringBuilder
+            + "\n";
   }
 }
