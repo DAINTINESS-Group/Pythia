@@ -1,28 +1,31 @@
 package gr.uoi.cs.pythia.patterns;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 
 public class DominanceColumnSelectorTests {
 	
 	private DatasetProfile datasetProfile;
+	private Dataset<Row> dataset;
 	
 	@Before
 	public void init() throws AnalysisException {
 		datasetProfile = AllPatternTests.patternsResource.getDatasetProfile();
+		dataset = AllPatternTests.patternsResource.getDataset();
 	}
 	
 	@Test
@@ -39,16 +42,30 @@ public class DominanceColumnSelectorTests {
 				new String[] {"manufacturer", "model", "year", "transmission", "fuelType"});
 		
 		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
-		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		
 		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
 		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
 	}
 	
 	@Test
-	public void testSelectMeasureColsWithSmartMode() {
-		// TODO write this when smart mode gets implemented
-		assertEquals(true, true);
+	public void testSelectColumnsWithSmartMode() {
+		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
+				new DominanceParameters(
+						DominanceColumnSelectionMode.SMART, 
+						new String[] {}, new String[] {})
+				);
+		
+		List<String> expectedMeasureCols = Arrays.asList(
+				new String[] {"price", "mileage", "mpg", "engineSize"});
+		List<String> expectedCoordCols = Arrays.asList(
+				new String[] {"model", "year", "transmission", "fuelType"});
+		
+		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
+		
+		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
+		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
 	}
 	
 	@Test
@@ -66,7 +83,7 @@ public class DominanceColumnSelectorTests {
 				new String[] {"manufacturer", "model", "year"});
 		
 		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
-		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		
 		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
 		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
@@ -84,7 +101,7 @@ public class DominanceColumnSelectorTests {
 		List<String> expectedCoordCols = Arrays.asList(new String[] {});
 		
 		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
-		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		
 		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
 		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
@@ -105,7 +122,7 @@ public class DominanceColumnSelectorTests {
 				new String[] {"model", "manufacturer", "year", "transmission", "fuelType"});
 		
 		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
-		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		
 		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
 		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
@@ -124,7 +141,7 @@ public class DominanceColumnSelectorTests {
 			columnSelector.selectMeasurementColumns(datasetProfile);
 		});
 		assertThrows(IllegalArgumentException.class, () -> {
-			columnSelector.selectCoordinateColumns(datasetProfile);
+			columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		});
 	}
 	
@@ -141,7 +158,7 @@ public class DominanceColumnSelectorTests {
 			columnSelector.selectMeasurementColumns(datasetProfile);
 		});
 		assertThrows(IllegalArgumentException.class, () -> {
-			columnSelector.selectCoordinateColumns(datasetProfile);
+			columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		});
 	}
 	
@@ -156,20 +173,27 @@ public class DominanceColumnSelectorTests {
 				new String[] {"manufacturer", "model", "year", "transmission", "fuelType"});
 		
 		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
-		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 		
 		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
 		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
 	}
 	
 	@Test
-	public void testSelectMeasureColsWithAllNullParams() {
-		// TODO write this when smart mode gets implemented
-		// as smart mode is the default mode.
+	public void testSelectColumnsWithAllNullParams() {
 		DominanceColumnSelector columnSelector = new DominanceColumnSelector(
 				new DominanceParameters(null, null, null));
 		
-		assertEquals(true, true);
+		List<String> expectedMeasureCols = Arrays.asList(
+				new String[] {"price", "mileage", "mpg", "engineSize"});
+		List<String> expectedCoordCols = Arrays.asList(
+				new String[] {"model", "year", "transmission", "fuelType"});
+		
+		List<String> actualMeasureCols = columnSelector.selectMeasurementColumns(datasetProfile);
+		List<String> actualCoordCols = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
+		
+		assertArrayEquals(expectedMeasureCols.toArray(), actualMeasureCols.toArray());
+		assertArrayEquals(expectedCoordCols.toArray(), actualCoordCols.toArray());
 	}
 	
 }

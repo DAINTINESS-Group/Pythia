@@ -50,6 +50,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private Dataset<Row> dataset;
 	private DominanceParameters dominanceParameters;
 	private boolean hasComputedDescriptiveStats;
+	private boolean hasComputedAllPairsCorrelations;
 	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
@@ -57,6 +58,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 				SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster())
 						.config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate());
 		hasComputedDescriptiveStats = false;
+		hasComputedAllPairsCorrelations = false;
 	}
 
 	@Override
@@ -108,7 +110,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunHistograms()) computeAllHistograms();
 		if (parameters.shouldRunAllPairsCorrelations()) computeAllPairsCorrelations();
 		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
-		if(parameters.shouldRunHighlightPatterns()) identifyHighlightPatterns();
+		if (parameters.shouldRunHighlightPatterns()) identifyHighlightPatterns();
 		
 		return datasetProfile;
 	}
@@ -147,6 +149,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		ICorrelationsCalculator calculator = factory.createCorrelationsCalculator(CorrelationsMethod.PEARSON);
 		calculator.calculateAllPairsCorrelations(dataset, datasetProfile);
 		logger.info(String.format("Computed Correlations Profile for dataset: '%s'", datasetProfile.getAlias()));
+		hasComputedAllPairsCorrelations = true;
 	}
 
 	private void extractAllDecisionTrees() throws IOException {
@@ -165,6 +168,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 			return;
 		}
 		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
+		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		IPatternManagerFactory factory = new IPatternManagerFactory();
 		IPatternManager patternManager = factory.createPatternManager(
 				dataset, datasetProfile, dominanceParameters);

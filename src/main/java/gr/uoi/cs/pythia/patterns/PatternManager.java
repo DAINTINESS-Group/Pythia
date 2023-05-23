@@ -59,8 +59,12 @@ public class PatternManager implements IPatternManager {
 
     // Select the measurement & coordinate columns for dominance highlight identification
     List<String> measurementColumns = columnSelector.selectMeasurementColumns(datasetProfile);
-    List<String> coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile);
+    List<String> coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 
+    // Debug prints
+    logger.debug(String.format("Selected measurement columns: %s", measurementColumns));
+    logger.debug(String.format("Selected coordinate columns: %s", coordinateColumns));
+    
     // Highlight identification can not proceed with no measurement/coordinate
     if (measurementColumns.isEmpty()) return;
     if (coordinateColumns.isEmpty()) return;

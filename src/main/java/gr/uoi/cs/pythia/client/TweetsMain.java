@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia;
+package gr.uoi.cs.pythia.client;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +21,9 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
-public class Main {
+// This class contains a main method specifically set up for the 'tweets' dataset.
+// Used to assist with development.
+public class TweetsMain {
   public static void main(String[] args) throws AnalysisException, IOException {
     IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 

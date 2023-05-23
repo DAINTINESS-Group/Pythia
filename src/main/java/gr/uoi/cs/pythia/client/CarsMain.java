@@ -15,13 +15,10 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
-// TODO this class can most likely be deleted
-// DatasetProfilerParameters allow us to select which parts of the dataset profiling
-// will be executed and therefore the normal main method could be used for patterns development.
-public class Patterns {
+// This class contains a main method specifically set up for the 'cars' dataset.
+// Used to assist with development.
+public class CarsMain {
 
-  // This is a dummy main method
-  // Its purpose is to assist with the development of highlight pattern identification
   public static void main(String[] args) throws AnalysisException, IOException {
     IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 
@@ -33,14 +30,14 @@ public class Patterns {
 
     datasetProfiler.registerDataset(alias, path, schema);
     datasetProfiler.declareDominanceParameters(
-            DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
-            new String[]{"price"},
-            new String[]{"model", "year"}
+            DominanceColumnSelectionMode.SMART,
+            new String[] {"price"},
+            new String[] {"model", "year"}
     );
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
-    boolean shouldRunAllPairsCorrelations = false;
+    boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = false;
     boolean shouldRunHighlightPatterns = true;
 

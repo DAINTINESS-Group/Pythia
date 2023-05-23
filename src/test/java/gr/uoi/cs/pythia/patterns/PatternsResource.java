@@ -49,7 +49,7 @@ public class PatternsResource extends ExternalResource {
         
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = false;
-		boolean shouldRunAllPairsCorrelations = false;
+		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunHighlightPatterns = false;
 

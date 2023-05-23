@@ -3,7 +3,11 @@ package gr.uoi.cs.pythia.patterns.dominance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 
 import gr.uoi.cs.pythia.model.Column;
@@ -12,9 +16,13 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 // TODO maybe add interface-factory for the different selection modes.
 public class DominanceColumnSelector {
 
+  private static final double CORRELATIONS_THRESHOLD = 0.6;
+  private static final int DISTINCT_VALUES_THRESHOLD = 20;
+
   private final DominanceColumnSelectionMode dominanceColumnSelectionMode;
   private final List<String> measurementColumns;
   private final List<String> coordinateColumns;
+  private final List<String> userSpecifiedMeasurementColumns;
 
   // Valid data types for measurement columns
   private final String[] measurementDataTypes = {
@@ -31,6 +39,7 @@ public class DominanceColumnSelector {
   public DominanceColumnSelector(DominanceParameters dominanceParameters) {
     this.measurementColumns = new ArrayList<>();
     this.coordinateColumns = new ArrayList<>();
+    this.userSpecifiedMeasurementColumns = new ArrayList<>();
 
     if (dominanceParameters.getColumnSelectionMode() != null) {
       this.dominanceColumnSelectionMode = dominanceParameters.getColumnSelectionMode();
@@ -39,10 +48,12 @@ public class DominanceColumnSelector {
       this.dominanceColumnSelectionMode = DominanceColumnSelectionMode.SMART;
     }
     if (dominanceParameters.getMeasurementColumns() != null) {
-      this.measurementColumns.addAll(Arrays.asList(
-              dominanceParameters.getMeasurementColumns()));
+    	this.userSpecifiedMeasurementColumns.addAll(Arrays.asList(
+                dominanceParameters.getMeasurementColumns()));
+      this.measurementColumns.addAll(userSpecifiedMeasurementColumns);
     }
     if (dominanceParameters.getCoordinateColumns() != null) {
+      
       this.coordinateColumns.addAll(Arrays.asList(
               dominanceParameters.getCoordinateColumns()));
     }
@@ -58,11 +69,11 @@ public class DominanceColumnSelector {
     return measurementColumns;
   }
 
-  public List<String> selectCoordinateColumns(DatasetProfile datasetProfile) {
+  public List<String> selectCoordinateColumns(DatasetProfile datasetProfile, Dataset<Row> dataset) {
     if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.EXHAUSTIVE)) {
       selectAllCandidateCoordinateColumns(datasetProfile);
     } else if (dominanceColumnSelectionMode.equals(DominanceColumnSelectionMode.SMART)) {
-      selectInterestingCoordinateColumns(datasetProfile);
+      selectInterestingCoordinateColumns(datasetProfile, dataset);
     }
     validateCoordinateColumns(datasetProfile);
     return coordinateColumns;
@@ -86,16 +97,60 @@ public class DominanceColumnSelector {
     }
   }
 
+  // TODO 1: can we improve measurement columns selection algorithm?
+  //  The algorithm currently prunes the columns that are highly correlated
+  //  unless they are explicitly declared for dominance identification by the user
+  //  in the input DominanceParameters.
+  // TODO 2: report on pruned columns - currently no information is kept about columns
+  //  that are skipped due to the fact that they are highly correlated.
   private void selectInterestingMeasurementColumns(DatasetProfile datasetProfile) {
-    // TODO figure out an algorithm to select measurement columns
-    // most likely by utilizing the DescriptiveStatisticsProfile and/or CorrelationsProfile
-    // of each Column
+    for (Column column : datasetProfile.getColumns()) {
+      if (measurementColumns.contains(column.getName())) continue;
+      if (!isValidDataType(column.getDatatype(), measurementDataTypes)) continue;
+      Map<String, Double> allCorrelations = column.getCorrelationsProfile().getAllCorrelations();
+      for (Map.Entry<String, Double> entry : allCorrelations.entrySet()) {
+        double correlation = entry.getValue();
+        String correlatedColumn = entry.getKey();
+        if (Math.abs(correlation) >= CORRELATIONS_THRESHOLD) {
+          if (!userSpecifiedMeasurementColumns.contains(correlatedColumn)) {
+            measurementColumns.remove(correlatedColumn);
+          }
+        }
+      }
+      measurementColumns.add(column.getName());
+    }
   }
 
-  private void selectInterestingCoordinateColumns(DatasetProfile datasetProfile) {
-    // TODO figure out an algorithm to select coordinate columns
-    // most likely by utilizing the DescriptiveStatisticsProfile and/or CorrelationsProfile
-    // of each Column
+  // TODO can we improve coordinate columns selection algorithm?
+  //  The algorithm currently prunes the columns with more distinct values
+  //  than the defined threshold allows, and the columns with a single distinct value,
+  //  unless they are explicitly declared for dominance identification by the user
+  //  in the input DominanceParameters.
+  private void selectInterestingCoordinateColumns(DatasetProfile datasetProfile,
+      Dataset<Row> dataset) {
+    for (Column column : datasetProfile.getColumns()) {
+      if (coordinateColumns.contains(column.getName())) continue;
+      if (!isValidDataType(column.getDatatype(), coordinateDataTypes)) continue;
+      List<String> distinctValues = runGetDistinctValuesQuery(dataset, column.getName());
+      if (distinctValues.size() > DISTINCT_VALUES_THRESHOLD) continue;
+      if (distinctValues.size() == 1) continue;
+      coordinateColumns.add(column.getName());
+    }
+  }
+
+  private List<String> runGetDistinctValuesQuery(Dataset<Row> dataset, String colName) {
+    return dataset
+            .select(colName)
+            .distinct()
+            .collectAsList()
+            .stream()
+            .map(s -> parseStringValue(s.get(0)))
+            .collect(Collectors.toList());
+  }
+
+  private String parseStringValue(Object object) {
+    if (object == null) return "";
+    return object.toString();
   }
 
   private void validateMeasurementColumns(DatasetProfile datasetProfile) {
