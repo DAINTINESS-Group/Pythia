@@ -50,6 +50,7 @@ public class CarsMain {
                     shouldRunDecisionTrees,
                     shouldRunHighlightPatterns));
 
+    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
   }
 

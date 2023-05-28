@@ -186,9 +186,11 @@ public class DominanceResult {
     return str;
   }
 
-  public String identificationResultsToString() {
+  public String identificationResultsToString(boolean isExtensiveReport) {
     StringBuilder str = new StringBuilder();
     for (Row row : identificationResults) {
+      boolean isHighlight = isHighlightRow(row);
+      if (!isExtensiveReport && !isHighlight) continue;
       for (int i = 0; i < row.length(); i++) {
         if (row.get(i) == null) continue;
         if (hasTwoCoordinates() && i == 2) continue;
@@ -200,6 +202,13 @@ public class DominanceResult {
     }
     return str.toString();
   }
+  
+  private boolean isHighlightRow(Row row) {
+	  // First row contains the titles of columns so we always include it
+	  if (identificationResults.indexOf(row) == 0) return true;
+	  if (hasOneCoordinate()) return row.getBoolean(3);
+	  return row.getBoolean(4);
+  }
 
   private int getLongestStringLength(int index) {
     int length = identificationResults.get(0).get(index).toString().length();
@@ -210,7 +219,7 @@ public class DominanceResult {
     return length;
   }
 
-  public String highlightsToString() {
+  public String highlightsToString(boolean isExtensiveReport) {
     StringBuilder str = new StringBuilder();
     for (Row row : identificationResults) {
       if (identificationResults.indexOf(row) == 0) continue;
@@ -220,7 +229,7 @@ public class DominanceResult {
         }
       } else if (hasTwoCoordinates()) {
         if (row.getBoolean(4)) {
-          str.append(buildHighlightStringWithTwoCoords(row)).append("\n");
+          str.append(buildHighlightStringWithTwoCoords(row, isExtensiveReport)).append("\n");
         }
       }
     }
@@ -238,17 +247,23 @@ public class DominanceResult {
     );
   }
 
-  private String buildHighlightStringWithTwoCoords(Row row) {
-    return String.format("- Coordinate X: %s (%s) presents a %s dominance over the %ss: %s." +
-                    "\nIn detail, the aggregate values of %s dominate the %ss:" +
-                    "\n%s" +
-                    "Overall, %s has a dominance percentage score of %s%% " +
-                    "and an aggregate marginal sum of %s (%s).",
-            row.getString(0), xCoordinateColName, row.getString(5), xCoordinateColName,
-            row.get(1).toString(), row.getString(0), xCoordinateColName,
-            buildDominatedOnYValuesString(row),
-            row.getString(0), decimalFormat.format(row.getDouble(3)),
-            decimalFormat.format(row.getDouble(6)), measurementColName
+  private String buildHighlightStringWithTwoCoords(Row row, boolean isExtensiveReport) {
+	  String dominatedOnYValuesString = "";
+	  if (isExtensiveReport) {
+		  dominatedOnYValuesString = 
+				  String.format("\nIn detail, the aggregate values of %s dominate the %ss:" +
+				  "\n%s", 
+				  row.getString(0), xCoordinateColName,
+				  buildDominatedOnYValuesString(row));
+	  }
+	  return String.format("- Coordinate X: %s (%s) presents a %s dominance over the %ss: %s. " + 
+			  dominatedOnYValuesString +
+			  "Overall, %s has a dominance percentage score of %s%% " +
+			  "and an aggregate marginal sum of %s (%s).",
+			  row.getString(0), xCoordinateColName, row.getString(5), xCoordinateColName,
+			  row.get(1).toString(),
+			  row.getString(0), decimalFormat.format(row.getDouble(3)),
+			  decimalFormat.format(row.getDouble(6)), measurementColName
     );
   }
 

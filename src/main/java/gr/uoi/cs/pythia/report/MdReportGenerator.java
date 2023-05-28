@@ -19,6 +19,8 @@ import gr.uoi.cs.pythia.report.md.components.MdHistograms;
 
 public class MdReportGenerator implements IReportGenerator {
 
+	private static final String horizontalLine =  "\n\n-----------------------------------------------" +
+			"-----------------------------------------------------\n\n";
 	private static final String preTagOpen = "<pre>\n";
 	private static final String preTagClose = "</pre>\n";
 
@@ -27,6 +29,7 @@ public class MdReportGenerator implements IReportGenerator {
 	private static final String lowDominanceReportFileName = "low_dominance_report.md";
 	private static final String outliersReportFileName = "outliers_report.md";
 
+	private static final boolean isExtensiveReport = false;
 
 	@Override
 	public void produceReport(DatasetProfile datasetProfile, String outputDirectoryPath)
@@ -65,43 +68,32 @@ public class MdReportGenerator implements IReportGenerator {
 
 	private void produceHighDominanceReport(List<DominanceResult> highDominanceResults,
 			String outputDirectoryPath) throws IOException {
-		StringBuilder str = new StringBuilder("# High Dominance Pattern Report\n");
+		StringBuilder str = new StringBuilder("# High Dominance Pattern Concise Report\n");
 		for (DominanceResult result : highDominanceResults) {
-			str.append(buildDominanceResultString(result, false));
+			str.append(buildDominanceResultString(result));
 		}
 		writeToFile(outputDirectoryPath, highDominanceReportFileName, String.valueOf(str));
 	}
 
 	private void produceLowDominanceReport(List<DominanceResult> lowDominanceResults,
 		 	String outputDirectoryPath) throws IOException {
-		StringBuilder str = new StringBuilder("# Low Dominance Pattern Report\n");
+		StringBuilder str = new StringBuilder("# Low Dominance Pattern Concise Report\n");
 		for (DominanceResult result : lowDominanceResults) {
-			str.append(buildDominanceResultString(result, false));
+			str.append(buildDominanceResultString(result));
 		}
 		writeToFile(outputDirectoryPath, lowDominanceReportFileName, String.valueOf(str));
 	}
 
-	// For debug purposes - set shouldIncludeQueryResults to true to add query results of
-	// double-coordinate dominance to the generated report.
-	private String buildDominanceResultString(DominanceResult dominanceResult,
-			boolean shouldIncludeQueryResults) {
-		String queryResultToString = "";
-
-    if (dominanceResult.hasTwoCoordinates() && shouldIncludeQueryResults) {
-      queryResultToString = "\n### Query Results:\n" +
-							preTagOpen + dominanceResult.queryResultToString() + preTagClose;
-    }
-
-		return "\n\n-----------------------------------------------" +
-						"-----------------------------------------------------\n\n" +
-						"\n## " + dominanceResult.titleToString() +
-						"\n### Metadata:\n" +
-						preTagOpen + dominanceResult.metadataToString() + preTagClose +
-						"\n### Detailed Results:\n" +
-						preTagOpen + dominanceResult.identificationResultsToString() + preTagClose +
-						"\n### Identified Highlights:\n" +
-						preTagOpen + dominanceResult.highlightsToString() + preTagClose +
-						queryResultToString;
+	private String buildDominanceResultString(DominanceResult dominanceResult) {
+		return horizontalLine + 
+				"\n## " + dominanceResult.titleToString() +
+				"\n### Metadata:\n" +
+				preTagOpen + dominanceResult.metadataToString() + preTagClose +
+				"\n### Detailed Results:\n" +
+				preTagOpen + dominanceResult.identificationResultsToString(isExtensiveReport) 
+				+ preTagClose +
+				"\n### Identified Highlights:\n" +
+				preTagOpen + dominanceResult.highlightsToString(isExtensiveReport) + preTagClose;
 	}
 
 	private void produceOutliersReport(DatasetProfile datasetProfile,
@@ -114,14 +106,13 @@ public class MdReportGenerator implements IReportGenerator {
 										"Total outliers found: %s\n", outlierResults.size()));
 
 		for (Column column : datasetProfile.getColumns()) {
-			int outlierInColumn = patternsProfile.countOutliersInColumn(column.getName());
-			str.append(String.format("\n\n-----------------------------------------------" +
-											"-----------------------------------------------------\n\n" +
+			int outliersInColumn = patternsProfile.countOutliersInColumn(column.getName());
+			str.append(String.format(horizontalLine +
 											"## Outliers in %s column\n" +
 											"Outliers found: %s\n",
 							column.getName(),
-							outlierInColumn));
-			if (outlierInColumn > 0) {
+							outliersInColumn));
+			if (outliersInColumn > 0) {
 				str.append(String.format("%s%-24s%-24s%-24s\n",
 								preTagOpen,
 								"Outlier value", patternsProfile.getOutlierType(), "Position in the column"));
@@ -130,7 +121,7 @@ public class MdReportGenerator implements IReportGenerator {
 				if (!Objects.equals(result.getColumnName(), column.getName())) continue;
 				str.append(result.toString());
 			}
-			if (outlierInColumn > 0) str.append(preTagClose);
+			if (outliersInColumn > 0) str.append(preTagClose);
 		}
 		writeToFile(outputDirectoryPath, outliersReportFileName, String.valueOf(str));
 	}
