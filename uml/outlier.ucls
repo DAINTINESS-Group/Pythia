@@ -4,7 +4,7 @@
   <class id="1" language="java" name="gr.uoi.cs.pythia.patterns.outlier.OutlierResult" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/OutlierResult.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="904" y="634"/>    
+    <position height="-1" width="-1" x="655" y="522"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -14,7 +14,7 @@
   <class id="2" language="java" name="gr.uoi.cs.pythia.patterns.outlier.ZScoreOutlierAlgo" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/ZScoreOutlierAlgo.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="292" y="751"/>    
+    <position height="-1" width="-1" x="387" y="603"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -33,7 +33,7 @@
   </class>  
   <enumeration id="4" language="java" name="gr.uoi.cs.pythia.patterns.outlier.OutlierType" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/OutlierType.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="623" y="634"/>    
+    <position height="-1" width="-1" x="645" y="780"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -43,7 +43,7 @@
   <interface id="5" language="java" name="gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/IOutlierAlgo.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="292" y="504"/>    
+    <position height="-1" width="-1" x="399" y="404"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -63,73 +63,70 @@
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <realization id="8">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="5"/>  
-  </realization>  
-  <dependency id="9">    
-    <bendpoint x="903" y="468"/>    
+  <dependency id="8">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="10">    
-    <bendpoint x="67" y="492"/>    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <association id="11">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="12" name="outlierType">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="13" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="14">    
-    <bendpoint x="475" y="598"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="16">    
-    <bendpoint x="629" y="750"/>    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <association id="17">    
-    <bendpoint x="292" y="435"/>    
+  <association id="9">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="18" name="outlierAlgo">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <attribute id="10" name="outlierAlgo">        
+        <position height="0" width="0" x="0" y="-14"/>      
       </attribute>      
-      <multiplicity id="19" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="11" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="-14"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="20">    
-    <bendpoint x="711" y="505"/>    
+  <dependency id="12">    
+    <bendpoint x="67" y="492"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="14">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="21">    
-    <bendpoint x="623" y="550"/>    
+  <realization id="15">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <dependency id="16">    
+    <bendpoint x="774" y="329"/>    
+    <bendpoint x="774" y="782"/>    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <dependency id="22">    
+  <association id="17">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="outlierType">        
+        <position height="0" width="0" x="22" y="146"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="0" width="0" x="22" y="146"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="21">    
     <bendpoint x="195" y="503"/>    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="22">    
+    <bendpoint x="67" y="784"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
