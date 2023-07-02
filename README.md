@@ -7,8 +7,7 @@
 #### <div align="center">Java library that produces an automated statistical profile of an input dataset.</div>
 
 A standard dataset is just a text file, with lines, where each line is a record, the fields of which are separated by a
-separator (eg. tabs, comma, pipe, etc). After registering a data set, the system produces a 100% automatic statistical
-profile of the dataset and generates a report of the findings.
+separator (eg. tabs, comma, pipe, etc). After registering a dataset and declaring the desired data analysis methods that should get executed, the system produces a 100% automatic statistical profile of the dataset and generates reports of the findings.
 
 ### <div align="center">Setup</div>
 
@@ -17,7 +16,7 @@ profile of the dataset and generates a report of the findings.
 #### Intellij IDEA Installation Requirements
 
 - Install [**Intellij IDEA**](https://www.jetbrains.com/idea/download/#section=windows) (Community edition is free)
-- Import the project as a Maven project, and it runs out of the box
+- Import the project as a Maven project, and it runs out of the box.
 
 #### Eclipse Installation Requirements
 
@@ -100,31 +99,16 @@ Suppose we want to generate a statistical profile of the following file:
 |  Andy   | 30  | 1000  |
 | Justin  | 65  | 10000 |
 
-Sample Main class with API usage for the file above
+Below is a sample Main class that showcases API usage in simple steps for the above dataset:
 
 ```java
-import gr.uoi.cs.pythia.engine.IDatasetProfiler;
-import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.labeling.Rule;
-import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.Metadata;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
-    public static void main(String[] args) throws AnalysisException, IOException {
-        // Initialize a DatasetProfiler
+	public static void main(String[] args) throws AnalysisException, IOException {
+		
+        // 1. Initialize a DatasetProfiler object (this is the main engine interface of Pythia).
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
 
-        // Specify input file schema
+        // 2. Specify the schema, an alias and the path of the input dataset.
         StructType schema =
                 new StructType(
                         new StructField[]{
@@ -132,30 +116,66 @@ public class Main {
                                 new StructField("age", DataTypes.IntegerType, true, Metadata.empty()),
                                 new StructField("money", DataTypes.IntegerType, true, Metadata.empty()),
                         });
+        String alias = "people";
+        String path = String.format(
+                "src%stest%sresources%sdatasets%speople.json",
+                File.separator, File.separator, File.separator, File.separator);
+        
+        // 3. Register the input dataset specified in step 2 into Pythia.
+        datasetProfiler.registerDataset(alias, path, schema);
 
-        // Register the input file
-        datasetProfiler.registerDataset("people", "people.csv", schema);
-
-        // Specify labeling rules for a column
+        // 4. Specify labeling rules for a column and a name for the new labeled column.
         List<Rule> rules =
                 new ArrayList<Rule>(
                         Arrays.asList(
                                 new Rule("money", LabelingSystemConstants.LEQ, 20, "poor"),
                                 new Rule("money", LabelingSystemConstants.LEQ, 1000, "mid"),
                                 new Rule("money", LabelingSystemConstants.GT, 1000, "rich")));
-
-        // Create Ruleset and specify the new column name
-        RuleSet ruleSet = new RuleSet("money_labeled", rules);
-
-        // Compute the new labeled column
+        String newColumnName = "money_labeled";
+        
+        // 5. Create a RuleSet object and compute the new labeled column
+        // (steps 4 & 5 can be repeated multiple times).
+        RuleSet ruleSet = new RuleSet(newColumnName, rules);
         datasetProfiler.computeLabeledColumn(ruleSet);
+        
+        // 6. Specify the DominanceColumnSelectionMode and (optionally) a list of 
+        // measurement & coordinate columns used in dominance pattern identification.
+        DominanceColumnSelectionMode mode = DominanceColumnSelectionMode.USER_SPECIFIED_ONLY;
+        String[] measurementColumns = new String[] { "money", "age" };
+        String[] coordinateColumns =  new String[] { "name" };
+        
+        // 7. Declare the specified dominance parameters into Pythia
+        // (steps 6 & 7 are optional, however, they are a prerequisite for highlight patterns identification).
+    	datasetProfiler.declareDominanceParameters(mode, measurementColumns, coordinateColumns);
 
-        // Compute the profile of the Dataset (this will take a while for big datasets)
-        datasetProfiler.computeProfileOfDataset("");
+    	// 8. Specify the auxiliary data output directory and the desired parts of the analysis procedure 
+    	// that should get executed for the computation of the dataset profile.
+    	String auxiliaryDataOutputDirectory = "results";
+    	boolean shouldRunDescriptiveStats = true;
+    	boolean shouldRunHistograms = true;
+    	boolean shouldRunAllPairsCorrelations = true;
+    	boolean shouldRunDecisionTrees = true;
+    	boolean shouldRunHighlightPatterns = true;
+        
+        // 9. Create a DatasetProfilerParameters object with the parameters specified in step 8
+        // and compute the profile of the dataset (this will take a while for big datasets).
+        DatasetProfilerParameters parameters =  new DatasetProfilerParameters(
+        		auxiliaryDataOutputDirectory,
+                shouldRunDescriptiveStats,
+                shouldRunHistograms,
+                shouldRunAllPairsCorrelations,
+                shouldRunDecisionTrees,
+                shouldRunHighlightPatterns);
+        datasetProfiler.computeProfileOfDataset(parameters);
 
-        // Generate a report in plain text and markdown format
-        datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "report.txt");
-        datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "report.md");
+        // 10. (Optionally) specify an output directory path for the generated reports
+        // (unspecified output directory path means that the reports will be generated under the 
+        // auxiliary data output directory specified in step 8).
+        String outputDirectoryPath = "";
+        
+        // 11. Generate a report in plain text and markdown format.
+        datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, outputDirectoryPath);
+        datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, outputDirectoryPath);
     }
 }
 ```
