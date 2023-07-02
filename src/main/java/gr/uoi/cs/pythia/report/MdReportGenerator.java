@@ -85,6 +85,7 @@ public class MdReportGenerator implements IReportGenerator {
 	}
 
 	private String buildDominanceResultString(DominanceResult dominanceResult) {
+		if (dominanceResult.hasNoHighlights()) return "";
 		return horizontalLine + 
 				"\n## " + dominanceResult.titleToString() +
 				"\n### Metadata:\n" +

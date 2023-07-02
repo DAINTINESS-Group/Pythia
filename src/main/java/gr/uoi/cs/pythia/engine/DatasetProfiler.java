@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,6 +65,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 
 	@Override
 	public void registerDataset(String alias, String path, StructType schema) throws AnalysisException {
+		Instant start = Instant.now();
+		
 		dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
 
 		List<Column> columns = new ArrayList<>();
@@ -72,6 +76,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 		}
 		datasetProfile = new DatasetProfile(alias, path, columns);
 		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of registerDataset: %s / %sms", duration, duration.toMillis()));
 	}
 
 	@Override
@@ -130,37 +138,64 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 
 	private void computeDescriptiveStats() {
+		Instant start = Instant.now();
+		
 		DescriptiveStatisticsFactory factory = new DescriptiveStatisticsFactory();
 		IDescriptiveStatisticsCalculator calculator = factory.getDefaultCalculator();
 		calculator.computeDescriptiveStats(dataset, datasetProfile);
 		logger.info(
 				String.format("Computed Descriptive Statistics Profile for dataset: '%s'", datasetProfile.getAlias()));
 		hasComputedDescriptiveStats = true;
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of computeDescriptiveStats: %s / %sms", duration, duration.toMillis()));
+		
 	}
 
 	private void computeAllHistograms() throws IOException {
+		Instant start = Instant.now();
+		
 		HistogramManager histogramManager = new HistogramManager(datasetProfile, dataset);
 		histogramManager.createAllHistograms();
 		logger.info(String.format("Computed Histogram(s) for dataset: '%s'", datasetProfile.getAlias()));
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of computeAllHistograms: %s / %sms", duration, duration.toMillis()));
 	}
 
 	private void computeAllPairsCorrelations() {
+		Instant start = Instant.now();
+		
 		CorrelationsCalculatorFactory factory = new CorrelationsCalculatorFactory();
 		ICorrelationsCalculator calculator = factory.createCorrelationsCalculator(CorrelationsMethod.PEARSON);
 		calculator.calculateAllPairsCorrelations(dataset, datasetProfile);
 		logger.info(String.format("Computed Correlations Profile for dataset: '%s'", datasetProfile.getAlias()));
 		hasComputedAllPairsCorrelations = true;
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of computeAllPairsCorrelations: %s / %sms", duration, duration.toMillis()));
 	}
 
 	private void extractAllDecisionTrees() throws IOException {
+		Instant start = Instant.now();
+		
 		DecisionTreeManager decisionTreeManager = new DecisionTreeManager(dataset, datasetProfile);
 		List<String> labeledColumnNames = decisionTreeManager.extractAllDecisionTrees();
 		for (String labeledColumnName : labeledColumnNames) {
 			logger.info(String.format("Computed Decision Tree(s) for labeled column: %s", labeledColumnName));
 		}
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of extractAllDecisionTrees: %s / %sms", duration, duration.toMillis()));
 	}
 
 	private void identifyHighlightPatterns() throws IOException {
+		Instant start = Instant.now();
+		
 		if (!hasDeclaredDominanceParameters()) {
 			logger.info(String.format(
 					"Dominance parameters not declared. " +
@@ -174,11 +209,17 @@ public class DatasetProfiler implements IDatasetProfiler {
 				dataset, datasetProfile, dominanceParameters);
 		patternManager.identifyHighlightPatterns();
 		logger.info(String.format("Identified highlight patterns for dataset %s", datasetProfile.getAlias()));
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of identifyHighlightPatterns: %s / %sms", duration, duration.toMillis()));
 	}
 
 	@Override
 	public void generateReport(String reportGeneratorType, String outputDirectoryPath) 
 			throws IOException {
+		Instant start = Instant.now();
+		
 		if (isInvalidPath(outputDirectoryPath)) {
 			outputDirectoryPath = datasetProfile.getAuxiliaryDataOutputDirectory();
 		}
@@ -187,6 +228,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 		generator.produceReport(datasetProfile, outputDirectoryPath);
 		logger.info(String.format("Generated %s report for dataset '%s' under the directory: %s.", 
 				reportGeneratorType, datasetProfile.getAlias(), outputDirectoryPath));
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of generateReport (%s): %s / %sms", reportGeneratorType, duration, duration.toMillis()));
 	}
 
 	@Override

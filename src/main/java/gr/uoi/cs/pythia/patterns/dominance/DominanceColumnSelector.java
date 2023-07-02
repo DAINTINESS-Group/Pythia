@@ -53,7 +53,6 @@ public class DominanceColumnSelector {
       this.measurementColumns.addAll(userSpecifiedMeasurementColumns);
     }
     if (dominanceParameters.getCoordinateColumns() != null) {
-      
       this.coordinateColumns.addAll(Arrays.asList(
               dominanceParameters.getCoordinateColumns()));
     }

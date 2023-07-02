@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.patterns;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,8 @@ public class PatternManager implements IPatternManager {
   }
 
   private void identifyDominance() {
+	Instant start = Instant.now();
+	
     DominanceColumnSelector columnSelector = new DominanceColumnSelector(dominanceParameters);
 
     // Select the measurement & coordinate columns for dominance highlight identification
@@ -62,9 +66,14 @@ public class PatternManager implements IPatternManager {
     List<String> coordinateColumns = columnSelector.selectCoordinateColumns(datasetProfile, dataset);
 
     // Debug prints
-    logger.debug(String.format("Selected measurement columns: %s", measurementColumns));
-    logger.debug(String.format("Selected coordinate columns: %s", coordinateColumns));
+    logger.info(String.format("Selected measurement columns: %s", measurementColumns));
+    logger.info(String.format("Selected coordinate columns: %s", coordinateColumns));
     
+    Instant end = Instant.now();
+    Duration duration = Duration.between(start, end);
+    logger.info(String.format("Duration of dominance column selection: %s / %sms", 
+    		duration, duration.toMillis()));
+	  
     // Highlight identification can not proceed with no measurement/coordinate
     if (measurementColumns.isEmpty()) return;
     if (coordinateColumns.isEmpty()) return;
@@ -92,44 +101,65 @@ public class PatternManager implements IPatternManager {
           List<String> measurementColumns, List<String> coordinateColumns,
           List<DominanceResult> highDominanceResults,
           List<DominanceResult> lowDominanceResults) {
-    for (String measurement : measurementColumns) {
-      for (String xCoordinate : coordinateColumns) {
-        highDominanceResults.add(highDominanceAlgo
-                .identifyDominanceWithOneCoordinate(measurement, xCoordinate));
-        lowDominanceResults.add(lowDominanceAlgo
-                .identifyDominanceWithOneCoordinate(measurement, xCoordinate));
-      }
-    }
+	  Instant start = Instant.now();
+	  
+	  for (String measurement : measurementColumns) {
+		  for (String xCoordinate : coordinateColumns) {
+			  highDominanceResults.add(highDominanceAlgo
+					  .identifyDominanceWithOneCoordinate(measurement, xCoordinate));
+			  lowDominanceResults.add(lowDominanceAlgo
+					  .identifyDominanceWithOneCoordinate(measurement, xCoordinate));
+		  }
+	  }
+	  
+	  Instant end = Instant.now();
+	  Duration duration = Duration.between(start, end);
+	  logger.info(String.format("Duration of identifyDominanceWithOneCoordinate: %s / %sms", 
+			  duration, duration.toMillis()));
   }
 
   private void identifyDominanceWithTwoCoordinates(
           List<String> measurementColumns, List<String> coordinateColumns,
           List<DominanceResult> highDominanceResults,
           List<DominanceResult> lowDominanceResults) {
-    for (String measurement : measurementColumns) {
-      for (String xCoordinate : coordinateColumns) {
-        for (String yCoordinate : coordinateColumns) {
-          if (xCoordinate.equals(yCoordinate)) continue;
-          highDominanceResults.add(highDominanceAlgo
-                  .identifyDominanceWithTwoCoordinates(
-                          measurement, xCoordinate, yCoordinate));
-          lowDominanceResults.add(lowDominanceAlgo
-                  .identifyDominanceWithTwoCoordinates(
-                          measurement, xCoordinate, yCoordinate));
+	  	Instant start = Instant.now();
+	  	
+        for (String measurement : measurementColumns) {
+          for (String xCoordinate : coordinateColumns) {
+            for (String yCoordinate : coordinateColumns) {
+              if (xCoordinate.equals(yCoordinate)) continue;
+              highDominanceResults.add(highDominanceAlgo
+                      .identifyDominanceWithTwoCoordinates(
+                              measurement, xCoordinate, yCoordinate));
+              lowDominanceResults.add(lowDominanceAlgo
+                      .identifyDominanceWithTwoCoordinates(
+                              measurement, xCoordinate, yCoordinate));
+            }
+          }
         }
-      }
-    }
+        
+        Instant end = Instant.now();
+  	  	Duration duration = Duration.between(start, end);
+  	  	logger.info(String.format("Duration of identifyDominanceWithTwoCoordinates: %s / %sms", 
+  	  			duration, duration.toMillis()));
   }
 
   private void identifyOutliers() {
-    List<OutlierResult> outlierResults = outlierAlgo.identifyOutliers(dataset, datasetProfile);
-    datasetProfile.getPatternsProfile().setOutlierResults(outlierResults);
-    datasetProfile.getPatternsProfile().setOutlierType(outlierAlgo.getOutlierType().replace("_", " "));
+	  Instant start = Instant.now();
 
-    // TODO outlierType is hard-coded here
-    logger.info(String.format(
-            "Identified outliers using the \"%s\" outlier type for dataset: '%s'",
-            OutlierType.Z_SCORE, datasetProfile.getAlias()));
+	  List<OutlierResult> outlierResults = outlierAlgo.identifyOutliers(dataset,datasetProfile);
+	  datasetProfile.getPatternsProfile().setOutlierResults(outlierResults);
+	  datasetProfile.getPatternsProfile().setOutlierType(outlierAlgo.getOutlierType().replace("_", " "));
+
+	  // TODO outlierType is hard-coded here
+	  logger.info(String.format(
+			  "Identified outliers using the \"%s\" outlier type for dataset: '%s'",
+			  OutlierType.Z_SCORE, datasetProfile.getAlias()));
+	  
+	  Instant end = Instant.now();
+	  Duration duration = Duration.between(start, end);
+	  logger.info(String.format("Duration of identifyOutliers: %s / %sms", 
+			  duration, duration.toMillis()));
   }
 
 }

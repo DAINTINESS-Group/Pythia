@@ -276,5 +276,13 @@ public class DominanceResult {
     }
     return str.toString();
   }
+  
+  public boolean hasNoHighlights() {
+	  for (Row row : identificationResults) {
+		  if (identificationResults.indexOf(row) == 0) continue;
+		  if (isHighlightRow(row)) return false;
+	  }
+	  return true;
+  }
 
 }
