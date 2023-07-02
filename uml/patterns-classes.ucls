@@ -31,30 +31,30 @@
   </interface>  
   <class id="4" language="java" name="gr.uoi.cs.pythia.model.PatternsProfile" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/PatternsProfile.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="561" y="873"/>    
+    <position height="-1" width="-1" x="559" y="858"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="5">    
-    <bendpoint x="865" y="158"/>    
-    <end type="SOURCE" refId="2"/>    
+  <realization id="5">    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="3"/>  
-  </dependency>  
+  </realization>  
   <dependency id="6">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="7">    
+    <bendpoint x="865" y="158"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="8">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <realization id="8">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
