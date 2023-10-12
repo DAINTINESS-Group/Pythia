@@ -97,5 +97,9 @@ public class PeopleMain {
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, outputDirectoryPath);
         datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, outputDirectoryPath);
         
+        // 12. Extract the highlights of all the produced model
+        datasetProfiler.extractHighlightsForStorytelling(shouldRunDescriptiveStats, shouldRunHistograms, 
+        		shouldRunAllPairsCorrelations, shouldRunDecisionTrees, shouldRunHighlightPatterns);
+        
     }
 }

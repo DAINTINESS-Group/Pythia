@@ -1,6 +1,10 @@
 package gr.uoi.cs.pythia.storytelling;
 
+import java.util.List;
+
+
 public class HolisticHighlight {
+	
 	//Definitions based on the tables
 	
 	//HighlightType -> Correlation/Dec. Tree/ HighlightPattern / Histograms / Descriptive Stats
@@ -13,22 +17,66 @@ public class HolisticHighlight {
 	//Score -> one score
 	//List<ElementaryHighlight>
 	
+	private String highlightType;
+	private String mainMeasure;
+	private String highlightExtractionAlgorithm;
+	private String supportingText;
+	private String supportingRole;
+	private String resultingModel;
+	private String scoreType; 
+	private String scoreValue;
+	private List<ElementaryHighlight> elementaryHighlights;
+	
+	public HolisticHighlight(String highlightType, String mainMeasure, String highlightExtractionAlgorithm, String supportingRole,
+			 String resultingModel, String scoreType, String scoreValue, List<ElementaryHighlight> elementaryHighlights) {
+		this.highlightType = highlightType;
+		this.mainMeasure = mainMeasure;
+		this.highlightExtractionAlgorithm = highlightExtractionAlgorithm;
+		this.supportingRole = supportingRole;
+		this.resultingModel = resultingModel;
+		this.scoreType = scoreType;
+		this.scoreValue = scoreValue;
+		this.elementaryHighlights = elementaryHighlights;
 		
-	//////////////////////////////////////////
-	//Definitions based on the text and graphs
+	}
 	
-	//String mainMeasure -> The role of a measure type of the holistic highlight
-	//Explanator -> one of the possible features of the dataset
-	//List<ElementaryHighlight>
+	public String getHighlightType() {
+		return this.highlightType;
+	}
 	
-	//common start here
+	public String getMainMeasure() {
+		return this.mainMeasure;
+	}
+		
+	public String getHighlightExtractionAlgorithm() {
+		return this.highlightExtractionAlgorithm;
+	}
 	
+	public String getSupportingText() {
+		return this.supportingText;
+	}
 	
-	//HighlightType -> Correlation/Dec. Tree/ HighlightPattern / Histograms / Descriptive Stats
-	//HighlightModelType -> if i do correlation, then HighlightModelType is a list that includes Significant, Insignificant, Negatively Significant etc
-	//Model -> one value of the HighlightModelType list
-	//HighlightExtractionAlgorithm -> px Pearson/Kendall/Spearman for correlation
-	//ScoreType -> a list with all possible scores for the highlight extraction algorithm
-	//Score -> one score
-
+	public String getSupportingRole() {
+		return this.supportingRole;
+	}
+	
+	public String getResultingModel() {
+		return this.resultingModel;
+	}
+	
+	public String getScoreType() {
+		return this.scoreType;
+	}
+	
+	public String getScoreValue() {
+		return this.scoreValue;
+	}
+	
+	public List<ElementaryHighlight> getElementaryHighlights(){
+		return this.elementaryHighlights;
+	}
+	
+	public void setSupportingText(String supportingText) {
+		this.supportingText = supportingText;
+	}
 }

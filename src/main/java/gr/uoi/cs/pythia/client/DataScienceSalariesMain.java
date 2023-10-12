@@ -52,6 +52,9 @@ public class DataScienceSalariesMain {
 
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
+    
+    datasetProfiler.extractHighlightsForStorytelling(shouldRunDescriptiveStats, shouldRunHistograms, 
+    		shouldRunAllPairsCorrelations, shouldRunDecisionTrees, shouldRunHighlightPatterns);
   }
 
   public static StructType getDataScienceSalariesCsvSchema() {

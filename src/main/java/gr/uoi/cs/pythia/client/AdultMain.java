@@ -59,7 +59,10 @@ public class AdultMain {
 
 	    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
 	    datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
-
+	    
+	    datasetProfiler.extractHighlightsForStorytelling(shouldRunDescriptiveStats, shouldRunHistograms, 
+	    		shouldRunAllPairsCorrelations, shouldRunDecisionTrees, shouldRunHighlightPatterns);
+	    
 	    Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Total executiontime: %s / %sms", duration, duration.toMillis()));

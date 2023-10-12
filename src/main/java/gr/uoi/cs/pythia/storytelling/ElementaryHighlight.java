@@ -1,6 +1,11 @@
 package gr.uoi.cs.pythia.storytelling;
 
+import java.util.List;
+
+
 public class ElementaryHighlight {
+	
+	//private final Logger logger = Logger.getLogger(ElementaryHighlight.class);
 	// A fact produced as a combination of characters and measure values that play an important role in a holistic highlight
 	
 	//Definitions based on the tables
@@ -14,24 +19,60 @@ public class ElementaryHighlight {
 	//ScoreValue -> the actual score value
 	//ExtraComments
 	
+	private List<String> characterSet;
+	private List<String> characterTypes;
+	private String measureType;
+	private String measureValue;
+	private String highlightType;
+	private String scoreType;
+	private String scoreValue;
+	private String comments;
 	
 	
+	public ElementaryHighlight(List<String> characterSet, List<String> characterTypes, String measureType, String measureValue,
+								String highlightType, String scoreType, String scoreValue) {
+		this.characterSet = characterSet;
+		this.characterTypes = characterTypes;
+		this.measureType = measureType;
+		this.measureValue = measureValue;
+		this.highlightType = highlightType;
+		this.scoreType = scoreType;
+		this.scoreValue = scoreValue;	
+	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Definitions based on the text and graphs
+	public List<String> getCharacterSet(){
+		return this.characterSet;
+	}
 	
-	//CharactersSet -> the combination of dimension level values, i.e., the coordinates of a fact that is a highlight
-	//MeasureQuantity -> a role for the Measure Value of the elementary highlight
-	//HolisticHighlight -> to which the elementary highlight belongs
+	public List<String> getCharacterTypes(){
+		return this.characterTypes;
+	}
 	
-	// common start here
+	public String getMeasureType() {
+		return this.measureType;
+	}
 	
-	//HighlightType -> Correlation/Dec. Tree/ HighlightPattern / Histograms / Descriptive Stats
-	//HighlightModelType -> if i do correlation, then HighlightModelType is a list that includes Significant, Insignificant, Negatively Significant etc
-	//Model -> one value of the HighlightModelType list
-	//HighlightExtractionAlgorithm -> px Pearson/Kendall/Spearman for correlation
-	//ScoreType -> a list with all possible scores for the highlight extraction algorithm
-	//Score -> one score
+	public String getMeasureValue() {
+		return this.measureValue;
+	}
 	
-
+	public String getHighlightType() {
+		return this.highlightType;
+	}
+	
+	public String getScoreType() {
+		return this.scoreType;
+	}
+	
+	public String getScoreValue() {
+		return this.scoreValue;
+	}
+	
+	public String getComments() {
+		return this.comments;
+	}
+	
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 }
