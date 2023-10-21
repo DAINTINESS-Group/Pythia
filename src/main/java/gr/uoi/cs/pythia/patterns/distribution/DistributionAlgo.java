@@ -12,6 +12,7 @@ import org.apache.spark.mllib.stat.KernelDensity;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+@Deprecated
 public class DistributionAlgo {
 
 	private static final String DISTRIBUTION = "distribution";
