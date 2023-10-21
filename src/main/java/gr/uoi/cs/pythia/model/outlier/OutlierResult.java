@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.outlier;
+package gr.uoi.cs.pythia.model.outlier;
 
 public class OutlierResult {
 	private final OutlierType outlierType;

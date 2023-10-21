@@ -10,6 +10,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
@@ -17,8 +19,6 @@ import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierType;
 
 public class PatternManager implements IPatternManager {
 

@@ -10,6 +10,8 @@ import org.apache.spark.sql.types.DataTypes;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 
 public class ZScoreOutlierAlgo implements IOutlierAlgo {
 

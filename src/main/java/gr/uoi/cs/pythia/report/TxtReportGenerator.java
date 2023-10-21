@@ -9,8 +9,8 @@ import java.util.Objects;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.PatternsProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
 
 public class TxtReportGenerator implements IReportGenerator {
 

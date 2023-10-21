@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.patterns.outlier;
 
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
+
 public class OutlierAlgoFactory {
 
 	  public IOutlierAlgo createOutlierAlgo(OutlierType type) {

@@ -47,7 +47,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="gr.uoi.cs.pythia.patterns.outlier.OutlierResult" project="Pythia" 
+  <class id="6" language="java" name="gr.uoi.cs.pythia.model.outlier.OutlierResult" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/OutlierResult.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="324" y="1109"/>    

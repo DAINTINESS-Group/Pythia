@@ -11,7 +11,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
 import gr.uoi.cs.pythia.model.histogram.Bin;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 
 public class HighlightsManager {
 	
