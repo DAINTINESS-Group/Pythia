@@ -14,7 +14,7 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
+import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 

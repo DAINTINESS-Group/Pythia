@@ -41,6 +41,7 @@ import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
+import gr.uoi.cs.pythia.storytelling.HighlightsManager;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriter;
 
@@ -53,6 +54,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private DominanceParameters dominanceParameters;
 	private boolean hasComputedDescriptiveStats;
 	private boolean hasComputedAllPairsCorrelations;
+	private HighlightsManager highlightsManager;
 	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
@@ -240,6 +242,15 @@ public class DatasetProfiler implements IDatasetProfiler {
 		IDatasetWriter datasetWriter = factory.createDatasetWriter(datasetWriterType);
 		datasetWriter.write(dataset, path);
 		logger.info(String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
+	}
+	
+	@Override
+	public void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
+									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns) {
+		// TODO Auto-generated method stub
+		highlightsManager = new HighlightsManager(datasetProfile);
+		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees, highlightPatterns);
+		
 	}
 
 	private boolean isInvalidPath(String path) {

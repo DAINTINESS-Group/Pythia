@@ -60,7 +60,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <class id="7" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceResult" project="Pythia" 
+  <class id="7" language="java" name="gr.uoi.cs.pythia.model.dominance.DominanceResult" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceResult.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1070" y="784"/>    

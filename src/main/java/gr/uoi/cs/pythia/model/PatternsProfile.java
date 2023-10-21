@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import gr.uoi.cs.pythia.patterns.dominance.DominanceResult;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
+import gr.uoi.cs.pythia.model.dominance.DominanceResult;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 
 public class PatternsProfile {
 

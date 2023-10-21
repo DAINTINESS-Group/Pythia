@@ -11,10 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierResult;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierType;
 
 public class ZScoreOutlierAlgoTests {
 

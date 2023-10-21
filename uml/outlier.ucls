@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="gr.uoi.cs.pythia.patterns.outlier.OutlierResult" project="Pythia" 
+  <class id="1" language="java" name="gr.uoi.cs.pythia.model.outlier.OutlierResult" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/OutlierResult.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="655" y="522"/>    
@@ -31,7 +31,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="4" language="java" name="gr.uoi.cs.pythia.patterns.outlier.OutlierType" project="Pythia" 
+  <enumeration id="4" language="java" name="gr.uoi.cs.pythia.model.outlier.OutlierType" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier/OutlierType.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="655" y="780"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
