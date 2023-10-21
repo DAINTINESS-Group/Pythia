@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import gr.uoi.cs.pythia.model.dominance.DominanceResult;
+
 public abstract class DominanceAlgo {
 
   private final Logger logger = Logger.getLogger(DominanceAlgo.class);
