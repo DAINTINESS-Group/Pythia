@@ -122,6 +122,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
 		if (parameters.shouldRunHighlightPatterns()) identifyHighlightPatterns();
 		
+		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
+				parameters.shouldRunHistograms(),
+				parameters.shouldRunAllPairsCorrelations(),
+				parameters.shouldRunDecisionTrees(),
+				parameters.shouldRunHighlightPatterns());
+		
 		return datasetProfile;
 	}
 

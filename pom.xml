@@ -87,7 +87,8 @@
     </dependencies>
 
     <build>
-        <plugins>
+		<pluginManagement>
+			<plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -153,5 +154,7 @@
                 </configuration>
             </plugin>
         </plugins>
+		</pluginManagement>
+        
     </build>
 </project>

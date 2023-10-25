@@ -89,8 +89,5 @@ public class TweetsMain {
      
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
-    
-    datasetProfiler.extractHighlightsForStorytelling(shouldRunDescriptiveStats, shouldRunHistograms, 
-    		shouldRunAllPairsCorrelations, shouldRunDecisionTrees, shouldRunHighlightPatterns);
   }
 }

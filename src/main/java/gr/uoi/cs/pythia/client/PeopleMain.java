@@ -96,10 +96,5 @@ public class PeopleMain {
         // 11. Generate a report in plain text and markdown format.
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, outputDirectoryPath);
         datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, outputDirectoryPath);
-        
-        // 12. Extract the highlights of all the produced model
-        datasetProfiler.extractHighlightsForStorytelling(shouldRunDescriptiveStats, shouldRunHistograms, 
-        		shouldRunAllPairsCorrelations, shouldRunDecisionTrees, shouldRunHighlightPatterns);
-        
     }
 }
