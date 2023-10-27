@@ -43,9 +43,9 @@ public class AdultMain {
 	    );
 
 	    boolean shouldRunDescriptiveStats = true;
-	    boolean shouldRunHistograms = false;
+	    boolean shouldRunHistograms = true;
 	    boolean shouldRunAllPairsCorrelations = true;
-	    boolean shouldRunDecisionTrees = false;
+	    boolean shouldRunDecisionTrees = true;
 	    boolean shouldRunHighlightPatterns = true;
 
 	    datasetProfiler.computeProfileOfDataset(

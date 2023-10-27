@@ -130,15 +130,15 @@ public abstract class DominanceAlgo {
 
       double dominancePercentage = (double) dominatedValues
               / (double) (queryResult.size() - 1) * 100;
-      String highlightType = determineHighlightType(
+      String dominanceType = determineDominanceType(
               dominancePercentage, getDominanceType());
 
       dominanceResult.addIdentificationResult(
               xCoordinate,
               aggValueA,
               dominancePercentage,
-              isHighlight(highlightType),
-              highlightType);
+              isDominance(dominanceType),
+              dominanceType);
     }
     Instant end = Instant.now();
     Duration duration = Duration.between(start, end);
@@ -197,7 +197,7 @@ public abstract class DominanceAlgo {
       }
       double dominancePercentage = (double) dominatedXValues.size()
               / (double) (xCoordinates.size() - 1) * 100;
-      String highlightType = determineHighlightType(
+      String dominanceType = determineDominanceType(
               dominancePercentage, getDominanceType());
 
       dominanceResult.addIdentificationResult(
@@ -205,8 +205,8 @@ public abstract class DominanceAlgo {
               dominatedXValues,
               onYValues,
               dominancePercentage,
-              isHighlight(highlightType),
-              highlightType,
+              isDominance(dominanceType),
+              dominanceType,
               calculateAggValuesMarginalSum(xCoordinateA, queryResult));
     }
     
@@ -293,8 +293,8 @@ public abstract class DominanceAlgo {
     return rowA == rowB;
   }
 
-  private boolean isHighlight(String highlightType) {
-    return highlightType != EMPTY;
+  private boolean isDominance(String dominanceType) {
+    return dominanceType != EMPTY;
   }
 
   // TODO is it ok to use collectAsList here?
@@ -343,8 +343,8 @@ public abstract class DominanceAlgo {
 
   // This method checks if the given dominance percentages
   // satisfy the partial or total thresholds and returns a string
-  // that describes the type of the highlight.
-  private String determineHighlightType(double dominancePercentage, String dominanceType) {
+  // that describes the type of the dominance feature.
+  private String determineDominanceType(double dominancePercentage, String dominanceType) {
     if (dominancePercentage >= TOTAL_DOMINANCE_THRESHOLD) {
       return String.format("%s %s", TOTAL, dominanceType);
     }

@@ -17,11 +17,11 @@
 
 ### Detailed Results:
 <pre>
-name      age (sum)   Dominance%   Is highlight?   Highlight Type   
+name      age (sum)   Dominance%   Is dominance?   Dominance Type   
 Michael   50.0        100.0        true            total high       
 </pre>
 
-### Identified Highlights:
+### Identified Dominance Features:
 <pre>
 - Coordinate: Michael (name) has an aggregate (sum) value of 50 (age)
 and a total high dominance of 100% over the aggregate values of the other names.
@@ -44,11 +44,11 @@ and a total high dominance of 100% over the aggregate values of the other names.
 
 ### Detailed Results:
 <pre>
-name      money (sum)   Dominance%   Is highlight?   Highlight Type   
+name      money (sum)   Dominance%   Is dominance?   Dominance Type   
 Justin    30.0          100.0        true            total high       
 </pre>
 
-### Identified Highlights:
+### Identified Dominance Features:
 <pre>
 - Coordinate: Justin (name) has an aggregate (sum) value of 30 (money)
 and a total high dominance of 100% over the aggregate values of the other names.

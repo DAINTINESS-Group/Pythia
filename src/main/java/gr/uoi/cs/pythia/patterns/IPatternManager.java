@@ -13,6 +13,6 @@ public interface IPatternManager {
    * generated results are added to result objects lists in the PatternsProfile model
    * class.
    */
-  void identifyHighlightPatterns()
+  void identifyPatterns()
           throws IOException;
 }

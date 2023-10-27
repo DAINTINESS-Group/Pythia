@@ -51,7 +51,7 @@ public class PatternManager implements IPatternManager {
   }
 
   @Override
-  public void identifyHighlightPatterns() {
+  public void identifyPatterns() {
     identifyDominance();
     identifyOutliers();
   }

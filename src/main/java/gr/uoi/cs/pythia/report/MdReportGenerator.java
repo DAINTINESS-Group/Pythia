@@ -85,7 +85,7 @@ public class MdReportGenerator implements IReportGenerator {
 	}
 
 	private String buildDominanceResultString(DominanceResult dominanceResult) {
-		if (dominanceResult.hasNoHighlights()) return "";
+		if (dominanceResult.hasNoDominance()) return "";
 		return horizontalLine + 
 				"\n## " + dominanceResult.titleToString() +
 				"\n### Metadata:\n" +
@@ -93,8 +93,8 @@ public class MdReportGenerator implements IReportGenerator {
 				"\n### Detailed Results:\n" +
 				preTagOpen + dominanceResult.identificationResultsToString(isExtensiveReport) 
 				+ preTagClose +
-				"\n### Identified Highlights:\n" +
-				preTagOpen + dominanceResult.highlightsToString(isExtensiveReport) + preTagClose;
+				"\n### Identified Dominance Features:\n" +
+				preTagOpen + dominanceResult.dominanceToString(isExtensiveReport) + preTagClose;
 	}
 
 	private void produceOutliersReport(DatasetProfile datasetProfile,

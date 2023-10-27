@@ -120,7 +120,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunHistograms()) computeAllHistograms();
 		if (parameters.shouldRunAllPairsCorrelations()) computeAllPairsCorrelations();
 		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
-		if (parameters.shouldRunHighlightPatterns()) identifyHighlightPatterns();
+		if (parameters.shouldRunHighlightPatterns()) identifyPatterns();
 		
 		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
@@ -201,7 +201,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Duration of extractAllDecisionTrees: %s / %sms", duration, duration.toMillis()));
 	}
 
-	private void identifyHighlightPatterns() throws IOException {
+	private void identifyPatterns() throws IOException {
 		Instant start = Instant.now();
 		
 		if (!hasDeclaredDominanceParameters()) {
@@ -215,7 +215,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		IPatternManagerFactory factory = new IPatternManagerFactory();
 		IPatternManager patternManager = factory.createPatternManager(
 				dataset, datasetProfile, dominanceParameters);
-		patternManager.identifyHighlightPatterns();
+		patternManager.identifyPatterns();
 		logger.info(String.format("Identified highlight patterns for dataset %s", datasetProfile.getAlias()));
 		
 		Instant end = Instant.now();

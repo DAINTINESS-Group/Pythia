@@ -42,8 +42,8 @@ public class DominanceResult {
 				xCoordinateColName,
 				measurementColName + " (" + aggregationMethod + ")",
 				"Dominance%",
-				"Is highlight?",
-				"Highlight Type"));
+				"Is dominance?",
+				"Dominance Type"));
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
 	}
 
@@ -66,8 +66,8 @@ public class DominanceResult {
 				"Dominates the " + xCoordinateColName + "(s)",
 				"for the " + yCoordinateColName + "(s)",
 				"Dominance%",
-				"Is highlight?",
-				"Highlight Type",
+				"Is dominance?",
+				"Dominance Type",
 				"Aggr. Marginal Sum (" + measurementColName + ")"));
 		this.queryResult = queryResult;
 		this.decimalFormat.setRoundingMode(RoundingMode.FLOOR);
@@ -77,15 +77,15 @@ public class DominanceResult {
 			String xCoordinate,
 			double aggValue,
 			double dominancePercentage,
-			boolean isHighlight,
-			String highlightType) {
+			boolean isDominance,
+			String dominanceType) {
 
 		identificationResults.add(RowFactory.create(
 				xCoordinate,
 				Double.parseDouble(decimalFormat.format(aggValue)),
 				Double.parseDouble(decimalFormat.format(dominancePercentage)),
-				isHighlight,
-				highlightType
+				isDominance,
+				dominanceType
 				));
 	}
 
@@ -94,8 +94,8 @@ public class DominanceResult {
 			List<String> dominatedXValues,
 			HashMap<String, List<String>> onYValues,
 			double dominancePercentage,
-			boolean isHighlight,
-			String highlightType,
+			boolean isDominance,
+			String dominanceType,
 			double aggValuesMarginalSum) {
 
 		identificationResults.add(RowFactory.create(
@@ -103,8 +103,8 @@ public class DominanceResult {
 				dominatedXValues,
 				onYValues,
 				Double.parseDouble(decimalFormat.format(dominancePercentage)),
-				isHighlight,
-				highlightType,
+				isDominance,
+				dominanceType,
 				Double.parseDouble(decimalFormat.format(aggValuesMarginalSum))
 				));
 	}
@@ -163,8 +163,8 @@ public class DominanceResult {
 	public String identificationResultsToString(boolean isExtensiveReport) {
 		StringBuilder str = new StringBuilder();
 		for (Row row : identificationResults) {
-			boolean isHighlight = isHighlightRow(row);
-			if (!isExtensiveReport && !isHighlight) continue;
+			boolean isDominance = isDominanceRow(row);
+			if (!isExtensiveReport && !isDominance) continue;
 			for (int i = 0; i < row.length(); i++) {
 				if (row.get(i) == null) continue;
 				if (hasTwoCoordinates() && i == 2) continue;
@@ -177,7 +177,7 @@ public class DominanceResult {
 		return str.toString();
 	}
 
-	private boolean isHighlightRow(Row row) {
+	private boolean isDominanceRow(Row row) {
 		// First row contains the titles of columns so we always include it
 		if (identificationResults.indexOf(row) == 0) return true;
 		if (hasOneCoordinate()) return row.getBoolean(3);
@@ -222,25 +222,25 @@ public class DominanceResult {
 	}
 
 
-	public String highlightsToString(boolean isExtensiveReport) {
+	public String dominanceToString(boolean isExtensiveReport) {
 		StringBuilder str = new StringBuilder();
 		for (Row row : identificationResults) {
 			if (identificationResults.indexOf(row) == 0) continue;
 			if (hasOneCoordinate()) {
 				if (row.getBoolean(3)) {
-					str.append(buildHighlightStringWithOneCoord(row)).append("\n");
+					str.append(buildDominanceStringWithOneCoord(row)).append("\n");
 				}
 			} else if (hasTwoCoordinates()) {
 				if (row.getBoolean(4)) {
-					str.append(buildHighlightStringWithTwoCoords(row, isExtensiveReport)).append("\n");
+					str.append(buildDominanceStringWithTwoCoords(row, isExtensiveReport)).append("\n");
 				}
 			}
 		}
-		if (str.length() == 0) return "No highlights identified.\n";
+		if (str.length() == 0) return "No dominance patterns identified.\n";
 		return str.toString();
 	}
 
-	private String buildHighlightStringWithOneCoord(Row row) {
+	private String buildDominanceStringWithOneCoord(Row row) {
 		return String.format("- Coordinate: %s (%s) has an aggregate (%s) value of %s (%s)" +
 				"\nand a %s dominance of %s%% over the aggregate values of the other %ss.",
 				row.getString(0), xCoordinateColName, aggregationMethod,
@@ -250,7 +250,7 @@ public class DominanceResult {
 				);
 	}
 
-	private String buildHighlightStringWithTwoCoords(Row row, boolean isExtensiveReport) {
+	private String buildDominanceStringWithTwoCoords(Row row, boolean isExtensiveReport) {
 		String dominatedOnYValuesString = "";
 		if (isExtensiveReport) {
 			dominatedOnYValuesString = 
@@ -280,10 +280,10 @@ public class DominanceResult {
 		return str.toString();
 	}
 
-	public boolean hasNoHighlights() {
+	public boolean hasNoDominance() {
 		for (Row row : identificationResults) {
 			if (identificationResults.indexOf(row) == 0) continue;
-			if (isHighlightRow(row)) return false;
+			if (isDominanceRow(row)) return false;
 		}
 		return true;
 	}

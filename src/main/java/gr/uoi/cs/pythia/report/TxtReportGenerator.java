@@ -78,8 +78,8 @@ public class TxtReportGenerator implements IReportGenerator {
 				dominanceResult.metadataToString() +
 				"\nDetailed Results:\n" +
 				dominanceResult.identificationResultsToString(isExtensiveReport) +
-				"\nIdentified Highlights:\n" +
-				dominanceResult.highlightsToString(isExtensiveReport) +
+				"\nIdentified Dominance Features:\n" +
+				dominanceResult.dominanceToString(isExtensiveReport) +
 				queryResultToString;
 	}
 	
