@@ -8,6 +8,8 @@ public class OutlierAlgoFactory {
 		    switch (type) {
 		      case Z_SCORE:
 		        return new ZScoreOutlierAlgo();
+		      case NORMALIZED_SCORE:
+		      	return new NormalizedScoreOutlierAlgo();
 		    }
 		    throw new IllegalArgumentException(
 		        String.format("Outlier %s is not a supported outlier type.", type));

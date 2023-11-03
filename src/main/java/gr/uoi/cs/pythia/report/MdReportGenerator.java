@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.spark.sql.types.DataTypes;
+
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.PatternsProfile;
@@ -107,22 +109,24 @@ public class MdReportGenerator implements IReportGenerator {
 										"Total outliers found: %s\n", outlierResults.size()));
 
 		for (Column column : datasetProfile.getColumns()) {
-			int outliersInColumn = patternsProfile.countOutliersInColumn(column.getName());
-			str.append(String.format(horizontalLine +
-											"## Outliers in %s column\n" +
-											"Outliers found: %s\n",
-							column.getName(),
-							outliersInColumn));
-			if (outliersInColumn > 0) {
-				str.append(String.format("%s%-24s%-24s%-24s\n",
-								preTagOpen,
-								"Outlier value", patternsProfile.getOutlierType(), "Position in the column"));
+			if(isNumericColumn(column)) {
+				int outliersInColumn = patternsProfile.countOutliersInColumn(column.getName());
+				str.append(String.format(horizontalLine +
+												"## Outliers in %s column\n" +
+												"Outliers found: %s\n",
+								column.getName(),
+								outliersInColumn));
+				if (outliersInColumn > 0) {
+					str.append(String.format("%s%-24s%-24s%-24s\n",
+									preTagOpen,
+									"Outlier value", patternsProfile.getOutlierType(), "Position in the column"));
+				}
+				for (OutlierResult result : outlierResults) {
+					if (!Objects.equals(result.getColumnName(), column.getName())) continue;
+					str.append(result.toString());
+				}
+				if (outliersInColumn > 0) str.append(preTagClose);
 			}
-			for (OutlierResult result : outlierResults) {
-				if (!Objects.equals(result.getColumnName(), column.getName())) continue;
-				str.append(result.toString());
-			}
-			if (outliersInColumn > 0) str.append(preTagClose);
 		}
 		writeToFile(outputDirectoryPath, outliersReportFileName, String.valueOf(str));
 	}
@@ -134,6 +138,11 @@ public class MdReportGenerator implements IReportGenerator {
 		try (FileWriter fileWriter = new FileWriter(absoluteFileName)) {
 			fileWriter.write(contents);
 		}
+	}
+	
+	private boolean isNumericColumn(Column column) {
+		return (column.getDatatype() == DataTypes.DoubleType.toString() ||
+				column.getDatatype() == DataTypes.IntegerType.toString());
 	}
 
 }

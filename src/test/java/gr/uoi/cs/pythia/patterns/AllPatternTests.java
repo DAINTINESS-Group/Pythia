@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	DominanceColumnSelectorTests.class, 
 	DominanceAlgoTests.class,
-	ZScoreOutlierAlgoTests.class 
+	ZScoreOutlierAlgoTests.class,
+	NormalizedScoreOutlierAlgoTests.class
 })
 public class AllPatternTests {
 
@@ -17,3 +18,4 @@ public class AllPatternTests {
     public static PatternsResource patternsResource = new PatternsResource();
     
 }
+  

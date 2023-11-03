@@ -13,7 +13,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 
-public class ZScoreOutlierAlgo implements IOutlierAlgo {
+public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
 	private static final String Z_SCORE = "Z_Score";
 	private static final double Z_SCORE_THRESHOLD = 3.0;
@@ -28,6 +28,9 @@ public class ZScoreOutlierAlgo implements IOutlierAlgo {
 			Dataset<Row> dataset, 
 			DatasetProfile datasetProfile) {
 		List<OutlierResult> results = new ArrayList<OutlierResult>();
+		
+		// Debug print
+		//System.out.println("------------------zSCORE--------------------");
 		
 		for (Column column : datasetProfile.getColumns()) {
 			if (isNotNumericColumn(column)) continue;
@@ -50,33 +53,6 @@ public class ZScoreOutlierAlgo implements IOutlierAlgo {
 		
 		// Debug print
 //		System.out.println(results);
-	}
-
-	private boolean isNotNumericColumn(Column column) {
-		return !(column.getDatatype() == DataTypes.DoubleType.toString() ||
-				column.getDatatype() == DataTypes.IntegerType.toString());
-	}
-
-	private List<Double> getColumnValues(Dataset<Row> dataset, Column column) {
-		return dataset
-				.select(column.getName())
-				.collectAsList()
-				.stream()
-				.map(s -> parseColumnValue(s.get(0)))
-				.collect(Collectors.toList());
-	}
-	
-	private Double parseColumnValue(Object object) {
-		if (object == null) return Double.NaN;
-		return Double.parseDouble(object.toString());
-	}
-
-	private Double getColumnMean(Column column) {
-		return Double.parseDouble(column.getDescriptiveStatisticsProfile().getMean());
-	}
-
-	private Double getColumnStandardDeviation(Column column) {
-		return Double.parseDouble(column.getDescriptiveStatisticsProfile().getStandardDeviation());
 	}
 
 }
