@@ -2,12 +2,11 @@ package gr.uoi.cs.pythia.patterns.outlier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Collections;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataTypes;
+
 
 //import org.apache.commons.math3.special.Erf;
 
@@ -18,12 +17,12 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 
 public class NormalizedScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 	
-	private static final String NORMALIZED_SCORE = "Normalized_Score";
-	private static final double NORMALIZED_SCORE_THRESHOLD = 1.0;
+	private static final String NORMALIZED_SCORE_TEXT = "Normalized_Score";
+	private static final double NORMALIZED_SCORE_THRESHOLD = 0.95;
 	
 	@Override
 	public String getOutlierType() {
-		return NORMALIZED_SCORE;
+		return NORMALIZED_SCORE_TEXT;
 	}
 	
 	@Override
@@ -39,7 +38,8 @@ public class NormalizedScoreOutlierAlgo extends OutlierAlgo implements IOutlierA
 			if (isNotNumericColumn(column)) continue;
 			Double mean = getColumnMean(column);
 			Double standardDeviation = getColumnStandardDeviation(column);
-			if (standardDeviation == 0.0) continue;
+			if (standardDeviation == 0.0)		//outlierness is 0 for all, will never exceed the THRESHOLD 
+				continue;
 			List<Double> values = getColumnValues(dataset, column);
 			
 			List<Double> zScores = getColumnZScores(values, mean, standardDeviation);			
