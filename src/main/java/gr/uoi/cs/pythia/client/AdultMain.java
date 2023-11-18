@@ -46,7 +46,8 @@ public class AdultMain {
 	    boolean shouldRunHistograms = true;
 	    boolean shouldRunAllPairsCorrelations = true;
 	    boolean shouldRunDecisionTrees = true;
-	    boolean shouldRunHighlightPatterns = true;
+	    boolean shouldRunDominancePatterns = true;
+	    boolean shouldRunOutlierDetection = false;
 
 	    datasetProfiler.computeProfileOfDataset(
 	            new DatasetProfilerParameters(
@@ -55,7 +56,8 @@ public class AdultMain {
 	                    shouldRunHistograms,
 	                    shouldRunAllPairsCorrelations,
 	                    shouldRunDecisionTrees,
-	                    shouldRunHighlightPatterns));
+	                    shouldRunDominancePatterns,
+	                    shouldRunOutlierDetection));
 
 	    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
 	    datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

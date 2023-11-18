@@ -75,7 +75,8 @@ public class PeopleMain {
     	boolean shouldRunHistograms = true;
     	boolean shouldRunAllPairsCorrelations = true;
     	boolean shouldRunDecisionTrees = false;
-    	boolean shouldRunHighlightPatterns = true;
+    	boolean shouldRunDominancePatterns = true;
+    	boolean shouldRunOutlierDetection = false;
         
         // 9. Create a DatasetProfilerParameters object with the parameters specified in step 8
         // and compute the profile of the dataset (this will take a while for big datasets).
@@ -85,7 +86,8 @@ public class PeopleMain {
                 shouldRunHistograms,
                 shouldRunAllPairsCorrelations,
                 shouldRunDecisionTrees,
-                shouldRunHighlightPatterns);
+                shouldRunDominancePatterns,
+                shouldRunOutlierDetection);
         datasetProfiler.computeProfileOfDataset(parameters);
 
         // 10. (Optionally) specify an output directory path for the generated reports

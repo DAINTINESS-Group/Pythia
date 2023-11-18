@@ -26,6 +26,7 @@ public class PatternManager implements IPatternManager {
   private final Dataset<Row> dataset;
   private final DatasetProfile datasetProfile;
   private final DominanceParameters dominanceParameters;
+  private final OutlierType outlierType;
 
   private HighDominanceAlgo highDominanceAlgo;
   private LowDominanceAlgo lowDominanceAlgo;
@@ -34,29 +35,39 @@ public class PatternManager implements IPatternManager {
   public PatternManager(
           Dataset<Row> dataset,
           DatasetProfile datasetProfile,
-          DominanceParameters dominanceParameters) {
+          DominanceParameters dominanceParameters,
+          OutlierType outlierType,
+          double outlierThreshold) {
     this.dataset = dataset;
     this.datasetProfile = datasetProfile;
     this.dominanceParameters = dominanceParameters;
+    this.outlierType = outlierType;
+    outlierAlgo = new OutlierAlgoFactory()
+            .createOutlierAlgo(outlierType, outlierThreshold);
     initializePatternAlgos();
   }
 
   private void initializePatternAlgos() {
     highDominanceAlgo = new HighDominanceAlgo(dataset);
     lowDominanceAlgo = new LowDominanceAlgo(dataset);
-    // TODO outlierType is hard-coded
-    // outlierType should be set dynamically when more outlier algos are added
-    outlierAlgo = new OutlierAlgoFactory()
-            .createOutlierAlgo(OutlierType.Z_SCORE);
   }
 
+ 
   @Override
-  public void identifyPatterns() {
-    identifyDominance();
-    identifyOutliers();
+  public void identifyOutliers() {
+	  List<OutlierResult> outlierResults = outlierAlgo.identifyOutliers(dataset,datasetProfile);
+	  
+	  datasetProfile.getPatternsProfile().setOutlierResults(outlierResults);
+	  
+	  datasetProfile.getPatternsProfile().setOutlierType(outlierAlgo.getOutlierType().replace("_", " "));
+	  
+	  logger.info(String.format(
+			  "Identified outliers using the \"%s\" outlier type for dataset: '%s'",
+			  outlierType, datasetProfile.getAlias()));
   }
-
-  private void identifyDominance() {
+  
+  @Override
+  public void identifyDominancePatterns() {
 	Instant start = Instant.now();
 	
     DominanceColumnSelector columnSelector = new DominanceColumnSelector(dominanceParameters);
@@ -143,23 +154,4 @@ public class PatternManager implements IPatternManager {
   	  	logger.info(String.format("Duration of identifyDominanceWithTwoCoordinates: %s / %sms", 
   	  			duration, duration.toMillis()));
   }
-
-  private void identifyOutliers() {
-	  Instant start = Instant.now();
-
-	  List<OutlierResult> outlierResults = outlierAlgo.identifyOutliers(dataset,datasetProfile);
-	  datasetProfile.getPatternsProfile().setOutlierResults(outlierResults);
-	  datasetProfile.getPatternsProfile().setOutlierType(outlierAlgo.getOutlierType().replace("_", " "));
-
-	  // TODO outlierType is hard-coded here
-	  logger.info(String.format(
-			  "Identified outliers using the \"%s\" outlier type for dataset: '%s'",
-			  OutlierType.Z_SCORE, datasetProfile.getAlias()));
-	  
-	  Instant end = Instant.now();
-	  Duration duration = Duration.between(start, end);
-	  logger.info(String.format("Duration of identifyOutliers: %s / %sms", 
-			  duration, duration.toMillis()));
-  }
-
 }

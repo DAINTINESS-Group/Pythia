@@ -16,7 +16,12 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
 	private static final String Z_SCORE = "Z_Score";
-	private static final double Z_SCORE_THRESHOLD = 3.0;
+	private  double Z_SCORE_THRESHOLD;
+
+	public ZScoreOutlierAlgo(double z_SCORE_THRESHOLD) {
+		super();
+		this.Z_SCORE_THRESHOLD = z_SCORE_THRESHOLD;
+	}
 
 	@Override
 	public String getOutlierType() {

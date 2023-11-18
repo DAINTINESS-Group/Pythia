@@ -19,8 +19,13 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 public class NormalizedScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 	
 	private static final String NORMALIZED_SCORE = "Normalized_Score";
-	private static final double NORMALIZED_SCORE_THRESHOLD = 1.0;
+	private double NORMALIZED_SCORE_THRESHOLD;
 	
+	public NormalizedScoreOutlierAlgo(double NORMALIZED_SCORE_THRESHOLD) {
+		super();
+		this.NORMALIZED_SCORE_THRESHOLD = NORMALIZED_SCORE_THRESHOLD;
+	}
+
 	@Override
 	public String getOutlierType() {
 		return NORMALIZED_SCORE;

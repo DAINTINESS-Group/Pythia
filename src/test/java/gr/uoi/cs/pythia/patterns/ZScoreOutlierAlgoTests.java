@@ -22,7 +22,7 @@ public class ZScoreOutlierAlgoTests {
 	
 	@Before
 	public void init() {
-		zScoreOutlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(OutlierType.Z_SCORE);
+		zScoreOutlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(OutlierType.Z_SCORE, 3.0);
 	}
 	
 	@Test

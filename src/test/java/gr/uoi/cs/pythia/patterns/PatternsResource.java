@@ -51,14 +51,15 @@ public class PatternsResource extends ExternalResource {
 		boolean shouldRunHistograms = false;
 		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = false;
-		boolean shouldRunHighlightPatterns = false;
+		boolean shouldRunDominancePatterns = false;
+		boolean shouldRunOutlierDetection = false;
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("patterns"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunHighlightPatterns));
+						shouldRunDominancePatterns, shouldRunOutlierDetection));
 	}
     
 }

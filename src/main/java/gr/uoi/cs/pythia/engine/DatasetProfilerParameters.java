@@ -8,7 +8,8 @@ public class DatasetProfilerParameters {
   private boolean shouldRunHistograms = false;
   private boolean shouldRunAllPairsCorrelations = false;
   private boolean shouldRunDecisionTrees = false;
-  private boolean shouldRunHighlightPatterns = false;
+  private boolean shouldRunDominancePatterns = false;
+  private boolean shouldRunOutlierDetection = false;
 
   /**
    * Determines the dataset analysis parts that should be executed.
@@ -25,8 +26,8 @@ public class DatasetProfilerParameters {
    *                                      should be calculated as part of the dataset profiling analysis.
    * @param shouldRunDecisionTrees        - Boolean value that defines whether decision trees should
    *                                      be calculated as part of the dataset profiling analysis.
-   * @param shouldRunHighlightPatterns    - Boolean value that defines whether the dataset should be
-   *                                      evaluated for highlight patterns as part of the dataset profiling analysis.
+   * @param shouldRunDominancePatterns    - Boolean value that defines whether the dataset should be
+   *                                      evaluated for dominance patterns as part of the dataset profiling analysis.
    */
   public DatasetProfilerParameters(
           String auxiliaryDataOutputDirectory,
@@ -34,13 +35,15 @@ public class DatasetProfilerParameters {
           boolean shouldRunHistograms,
           boolean shouldRunAllPairsCorrelations,
           boolean shouldRunDecisionTrees,
-          boolean shouldRunHighlightPatterns) {
+          boolean shouldRunDominancePatterns,
+          boolean shouldRunOutlierDetection) {
     this.auxiliaryDataOutputDirectory = auxiliaryDataOutputDirectory;
     this.shouldRunDescriptiveStats = shouldRunDescriptiveStats;
     this.shouldRunHistograms = shouldRunHistograms;
     this.shouldRunAllPairsCorrelations = shouldRunAllPairsCorrelations;
     this.shouldRunDecisionTrees = shouldRunDecisionTrees;
-    this.shouldRunHighlightPatterns = shouldRunHighlightPatterns;
+    this.shouldRunDominancePatterns = shouldRunDominancePatterns;
+    this.shouldRunOutlierDetection = shouldRunOutlierDetection;
   }
 
   public String getAuxiliaryDataOutputDirectory() {
@@ -63,8 +66,12 @@ public class DatasetProfilerParameters {
     return shouldRunDecisionTrees;
   }
 
-  public boolean shouldRunHighlightPatterns() {
-    return shouldRunHighlightPatterns;
+  public boolean shouldRunDominancePatterns() {
+    return shouldRunDominancePatterns;
+  }
+  
+  public boolean shouldRunOutlierDetection() {
+	  return shouldRunOutlierDetection;
   }
 
-} //end DatasetProfilerParameters
+}

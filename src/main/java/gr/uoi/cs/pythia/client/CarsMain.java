@@ -12,6 +12,7 @@ import org.apache.spark.sql.types.StructType;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
@@ -34,12 +35,15 @@ public class CarsMain {
             new String[] {"price"},
             new String[] {"model", "year"}
     );
+    datasetProfiler.setOutlierType(OutlierType.Z_SCORE);
+    datasetProfiler.setOutlierThreshold(3.0);
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
     boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = false;
-    boolean shouldRunHighlightPatterns = true;
+    boolean shouldRunDominancePatterns = false;
+    boolean shouldRunOutlierDetection = true;
 
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
@@ -48,7 +52,8 @@ public class CarsMain {
                     shouldRunHistograms,
                     shouldRunAllPairsCorrelations,
                     shouldRunDecisionTrees,
-                    shouldRunHighlightPatterns));
+                    shouldRunDominancePatterns,
+                    shouldRunOutlierDetection));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

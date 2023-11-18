@@ -22,7 +22,7 @@ public class NormalizedScoreOutlierAlgoTests {
 	
 	@Before
 	public void init() {
-		normalizedScoreOutlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(OutlierType.NORMALIZED_SCORE);
+		normalizedScoreOutlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(OutlierType.NORMALIZED_SCORE, 1.0);
 	}
 	
 	@Test

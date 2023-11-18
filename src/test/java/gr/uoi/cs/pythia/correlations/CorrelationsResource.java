@@ -38,14 +38,16 @@ public class CorrelationsResource extends ExternalResource {
 		boolean shouldRunHistograms = false;
 		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = false;
-		boolean shouldRunHighlightPatterns = false;
+		boolean shouldRunDominancePatterns = false;
+		boolean shouldRunOutlierDetection = false;
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("correlations"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunHighlightPatterns));
+						shouldRunDominancePatterns,
+						shouldRunOutlierDetection));
     }
     
 }

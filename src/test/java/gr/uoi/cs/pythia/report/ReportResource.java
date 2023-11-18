@@ -9,6 +9,7 @@ import org.junit.rules.ExternalResource;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
@@ -38,7 +39,9 @@ public class ReportResource extends ExternalResource {
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        
+        datasetProfiler.setOutlierThreshold(3.0);
+        datasetProfiler.setOutlierType(OutlierType.Z_SCORE);
+        datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
 		datasetProfiler.declareDominanceParameters(
 				DominanceColumnSelectionMode.EXHAUSTIVE,
 				null, null);
@@ -47,13 +50,15 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunHistograms = true;
 		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = true;
-		boolean shouldRunHighlightPatterns = true;
+		boolean shouldRunDominancePatterns = true;
+		boolean shouldRunOutlierDetection = false;
 
 		datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
 						shouldRunHistograms, shouldRunAllPairsCorrelations,
-						shouldRunDecisionTrees, shouldRunHighlightPatterns));
+						shouldRunDecisionTrees, shouldRunDominancePatterns,
+						shouldRunOutlierDetection));
     }
     
 }

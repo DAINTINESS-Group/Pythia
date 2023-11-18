@@ -39,7 +39,8 @@ public class DataScienceSalariesMain {
     boolean shouldRunHistograms = true;
     boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = false;
-    boolean shouldRunHighlightPatterns = true;
+    boolean shouldRunDominancePatterns = true;
+    boolean shouldRunOutlierDetection = false;
 
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
@@ -48,7 +49,8 @@ public class DataScienceSalariesMain {
                     shouldRunHistograms,
                     shouldRunAllPairsCorrelations,
                     shouldRunDecisionTrees,
-                    shouldRunHighlightPatterns));
+                    shouldRunDominancePatterns,
+                    shouldRunOutlierDetection));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");

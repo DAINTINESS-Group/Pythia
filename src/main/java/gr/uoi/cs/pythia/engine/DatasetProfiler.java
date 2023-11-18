@@ -34,6 +34,7 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
@@ -54,6 +55,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private DominanceParameters dominanceParameters;
 	private boolean hasComputedDescriptiveStats;
 	private boolean hasComputedAllPairsCorrelations;
+	private OutlierType outlierType;
+	private double outlierThreshold;
+
 	private HighlightsManager highlightsManager;
 	
 	public DatasetProfiler() {
@@ -120,13 +124,15 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunHistograms()) computeAllHistograms();
 		if (parameters.shouldRunAllPairsCorrelations()) computeAllPairsCorrelations();
 		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
-		if (parameters.shouldRunHighlightPatterns()) identifyPatterns();
+		if (parameters.shouldRunDominancePatterns()) identifyDominancePatterns();
+		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		
 		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
 				parameters.shouldRunAllPairsCorrelations(),
 				parameters.shouldRunDecisionTrees(),
-				parameters.shouldRunHighlightPatterns());
+				parameters.shouldRunDominancePatterns(),
+				parameters.shouldRunOutlierDetection());
 		
 		return datasetProfile;
 	}
@@ -201,7 +207,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Duration of extractAllDecisionTrees: %s / %sms", duration, duration.toMillis()));
 	}
 
-	private void identifyPatterns() throws IOException {
+	private void identifyDominancePatterns() throws IOException {
 		Instant start = Instant.now();
 		
 		if (!hasDeclaredDominanceParameters()) {
@@ -214,13 +220,29 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		IPatternManagerFactory factory = new IPatternManagerFactory();
 		IPatternManager patternManager = factory.createPatternManager(
-				dataset, datasetProfile, dominanceParameters);
-		patternManager.identifyPatterns();
+				dataset, datasetProfile, dominanceParameters, outlierType, outlierThreshold);
+		patternManager.identifyDominancePatterns();
 		logger.info(String.format("Identified highlight patterns for dataset %s", datasetProfile.getAlias()));
 		
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Duration of identifyHighlightPatterns: %s / %sms", duration, duration.toMillis()));
+	}
+	
+	private void identifyOutliers() throws IOException {
+		Instant start = Instant.now();
+
+		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
+		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
+		IPatternManagerFactory factory = new IPatternManagerFactory();
+		IPatternManager patternManager = factory.createPatternManager(
+				dataset, datasetProfile, dominanceParameters, outlierType, outlierThreshold);
+		patternManager.identifyOutliers();
+		logger.info(String.format("Identified outliers for dataset %s", datasetProfile.getAlias()));
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
 	}
 
 	@Override
@@ -252,11 +274,22 @@ public class DatasetProfiler implements IDatasetProfiler {
 	
 	@Override
 	public void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
-									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns) {
+									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
 		// TODO Auto-generated method stub
 		highlightsManager = new HighlightsManager(datasetProfile);
-		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees, highlightPatterns);
+		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
+														highlightPatterns, outlierDetection);
 		
+	}
+	
+	@Override
+	public void setOutlierType(OutlierType outlierType) {
+		this.outlierType = outlierType;
+	}
+	
+	@Override
+	public void setOutlierThreshold(double outlierThreshold) {
+		this.outlierThreshold = outlierThreshold;
 	}
 
 	private boolean isInvalidPath(String path) {
@@ -267,4 +300,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 		return dominanceParameters != null;
 	}
 	
+	@Override
+	public DatasetProfile getDatasetProfile() {
+		return datasetProfile;
+	}
 }

@@ -13,6 +13,9 @@ public interface IPatternManager {
    * generated results are added to result objects lists in the PatternsProfile model
    * class.
    */
-  void identifyPatterns()
+  void identifyDominancePatterns()
+          throws IOException;
+  
+  void identifyOutliers()
           throws IOException;
 }

@@ -7,6 +7,7 @@ import org.apache.spark.sql.types.StructType;
 
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 
 public interface IDatasetProfiler {
@@ -79,6 +80,14 @@ public interface IDatasetProfiler {
    */
   void writeDataset(String datasetWriterType, String path) throws IOException;
   
+  void setOutlierType(OutlierType outlierType);
+
+  void setOutlierThreshold(double threshold);
+
+  DatasetProfile getDatasetProfile();
+	
+	
+  
   
   /**
    * Extracts the highlights of the produced models for storytelling purposes.
@@ -92,6 +101,8 @@ public interface IDatasetProfiler {
    * 
    */
   void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
-		  boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns);
+		  boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection);
+  
+  
 
 }

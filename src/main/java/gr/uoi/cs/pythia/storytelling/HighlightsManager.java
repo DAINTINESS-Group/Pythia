@@ -29,16 +29,14 @@ public class HighlightsManager {
 	
 	public void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
 								boolean allPairsCorrelations, boolean decisionTrees, 
-								boolean highlightPatterns) {
+								boolean dominancePatterns, boolean outlierDetection) {
 		
 		if(descriptiveStats) extractDescriptiveStatsHighlights();
 		if(histograms) extractHistogramHighlights();
 		if(allPairsCorrelations) extractCorrelationsHighlights();
 		if(decisionTrees) extractDecisionTreesHighlights();
-		if(highlightPatterns) {
-			extractPatternHighlights();
-			extractOutlierHighlights();
-		}
+		if(dominancePatterns) extractPatternHighlights();
+		if(outlierDetection) extractOutlierHighlights();
 	}
 	
 	
