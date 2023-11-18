@@ -11,6 +11,12 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 
+/**
+ * An abstract class with reusable code for handling column values and stats
+ * 
+ * @author georgekarathanos
+ *
+ */
 public abstract class OutlierAlgo {
 
 	public abstract List<OutlierResult> identifyOutliers(

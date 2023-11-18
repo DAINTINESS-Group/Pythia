@@ -2,11 +2,10 @@ package gr.uoi.cs.pythia.patterns.outlier;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataTypes;
+
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -15,17 +14,17 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 
 public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
-	private static final String Z_SCORE = "Z_Score";
+	private static final String Z_SCORE_TEXT = "Z_Score";
 	private  double Z_SCORE_THRESHOLD;
 
 	public ZScoreOutlierAlgo(double z_SCORE_THRESHOLD) {
 		super();
 		this.Z_SCORE_THRESHOLD = z_SCORE_THRESHOLD;
 	}
-
+	
 	@Override
 	public String getOutlierType() {
-		return Z_SCORE;
+		return Z_SCORE_TEXT;
 	}
 	
 	@Override
