@@ -206,8 +206,8 @@ public class HighlightsManager {
 		for(OutlierResult outlierRes: outliersResults) {
 			String columnName = outlierRes.getColumnName();
 			
-			HolisticHighlight hHighlight = new HolisticHighlight("Outlier", columnName, "a Z-Score calculation algorithm",
-					null, "True", "Z-Score", Double.toString(outlierRes.getScore()), null);
+			HolisticHighlight hHighlight = new HolisticHighlight("Outlier", columnName, "a "+ datasetProfile.getPatternsProfile().getOutlierType() +" calculation algorithm",
+					null, "True", datasetProfile.getPatternsProfile().getOutlierType(), Double.toString(outlierRes.getScore()), null);
 			hHighlight.setSupportingText(" with value " + outlierRes.getValue());
 			holisticHighlights.add(hHighlight);
 			outlierHolisticHLs.add(hHighlight);
