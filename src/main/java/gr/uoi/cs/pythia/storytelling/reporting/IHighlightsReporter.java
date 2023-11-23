@@ -1,6 +1,8 @@
-package gr.uoi.cs.pythia.storytelling;
+package gr.uoi.cs.pythia.storytelling.reporting;
 
-public interface IModelHighlightsReporter {
+import gr.uoi.cs.pythia.storytelling.highlights.HolisticHighlight;
+
+public interface IHighlightsReporter {
 	
 	/**
 	 * Takes as input the holistic highlights of a model and returns a String with a highlight report.

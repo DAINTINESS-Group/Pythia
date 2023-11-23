@@ -1,10 +1,13 @@
-package gr.uoi.cs.pythia.storytelling;
+package gr.uoi.cs.pythia.storytelling.reporting;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class HistogramsHighlightsReporter implements IModelHighlightsReporter{
+import gr.uoi.cs.pythia.storytelling.highlights.ElementaryHighlight;
+import gr.uoi.cs.pythia.storytelling.highlights.HolisticHighlight;
+
+public class HistogramsHighlightsReporter implements IHighlightsReporter{
 
 	private final Logger logger = Logger.getLogger(HistogramsHighlightsReporter.class);
 	
