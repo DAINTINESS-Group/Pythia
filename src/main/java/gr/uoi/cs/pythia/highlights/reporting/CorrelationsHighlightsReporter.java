@@ -1,32 +1,34 @@
-package gr.uoi.cs.pythia.storytelling.reporting;
+package gr.uoi.cs.pythia.highlights.reporting;
 
 import org.apache.log4j.Logger;
 
-import gr.uoi.cs.pythia.storytelling.highlights.HolisticHighlight;
+import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 
-public class OutlierHighlightsReporter implements IHighlightsReporter{
+@Deprecated
+public class CorrelationsHighlightsReporter implements IHighlightsReporter{
 
-	private final Logger logger = Logger.getLogger(OutlierHighlightsReporter.class);
-	public OutlierHighlightsReporter() {
-		// TODO Auto-generated constructor stub
+	private final Logger logger = Logger.getLogger(CorrelationsHighlightsReporter.class);
+	
+	public CorrelationsHighlightsReporter() {
+		
 	}
 
 	@Override
 	public String getModelHighlightsString(HolisticHighlight holisticHighlight) {
-		// TODO Auto-generated method stub
-
+		holisticHighlight.setSupportingText(" with respect to the measure column");
+		
 		String highlightToString = "The Highlight Type " + holisticHighlight.getHighlightType() +
 				" for the column " + holisticHighlight.getMainMeasure() +
-				holisticHighlight.getSupportingText() +
 				" tested via " + holisticHighlight.getHighlightExtractionAlgorithm() +
+				holisticHighlight.getSupportingText() + " " + holisticHighlight.getSupportingRole() +
 				" fits under the model " + holisticHighlight.getResultingModel() +
 				" with Score Type " + holisticHighlight.getScoreType() +
 				" and with Score Value " + holisticHighlight.getScoreValue();
 		
+		
 		logger.info(String.format("%s", highlightToString));
 		
 		return highlightToString;
-
 	}
 
 }

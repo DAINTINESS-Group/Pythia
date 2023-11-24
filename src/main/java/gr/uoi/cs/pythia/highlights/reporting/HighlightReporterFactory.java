@@ -1,5 +1,6 @@
-package gr.uoi.cs.pythia.storytelling.reporting;
+package gr.uoi.cs.pythia.highlights.reporting;
 
+@Deprecated
 public class HighlightReporterFactory {
 
 	public enum HighlightReporterType{

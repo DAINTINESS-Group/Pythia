@@ -1,12 +1,13 @@
-package gr.uoi.cs.pythia.storytelling.reporting;
+package gr.uoi.cs.pythia.highlights.reporting;
 
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import gr.uoi.cs.pythia.storytelling.highlights.ElementaryHighlight;
-import gr.uoi.cs.pythia.storytelling.highlights.HolisticHighlight;
+import gr.uoi.cs.pythia.highlights.dom.ElementaryHighlight;
+import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 
+@Deprecated
 public class HistogramsHighlightsReporter implements IHighlightsReporter{
 
 	private final Logger logger = Logger.getLogger(HistogramsHighlightsReporter.class);

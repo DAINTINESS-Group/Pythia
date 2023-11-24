@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.storytelling.highlights;
+package gr.uoi.cs.pythia.highlights.dom;
 
 import java.util.List;
 
@@ -75,4 +75,24 @@ public class ElementaryHighlight {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-}
+
+	@Override
+	public String toString() {
+		String result = "\n";
+		result += "The ElementaryHighlight of " + getHighlightType() + " has: \n";
+		if(null != characterSet && null != characterTypes && characterSet.size() > 0 && characterTypes.size() > 0) {
+			for(int i=0; i<this.characterSet.size();i++) {
+				result += "\n\t (*) Character: " + this.characterSet.get(i) + " of type " + this.characterTypes.get(i);
+			}
+			result += "\n";
+		}	
+		result += "\t (*) a Measure Type " + getMeasureType() + " with value " + getMeasureValue()  
+				+ "\n\t (*) a Score Type " + getScoreType() + " with value " + getScoreValue() 
+				//+ "\n\t as well as " + getComments() 
+				+ "\n";
+		return result;
+	}
+	
+	
+	
+}//end class

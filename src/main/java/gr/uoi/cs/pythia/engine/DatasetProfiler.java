@@ -29,6 +29,7 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
+import gr.uoi.cs.pythia.highlights.HighlightsManager;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
@@ -42,7 +43,6 @@ import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
-import gr.uoi.cs.pythia.storytelling.HighlightsManager;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriter;
 
@@ -272,10 +272,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Exported dataset to %s using the %s writer.", path, datasetWriterType));
 	}
 	
-	@Override
-	public void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
+	
+	private void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
 									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
-		// TODO Auto-generated method stub
 		highlightsManager = new HighlightsManager(datasetProfile);
 		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
 														highlightPatterns, outlierDetection);

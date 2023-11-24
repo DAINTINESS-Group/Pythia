@@ -1,7 +1,8 @@
-package gr.uoi.cs.pythia.storytelling.reporting;
+package gr.uoi.cs.pythia.highlights.reporting;
 
-import gr.uoi.cs.pythia.storytelling.highlights.HolisticHighlight;
+import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 
+@Deprecated
 public interface IHighlightsReporter {
 	
 	/**

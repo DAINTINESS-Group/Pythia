@@ -89,20 +89,20 @@ public interface IDatasetProfiler {
 	
   
   
-  /**
-   * Extracts the highlights of the produced models for storytelling purposes.
-   * 
-   * @param descriptiveStats - A boolean that informs whether descriptive stats are produced for the dataset
-   * @param histograms - A boolean that informs whether histograms are produced for the dataset
-   * @param allPairsCorrelations - A boolean that informs whether correlations are produced for the dataset
-   * @param decisionTrees - A boolean that informs whether decision trees are produced for the dataset
-   * @param highlightPatterns - A boolean that informs whether highlight patterns are produced for the dataset
-   * 
-   * 
-   */
-  void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
-		  boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection);
-  
-  
+//  /**
+//   * Extracts the highlights of the produced models for storytelling purposes.
+//   * 
+//   * @param descriptiveStats - A boolean that informs whether descriptive stats are produced for the dataset
+//   * @param histograms - A boolean that informs whether histograms are produced for the dataset
+//   * @param allPairsCorrelations - A boolean that informs whether correlations are produced for the dataset
+//   * @param decisionTrees - A boolean that informs whether decision trees are produced for the dataset
+//   * @param highlightPatterns - A boolean that informs whether highlight patterns are produced for the dataset
+//   * 
+//   * 
+//   */
+//  void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
+//		  boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection);
+//  
+//  
 
 }
