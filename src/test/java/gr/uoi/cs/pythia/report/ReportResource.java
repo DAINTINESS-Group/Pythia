@@ -39,8 +39,9 @@ public class ReportResource extends ExternalResource {
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
-        datasetProfiler.setOutlierThreshold(3.0);
-        datasetProfiler.setOutlierType(OutlierType.Z_SCORE);
+        datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 3.0);
+//        datasetProfiler.setOutlierThreshold(3.0);
+//        datasetProfiler.setOutlierType(OutlierType.Z_SCORE);
         datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
 		datasetProfiler.declareDominanceParameters(
 				DominanceColumnSelectionMode.EXHAUSTIVE,

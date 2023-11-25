@@ -114,6 +114,27 @@ public class DatasetProfiler implements IDatasetProfiler {
 				dominanceColumnSelectionMode.toString()));
 	}
 	
+	
+	@Override
+	public DatasetProfile getDatasetProfile() {
+		//TODO why is this needed? Apparently, only at tests?
+		//TODO if needed:
+		//TODO add copy constructor at DataSetProfile and return a copy?
+		return datasetProfile;
+	}
+	
+	@Override
+	public void declareOutlierParameters(OutlierType outlierType, double outlierThreshold) {
+		if(null == outlierType) {
+			this.outlierType = OutlierType.Z_SCORE;
+		}
+		if(outlierThreshold < 0) {
+			this.outlierThreshold = 3.0;
+		}
+		this.outlierType = outlierType;
+		this.outlierThreshold = outlierThreshold;	
+	}
+	
 	@Override
 	public DatasetProfile computeProfileOfDataset(DatasetProfilerParameters parameters) 
 			throws IOException {
@@ -280,16 +301,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 														highlightPatterns, outlierDetection);
 		
 	}
-	
-	@Override
-	public void setOutlierType(OutlierType outlierType) {
-		this.outlierType = outlierType;
-	}
-	
-	@Override
-	public void setOutlierThreshold(double outlierThreshold) {
-		this.outlierThreshold = outlierThreshold;
-	}
 
 	private boolean isInvalidPath(String path) {
 		return path == null || path.isEmpty();
@@ -299,8 +310,5 @@ public class DatasetProfiler implements IDatasetProfiler {
 		return dominanceParameters != null;
 	}
 	
-	@Override
-	public DatasetProfile getDatasetProfile() {
-		return datasetProfile;
-	}
+
 }

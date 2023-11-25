@@ -185,3 +185,5 @@ public class Main {
 - Charisis Alexandros ([Youtube](https://youtu.be/QhAO9OIl6Cg))
 - Christodoulos Antoniou
 - Dimos Gkitsakis
+- George Karathanos
+- Panos Vassiliadis
