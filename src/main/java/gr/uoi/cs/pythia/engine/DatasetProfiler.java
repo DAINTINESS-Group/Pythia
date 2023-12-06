@@ -29,7 +29,8 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
-import gr.uoi.cs.pythia.highlights.HighlightsManager;
+import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
+import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
@@ -58,7 +59,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private OutlierType outlierType;
 	private double outlierThreshold;
 
-	private HighlightsManager highlightsManager;
+	private HighlightsManagerInterface highlightsManager;
 	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
@@ -296,7 +297,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	
 	private void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
 									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
-		highlightsManager = new HighlightsManager(datasetProfile);
+		highlightsManager = new HighlightsManagerFactory().generateHighlightsManager(HighlightsManagerFactory.HighlightManagerVersion.V01, datasetProfile);
 		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
 														highlightPatterns, outlierDetection);
 		

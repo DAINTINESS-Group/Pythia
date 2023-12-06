@@ -35,7 +35,7 @@ public class CarsMain {
             new String[] {"price"},
             new String[] {"model", "year"}
     );
-    datasetProfiler.declareOutlierParameters(OutlierType.NORMALIZED_SCORE, 1.0);
+    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
 //    datasetProfiler.setOutlierType(OutlierType.NORMALIZED_SCORE);
 //    datasetProfiler.setOutlierThreshold(1.0);
 

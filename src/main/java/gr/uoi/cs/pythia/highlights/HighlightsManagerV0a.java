@@ -19,33 +19,35 @@ import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 
 
 
-
-public class HighlightsManager {
+@Deprecated
+public class HighlightsManagerV0a implements HighlightsManagerInterface {
 	
-	private final Logger logger = Logger.getLogger(HighlightsManager.class);
+	private final Logger logger = Logger.getLogger(HighlightsManagerV0a.class);
 	private DatasetProfile datasetProfile;
 	private List<Column> columns;
 	private List<HolisticHighlight> holisticHighlights;
 	//private HighlightReporterFactory highlightReporterFactory; 
 	
 	
-	public HighlightsManager(DatasetProfile datasetProfile) {
+	public HighlightsManagerV0a(DatasetProfile datasetProfile) {
 		this.datasetProfile = datasetProfile;
 		this.columns = this.datasetProfile.getColumns();
 		this.holisticHighlights = new ArrayList<HolisticHighlight>();
 		//this.highlightReporterFactory = new HighlightReporterFactory();
 	}
 	
+	@Override
 	public List<HolisticHighlight> extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
-								boolean allPairsCorrelations, boolean decisionTrees, 
-								boolean dominancePatterns, boolean outlierDetection) {
+								boolean allPairsCorrelations, boolean decisionTrees, boolean outlierDetection,
+								boolean dominancePatterns) {
 		
 		if(descriptiveStats) extractDescriptiveStatsHighlights();
 		if(histograms) extractHistogramHighlights();
 		if(allPairsCorrelations) extractCorrelationsHighlights();
 		if(decisionTrees) extractDecisionTreesHighlights();
-		if(dominancePatterns) extractPatternHighlights();
 		if(outlierDetection) extractOutlierHighlights();
+		if(dominancePatterns) extractPatternHighlights();
+
 		
 		//TODO Now, everything is a highlight. We must process the bloody highlights
 		
@@ -76,37 +78,37 @@ public class HighlightsManager {
 			if(c.getDescriptiveStatisticsProfile() != null) {
 				String columnName = c.getName();
 				
-				String countValue = c.getDescriptiveStatisticsProfile().getCount();
+				Double countValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getCount());
 				HolisticHighlight hHighlight = new HolisticHighlight("Desciptive Statistics - Count of Values", columnName, "a values count", null, 
 						"True", null, countValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String meanValue = c.getDescriptiveStatisticsProfile().getMean();
+				Double meanValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMean());
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Mean Value", columnName, "mean value calculation", null, 
 						"True", null, meanValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String standDevValue = c.getDescriptiveStatisticsProfile().getStandardDeviation();
+				Double standDevValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getStandardDeviation());
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Standard Deviation", columnName, "standard deviation calculation", null, 
 						"True", null, standDevValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String medianValue = c.getDescriptiveStatisticsProfile().getMedian();
+				Double medianValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMedian());
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Median Value", columnName, "median value calculation", null, 
 						"True", null, medianValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String minValue = c.getDescriptiveStatisticsProfile().getMin();
+				Double minValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMin());
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Minimum Value", columnName, "minimum value calculation", null, 
 						"True", null, minValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String maxValue = c.getDescriptiveStatisticsProfile().getMax();
+				Double maxValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMax());
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Maximum Value", columnName, "maximum value calculation", null, 
 						"True", null, maxValue, null);
 				holisticHighlights.add(hHighlight);
@@ -148,7 +150,7 @@ public class HighlightsManager {
 					eHighlights.add(valuesCount);
 				}
 				HolisticHighlight hHighlight = new HolisticHighlight("Histogram", columnName, "a histogram constructor", null, 
-						"True", "Histogram Bins", Integer.toString(c.getHistogram().getBins().size()), eHighlights);
+						"True", "Histogram Bins", (double)(c.getHistogram().getBins().size()), eHighlights);
 				holisticHighlights.add(hHighlight);
 				histogramHolisticHLs.add(hHighlight);
 			}
@@ -181,7 +183,7 @@ public class HighlightsManager {
 						resultingModel = "Significantly High";
 					}
 					HolisticHighlight hHighlight = new HolisticHighlight("Correlation", columnName, "Pearson algorithm", supportingRole,
-							resultingModel, "r", Double.toString(scoreValue), null );
+							resultingModel, "r", scoreValue, null );
 					holisticHighlights.add(hHighlight);
 					
 //					IHighlightsReporter correlationsHighlightsReporter = this.highlightReporterFactory.createHighlightReporter(HighlightReporterFactory.HighlightReporterType.CORREL);
@@ -206,7 +208,7 @@ public class HighlightsManager {
 					String supportingRole = String.join(", ", decisionTrees.get(i).getFeatureColumnNames());
 					
 					HolisticHighlight hHighlight = new HolisticHighlight("Decision Tree", columnName, "decision tree construction algorithm",
-							supportingRole, "True", "Average Impurity", Double.toString(decisionTrees.get(i).getAverageImpurity()), null);
+							supportingRole, "True", "Average Impurity", decisionTrees.get(i).getAverageImpurity(), null);
 					hHighlight.setSupportingText(" with feature columns: ");
 					holisticHighlights.add(hHighlight);
 					
@@ -233,7 +235,7 @@ public class HighlightsManager {
 			String columnName = outlierRes.getColumnName();
 			
 			HolisticHighlight hHighlight = new HolisticHighlight("Outlier", columnName, "a "+ datasetProfile.getPatternsProfile().getOutlierType() +" calculation algorithm",
-					null, "True", datasetProfile.getPatternsProfile().getOutlierType(), Double.toString(outlierRes.getScore()), null);
+					null, "True", datasetProfile.getPatternsProfile().getOutlierType(), outlierRes.getScore(), null);
 			hHighlight.setSupportingText(" with value " + outlierRes.getValue());
 			holisticHighlights.add(hHighlight);
 			outlierHolisticHLs.add(hHighlight);
