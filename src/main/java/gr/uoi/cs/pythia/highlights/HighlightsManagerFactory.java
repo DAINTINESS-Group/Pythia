@@ -5,12 +5,12 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 public class HighlightsManagerFactory {
 
 	public enum HighlightManagerVersion{
-		V0a,V01 
+		V00,V01 
 	}
 	
 	public HighlightsManagerInterface generateHighlightsManager(HighlightManagerVersion version, DatasetProfile datasetProfile) {
 		switch(version) {
-			case V0a: return new HighlightsManagerV0a(datasetProfile);
+			case V00: return new HighlightsManagerV00(datasetProfile);
 			default:
 				return new HighlightsManagerV01(datasetProfile);
 		}

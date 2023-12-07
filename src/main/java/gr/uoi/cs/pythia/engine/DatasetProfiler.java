@@ -30,6 +30,7 @@ import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
+import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
@@ -61,13 +62,16 @@ public class DatasetProfiler implements IDatasetProfiler {
 
 	private HighlightsManagerInterface highlightsManager;
 	
+	//package-private for the moment
+	List<HolisticHighlight> holisticHighlights;
+	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(
 				SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster())
 						.config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate());
-		hasComputedDescriptiveStats = false;
-		hasComputedAllPairsCorrelations = false;
+		this.hasComputedDescriptiveStats = false;
+		this.hasComputedAllPairsCorrelations = false;
 	}
 
 	@Override
@@ -298,9 +302,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
 									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
 		highlightsManager = new HighlightsManagerFactory().generateHighlightsManager(HighlightsManagerFactory.HighlightManagerVersion.V01, datasetProfile);
-		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
+		this.holisticHighlights = highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
 														highlightPatterns, outlierDetection);
-		
 	}
 
 	private boolean isInvalidPath(String path) {

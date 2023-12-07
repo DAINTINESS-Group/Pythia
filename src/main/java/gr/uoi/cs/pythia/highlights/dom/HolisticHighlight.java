@@ -2,9 +2,6 @@ package gr.uoi.cs.pythia.highlights.dom;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import gr.uoi.cs.pythia.highlights.reporting.DecisionTreesHighlightsReporter;
 
 
 public class HolisticHighlight {

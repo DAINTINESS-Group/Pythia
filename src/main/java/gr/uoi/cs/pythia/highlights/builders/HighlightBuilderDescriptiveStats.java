@@ -16,9 +16,9 @@ public class HighlightBuilderDescriptiveStats {
 		this.columns = this.datasetProfile.getColumns();
 	}
 
-	public List<HolisticHighlight> extractDescriptiveStatsHighlights() {
+	public List<HolisticHighlight> extractHolisticHighlights() {
 		
-		List<HolisticHighlight> descriptiveStatsHolisticHLs = new ArrayList<HolisticHighlight>();
+		List<HolisticHighlight> fullListHLs = new ArrayList<HolisticHighlight>();
 		for(Column c: columns) {
 			if(c.getDescriptiveStatisticsProfile() != null) {
 				String mainMeasure = c.getName();
@@ -93,43 +93,43 @@ public class HighlightBuilderDescriptiveStats {
 						resultingModel, scoreTypePrefix+"Count", //countValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 	
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Mean Value", mainMeasure, "Algo mean()", supportingRole, 
 						resultingModel, scoreTypePrefix+"Mean", //meanValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 				
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Standard Deviation", mainMeasure, "Algo stddev()", supportingRole, 
 						resultingModel, scoreTypePrefix+"Stddev", //standDevValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 				
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Median Value", mainMeasure, "Algo median()", supportingRole, 
 						resultingModel, scoreTypePrefix+"Median", //medianValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 				
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Minimum Value", mainMeasure, "Algo min()", supportingRole, 
 						resultingModel, scoreTypePrefix+"Min", //minValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 				
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Maximum Value", mainMeasure, "Algo max()", supportingRole, 
 						resultingModel, scoreTypePrefix+"Max", //maxValue, null);
 						Double.NaN, null);
 //				holisticHighlights.add(hHighlight);
-				descriptiveStatsHolisticHLs.add(hHighlight);
+				fullListHLs.add(hHighlight);
 
 			}
 		}
 		
 		
-		return descriptiveStatsHolisticHLs;
+		return fullListHLs;
 	}
 
 }

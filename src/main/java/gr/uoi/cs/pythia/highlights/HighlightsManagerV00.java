@@ -20,16 +20,16 @@ import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 
 
 @Deprecated
-public class HighlightsManagerV0a implements HighlightsManagerInterface {
+public class HighlightsManagerV00 implements HighlightsManagerInterface {
 	
-	private final Logger logger = Logger.getLogger(HighlightsManagerV0a.class);
+	private final Logger logger = Logger.getLogger(HighlightsManagerV00.class);
 	private DatasetProfile datasetProfile;
 	private List<Column> columns;
 	private List<HolisticHighlight> holisticHighlights;
 	//private HighlightReporterFactory highlightReporterFactory; 
 	
 	
-	public HighlightsManagerV0a(DatasetProfile datasetProfile) {
+	public HighlightsManagerV00(DatasetProfile datasetProfile) {
 		this.datasetProfile = datasetProfile;
 		this.columns = this.datasetProfile.getColumns();
 		this.holisticHighlights = new ArrayList<HolisticHighlight>();

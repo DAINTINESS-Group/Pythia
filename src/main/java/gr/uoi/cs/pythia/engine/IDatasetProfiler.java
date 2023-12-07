@@ -89,7 +89,10 @@ public interface IDatasetProfiler {
 	 */
 	void declareOutlierParameters(OutlierType outlierType, double outlierThreshold);
 
-
+	/**
+	 * 
+	 * @return the DatasetProfile object that characterizes the dataset
+	 */
 	DatasetProfile getDatasetProfile();
 
 
