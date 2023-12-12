@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import gr.uoi.cs.pythia.highlights.dom.ElementaryHighlight;
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
+import gr.uoi.cs.pythia.model.highlights.ElementaryHighlight;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 
 @Deprecated
 public class HistogramsHighlightsReporter implements IHighlightsReporter{

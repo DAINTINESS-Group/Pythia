@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.highlights.dom;
+package gr.uoi.cs.pythia.model.highlights;
 
 import java.util.List;
 

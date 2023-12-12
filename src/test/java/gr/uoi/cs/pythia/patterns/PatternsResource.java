@@ -16,6 +16,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 public class PatternsResource extends ExternalResource {
 
@@ -53,13 +55,15 @@ public class PatternsResource extends ExternalResource {
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("patterns"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunDominancePatterns, shouldRunOutlierDetection));
+						shouldRunDominancePatterns, shouldRunOutlierDetection,
+						highlightParameters));
 	}
     
 }

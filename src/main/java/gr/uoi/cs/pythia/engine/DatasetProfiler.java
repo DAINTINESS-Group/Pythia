@@ -30,13 +30,13 @@ import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
@@ -45,6 +45,7 @@ import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
+import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriter;
 
@@ -153,7 +154,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunDominancePatterns()) identifyDominancePatterns();
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		
-		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
+		this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
 				parameters.shouldRunAllPairsCorrelations(),
 				parameters.shouldRunDecisionTrees(),
@@ -299,10 +300,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	
-	private void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
+	private void extractHighlightsForStorytelling(HighlightParameters highlightParameters, boolean descriptiveStats, boolean histograms, 
 									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
 		highlightsManager = new HighlightsManagerFactory().generateHighlightsManager(HighlightsManagerFactory.HighlightManagerVersion.V01, datasetProfile);
-		this.holisticHighlights = highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
+		this.holisticHighlights = highlightsManager.extractHighlightsForStorytelling(highlightParameters, descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
 														highlightPatterns, outlierDetection);
 	}
 

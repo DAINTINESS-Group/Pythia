@@ -10,12 +10,11 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
+import gr.uoi.cs.pythia.model.highlights.ElementaryHighlight;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.histogram.Bin;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
-import gr.uoi.cs.pythia.highlights.dom.ElementaryHighlight;
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
-//import gr.uoi.cs.pythia.highlights.reporting.IHighlightsReporter;
-//import gr.uoi.cs.pythia.highlights.reporting.HighlightReporterFactory;
+import gr.uoi.cs.pythia.util.HighlightParameters;
 
 
 
@@ -37,7 +36,7 @@ public class HighlightsManagerV00 implements HighlightsManagerInterface {
 	}
 	
 	@Override
-	public List<HolisticHighlight> extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
+	public List<HolisticHighlight> extractHighlightsForStorytelling(HighlightParameters highlightParameters, boolean descriptiveStats, boolean histograms,
 								boolean allPairsCorrelations, boolean decisionTrees, boolean outlierDetection,
 								boolean dominancePatterns) {
 		

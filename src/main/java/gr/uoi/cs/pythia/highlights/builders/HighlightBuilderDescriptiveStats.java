@@ -3,9 +3,9 @@ package gr.uoi.cs.pythia.highlights.builders;
 import java.util.ArrayList;
 import java.util.List;
 
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 
 public class HighlightBuilderDescriptiveStats {
 	private DatasetProfile datasetProfile;

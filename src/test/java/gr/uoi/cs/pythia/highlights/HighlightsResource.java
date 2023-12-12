@@ -1,8 +1,12 @@
-package gr.uoi.cs.pythia.correlations;
+package gr.uoi.cs.pythia.highlights;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
 
@@ -15,43 +19,52 @@ import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
-public class CorrelationsResource extends ExternalResource {
+public class HighlightsResource extends ExternalResource {
 
+    private Dataset<Row> dataset;
     private DatasetProfile datasetProfile;
+    
+    public Dataset<Row> getDataset() {
+        return dataset;
+    }
 
     public DatasetProfile getDatasetProfile() {
         return datasetProfile;
     }
-
+    
     @Override
     protected void before() throws Throwable {
         super.before();
-        TestsUtilities.setupResultsDir("correlations");
+        TestsUtilities.setupResultsDir("highlights");
         initializeProfile();
     }
 
-    private void initializeProfile() throws AnalysisException, IOException {
-        StructType schema = TestsDatasetSchemas.getPeopleJsonSchema();
+	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
+        StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        String datasetPath = TestsUtilities.getDatasetPath("people.json");
-        datasetProfiler.registerDataset("people", datasetPath, schema);
+        String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
+        datasetProfiler.registerDataset("cars", datasetPath, schema);
+        
+        // Get dataset
+        Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
+        dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
         
 		boolean shouldRunDescriptiveStats = true;
-		boolean shouldRunHistograms = false;
+		boolean shouldRunHistograms = true;
 		boolean shouldRunAllPairsCorrelations = true;
-		boolean shouldRunDecisionTrees = false;
+		boolean shouldRunDecisionTrees = true;
 		boolean shouldRunDominancePatterns = false;
-		boolean shouldRunOutlierDetection = false;
-	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+		boolean shouldRunOutlierDetection = true;
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, 1.0);
+
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
-						TestsUtilities.getResultsDir("correlations"),
+						TestsUtilities.getResultsDir("highlights"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunDominancePatterns,
-						shouldRunOutlierDetection,
+						shouldRunDominancePatterns, shouldRunOutlierDetection,
 						highlightParameters));
-    }
+	}
     
 }

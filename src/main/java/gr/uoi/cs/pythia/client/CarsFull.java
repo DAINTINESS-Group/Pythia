@@ -15,6 +15,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 // This class contains a main method specifically set up for the 'cars' dataset.
 // Used to assist with development.
@@ -46,6 +48,9 @@ public class CarsFull {
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
 
+    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+
+    
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
                     "results",
@@ -54,7 +59,8 @@ public class CarsFull {
                     shouldRunAllPairsCorrelations,
                     shouldRunDecisionTrees,
                     shouldRunDominancePatterns,
-                    shouldRunOutlierDetection));
+                    shouldRunOutlierDetection,
+                    highlightParameters));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

@@ -19,6 +19,8 @@ import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 // This class contains a main method specifically set up for the 'people' dataset.
 // Used as a sample main class that showcases usage of Pythia in simple steps.
@@ -77,7 +79,8 @@ public class PeopleMain {
     	boolean shouldRunDecisionTrees = false;
     	boolean shouldRunDominancePatterns = true;
     	boolean shouldRunOutlierDetection = false;
-        
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+
         // 9. Create a DatasetProfilerParameters object with the parameters specified in step 8
         // and compute the profile of the dataset (this will take a while for big datasets).
         DatasetProfilerParameters parameters =  new DatasetProfilerParameters(
@@ -87,7 +90,8 @@ public class PeopleMain {
                 shouldRunAllPairsCorrelations,
                 shouldRunDecisionTrees,
                 shouldRunDominancePatterns,
-                shouldRunOutlierDetection);
+                shouldRunOutlierDetection,
+                highlightParameters);
         datasetProfiler.computeProfileOfDataset(parameters);
 
         // 10. (Optionally) specify an output directory path for the generated reports

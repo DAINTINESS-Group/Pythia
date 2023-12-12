@@ -1,7 +1,8 @@
 package gr.uoi.cs.pythia.highlights.reporting;
 
 import org.apache.log4j.Logger;
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
+
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 
 @Deprecated
 public class DescriptiveStatsHighlightsReporter implements IHighlightsReporter{
