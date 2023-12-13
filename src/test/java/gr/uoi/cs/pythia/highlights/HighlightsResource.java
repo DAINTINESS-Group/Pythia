@@ -14,6 +14,7 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -32,7 +33,7 @@ public class HighlightsResource extends ExternalResource {
         return datasetProfile;
     }
     
-    @Override
+    @Override 
     protected void before() throws Throwable {
         super.before();
         TestsUtilities.setupResultsDir("highlights");
@@ -48,7 +49,8 @@ public class HighlightsResource extends ExternalResource {
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        
+        datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
+
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = true;
 		boolean shouldRunAllPairsCorrelations = true;

@@ -7,9 +7,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-// TODO add classes for highlights testing
+	HighlightManagerTest.class
 })
-public class AllPatternTests {
+public class AllHighlightsTests {
 
     @ClassRule
     public static HighlightsResource highlightsResource = new HighlightsResource();

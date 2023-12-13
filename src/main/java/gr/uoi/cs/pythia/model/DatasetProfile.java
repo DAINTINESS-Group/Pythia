@@ -2,19 +2,23 @@ package gr.uoi.cs.pythia.model;
 
 import java.util.List;
 
+import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
+
 public class DatasetProfile {
 
   private final String alias;
   private final String path;
   private final List<Column> columns;
-  private final PatternsProfile patternsProfile;
   private String auxiliaryDataOutputDirectory;
+  private final PatternsProfile patternsProfile;
+  private HighlightsProfile highlightsProfile;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
     this.alias = alias;
     this.path = path;
     this.columns = columns;
     this.patternsProfile = new PatternsProfile();
+    this.highlightsProfile = null;
   }
 
   public String getAlias() {
@@ -33,6 +37,10 @@ public class DatasetProfile {
     return patternsProfile;
   }
 
+  public HighlightsProfile getHighlightsProfile() {
+	  return  this.highlightsProfile;
+  }
+  
   public String getAuxiliaryDataOutputDirectory() {
     return auxiliaryDataOutputDirectory;
   }
@@ -41,6 +49,10 @@ public class DatasetProfile {
     this.auxiliaryDataOutputDirectory = outputDirectory;
   }
 
+  public void setHighlightsProfile(HighlightsProfile highlightsProfile) {
+	  this.highlightsProfile = highlightsProfile;
+  }
+  
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();

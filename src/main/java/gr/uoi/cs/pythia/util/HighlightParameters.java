@@ -21,7 +21,7 @@ public class HighlightParameters {
 				this.numericLimit = Double.MAX_VALUE;
 				break;
 			case ALL: 
-				this.numericLimit = Double.MIN_VALUE;  //Not NaN: a NaN H/L score means "don't put me in, no matter what"
+				this.numericLimit = Double.NaN; //no filters to be applied anyway  
 				break;
 			default: 
 				if(null == numericLimit)

@@ -63,10 +63,12 @@ public class HighlightBuilderHistograms {
 		 		The score should be some form of skewness / kurtosis / bias /giniIndex .. anyway non-uniformity of the bins
 		 		   //https://en.wikipedia.org/wiki/Gini_coefficient  also within 0..1
 			 */
+				double columnHistoScore = c.getHistogram().getHistoSkewness(); //Double.MIN_VALUE; 
+				
 				HolisticHighlight hHighlight = new HolisticHighlight("Histogram", columnName, "a histogram constructor", null, 
 						"True", 
-						"Histogram Bins", (double)(c.getHistogram().getBins().size()), 
-						eHighlights);
+						"Histogram Non-Uniformity", columnHistoScore, eHighlights);
+
 				fullListHLs.add(hHighlight);
 			}
 		}

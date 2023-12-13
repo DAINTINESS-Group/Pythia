@@ -9,10 +9,11 @@ public class HighlightsProfile {
 	private List<HolisticHighlight> correlationsHHs;
 	private List<HolisticHighlight> decisionTreesHHs;
 	private List<HolisticHighlight> outliersHHs;
+	private List<HolisticHighlight> selectedHHs;
 	
 	public HighlightsProfile(List<HolisticHighlight> descriptiveStatsHHs, List<HolisticHighlight> histogramsHHs,
 			List<HolisticHighlight> correlationsHHs, List<HolisticHighlight> decisionTreesHHs,
-			List<HolisticHighlight> outliersHHs) {
+			List<HolisticHighlight> outliersHHs, List<HolisticHighlight>selectedHHs) {
 		
 		if(null == descriptiveStatsHHs)
 			this.descriptiveStatsHHs = new ArrayList<HolisticHighlight>();
@@ -34,6 +35,11 @@ public class HighlightsProfile {
 			this.outliersHHs = new ArrayList<HolisticHighlight>();
 		else
 			this.outliersHHs = outliersHHs;
+		if(null == selectedHHs)
+			this.selectedHHs = new ArrayList<HolisticHighlight>();
+		else
+			this.selectedHHs = selectedHHs;
+	
 	}
 	
 	public List<HolisticHighlight> getDescriptiveStatsHHs() {
@@ -66,6 +72,8 @@ public class HighlightsProfile {
 	public void setOutliersHHs(List<HolisticHighlight> outliersHHs) {
 		this.outliersHHs = outliersHHs;
 	}
-	
-	
+
+	public List<HolisticHighlight> getSelectedHHs() {
+		return selectedHHs;
+	}
 }//end class

@@ -134,11 +134,14 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if(null == outlierType) {
 			this.outlierType = OutlierType.Z_SCORE;
 		}
+		else
+			this.outlierType = outlierType;
+		
 		if(outlierThreshold < 0) {
 			this.outlierThreshold = 3.0;
 		}
-		this.outlierType = outlierType;
-		this.outlierThreshold = outlierThreshold;	
+		else
+			this.outlierThreshold = outlierThreshold;	
 	}
 	
 	@Override
