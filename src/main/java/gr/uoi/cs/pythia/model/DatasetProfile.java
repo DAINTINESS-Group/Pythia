@@ -8,6 +8,7 @@ public class DatasetProfile {
   private final String path;
   private final List<Column> columns;
   private final PatternsProfile patternsProfile;
+  private final RegressionProfile regressionProfile;
   private String auxiliaryDataOutputDirectory;
 
   public DatasetProfile(String alias, String path, List<Column> columns) {
@@ -15,6 +16,7 @@ public class DatasetProfile {
     this.path = path;
     this.columns = columns;
     this.patternsProfile = new PatternsProfile();
+    this.regressionProfile = new RegressionProfile();
   }
 
   public String getAlias() {
@@ -31,6 +33,10 @@ public class DatasetProfile {
 
   public PatternsProfile getPatternsProfile() {
     return patternsProfile;
+  }
+  
+  public RegressionProfile getRegressionProfile() {
+	  return regressionProfile;
   }
 
   public String getAuxiliaryDataOutputDirectory() {

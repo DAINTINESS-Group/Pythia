@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia;
 import gr.uoi.cs.pythia.correlations.AllCorrelationsTests;
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
 import gr.uoi.cs.pythia.patterns.AllPatternTests;
+import gr.uoi.cs.pythia.regression.AllRegressionTests;
 import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.labeling.LabelingSystemTests;
 import gr.uoi.cs.pythia.report.AllReportTests;
@@ -18,6 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
         AllCorrelationsTests.class,
         AllDecisionTreeTests.class,
         AllPatternTests.class,
+        AllRegressionTests.class,
         AllReportTests.class,
         AllWriterTests.class
 })

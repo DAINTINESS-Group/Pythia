@@ -1,7 +1,8 @@
-package gr.uoi.cs.pythia.patterns;
+package gr.uoi.cs.pythia.regression;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
@@ -14,12 +15,13 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 
-public class PatternsResource extends ExternalResource {
-
-    private Dataset<Row> dataset;
+public class RegressionResource extends ExternalResource{
+	
+	private Dataset<Row> dataset;
     private DatasetProfile datasetProfile;
     
     public Dataset<Row> getDataset() {
@@ -33,12 +35,12 @@ public class PatternsResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
-        TestsUtilities.setupResultsDir("patterns");
+        TestsUtilities.setupResultsDir("regression");
         initializeProfile();
     }
-
-	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
-        StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
+    
+    private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
+    	StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
@@ -46,22 +48,23 @@ public class PatternsResource extends ExternalResource {
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
+        datasetProfiler.declareRegressionParameters(Arrays.asList("year"), "price", RegressionType.LINEAR);
         
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = false;
-		boolean shouldRunAllPairsCorrelations = true;
+		boolean shouldRunAllPairsCorrelations = false;
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
-		boolean shouldRunRegression = false;
+		boolean shouldRunRegression = true;
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
-						TestsUtilities.getResultsDir("patterns"),
+						TestsUtilities.getResultsDir("regression"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
 						shouldRunRegression));
-	}
-    
+    }
+
 }

@@ -10,6 +10,7 @@ public class DatasetProfilerParameters {
   private boolean shouldRunDecisionTrees = false;
   private boolean shouldRunDominancePatterns = false;
   private boolean shouldRunOutlierDetection = false;
+  private boolean shouldRunRegression = false;
 
   /**
    * Determines the dataset analysis parts that should be executed.
@@ -36,7 +37,8 @@ public class DatasetProfilerParameters {
           boolean shouldRunAllPairsCorrelations,
           boolean shouldRunDecisionTrees,
           boolean shouldRunDominancePatterns,
-          boolean shouldRunOutlierDetection) {
+          boolean shouldRunOutlierDetection,
+          boolean shouldRunRegression) {
     this.auxiliaryDataOutputDirectory = auxiliaryDataOutputDirectory;
     this.shouldRunDescriptiveStats = shouldRunDescriptiveStats;
     this.shouldRunHistograms = shouldRunHistograms;
@@ -44,6 +46,7 @@ public class DatasetProfilerParameters {
     this.shouldRunDecisionTrees = shouldRunDecisionTrees;
     this.shouldRunDominancePatterns = shouldRunDominancePatterns;
     this.shouldRunOutlierDetection = shouldRunOutlierDetection;
+    this.shouldRunRegression = shouldRunRegression;
   }
 
   public String getAuxiliaryDataOutputDirectory() {
@@ -72,6 +75,10 @@ public class DatasetProfilerParameters {
   
   public boolean shouldRunOutlierDetection() {
 	  return shouldRunOutlierDetection;
+  }
+
+  public boolean shouldRunRegression() {
+	  return shouldRunRegression;
   }
 
 }

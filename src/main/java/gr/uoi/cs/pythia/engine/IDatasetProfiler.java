@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.engine;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
@@ -8,6 +9,7 @@ import org.apache.spark.sql.types.StructType;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 
 public interface IDatasetProfiler {
@@ -88,6 +90,13 @@ public interface IDatasetProfiler {
 	 * @param outlierThreshold a double value for the threshold that decides if a value is an outlier
 	 */
 	void declareOutlierParameters(OutlierType outlierType, double outlierThreshold);
+	
+	
+	
+	/**
+	 * ADD COMMENTS HERE
+	 */
+	void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType);
 
 
 	DatasetProfile getDatasetProfile();

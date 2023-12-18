@@ -48,6 +48,7 @@ public class AdultMain {
 	    boolean shouldRunDecisionTrees = true;
 	    boolean shouldRunDominancePatterns = true;
 	    boolean shouldRunOutlierDetection = false;
+	    boolean shouldRunRegression = false;
 
 	    datasetProfiler.computeProfileOfDataset(
 	            new DatasetProfilerParameters(
@@ -57,7 +58,8 @@ public class AdultMain {
 	                    shouldRunAllPairsCorrelations,
 	                    shouldRunDecisionTrees,
 	                    shouldRunDominancePatterns,
-	                    shouldRunOutlierDetection));
+	                    shouldRunOutlierDetection,
+	                    shouldRunRegression));
 
 	    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
 	    datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

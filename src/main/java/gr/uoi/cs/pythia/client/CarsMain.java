@@ -2,6 +2,7 @@ package gr.uoi.cs.pythia.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
@@ -15,7 +16,7 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
-
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 // This class contains a main method specifically set up for the 'cars' dataset.
 // Used to assist with development.
 public class CarsMain {
@@ -36,8 +37,8 @@ public class CarsMain {
             new String[] {"model", "year"}
     );
     datasetProfiler.declareOutlierParameters(OutlierType.NORMALIZED_SCORE, 1.0);
-//    datasetProfiler.setOutlierType(OutlierType.NORMALIZED_SCORE);
-//    datasetProfiler.setOutlierThreshold(1.0);
+    //datasetProfiler.declareRegressionParameters(Arrays.asList("year"), "price", RegressionType.LINEAR);
+    datasetProfiler.declareRegressionParameters(Arrays.asList("year", "tax"), "price", RegressionType.MULTIPLE_LINEAR);
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
@@ -45,6 +46,7 @@ public class CarsMain {
     boolean shouldRunDecisionTrees = false;
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
+    boolean shouldRunRegression = true;
 
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
@@ -54,7 +56,8 @@ public class CarsMain {
                     shouldRunAllPairsCorrelations,
                     shouldRunDecisionTrees,
                     shouldRunDominancePatterns,
-                    shouldRunOutlierDetection));
+                    shouldRunOutlierDetection,
+                    shouldRunRegression));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

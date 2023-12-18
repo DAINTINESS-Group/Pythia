@@ -52,13 +52,15 @@ public class HistogramResource extends ExternalResource {
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
+		boolean shouldRunRegression = false;
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("histogram"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunDominancePatterns, shouldRunOutlierDetection));
+						shouldRunDominancePatterns, shouldRunOutlierDetection,
+						shouldRunRegression));
     }
     
 }

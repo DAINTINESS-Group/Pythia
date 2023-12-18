@@ -36,11 +36,15 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
+import gr.uoi.cs.pythia.regression.IRegressionPerformer;
+import gr.uoi.cs.pythia.regression.RegressionParameters;
+import gr.uoi.cs.pythia.regression.RegressionPerformerFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
@@ -57,6 +61,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private boolean hasComputedAllPairsCorrelations;
 	private OutlierType outlierType;
 	private double outlierThreshold;
+	private RegressionParameters regressionParameters;
 
 	private HighlightsManager highlightsManager;
 	
@@ -136,6 +141,11 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	@Override
+	public void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType) {
+		this.regressionParameters = new RegressionParameters(independentVariables, dependentVariable, regressionType);
+	}
+	
+	@Override
 	public DatasetProfile computeProfileOfDataset(DatasetProfilerParameters parameters) 
 			throws IOException {
 		String path = parameters.getAuxiliaryDataOutputDirectory();
@@ -147,6 +157,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunDecisionTrees()) extractAllDecisionTrees();
 		if (parameters.shouldRunDominancePatterns()) identifyDominancePatterns();
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
+		if (parameters.shouldRunRegression()) performRegression();
 		
 		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
@@ -261,9 +272,24 @@ public class DatasetProfiler implements IDatasetProfiler {
 		patternManager.identifyOutliers();
 		logger.info(String.format("Identified outliers for dataset %s", datasetProfile.getAlias()));
 		
-		Instant end = Instant.now();
+		Instant end = Instant.now();		
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
+	}
+	
+	private void performRegression() throws IOException {
+		Instant start = Instant.now();
+		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
+		
+		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
+		
+		RegressionPerformerFactory factory = new RegressionPerformerFactory();
+		IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
+		regressionPerformer.performRegression(dataset, datasetProfile);
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of perfomRegression: %s / %sms", duration, duration.toMillis()));
 	}
 
 	@Override

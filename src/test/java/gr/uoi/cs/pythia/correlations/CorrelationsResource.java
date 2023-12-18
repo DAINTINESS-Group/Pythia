@@ -40,6 +40,7 @@ public class CorrelationsResource extends ExternalResource {
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
+		boolean shouldRunRegression = false;
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
@@ -47,7 +48,8 @@ public class CorrelationsResource extends ExternalResource {
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns,
-						shouldRunOutlierDetection));
+						shouldRunOutlierDetection,
+						shouldRunRegression));
     }
     
 }

@@ -53,13 +53,14 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunDecisionTrees = true;
 		boolean shouldRunDominancePatterns = true;
 		boolean shouldRunOutlierDetection = false;
+		boolean shouldRunRegression = false;
 
 		datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
 						shouldRunHistograms, shouldRunAllPairsCorrelations,
 						shouldRunDecisionTrees, shouldRunDominancePatterns,
-						shouldRunOutlierDetection));
+						shouldRunOutlierDetection, shouldRunRegression));
     }
     
 }

@@ -78,6 +78,7 @@ public class TweetsMain {
 	boolean shouldRunDecisionTrees = true;
 	boolean shouldRunDominancePatterns = true;
 	boolean shouldRunOutlierDetection = false;
+	boolean shouldRunRegression = true;
 
 	datasetProfiler.computeProfileOfDataset(
 			new DatasetProfilerParameters(
@@ -87,7 +88,8 @@ public class TweetsMain {
 					shouldRunAllPairsCorrelations,
 					shouldRunDecisionTrees, 
 					shouldRunDominancePatterns,
-					shouldRunOutlierDetection));
+					shouldRunOutlierDetection,
+					shouldRunRegression));
      
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

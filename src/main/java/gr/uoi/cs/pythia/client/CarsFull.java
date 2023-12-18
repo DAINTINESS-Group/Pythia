@@ -45,6 +45,7 @@ public class CarsFull {
     boolean shouldRunDecisionTrees = true;
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
+    boolean shouldRunRegression = false;
 
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
@@ -54,7 +55,8 @@ public class CarsFull {
                     shouldRunAllPairsCorrelations,
                     shouldRunDecisionTrees,
                     shouldRunDominancePatterns,
-                    shouldRunOutlierDetection));
+                    shouldRunOutlierDetection,
+                    shouldRunRegression));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
