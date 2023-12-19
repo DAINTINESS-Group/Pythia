@@ -1,10 +1,7 @@
-package gr.uoi.cs.pythia.highlights.dom;
+package gr.uoi.cs.pythia.model.highlights;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-import gr.uoi.cs.pythia.highlights.reporting.DecisionTreesHighlightsReporter;
 
 
 public class HolisticHighlight {
@@ -28,11 +25,11 @@ public class HolisticHighlight {
 	private String supportingRole;
 	private String resultingModel;
 	private String scoreType; 
-	private String scoreValue;
+	private Double scoreValue;
 	private List<ElementaryHighlight> elementaryHighlights;
 
 	public HolisticHighlight(String highlightType, String mainMeasure, String highlightExtractionAlgorithm, String supportingRole,
-			 String resultingModel, String scoreType, String scoreValue, List<ElementaryHighlight> elementaryHighlights) {
+			 String resultingModel, String scoreType, Double scoreValue, List<ElementaryHighlight> elementaryHighlights) {
 		this.highlightType = highlightType;
 		this.mainMeasure = mainMeasure;
 		this.highlightExtractionAlgorithm = highlightExtractionAlgorithm;
@@ -71,7 +68,7 @@ public class HolisticHighlight {
 		return this.scoreType;
 	}
 	
-	public String getScoreValue() {
+	public Double getScoreValue() {
 		return this.scoreValue;
 	}
 	
@@ -113,7 +110,7 @@ public class HolisticHighlight {
 		highlightToString += conditionallyAddInfo("with supporting role " , this.getSupportingRole(), " ");
 		highlightToString += conditionallyAddInfo("fits under the model " , this.getResultingModel(), " ");
 		highlightToString += conditionallyAddInfo("with Score Type " , this.getScoreType(), " ");
-		highlightToString += conditionallyAddInfo("and with Score Value " , this.getScoreValue() , "\n"); 
+		highlightToString += conditionallyAddInfo("and with Score Value " ,	String.format("%.3f", this.getScoreValue()), "\n"); 
 		
 		String elementaryStrings = "";
 		if(null != this.elementaryHighlights && this.elementaryHighlights.size() > 0)

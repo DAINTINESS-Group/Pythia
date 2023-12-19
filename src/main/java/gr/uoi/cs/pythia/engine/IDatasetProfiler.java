@@ -98,7 +98,10 @@ public interface IDatasetProfiler {
 	 */
 	void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType);
 
-
+	/**
+	 * 
+	 * @return the DatasetProfile object that characterizes the dataset
+	 */
 	DatasetProfile getDatasetProfile();
 
 

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.histogram;
+package gr.uoi.cs.pythia.highlights;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -14,16 +14,17 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
-public class HistogramResource extends ExternalResource {
+public class HighlightsResource extends ExternalResource {
 
     private Dataset<Row> dataset;
     private DatasetProfile datasetProfile;
-
+    
     public Dataset<Row> getDataset() {
         return dataset;
     }
@@ -31,42 +32,43 @@ public class HistogramResource extends ExternalResource {
     public DatasetProfile getDatasetProfile() {
         return datasetProfile;
     }
-
-    @Override
+    
+    @Override 
     protected void before() throws Throwable {
         super.before();
-        TestsUtilities.setupResultsDir("histogram");
+        TestsUtilities.setupResultsDir("highlights");
         initializeProfile();
     }
 
-    private void initializeProfile() throws AnalysisException, IllegalAccessException, IOException {
-        StructType schema = TestsDatasetSchemas.getBreastCsvSchema();
+	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
+        StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        datasetProfiler.registerDataset("breast-w", TestsUtilities.getDatasetPath("breast-w.csv"), schema);
+        String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
+        datasetProfiler.registerDataset("cars", datasetPath, schema);
         
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        
+        datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
+
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = true;
-		boolean shouldRunAllPairsCorrelations = false;
-		boolean shouldRunDecisionTrees = false;
+		boolean shouldRunAllPairsCorrelations = true;
+		boolean shouldRunDecisionTrees = true;
 		boolean shouldRunDominancePatterns = false;
-		boolean shouldRunOutlierDetection = false;
+		boolean shouldRunOutlierDetection = true;
 		boolean shouldRunRegression = false;
-	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, 1.0);
 
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
-						TestsUtilities.getResultsDir("histogram"),
+						TestsUtilities.getResultsDir("highlights"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
 						shouldRunRegression,
 						highlightParameters));
-
-    }
+	}
     
 }

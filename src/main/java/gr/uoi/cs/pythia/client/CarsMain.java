@@ -16,7 +16,13 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+
 import gr.uoi.cs.pythia.model.regression.RegressionType;
+
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
+
+
 // This class contains a main method specifically set up for the 'cars' dataset.
 // Used to assist with development.
 public class CarsMain {
@@ -36,10 +42,11 @@ public class CarsMain {
             new String[] {"price"},
             new String[] {"model", "year"}
     );
-    datasetProfiler.declareOutlierParameters(OutlierType.NORMALIZED_SCORE, 1.0);
-    //datasetProfiler.declareRegressionParameters(Arrays.asList("year"), "price", RegressionType.LINEAR);
-    datasetProfiler.declareRegressionParameters(Arrays.asList("year", "tax"), "price", RegressionType.MULTIPLE_LINEAR);
 
+
+    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
+    datasetProfiler.declareRegressionParameters(Arrays.asList("year", "tax"), "price", RegressionType.MULTIPLE_LINEAR);
+    
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
     boolean shouldRunAllPairsCorrelations = true;
@@ -47,6 +54,8 @@ public class CarsMain {
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = true;
+    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
+
 
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
@@ -57,7 +66,9 @@ public class CarsMain {
                     shouldRunDecisionTrees,
                     shouldRunDominancePatterns,
                     shouldRunOutlierDetection,
-                    shouldRunRegression));
+                    shouldRunRegression,
+                    highlightParameters));
+
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

@@ -1,7 +1,7 @@
 package gr.uoi.cs.pythia.model;
 
 import java.util.List;
-
+import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
 public class DatasetProfile {
 
   private final String alias;
@@ -10,13 +10,15 @@ public class DatasetProfile {
   private final PatternsProfile patternsProfile;
   private final RegressionProfile regressionProfile;
   private String auxiliaryDataOutputDirectory;
-
+  private HighlightsProfile highlightsProfile;
+  
   public DatasetProfile(String alias, String path, List<Column> columns) {
     this.alias = alias;
     this.path = path;
     this.columns = columns;
     this.patternsProfile = new PatternsProfile();
     this.regressionProfile = new RegressionProfile();
+    this.highlightsProfile = null;
   }
 
   public String getAlias() {
@@ -47,6 +49,13 @@ public class DatasetProfile {
     this.auxiliaryDataOutputDirectory = outputDirectory;
   }
 
+  public void setHighlightsProfile(HighlightsProfile highlightsProfile) {
+	  this.highlightsProfile = highlightsProfile;
+  }
+  public HighlightsProfile getHighlightsProfile() {
+	  return  this.highlightsProfile;
+  }
+  
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();

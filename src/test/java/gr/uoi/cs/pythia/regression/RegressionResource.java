@@ -18,6 +18,8 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 public class RegressionResource extends ExternalResource{
 	
@@ -57,6 +59,7 @@ public class RegressionResource extends ExternalResource{
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
 		boolean shouldRunRegression = true;
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
@@ -64,7 +67,7 @@ public class RegressionResource extends ExternalResource{
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
-						shouldRunRegression));
+						shouldRunRegression, highlightParameters));
     }
 
 }

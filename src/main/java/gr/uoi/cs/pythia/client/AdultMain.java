@@ -17,6 +17,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 //This class contains a main method specifically set up for the 'adult' dataset.
 //Used to assist with development and experimental evaluation.
@@ -49,7 +51,8 @@ public class AdultMain {
 	    boolean shouldRunDominancePatterns = true;
 	    boolean shouldRunOutlierDetection = false;
 	    boolean shouldRunRegression = false;
-
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+	    
 	    datasetProfiler.computeProfileOfDataset(
 	            new DatasetProfilerParameters(
 	                    "results",
@@ -59,7 +62,8 @@ public class AdultMain {
 	                    shouldRunDecisionTrees,
 	                    shouldRunDominancePatterns,
 	                    shouldRunOutlierDetection,
-	                    shouldRunRegression));
+	                    shouldRunRegression,
+	                    highlightParameters));
 
 	    datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
 	    datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
@@ -87,3 +91,4 @@ public class AdultMain {
 	}
 
 }
+

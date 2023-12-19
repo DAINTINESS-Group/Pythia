@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia.engine;
 
+import gr.uoi.cs.pythia.util.HighlightParameters;
 
 public class DatasetProfilerParameters {
 
@@ -11,7 +12,8 @@ public class DatasetProfilerParameters {
   private boolean shouldRunDominancePatterns = false;
   private boolean shouldRunOutlierDetection = false;
   private boolean shouldRunRegression = false;
-
+  private HighlightParameters highLightsParameters = null;
+  
   /**
    * Determines the dataset analysis parts that should be executed.
    *
@@ -29,6 +31,10 @@ public class DatasetProfilerParameters {
    *                                      be calculated as part of the dataset profiling analysis.
    * @param shouldRunDominancePatterns    - Boolean value that defines whether the dataset should be
    *                                      evaluated for dominance patterns as part of the dataset profiling analysis.
+   * @param shoudRunRegression				- Boolean value that defines whether the dataset should be
+   *                                      evaluated for regression as part of the dataset profiling analysis.
+   * @param highLightsParameters		- a HighLightsParameters object with (a) the mode of highlightSelection, and, (b) the threshold
+   * 
    */
   public DatasetProfilerParameters(
           String auxiliaryDataOutputDirectory,
@@ -38,7 +44,8 @@ public class DatasetProfilerParameters {
           boolean shouldRunDecisionTrees,
           boolean shouldRunDominancePatterns,
           boolean shouldRunOutlierDetection,
-          boolean shouldRunRegression) {
+          boolean shouldRunRegression,
+          HighlightParameters highLightsParameters) {
     this.auxiliaryDataOutputDirectory = auxiliaryDataOutputDirectory;
     this.shouldRunDescriptiveStats = shouldRunDescriptiveStats;
     this.shouldRunHistograms = shouldRunHistograms;
@@ -47,6 +54,7 @@ public class DatasetProfilerParameters {
     this.shouldRunDominancePatterns = shouldRunDominancePatterns;
     this.shouldRunOutlierDetection = shouldRunOutlierDetection;
     this.shouldRunRegression = shouldRunRegression;
+    this.highLightsParameters = highLightsParameters;
   }
 
   public String getAuxiliaryDataOutputDirectory() {
@@ -81,4 +89,7 @@ public class DatasetProfilerParameters {
 	  return shouldRunRegression;
   }
 
+  public HighlightParameters getHighLightsParameters() {
+		return highLightsParameters;
+  }
 }

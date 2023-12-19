@@ -53,6 +53,7 @@ public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 				}
 			}
 		}
+		
 		return results;
 		
 		// Debug print

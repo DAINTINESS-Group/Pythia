@@ -1,6 +1,8 @@
 package gr.uoi.cs.pythia.highlights;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,44 +12,75 @@ import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.decisiontree.DecisionTree;
+import gr.uoi.cs.pythia.model.highlights.ElementaryHighlight;
+import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.histogram.Bin;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
-import gr.uoi.cs.pythia.highlights.dom.ElementaryHighlight;
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
-//import gr.uoi.cs.pythia.highlights.reporting.IHighlightsReporter;
-//import gr.uoi.cs.pythia.highlights.reporting.HighlightReporterFactory;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 
 
 
-public class HighlightsManager {
+public class HighlightsManagerV01 implements HighlightsManagerInterface {
 	
-	private final Logger logger = Logger.getLogger(HighlightsManager.class);
+	private final Logger logger = Logger.getLogger(HighlightsManagerV01.class);
 	private DatasetProfile datasetProfile;
 	private List<Column> columns;
 	private List<HolisticHighlight> holisticHighlights;
 	//private HighlightReporterFactory highlightReporterFactory; 
 	
 	
-	public HighlightsManager(DatasetProfile datasetProfile) {
+	public HighlightsManagerV01(DatasetProfile datasetProfile) {
 		this.datasetProfile = datasetProfile;
 		this.columns = this.datasetProfile.getColumns();
 		this.holisticHighlights = new ArrayList<HolisticHighlight>();
 		//this.highlightReporterFactory = new HighlightReporterFactory();
 	}
 	
-	public List<HolisticHighlight> extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms,
-								boolean allPairsCorrelations, boolean decisionTrees, 
-								boolean dominancePatterns, boolean outlierDetection) {
+	@Override
+	public List<HolisticHighlight> extractHighlightsForStorytelling(HighlightParameters highlightParameters, 
+			boolean descriptiveStats, boolean histograms,
+			boolean allPairsCorrelations, boolean decisionTrees, 
+			boolean dominancePatterns,
+			boolean outlierDetection) {
 		
-		if(descriptiveStats) extractDescriptiveStatsHighlights();
-		if(histograms) extractHistogramHighlights();
-		if(allPairsCorrelations) extractCorrelationsHighlights();
-		if(decisionTrees) extractDecisionTreesHighlights();
-		if(dominancePatterns) extractPatternHighlights();
-		if(outlierDetection) extractOutlierHighlights();
-		
-		//TODO Now, everything is a highlight. We must process the bloody highlights
+		List<HolisticHighlight> descriptiveStatsHHs = null;
+		List<HolisticHighlight> histogramsHHs = null;
+		List<HolisticHighlight> correlationsHHs = null;
+		List<HolisticHighlight> decisionTreesHHs= null;
+		List<HolisticHighlight> outliersHHs= null;
+//		System.out.println(" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& " + 
+//				" descr: " +  descriptiveStats +  " histo: " +   histograms +
+//				" corr: " +   allPairsCorrelations + " decTr: " +   decisionTrees +
+//				" descr: " +   outlierDetection +
+//				" dom: " + dominancePatterns	);
+
+		if(descriptiveStats) 
+			descriptiveStatsHHs = extractDescriptiveStatsHighlights();
+		if(histograms) 
+			histogramsHHs = extractHistogramHighlights(); 
+		if(allPairsCorrelations) 
+			correlationsHHs = extractCorrelationsHighlights();
+		if(decisionTrees) 
+			decisionTreesHHs = extractDecisionTreesHighlights();
+		if(outlierDetection) { 
+			outliersHHs = extractOutlierHighlights();
+		}
+		if(dominancePatterns)	//TODO fix 
+			extractDominanceHighlights();
+
+		//process the bloody highlights, select the ones that should be selected, and make a highlights profile
+		List<HolisticHighlight> selectedHighlights = new ArrayList<HolisticHighlight>();
+		HighlightsProfile highlightsProfile = selectHighlights(highlightParameters, 
+				selectedHighlights,
+				descriptiveStatsHHs, 
+				histogramsHHs,
+				correlationsHHs, 
+				decisionTreesHHs,
+				outliersHHs);
+		this.datasetProfile.setHighlightsProfile(highlightsProfile);
 		
 		
 		//now report
@@ -56,6 +89,47 @@ public class HighlightsManager {
 		//return a defensive copy of the highlight list
 		List<HolisticHighlight> holisticHighlightsDefenseCopy = new ArrayList<HolisticHighlight>(this.holisticHighlights);
 		return holisticHighlightsDefenseCopy;
+	}
+	
+	private HighlightsProfile selectHighlights(HighlightParameters highlightParameters, 
+			List<HolisticHighlight> selectedHighlights,
+			List<HolisticHighlight> descriptiveStatsHHs, 
+			List<HolisticHighlight> histogramsHHs,
+			List<HolisticHighlight> correlationsHHs, 
+			List<HolisticHighlight> decisionTreesHHs,
+			List<HolisticHighlight> outliersHHs) {
+		HighlightsProfile highlightsProfile = new HighlightsProfile(
+				descriptiveStatsHHs, 
+				histogramsHHs,
+				correlationsHHs, 
+				decisionTreesHHs,
+				outliersHHs, selectedHighlights); 
+		if(HighlightExtractionMode.NONE == highlightParameters.getHighlightExtractionMode())
+			return highlightsProfile;
+		
+		if(HighlightExtractionMode.ALL == highlightParameters.getHighlightExtractionMode()) {
+			selectedHighlights.addAll(this.holisticHighlights);
+		}
+		if(HighlightExtractionMode.ABOVE_THRESHOLD == highlightParameters.getHighlightExtractionMode()) {
+			double threshold = highlightParameters.getNumericLimit().doubleValue();
+			for(HolisticHighlight hh: this.holisticHighlights) {
+				if(hh.getScoreValue() > threshold)
+					selectedHighlights.add(hh);
+			}
+		}
+		if(HighlightExtractionMode.TOP == highlightParameters.getHighlightExtractionMode()) {
+			//sort by score
+			Collections.sort(this.holisticHighlights, new Comparator<HolisticHighlight>() {
+				public int compare(HolisticHighlight o1, HolisticHighlight o2) {
+					return o2.getScoreValue().compareTo(o1.getScoreValue());
+				}
+			});
+			Collections.sort(this.holisticHighlights, Collections.reverseOrder());
+			int limit = highlightParameters.getNumericLimit().intValue();
+			selectedHighlights.addAll(this.holisticHighlights.subList(0,limit));
+		}	    
+	    
+		return highlightsProfile;
 	}
 	
 	private String reportHighlightsAsString() {
@@ -69,46 +143,102 @@ public class HighlightsManager {
 		return result;
 	}
 
-	private String extractDescriptiveStatsHighlights() {
-		StringBuilder stringBuilder = new StringBuilder();
+	private List<HolisticHighlight> extractDescriptiveStatsHighlights() {
 		List<HolisticHighlight> descriptiveStatsHolisticHLs = new ArrayList<HolisticHighlight>();
 		for(Column c: columns) {
 			if(c.getDescriptiveStatisticsProfile() != null) {
 				String columnName = c.getName();
 				
-				String countValue = c.getDescriptiveStatisticsProfile().getCount();
+				Double countValue = Double.MIN_VALUE;
+				try{ 
+					countValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getCount());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}
+				Double meanValue = Double.MIN_VALUE;
+				try{ 
+					countValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMean());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}
+				Double standDevValue  = Double.MIN_VALUE;
+				try{
+					standDevValue  = Double.parseDouble(c.getDescriptiveStatisticsProfile().getStandardDeviation());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}
+				Double medianValue  = Double.MIN_VALUE;
+				try{
+					medianValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMedian());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}
+				Double minValue= Double.MIN_VALUE;
+				try{ 
+					minValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMin());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}
+				Double maxValue = Double.MIN_VALUE;
+				try{ 
+					maxValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMax());
+				}catch(NumberFormatException nfe) {
+					;
+				}
+				catch(NullPointerException npe) {
+					;
+				}	
+				
+				double descriptiveHighlightsScore = Double.NaN;
+				
 				HolisticHighlight hHighlight = new HolisticHighlight("Desciptive Statistics - Count of Values", columnName, "a values count", null, 
-						"True", null, countValue, null);
+						"True", null, descriptiveHighlightsScore, null); 
+						//countValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
-				
-				String meanValue = c.getDescriptiveStatisticsProfile().getMean();
+							
+
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Mean Value", columnName, "mean value calculation", null, 
-						"True", null, meanValue, null);
+						"True", null, descriptiveHighlightsScore, null); //meanValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String standDevValue = c.getDescriptiveStatisticsProfile().getStandardDeviation();
+
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Standard Deviation", columnName, "standard deviation calculation", null, 
-						"True", null, standDevValue, null);
+						"True", null, descriptiveHighlightsScore, null); // standDevValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String medianValue = c.getDescriptiveStatisticsProfile().getMedian();
+
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Median Value", columnName, "median value calculation", null, 
-						"True", null, medianValue, null);
+						"True", null, descriptiveHighlightsScore, null);  //medianValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String minValue = c.getDescriptiveStatisticsProfile().getMin();
+
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Minimum Value", columnName, "minimum value calculation", null, 
-						"True", null, minValue, null);
+						"True", null, descriptiveHighlightsScore, null);  //minValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 				
-				String maxValue = c.getDescriptiveStatisticsProfile().getMax();
+
 				hHighlight = new HolisticHighlight("Desciptive Statistics - Maximum Value", columnName, "maximum value calculation", null, 
-						"True", null, maxValue, null);
+						"True", null, descriptiveHighlightsScore, null);  //maxValue, null);
 				holisticHighlights.add(hHighlight);
 				descriptiveStatsHolisticHLs.add(hHighlight);
 			}
@@ -122,11 +252,10 @@ public class HighlightsManager {
 //		}
 		
 		logger.info(String.format("Extracted the highlights for the descriptive stats of the dataset"));
-		return stringBuilder.toString();
+		return descriptiveStatsHolisticHLs;
 	}
 		
-	private String extractHistogramHighlights() {
-		StringBuilder stringBuilder = new StringBuilder();
+	private List<HolisticHighlight> extractHistogramHighlights() {
 		List<HolisticHighlight> histogramHolisticHLs = new ArrayList<HolisticHighlight>();
 		for(Column c: columns) {
 			if(c.getHistogram() != null) {
@@ -147,8 +276,11 @@ public class HighlightsManager {
 					eHighlights.add(upperBound);
 					eHighlights.add(valuesCount);
 				}
+				
+				double columnHistoScore = c.getHistogram().getHistoSkewness(); //Double.MIN_VALUE; 
+				
 				HolisticHighlight hHighlight = new HolisticHighlight("Histogram", columnName, "a histogram constructor", null, 
-						"True", "Histogram Bins", Integer.toString(c.getHistogram().getBins().size()), eHighlights);
+						"True", "Histogram Non-Uniformity", columnHistoScore, eHighlights);
 				holisticHighlights.add(hHighlight);
 				histogramHolisticHLs.add(hHighlight);
 			}
@@ -161,11 +293,11 @@ public class HighlightsManager {
 //		}
 		
 		logger.info(String.format("Extracted the highlights for the histograms of the dataset"));
-		return stringBuilder.toString();
+		return histogramHolisticHLs;
 	}
 	
-	private String extractCorrelationsHighlights() {
-		StringBuilder stringBuilder = new StringBuilder();
+	private List<HolisticHighlight> extractCorrelationsHighlights() {
+		List<HolisticHighlight> localCorrelationsHHs = new ArrayList<HolisticHighlight>();
 		for(Column c: columns) {
 			if(c.getCorrelationsProfile() != null) {
 				String columnName = c.getName();
@@ -181,8 +313,9 @@ public class HighlightsManager {
 						resultingModel = "Significantly High";
 					}
 					HolisticHighlight hHighlight = new HolisticHighlight("Correlation", columnName, "Pearson algorithm", supportingRole,
-							resultingModel, "r", Double.toString(scoreValue), null );
+							resultingModel, "r", scoreValue, null );
 					holisticHighlights.add(hHighlight);
+					localCorrelationsHHs.add(hHighlight);
 					
 //					IHighlightsReporter correlationsHighlightsReporter = this.highlightReporterFactory.createHighlightReporter(HighlightReporterFactory.HighlightReporterType.CORREL);
 //					//CorrelationsHighlightsReporter correlationsHighlightsReporter = new CorrelationsHighlightsReporter();
@@ -192,11 +325,11 @@ public class HighlightsManager {
 			}
 		}
 		logger.info(String.format("Extracted the highlights for the correlations of the dataset"));
-		return stringBuilder.toString();
+		return localCorrelationsHHs;
 	}
 	
-	private String extractDecisionTreesHighlights() {
-		StringBuilder stringBuilder = new StringBuilder();
+	private List<HolisticHighlight> extractDecisionTreesHighlights() {
+		List<HolisticHighlight> decisionTreesHHs = new ArrayList<HolisticHighlight>();
 		for(Column c: columns) {
 			if(c instanceof LabeledColumn) {
 				String columnName = c.getName();
@@ -206,8 +339,9 @@ public class HighlightsManager {
 					String supportingRole = String.join(", ", decisionTrees.get(i).getFeatureColumnNames());
 					
 					HolisticHighlight hHighlight = new HolisticHighlight("Decision Tree", columnName, "decision tree construction algorithm",
-							supportingRole, "True", "Average Impurity", Double.toString(decisionTrees.get(i).getAverageImpurity()), null);
+							supportingRole, "True", "Average Impurity", decisionTrees.get(i).getAverageImpurity(), null);
 					hHighlight.setSupportingText(" with feature columns: ");
+					decisionTreesHHs.add(hHighlight);
 					holisticHighlights.add(hHighlight);
 					
 //					IHighlightsReporter dTHLReporter = this.highlightReporterFactory.createHighlightReporter(HighlightReporterFactory.HighlightReporterType.DEC_TREE);
@@ -218,22 +352,24 @@ public class HighlightsManager {
 			}
 		}
 		logger.info(String.format("Extracted the highlights for the decision trees of the dataset"));
-		return stringBuilder.toString();
+		return decisionTreesHHs;
 	}
 		
-	private void extractPatternHighlights() {
+	private void extractDominanceHighlights() {
 		//logger.info(String.format("Extracted the highlights for the dominance patterns of the dataset"));
 	}
 	
-	private String extractOutlierHighlights() {
-		StringBuilder stringBuilder = new StringBuilder();
+	private List<HolisticHighlight> extractOutlierHighlights() {
 		List<HolisticHighlight> outlierHolisticHLs = new ArrayList<HolisticHighlight>();
 		List<OutlierResult>  outliersResults = datasetProfile.getPatternsProfile().getOutlierResults();
+		
+		System.out.println(" &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& " + outliersResults.size());
+		
 		for(OutlierResult outlierRes: outliersResults) {
 			String columnName = outlierRes.getColumnName();
 			
 			HolisticHighlight hHighlight = new HolisticHighlight("Outlier", columnName, "a "+ datasetProfile.getPatternsProfile().getOutlierType() +" calculation algorithm",
-					null, "True", datasetProfile.getPatternsProfile().getOutlierType(), Double.toString(outlierRes.getScore()), null);
+					null, "True", datasetProfile.getPatternsProfile().getOutlierType(), outlierRes.getScore(), null);
 			hHighlight.setSupportingText(" with value " + outlierRes.getValue());
 			holisticHighlights.add(hHighlight);
 			outlierHolisticHLs.add(hHighlight);
@@ -247,7 +383,8 @@ public class HighlightsManager {
 //		}
 
 		logger.info(String.format("Extracted the highlights for the outliers of the dataset"));
-		return stringBuilder.toString();
+		return outlierHolisticHLs;
 	}
 
-}
+
+}//end class

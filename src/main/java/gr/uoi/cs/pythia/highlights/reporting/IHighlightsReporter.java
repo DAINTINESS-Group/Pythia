@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.highlights.reporting;
 
-import gr.uoi.cs.pythia.highlights.dom.HolisticHighlight;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 
 @Deprecated
 public interface IHighlightsReporter {

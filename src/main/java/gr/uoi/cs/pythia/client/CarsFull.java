@@ -15,6 +15,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 // This class contains a main method specifically set up for the 'cars' dataset.
 // Used to assist with development.
@@ -35,7 +37,7 @@ public class CarsFull {
             new String[] {"price"},
             new String[] {"model", "year"}
     );
-    datasetProfiler.declareOutlierParameters(OutlierType.NORMALIZED_SCORE, 1.0);
+    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
 //    datasetProfiler.setOutlierType(OutlierType.NORMALIZED_SCORE);
 //    datasetProfiler.setOutlierThreshold(1.0);
 
@@ -47,6 +49,9 @@ public class CarsFull {
     boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = false;
 
+    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
+
+    
     datasetProfiler.computeProfileOfDataset(
             new DatasetProfilerParameters(
                     "results",
@@ -56,7 +61,9 @@ public class CarsFull {
                     shouldRunDecisionTrees,
                     shouldRunDominancePatterns,
                     shouldRunOutlierDetection,
-                    shouldRunRegression));
+                    shouldRunRegression,
+                    highlightParameters));
+
 
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

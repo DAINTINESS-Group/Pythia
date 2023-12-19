@@ -29,12 +29,14 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
-import gr.uoi.cs.pythia.highlights.HighlightsManager;
+import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
+import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
@@ -47,6 +49,7 @@ import gr.uoi.cs.pythia.regression.RegressionParameters;
 import gr.uoi.cs.pythia.regression.RegressionPerformerFactory;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
+import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriter;
 
@@ -63,15 +66,18 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private double outlierThreshold;
 	private RegressionParameters regressionParameters;
 
-	private HighlightsManager highlightsManager;
+	private HighlightsManagerInterface highlightsManager;
+	
+	//package-private for the moment
+	List<HolisticHighlight> holisticHighlights;
 	
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(
 				SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster())
 						.config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate());
-		hasComputedDescriptiveStats = false;
-		hasComputedAllPairsCorrelations = false;
+		this.hasComputedDescriptiveStats = false;
+		this.hasComputedAllPairsCorrelations = false;
 	}
 
 	@Override
@@ -133,11 +139,14 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if(null == outlierType) {
 			this.outlierType = OutlierType.Z_SCORE;
 		}
+		else
+			this.outlierType = outlierType;
+		
 		if(outlierThreshold < 0) {
 			this.outlierThreshold = 3.0;
 		}
-		this.outlierType = outlierType;
-		this.outlierThreshold = outlierThreshold;	
+		else
+			this.outlierThreshold = outlierThreshold;	
 	}
 	
 	@Override
@@ -159,7 +168,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		if (parameters.shouldRunRegression()) performRegression();
 		
-		this.extractHighlightsForStorytelling(parameters.shouldRunDescriptiveStats(),
+		this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
 				parameters.shouldRunAllPairsCorrelations(),
 				parameters.shouldRunDecisionTrees(),
@@ -320,12 +329,11 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	
-	private void extractHighlightsForStorytelling(boolean descriptiveStats, boolean histograms, 
+	private void extractHighlightsForStorytelling(HighlightParameters highlightParameters, boolean descriptiveStats, boolean histograms, 
 									boolean allPairsCorrelations, boolean decisionTrees, boolean highlightPatterns, boolean outlierDetection) {
-		highlightsManager = new HighlightsManager(datasetProfile);
-		highlightsManager.extractHighlightsForStorytelling(descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
+		highlightsManager = new HighlightsManagerFactory().generateHighlightsManager(HighlightsManagerFactory.HighlightManagerVersion.V01, datasetProfile);
+		this.holisticHighlights = highlightsManager.extractHighlightsForStorytelling(highlightParameters, descriptiveStats, histograms, allPairsCorrelations, decisionTrees,
 														highlightPatterns, outlierDetection);
-		
 	}
 
 	private boolean isInvalidPath(String path) {

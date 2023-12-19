@@ -13,6 +13,8 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
 public class ReportResource extends ExternalResource {
 
@@ -54,13 +56,16 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunDominancePatterns = true;
 		boolean shouldRunOutlierDetection = false;
 		boolean shouldRunRegression = false;
+	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
+
 
 		datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
 						TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
 						shouldRunHistograms, shouldRunAllPairsCorrelations,
 						shouldRunDecisionTrees, shouldRunDominancePatterns,
-						shouldRunOutlierDetection, shouldRunRegression));
+						shouldRunOutlierDetection, shouldRunRegression, highlightParameters));
+
     }
     
 }
