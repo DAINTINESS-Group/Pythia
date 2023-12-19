@@ -8,6 +8,8 @@ import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.labeling.LabelingSystemTests;
 import gr.uoi.cs.pythia.report.AllReportTests;
 import gr.uoi.cs.pythia.writer.AllWriterTests;
+import gr.uoi.cs.pythia.highlights.AllHighlightsTests;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -21,6 +23,7 @@ import org.junit.runners.Suite.SuiteClasses;
         AllPatternTests.class,
         AllRegressionTests.class,
         AllReportTests.class,
-        AllWriterTests.class
+        AllWriterTests.class,
+        AllHighlightsTests.class
 })
 public class AllTests {}
