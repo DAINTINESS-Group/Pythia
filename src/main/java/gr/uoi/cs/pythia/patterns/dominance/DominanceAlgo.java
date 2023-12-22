@@ -13,6 +13,7 @@ import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 
+/* In time, this class should probably be deleted and replaced by OptimizedDominanceAlgo. */
 public abstract class DominanceAlgo {
 
   private final Logger logger = Logger.getLogger(DominanceAlgo.class);
@@ -354,7 +355,7 @@ public abstract class DominanceAlgo {
     return EMPTY;
   }
 
-  private void debugPrintList(List<Row> list, String title) {
+  private void debugPrintList(String title, List<Row> list)  {
     String str = title;
     for (Row row : list) {
       for (int i = 0; i < row.length(); i++) {
