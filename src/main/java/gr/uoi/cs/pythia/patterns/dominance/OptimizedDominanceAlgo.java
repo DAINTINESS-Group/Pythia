@@ -13,7 +13,7 @@ import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 
-public abstract class OptimizedDominanceAlgo {
+public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
 
     private final Logger logger = Logger.getLogger(DominanceAlgo.class);
 
@@ -35,6 +35,7 @@ public abstract class OptimizedDominanceAlgo {
         this.dataset = dataset;
     }
 
+    @Override
     public DominanceResult identifyDominanceWithOneCoordinate(
             String measurementColName,
             String xCoordinateColName) {
@@ -61,6 +62,7 @@ public abstract class OptimizedDominanceAlgo {
         return dominanceResult;
     }
 
+    @Override
     public DominanceResult identifyDominanceWithTwoCoordinates(
             String measurementColName,
             String xCoordinateColName,

@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.patterns;
 
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_HIGH;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_LOW;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -8,6 +10,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory;
+import gr.uoi.cs.pythia.patterns.dominance.IDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.dominance.OptimizedHighDominanceAlgo;
+import gr.uoi.cs.pythia.patterns.dominance.OptimizedLowDominanceAlgo;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -15,14 +21,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
-import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 
 public class DominanceAlgoTests {
 
 	private Dataset<Row> dataset;
-	private HighDominanceAlgo highDominanceAlgo;
-	private LowDominanceAlgo lowDominanceAlgo;
+	private IDominanceAlgo highDominanceAlgo;
+	private IDominanceAlgo lowDominanceAlgo;
 	private String measurementColName;
 	private String xCoordinateColName;
 	private String yCoordinateColName;
@@ -38,8 +42,10 @@ public class DominanceAlgoTests {
 		dataset = AllPatternTests.patternsResource.getDataset();
 		
 		// Create high & low dominance pattern algo objects
-		highDominanceAlgo = new HighDominanceAlgo(dataset);
-		lowDominanceAlgo = new LowDominanceAlgo(dataset);
+		// Default to the optimized dominance algo versions
+		DominanceAlgoFactory factory = new DominanceAlgoFactory();
+		highDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_HIGH, dataset);
+		lowDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_LOW, dataset);
 	}
 	
 	@Test

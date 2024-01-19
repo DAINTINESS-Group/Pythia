@@ -3,11 +3,11 @@ package gr.uoi.cs.pythia.patterns.dominance;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-public class HighDominanceAlgo extends DominanceAlgo {
+public class OptimizedHighDominanceAlgo extends OptimizedDominanceAlgo {
 
 	private static final String HIGH = "high";
-
-	public HighDominanceAlgo(Dataset<Row> dataset) {
+	
+	public OptimizedHighDominanceAlgo(Dataset<Row> dataset) {
 		super(dataset);
 	}
 	

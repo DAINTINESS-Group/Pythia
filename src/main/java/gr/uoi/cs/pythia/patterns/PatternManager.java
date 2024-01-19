@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import gr.uoi.cs.pythia.patterns.dominance.*;
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -13,12 +14,11 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
-import gr.uoi.cs.pythia.patterns.dominance.HighDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.dominance.LowDominanceAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
+
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_HIGH;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_LOW;
 
 public class PatternManager implements IPatternManager {
 
@@ -28,8 +28,8 @@ public class PatternManager implements IPatternManager {
   private final DominanceParameters dominanceParameters;
   private final OutlierType outlierType;
 
-  private HighDominanceAlgo highDominanceAlgo;
-  private LowDominanceAlgo lowDominanceAlgo;
+  private IDominanceAlgo highDominanceAlgo;
+  private IDominanceAlgo lowDominanceAlgo;
   private IOutlierAlgo outlierAlgo;
 
   public PatternManager(
@@ -48,8 +48,10 @@ public class PatternManager implements IPatternManager {
   }
 
   private void initializePatternAlgos() {
-    highDominanceAlgo = new HighDominanceAlgo(dataset);
-    lowDominanceAlgo = new LowDominanceAlgo(dataset);
+      // Default to the optimized dominance algo versions
+      DominanceAlgoFactory factory = new DominanceAlgoFactory();
+      highDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_HIGH, dataset);
+      lowDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_LOW, dataset);
   }
 
  
