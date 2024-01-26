@@ -16,7 +16,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class AutomatedRegressionPerformer extends GeneralRegression implements IRegressionPerformer {
+public class AutomatedRegressionPerformer extends GeneralRegression  {
 	
 	private String dependentVariable;
 	private List<String> independentVariables;

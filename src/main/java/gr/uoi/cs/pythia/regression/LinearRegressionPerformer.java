@@ -12,7 +12,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class LinearRegressionPerformer extends GeneralRegression implements IRegressionPerformer {
+public class LinearRegressionPerformer extends GeneralRegression  {
 
 	private String dependentVariable;
 	private String independentVariable;

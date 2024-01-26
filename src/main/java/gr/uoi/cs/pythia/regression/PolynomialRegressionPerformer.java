@@ -16,7 +16,7 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 //import Jama.Matrix;
 //import Jama.QRDecomposition;
 
-public class PolynomialRegressionPerformer extends GeneralRegression implements IRegressionPerformer {
+public class PolynomialRegressionPerformer extends GeneralRegression {
 
 	private String dependentVariable;
 	private String independentVariable;

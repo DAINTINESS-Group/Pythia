@@ -22,7 +22,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class MultipleLinearRegressionPerformer extends GeneralRegression implements IRegressionPerformer{
+public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	
 	private String dependentVariable;
 	private List<String> independentVariables;

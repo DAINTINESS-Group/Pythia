@@ -2,7 +2,7 @@ package gr.uoi.cs.pythia.regression;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.math3.distribution.TDistribution;
@@ -13,7 +13,13 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class GeneralRegression {
+public abstract class GeneralRegression implements IRegressionPerformer{
+	@Override
+	public abstract RegressionType getRegressionType();
+
+	@Override
+	public abstract void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) ;
+
 	
 	//this method saves the information of the output of the regression
 	protected void setupRegressionProfile(List<String> independentVariablesNames,
@@ -81,5 +87,6 @@ public class GeneralRegression {
     private static TDistribution getTDistribution(int degreesOfFreedom) {
         return new TDistribution(degreesOfFreedom);
     }
+
 	
 }
