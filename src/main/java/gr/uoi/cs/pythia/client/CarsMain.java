@@ -45,7 +45,10 @@ public class CarsMain {
 
 
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
-    datasetProfiler.declareRegressionParameters(Arrays.asList("year", "tax"), "price", RegressionType.MULTIPLE_LINEAR);
+    //datasetProfiler.declareRegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null);
+    datasetProfiler.declareRegressionParameters(Arrays.asList("tax", "mileage"), "price", RegressionType.MULTIPLE_LINEAR, null);
+    //datasetProfiler.declareRegressionParameters(null, "price", RegressionType.AUTOMATED, 0.05);
+    //datasetProfiler.declareRegressionParameters(Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3);
     
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
@@ -79,7 +82,7 @@ public class CarsMain {
             new StructField[]{
                     new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
                     new StructField("model", DataTypes.StringType, true, Metadata.empty()),
-                    new StructField("year", DataTypes.StringType, true, Metadata.empty()),
+                    new StructField("year", DataTypes.IntegerType, true, Metadata.empty()),
                     new StructField("price", DataTypes.DoubleType, true, Metadata.empty()),
                     new StructField("transmission", DataTypes.StringType, true, Metadata.empty()),
                     new StructField("mileage", DataTypes.DoubleType, true, Metadata.empty()),

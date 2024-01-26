@@ -19,9 +19,10 @@ import org.apache.spark.ml.linalg.DenseVector;
 
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class MultipleLinearRegressionPerformer implements IRegressionPerformer {
+public class MultipleLinearRegressionPerformer extends GeneralRegression implements IRegressionPerformer{
 	
 	private String dependentVariable;
 	private List<String> independentVariables;
@@ -49,7 +50,6 @@ public class MultipleLinearRegressionPerformer implements IRegressionPerformer {
 	    for (String var : independentVariables)
 	        independentVariablesValues.add(getColumnValues(dataset, var));
 
-
 	    //prepare a dataframe to train to the linear regression model
 	    Dataset<Row> data = createDataFrame(dependentVariableValues, independentVariablesValues);
 	    String[] featureCols = independentVariables.toArray(new String[0]);
@@ -76,47 +76,45 @@ public class MultipleLinearRegressionPerformer implements IRegressionPerformer {
 	    for (int i = 0; i < coefficients.size(); i++) {
 	        slopes.add(coefficients.apply(i));
 	    }
+	    
+	    List<Double> correlations = getCorrelations(datasetProfile, dependentVariable, independentVariables);
+		List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
+		Double error = model.summary().meanSquaredError();
+		
+		//for(int i =0; i<correlations.size(); i++)
+		//	System.out.println(i+"correlation = " + correlations.get(i));
+		//for(int i =0; i<pValues.size(); i++)
+		//	System.out.println(i+"pvalue = " + pValues.get(i));
+		//System.out.println("error = " + error);
 
 	    // Save output to RegressionProfile
-	    datasetProfile.getRegressionProfile().setIndependentVariablesNames(independentVariables);
-	    for (List<Double> var : independentVariablesValues)
-	        datasetProfile.getRegressionProfile().addIndependentVariablesValues(var);
-	    datasetProfile.getRegressionProfile().setDependentVariableName(dependentVariable);
-	    datasetProfile.getRegressionProfile().setDependentVariableValues(dependentVariableValues);
-	    datasetProfile.getRegressionProfile().setType(RegressionType.MULTIPLE_LINEAR);
-	    datasetProfile.getRegressionProfile().setSlopes(slopes);
-	    datasetProfile.getRegressionProfile().setIntercept(intercept);
-
-	    //DEBUG print
+		this.setupRegressionProfile(independentVariables, independentVariablesValues,
+				dependentVariable, dependentVariableValues, RegressionType.MULTIPLE_LINEAR,
+				slopes, intercept, correlations, pValues, error);
+		
+		//DEBUG print
 	    System.out.println(datasetProfile.getRegressionProfile());
-	}
-	
-	private List<Double> getColumnValues(Dataset<Row> dataset, String columnName) {
-		return dataset
-				.select(columnName)
-				.collectAsList()
-				.stream()
-				.map(s -> parseColumnValue(s.get(0)))
-				.collect(Collectors.toList());
-	}
-	
-	private Double parseColumnValue(Object object) {
-		if (object == null) return Double.NaN;
-		return Double.parseDouble(object.toString());
 	}
 	
 	//helper method to create a DataFrame from the given data
 	private Dataset<Row> createDataFrame(List<Double> dependentVariableValues, List<List<Double>> independentVariablesValues) {
 	    List<Row> rows = new ArrayList<>();
+	    boolean skipPoint;
 	    for (int i = 0; i < dependentVariableValues.size(); i++) {
+	    	skipPoint = false;
 	        List<Object> values = new ArrayList<>();
 	        values.add(dependentVariableValues.get(i));
 	        for (List<Double> var : independentVariablesValues) {
-	            values.add(var.get(i));
+	        	if(Double.isNaN(var.get(i)))	skipPoint=true;
 	        }
+	        if(Double.isNaN(dependentVariableValues.get(i)) || skipPoint)	continue;
+	        for (List<Double> var : independentVariablesValues) {
+	        	values.add(var.get(i));
+	        }
+	        
 	        rows.add(RowFactory.create(values.toArray()));
 	    }
-
+	    
 	    List<StructField> fields = new ArrayList<>();
 	    fields.add(DataTypes.createStructField(dependentVariable, DataTypes.DoubleType, false));
 	    for (String var : independentVariables) {

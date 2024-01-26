@@ -32,6 +32,14 @@ public class DatasetProfile {
   public List<Column> getColumns() {
     return columns;
   }
+  
+  public Column getColumn(String name) {
+      for (Column column : columns) {
+          if (column.getName().equals(name)) {
+              return column;
+          }
+      }return null;
+  }
 
   public PatternsProfile getPatternsProfile() {
     return patternsProfile;

@@ -18,6 +18,7 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -74,11 +75,12 @@ public class TweetsMain {
 			new String[] { "user_followers_labeled", "source" }
 			);
 	
+	
 	boolean shouldRunDescriptiveStats = true;
-	boolean shouldRunHistograms = true;
-	boolean shouldRunAllPairsCorrelations = true;
-	boolean shouldRunDecisionTrees = true;
-	boolean shouldRunDominancePatterns = true;
+	boolean shouldRunHistograms = false;
+	boolean shouldRunAllPairsCorrelations = false;
+	boolean shouldRunDecisionTrees = false;
+	boolean shouldRunDominancePatterns = false;
 	boolean shouldRunOutlierDetection = false;
 	boolean shouldRunRegression = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
@@ -87,14 +89,14 @@ public class TweetsMain {
 			new DatasetProfilerParameters(
 					"results", 
 					shouldRunDescriptiveStats,
-					shouldRunHistograms, 
+					shouldRunHistograms,
 					shouldRunAllPairsCorrelations,
-					shouldRunDecisionTrees, 
+					shouldRunDecisionTrees,
 					shouldRunDominancePatterns,
 					shouldRunOutlierDetection,
 					shouldRunRegression,
 					highlightParameters));
-     
+    
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");
   }

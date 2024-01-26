@@ -46,19 +46,17 @@ public class RegressionResource extends ExternalResource{
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
-        
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
         dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
-        datasetProfiler.declareRegressionParameters(Arrays.asList("year"), "price", RegressionType.LINEAR);
-        
+        datasetProfiler.declareRegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null);
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = false;
-		boolean shouldRunAllPairsCorrelations = false;
+		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = false;
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
-		boolean shouldRunRegression = true;
+		boolean shouldRunRegression = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(

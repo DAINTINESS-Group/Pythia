@@ -1,6 +1,7 @@
 package gr.uoi.cs.pythia.report;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.StructType;
@@ -10,6 +11,7 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
@@ -42,8 +44,7 @@ public class ReportResource extends ExternalResource {
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 3.0);
-//        datasetProfiler.setOutlierThreshold(3.0);
-//        datasetProfiler.setOutlierType(OutlierType.Z_SCORE);
+        datasetProfiler.declareRegressionParameters(null, "age", RegressionType.AUTOMATED, 0.05);
         datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
 		datasetProfiler.declareDominanceParameters(
 				DominanceColumnSelectionMode.EXHAUSTIVE,
@@ -55,7 +56,7 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunDecisionTrees = true;
 		boolean shouldRunDominancePatterns = true;
 		boolean shouldRunOutlierDetection = false;
-		boolean shouldRunRegression = false;
+		boolean shouldRunRegression = true;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 

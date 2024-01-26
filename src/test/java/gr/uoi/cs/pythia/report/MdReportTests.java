@@ -46,5 +46,12 @@ public class MdReportTests {
             new File(reportPath + File.separator + "outliers_report.md"))
             .replace(AllReportTests.reportResource.getDatasetPath(), "");
     assertEquals(expectedOutliersReport, actualOutliersReport);
+    
+    String expectedRegressionReport = TestsUtilities.getExpectedDatasetReport(
+            "cars/expected_regression_cars_report.md");
+    String actualRegressionReport = TestsUtilities.getTextFromFile(
+            new File(reportPath + File.separator + "regression_report.md"))
+            .replace(AllReportTests.reportResource.getDatasetPath(), "");
+    assertEquals(expectedRegressionReport, actualRegressionReport);
   }
 }

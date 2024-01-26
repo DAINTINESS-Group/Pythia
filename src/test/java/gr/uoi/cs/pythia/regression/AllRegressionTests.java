@@ -9,7 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	LinearRegressionPerformerTests.class,
-	MultipleLinearRegressionPerformerTests.class
+	MultipleLinearRegressionPerformerTests.class,
+	AutomatedRegressionPerformerTests.class,
+	PolynomialRegressionPerformerTests.class
 })
 public class AllRegressionTests {
 	

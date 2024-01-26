@@ -96,7 +96,7 @@ public interface IDatasetProfiler {
 	/**
 	 * ADD COMMENTS HERE
 	 */
-	void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType);
+	void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType, Double precision);
 
 	/**
 	 * 

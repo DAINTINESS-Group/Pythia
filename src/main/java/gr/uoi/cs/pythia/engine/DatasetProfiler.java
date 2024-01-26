@@ -150,8 +150,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	@Override
-	public void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType) {
-		this.regressionParameters = new RegressionParameters(independentVariables, dependentVariable, regressionType);
+	public void declareRegressionParameters(List<String> independentVariables, String dependentVariable,
+			RegressionType regressionType, Double precision) {
+		this.regressionParameters = new RegressionParameters(independentVariables, dependentVariable, regressionType, precision);
 	}
 	
 	@Override
@@ -168,12 +169,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		if (parameters.shouldRunRegression()) performRegression();
 		
-		this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
-				parameters.shouldRunHistograms(),
-				parameters.shouldRunAllPairsCorrelations(),
-				parameters.shouldRunDecisionTrees(),
-				parameters.shouldRunDominancePatterns(),
-				parameters.shouldRunOutlierDetection());
+		//this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
+		//		parameters.shouldRunHistograms(),
+		//		parameters.shouldRunAllPairsCorrelations(),
+		//		parameters.shouldRunDecisionTrees(),
+		//		parameters.shouldRunDominancePatterns(),
+		//		parameters.shouldRunOutlierDetection());
 		
 		return datasetProfile;
 	}
@@ -290,14 +291,15 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant start = Instant.now();
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		
-		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
-		
+
 		RegressionPerformerFactory factory = new RegressionPerformerFactory();
 		IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
+
 		regressionPerformer.performRegression(dataset, datasetProfile);
-		
+
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
 		logger.info(String.format("Duration of perfomRegression: %s / %sms", duration, duration.toMillis()));
 	}
 

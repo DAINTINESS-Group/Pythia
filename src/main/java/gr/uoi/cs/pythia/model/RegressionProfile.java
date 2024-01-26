@@ -18,6 +18,11 @@ public class RegressionProfile {
 	private static List<Double> slopes;
 	private static double intercept;
 	
+	private static List<Double> correlations;
+	private static List<Double> pValues;
+	
+	private static Double error;
+	
 	
 	public RegressionProfile() {
 		independentVariablesNames = new ArrayList<>();
@@ -82,13 +87,48 @@ public class RegressionProfile {
 		RegressionProfile.intercept = intercept;
 	}
 	
+	public static List<Double> getCorrelations() {
+		return correlations;
+	}
+
+	public static List<Double> getpValues() {
+		return pValues;
+	}
+
+	public static Double getError() {
+		return error;
+	}
+
+	public static void setIndependentVariablesValues(List<List<Double>> independentVariablesValues) {
+		RegressionProfile.independentVariablesValues = independentVariablesValues;
+	}
+
+	public static void setCorrelations(List<Double> correlations) {
+		RegressionProfile.correlations = correlations;
+	}
+
+	public static void setpValues(List<Double> pValues) {
+		RegressionProfile.pValues = pValues;
+	}
+
+	public static void setError(Double error) {
+		RegressionProfile.error = error;
+	}
+
 	@Override
 	public String toString() {
 		String independentPart = "";
-		for(int i=0; i<independentVariablesNames.size();i++) {
-			independentPart += " " + slopes.get(i) + "*" + independentVariablesNames.get(i) + " +";
+		if(type == RegressionType.LINEAR || type == RegressionType.MULTIPLE_LINEAR || type == RegressionType.AUTOMATED) {
+			for(int i=0; i<independentVariablesNames.size();i++) {
+				independentPart += " + " + slopes.get(i) + "*" + independentVariablesNames.get(i);
+			}
 		}
-		return dependentVariableName + " =" + independentPart + " " + intercept;
+		else if(type == RegressionType.POLYNOMIAL) {
+			for(int i=0; i<slopes.size();i++) {
+				independentPart += " + " + slopes.get(i) + "*" + independentVariablesNames.get(0) + "^(" + (i+1) + ")";
+			}
+		}
+		return dependentVariableName + " = " + intercept + independentPart;
 	}
 
 }

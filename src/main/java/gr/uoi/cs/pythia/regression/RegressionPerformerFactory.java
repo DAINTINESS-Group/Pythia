@@ -12,6 +12,12 @@ public class RegressionPerformerFactory {
 	      case MULTIPLE_LINEAR:
 	    	  	return new MultipleLinearRegressionPerformer(regressionParameters.getDependentVariable(),
 	    	  			regressionParameters.getIndependentVariables());
+	      case POLYNOMIAL:
+	    	  	return new PolynomialRegressionPerformer(regressionParameters.getDependentVariable(),
+	    	  			regressionParameters.getIndependentVariables().get(0), (int)regressionParameters.getPrecision());
+	      case AUTOMATED: 
+	    	  	return new AutomatedRegressionPerformer(regressionParameters.getDependentVariable(),
+	    	  			regressionParameters.getPrecision());
 		}
 		throw new IllegalArgumentException(
 		        String.format("Regression %s is not a supported regression type.", regressionParameters.getType()));

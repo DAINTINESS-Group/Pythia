@@ -9,11 +9,13 @@ public class RegressionParameters {
 	private String dependentVariable;
 	private List<String> independentVariables;
 	private RegressionType type;
+	private Double precision;
 	
-	public RegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType type) {
+	public RegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType type, Double precision) {
 		this.dependentVariable = dependentVariable;
 		this.independentVariables = independentVariables;
 		this.type = type;
+		this.precision = precision;
 	}
 	
 	public String getDependentVariable() {
@@ -38,6 +40,14 @@ public class RegressionParameters {
 
 	public void setType(RegressionType type) {
 		this.type = type;
+	}
+
+	public double getPrecision() {
+		return precision;
+	}
+
+	public void setPrecision(double precision) {
+		this.precision = precision;
 	}
 
 }
