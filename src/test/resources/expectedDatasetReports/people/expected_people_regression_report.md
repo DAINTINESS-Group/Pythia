@@ -1,4 +1,4 @@
-# Automated Regression
+# 1. Automated Regression
 
 ## Dependent Variable
 - age
@@ -18,3 +18,6 @@
 - **Error (MSE):** 164.66666666666669
 - **Regression Type:** Automated Regression
 - **Formula:** age = 33.0
+
+<br><br><br>
+

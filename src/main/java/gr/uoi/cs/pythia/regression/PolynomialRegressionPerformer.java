@@ -11,6 +11,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 //import Jama.Matrix;
@@ -38,7 +39,7 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	}
 	
 	@Override
-	public void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 	    // Get the values of the relevant columns
 	    List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 	    List<Double> independentVariableValues = getColumnValues(dataset, independentVariable);
@@ -84,13 +85,14 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	    List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
 
 	    // Save output to RegressionProfile
-	    this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
+	    RegressionProfile result = this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
 	            dependentVariable, dependentVariableValues, RegressionType.POLYNOMIAL,
 	            slopes, intercept, correlations, pValues, meanSquaredError);
 
 	    // DEBUG print
-	    System.out.println(datasetProfile.getRegressionProfile());
-	    System.out.println("Error = " + meanSquaredError);
+	    System.out.println(result);
+	    datasetProfile.addRegressionProfile(result);
+	    return result;
 	}
 
 	//Helper method

@@ -15,6 +15,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.regression.RegressionParameters;
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -45,10 +47,16 @@ public class CarsMain {
 
 
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
-    //datasetProfiler.declareRegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null);
-    datasetProfiler.declareRegressionParameters(Arrays.asList("tax", "mileage"), "price", RegressionType.MULTIPLE_LINEAR, null);
-    //datasetProfiler.declareRegressionParameters(null, "price", RegressionType.AUTOMATED, 0.05);
-    //datasetProfiler.declareRegressionParameters(Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3);
+    RegressionRequest regressionRequest = new RegressionRequest();
+    regressionRequest.addRegression(new RegressionParameters(
+    		Arrays.asList("tax"), "price", RegressionType.LINEAR, null));
+    regressionRequest.addRegression(new RegressionParameters(
+    		Arrays.asList("tax", "mileage"), "price", RegressionType.MULTIPLE_LINEAR, null));
+    regressionRequest.addRegression(new RegressionParameters(
+    		null, "price", RegressionType.AUTOMATED, 0.05));
+    regressionRequest.addRegression(new RegressionParameters(
+    		Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3));
+    datasetProfiler.declareRegressionRequest(regressionRequest);
     
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;

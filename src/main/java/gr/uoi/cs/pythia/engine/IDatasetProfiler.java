@@ -11,6 +11,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 
 public interface IDatasetProfiler {
 
@@ -96,7 +97,7 @@ public interface IDatasetProfiler {
 	/**
 	 * ADD COMMENTS HERE
 	 */
-	void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType, Double precision);
+	void declareRegressionRequest(RegressionRequest regressionRequest);
 
 	/**
 	 * 

@@ -30,24 +30,32 @@ public class TxtReportGenerator implements IReportGenerator {
 			throws IOException {
 		produceStatisticalProfileReport(datasetProfile, outputDirectoryPath);
 		producePatternsProfileReports(datasetProfile, outputDirectoryPath);
-		produceRegressionProfileReport(outputDirectoryPath);
+		produceRegressionProfileReport(datasetProfile, outputDirectoryPath);
 	}
 
-	private void produceRegressionProfileReport(String outputDirectoryPath) throws IOException{
-		String content = this.getTitle() + "\n\n";
-		content += "Dependent Variable: " + RegressionProfile.getDependentVariableName() + "\n";
-		if(RegressionProfile.getIndependentVariablesNames().size()>0)
-			content += "Independent Variables: " + RegressionProfile.getIndependentVariablesNames().get(0);
-		for(int i=1; i<RegressionProfile.getIndependentVariablesNames().size(); i++)
-			content += ", " + RegressionProfile.getIndependentVariablesNames().get(i);
-		content += "\n\n\n-> Results\n\n" + "-Information about Independent Variables\n";
-		content += this.getTable();
-		content += "\n\n\n-General Information\n";
-		content += "Intercept: " + RegressionProfile.getIntercept() + "\n";
-		content += "Error (MSE): " + RegressionProfile.getError() + "\n";	
-		content += "Regression Type: " + this.getTitle()  + "\n";	
-		content += "Formula: " + this.getFormula();
-		writeToFile(outputDirectoryPath, regressionReportFileName, content);
+	private void produceRegressionProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException{
+		String content = "";
+		for(int i=0; i<datasetProfile.getRegressionProfiles().size(); i++) {
+			RegressionProfile currentProfile = datasetProfile.getRegressionProfiles().get(i);
+			int currentRegressionId = i+1;
+			content += currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
+			content += "Dependent Variable: " + currentProfile.getDependentVariableName() + "\n";
+			if (currentProfile.getIndependentVariablesNames().size() > 0) {
+			    content += "Independent Variables: " + currentProfile.getIndependentVariablesNames().get(0);
+
+			    for (int j = 1; j < currentProfile.getIndependentVariablesNames().size(); j++) {
+			        content += ", " + currentProfile.getIndependentVariablesNames().get(j);
+			    }
+			}
+			content += "\n\n\n-> Results\n\n" + "-Information about Independent Variables\n";
+			content += this.getTable(currentProfile);
+			content += "\n\n\n-General Information\n";
+			content += "Intercept: " + currentProfile.getIntercept() + "\n";
+			content += "Error (MSE): " + currentProfile.getError() + "\n";	
+			content += "Regression Type: " + this.getTitle(currentProfile)  + "\n";	
+			content += "Formula: " + this.getFormula(currentProfile);
+			content += "\n\n\n\n\n";
+		}writeToFile(outputDirectoryPath, regressionReportFileName, content);
 		return;
 	}
 	
@@ -141,50 +149,50 @@ public class TxtReportGenerator implements IReportGenerator {
 		}
 	}
 	
-	private String getTitle() {
-		if(RegressionProfile.getType() == RegressionType.AUTOMATED)	return "Automated Regression";
-		else if(RegressionProfile.getType() == RegressionType.LINEAR)	return "Linear Regression";
-		else if(RegressionProfile.getType() == RegressionType.MULTIPLE_LINEAR)	return "Multiple Linear Regression";
-		else if(RegressionProfile.getType() == RegressionType.POLYNOMIAL)	return "Polynomial Regression";
+	private String getTitle(RegressionProfile profile) {
+		if(profile.getType() == RegressionType.AUTOMATED)	return "Automated Regression";
+		else if(profile.getType() == RegressionType.LINEAR)	return "Linear Regression";
+		else if(profile.getType() == RegressionType.MULTIPLE_LINEAR)	return "Multiple Linear Regression";
+		else if(profile.getType() == RegressionType.POLYNOMIAL)	return "Polynomial Regression";
 		else	return null;
 	}
 	
-	private String getFormula() {
+	private String getFormula(RegressionProfile profile) {
 		String independentPart = "";
-		if(RegressionProfile.getType() == RegressionType.LINEAR ||
-				RegressionProfile.getType() == RegressionType.MULTIPLE_LINEAR || RegressionProfile.getType() == RegressionType.AUTOMATED) {
-			for(int i=0; i<RegressionProfile.getIndependentVariablesNames().size();i++) {
-				independentPart += " + " + RegressionProfile.getSlopes().get(i) + "*" + RegressionProfile.getIndependentVariablesNames().get(i);
+		if(profile.getType() == RegressionType.LINEAR ||
+				profile.getType() == RegressionType.MULTIPLE_LINEAR || profile.getType() == RegressionType.AUTOMATED) {
+			for(int i=0; i<profile.getIndependentVariablesNames().size();i++) {
+				independentPart += " + " + profile.getSlopes().get(i) + "*" + profile.getIndependentVariablesNames().get(i);
 			}
 		}
-		else if(RegressionProfile.getType() == RegressionType.POLYNOMIAL) {
-			for(int i=0; i<RegressionProfile.getSlopes().size();i++) {
-				independentPart += " + " + RegressionProfile.getSlopes().get(i) +
-						"*" + RegressionProfile.getIndependentVariablesNames().get(0) + "^(" + (i+1) + ")";
+		else if(profile.getType() == RegressionType.POLYNOMIAL) {
+			for(int i=0; i<profile.getSlopes().size();i++) {
+				independentPart += " + " + profile.getSlopes().get(i) +
+						"*" + profile.getIndependentVariablesNames().get(0) + "^(" + (i+1) + ")";
 			}
 		}
-		return RegressionProfile.getDependentVariableName() + " = " + RegressionProfile.getIntercept() + independentPart;
+		return profile.getDependentVariableName() + " = " + profile.getIntercept() + independentPart;
 	}
 	
-	private String getTable() {
+	private String getTable(RegressionProfile profile) {
 		String content = "";
-		if(RegressionProfile.getType()!= RegressionType.POLYNOMIAL) {
+		if(profile.getType()!= RegressionType.POLYNOMIAL) {
 			content += "Column	|	Slope	|	Correlation	|	p-value (Null hypothesis for p-value of each column X -> Dependent variable and X are not correlated)\n";
 			content += "-------------------------------------------------\n";
-			for(int i=0; i<RegressionProfile.getIndependentVariablesNames().size(); i++) {
-				content += RegressionProfile.getIndependentVariablesNames().get(i) + "	|	";
-				content += RegressionProfile.getSlopes().get(i) + "	|	";
-				content += RegressionProfile.getCorrelations().get(i) + "	|	";
-				content += RegressionProfile.getpValues().get(i) + "\n";
+			for(int i=0; i<profile.getIndependentVariablesNames().size(); i++) {
+				content += profile.getIndependentVariablesNames().get(i) + "	|	";
+				content += profile.getSlopes().get(i) + "	|	";
+				content += profile.getCorrelations().get(i) + "	|	";
+				content += profile.getpValues().get(i) + "\n";
 			}
 		}
 		else {
 			content += "Column	|	Correlation	|	p-value (Null hypothesis for p-value of each column X -> Dependent variable and X are not correlated)\n";
 			content += "-------------------------------------------------\n";
-			for(int i=0; i<RegressionProfile.getIndependentVariablesNames().size(); i++) {
-				content += RegressionProfile.getIndependentVariablesNames().get(i) + "	|	";
-				content += RegressionProfile.getCorrelations().get(i) + "	|	";
-				content += RegressionProfile.getpValues().get(i) + "\n";
+			for(int i=0; i<profile.getIndependentVariablesNames().size(); i++) {
+				content += profile.getIndependentVariablesNames().get(i) + "	|	";
+				content += profile.getCorrelations().get(i) + "	|	";
+				content += profile.getpValues().get(i) + "\n";
 			}
 		}
 		return content;

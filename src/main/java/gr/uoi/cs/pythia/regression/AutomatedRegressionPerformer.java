@@ -35,7 +35,7 @@ public class AutomatedRegressionPerformer extends GeneralRegression  {
 	}
 	
 	@Override
-	public void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 		//setup all independent candidates and their correlations
 		List<String> independentCandidatesNames = new ArrayList<>();
 		List<Double> independentCandidatesCorValues = new ArrayList<>();
@@ -54,11 +54,11 @@ public class AutomatedRegressionPerformer extends GeneralRegression  {
 				independentVariables.add(independentCandidatesNames.get(i));
 			}
 		}
-		new MultipleLinearRegressionPerformer(dependentVariable, independentVariables)
+		RegressionProfile result = new MultipleLinearRegressionPerformer(dependentVariable, independentVariables)
 			.performRegression(dataset, datasetProfile);
 		
-		RegressionProfile.setType(RegressionType.AUTOMATED);
-		return;
+		result.setType(RegressionType.AUTOMATED);
+		return result;
 	}
 	
 }

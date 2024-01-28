@@ -18,31 +18,37 @@ public abstract class GeneralRegression implements IRegressionPerformer{
 	public abstract RegressionType getRegressionType();
 
 	@Override
-	public abstract void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) ;
+	public abstract RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) ;
 
 	
 	//this method saves the information of the output of the regression
-	protected void setupRegressionProfile(List<String> independentVariablesNames,
-			List<List<Double>> independentVariablesValues,
-			String dependentVariableName,
-			List<Double> dependentVariablesValues,
-			RegressionType regressionTYpe,
-			List<Double> slopes,
-			Double intercept,
-			List<Double> correlations,
-			List<Double> pValues,
-			Double error) {
-		RegressionProfile.setIndependentVariablesNames(independentVariablesNames);
-	    RegressionProfile.setIndependentVariablesValues(independentVariablesValues);
-	    RegressionProfile.setDependentVariableName(dependentVariableName);
-	    RegressionProfile.setDependentVariableValues(dependentVariablesValues);
-	    RegressionProfile.setType(regressionTYpe);
-	    RegressionProfile.setSlopes(slopes);
-	    RegressionProfile.setIntercept(intercept);
-	    RegressionProfile.setCorrelations(correlations);
-		RegressionProfile.setpValues(pValues);
-		RegressionProfile.setError(error);
-	}
+	protected RegressionProfile setupRegressionProfile(List<String> independentVariablesNames,
+            List<List<Double>> independentVariablesValues,
+            String dependentVariableName,
+            List<Double> dependentVariableValues,
+            RegressionType regressionType,
+            List<Double> slopes,
+            Double intercept,
+            List<Double> correlations,
+            List<Double> pValues,
+            Double error) {
+		
+			RegressionProfile newRegression = new RegressionProfile();
+			
+			newRegression.setIndependentVariablesNames(independentVariablesNames);
+			newRegression.setIndependentVariablesValues(independentVariablesValues);
+			newRegression.setDependentVariableName(dependentVariableName);
+			newRegression.setDependentVariableValues(dependentVariableValues);
+			newRegression.setType(regressionType);
+			newRegression.setSlopes(slopes);
+			newRegression.setIntercept(intercept);
+			newRegression.setCorrelations(correlations);
+			newRegression.setpValues(pValues);
+			newRegression.setError(error);
+			
+			return newRegression;
+			}
+
 	
 	protected List<Double> getColumnValues(Dataset<Row> dataset, String columnName) {
 		return dataset

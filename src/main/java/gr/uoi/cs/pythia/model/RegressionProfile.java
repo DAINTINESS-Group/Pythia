@@ -7,113 +7,130 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class RegressionProfile {
 	
-	private static List<String> independentVariablesNames;
-	private static List<List<Double>> independentVariablesValues;
+	private List<String> independentVariablesNames;
+	private List<List<Double>> independentVariablesValues;
 	
-	private static String dependentVariableName;
-	private static List<Double> dependentVariableValues;
+	private String dependentVariableName;
+	private List<Double> dependentVariableValues;
 	
-	private static RegressionType type;
+	private RegressionType type;
 	
-	private static List<Double> slopes;
-	private static double intercept;
+	private List<Double> slopes;
+	private double intercept;
 	
-	private static List<Double> correlations;
-	private static List<Double> pValues;
+	private List<Double> correlations;
+	private List<Double> pValues;
 	
-	private static Double error;
-	
-	
+	private Double error;
+		
 	public RegressionProfile() {
 		independentVariablesNames = new ArrayList<>();
 		independentVariablesValues = new ArrayList<>();
 		dependentVariableValues = new ArrayList<>();
 		slopes = new ArrayList<>();
+		correlations = new ArrayList<>();
+		pValues = new ArrayList<>();
 	}
 
-	public static List<String> getIndependentVariablesNames() {
+	public List<String> getIndependentVariablesNames() {
 		return independentVariablesNames;
 	}
-	
-	public static List<List<Double>> getIndependentVariablesValues() {
+
+
+	public List<List<Double>> getIndependentVariablesValues() {
 		return independentVariablesValues;
 	}
-	
-	public static String getDependentVariableName() {
+
+
+	public String getDependentVariableName() {
 		return dependentVariableName;
 	}
-	
-	public static List<Double> getDependentVariableValues() {
+
+
+	public List<Double> getDependentVariableValues() {
 		return dependentVariableValues;
 	}
-	
-	public static RegressionType getType() {
+
+
+	public RegressionType getType() {
 		return type;
 	}
-	
-	public static List<Double> getSlopes() {
+
+
+	public List<Double> getSlopes() {
 		return slopes;
 	}
-	
-	public static double getIntercept() {
+
+
+	public double getIntercept() {
 		return intercept;
 	}
-	
-	public static void setIndependentVariablesNames(List<String> independentVariablesNames) {
-		RegressionProfile.independentVariablesNames = independentVariablesNames;
-	}
-	
-	public static void addIndependentVariablesValues(List<Double> independentVariablesValues) {
-		RegressionProfile.independentVariablesValues.add(independentVariablesValues);
-	}
-	
-	public static void setDependentVariableName(String dependentVariableName) {
-		RegressionProfile.dependentVariableName = dependentVariableName;
-	}
-	
-	public static void setDependentVariableValues(List<Double> dependentVariableValues) {
-		RegressionProfile.dependentVariableValues = dependentVariableValues;
-	}
-	
-	public static void setType(RegressionType type) {
-		RegressionProfile.type = type;
-	}
-	
-	public static void setSlopes(List<Double> slopes) {
-		RegressionProfile.slopes = slopes;
-	}
-	
-	public static void setIntercept(double intercept) {
-		RegressionProfile.intercept = intercept;
-	}
-	
-	public static List<Double> getCorrelations() {
+
+
+	public List<Double> getCorrelations() {
 		return correlations;
 	}
 
-	public static List<Double> getpValues() {
+
+	public List<Double> getpValues() {
 		return pValues;
 	}
 
-	public static Double getError() {
+
+	public Double getError() {
 		return error;
 	}
 
-	public static void setIndependentVariablesValues(List<List<Double>> independentVariablesValues) {
-		RegressionProfile.independentVariablesValues = independentVariablesValues;
+
+	public void setIndependentVariablesNames(List<String> independentVariablesNames) {
+		this.independentVariablesNames = independentVariablesNames;
 	}
 
-	public static void setCorrelations(List<Double> correlations) {
-		RegressionProfile.correlations = correlations;
+
+	public void setIndependentVariablesValues(List<List<Double>> independentVariablesValues) {
+		this.independentVariablesValues = independentVariablesValues;
 	}
 
-	public static void setpValues(List<Double> pValues) {
-		RegressionProfile.pValues = pValues;
+
+	public void setDependentVariableName(String dependentVariableName) {
+		this.dependentVariableName = dependentVariableName;
 	}
 
-	public static void setError(Double error) {
-		RegressionProfile.error = error;
+
+	public void setDependentVariableValues(List<Double> dependentVariableValues) {
+		this.dependentVariableValues = dependentVariableValues;
 	}
+
+
+	public void setType(RegressionType type) {
+		this.type = type;
+	}
+
+
+	public void setSlopes(List<Double> slopes) {
+		this.slopes = slopes;
+	}
+
+
+	public void setIntercept(double intercept) {
+		this.intercept = intercept;
+	}
+
+
+	public void setCorrelations(List<Double> correlations) {
+		this.correlations = correlations;
+	}
+
+
+	public void setpValues(List<Double> pValues) {
+		this.pValues = pValues;
+	}
+
+
+	public void setError(Double error) {
+		this.error = error;
+	}
+
 
 	@Override
 	public String toString() {

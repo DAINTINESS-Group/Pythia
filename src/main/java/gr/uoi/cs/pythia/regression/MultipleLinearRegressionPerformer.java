@@ -43,7 +43,7 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	}
 	
 	@Override
-	public void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 	    // Get the values of the relevant columns
 	    List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 	    List<List<Double>> independentVariablesValues = new ArrayList<>();
@@ -88,12 +88,14 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 		//System.out.println("error = " + error);
 
 	    // Save output to RegressionProfile
-		this.setupRegressionProfile(independentVariables, independentVariablesValues,
+		RegressionProfile result = this.setupRegressionProfile(independentVariables, independentVariablesValues,
 				dependentVariable, dependentVariableValues, RegressionType.MULTIPLE_LINEAR,
 				slopes, intercept, correlations, pValues, error);
 		
 		//DEBUG print
-	    System.out.println(datasetProfile.getRegressionProfile());
+		System.out.println(result);
+	    datasetProfile.addRegressionProfile(result);
+	    return result;
 	}
 	
 	//helper method to create a DataFrame from the given data

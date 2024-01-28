@@ -31,19 +31,19 @@ private IRegressionPerformer regressionPerformer;
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
 		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
-		regressionPerformer.performRegression(dataset, datasetProfile);
+		RegressionProfile result = regressionPerformer.performRegression(dataset, datasetProfile);
 		
 		
-		List<String> independentVariableNames = RegressionProfile.getIndependentVariablesNames();
-		String dependentVariableName = RegressionProfile.getDependentVariableName();
-		RegressionType regressionType = RegressionProfile.getType();
-		List<Double> slopes = RegressionProfile.getSlopes();
-		double intercept = RegressionProfile.getIntercept();
-		List<List<Double>> independentVariablesValues = RegressionProfile.getIndependentVariablesValues();
-		List<Double> dependentVariablesValues = RegressionProfile.getDependentVariableValues();
-		List<Double> correlations = RegressionProfile.getCorrelations();
-		List<Double> pValues = RegressionProfile.getpValues();
-		Double error = RegressionProfile.getError();
+		List<String> independentVariableNames = result.getIndependentVariablesNames();
+		String dependentVariableName = result.getDependentVariableName();
+		RegressionType regressionType = result.getType();
+		List<Double> slopes = result.getSlopes();
+		double intercept = result.getIntercept();
+		List<List<Double>> independentVariablesValues = result.getIndependentVariablesValues();
+		List<Double> dependentVariablesValues = result.getDependentVariableValues();
+		List<Double> correlations = result.getCorrelations();
+		List<Double> pValues = result.getpValues();
+		Double error = result.getError();
 		
 		
 		List<String> expectedIndependentVariableNames = Arrays.asList("mpg", "tax");

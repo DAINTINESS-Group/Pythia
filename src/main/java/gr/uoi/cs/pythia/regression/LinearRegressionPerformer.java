@@ -32,7 +32,7 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 	}
 	
 	@Override
-	public void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 		SimpleRegression regression = new SimpleRegression();
 		List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 		List<Double> independentVariableValues = getColumnValues(dataset, independentVariable);
@@ -61,12 +61,14 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 		//System.out.println("error = " + error);
 
 		// Save output to RegressionProfile
-		this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
+		RegressionProfile result = this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
 				dependentVariable, dependentVariableValues, RegressionType.LINEAR,
 				Arrays.asList(slope), intercept, correlations, pValues, error);
 		
 		//DEBUG print
-	    System.out.println(datasetProfile.getRegressionProfile());
+		System.out.println(result);
+	    datasetProfile.addRegressionProfile(result);
+	    return result;
 	}
 	
 }

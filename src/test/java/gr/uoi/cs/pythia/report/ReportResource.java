@@ -13,6 +13,8 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.regression.RegressionParameters;
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -44,7 +46,10 @@ public class ReportResource extends ExternalResource {
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 3.0);
-        datasetProfiler.declareRegressionParameters(null, "age", RegressionType.AUTOMATED, 0.05);
+        RegressionRequest regressionRequest = new RegressionRequest();
+        regressionRequest.addRegression(new RegressionParameters(
+        		null, "age", RegressionType.AUTOMATED, 0.05));
+        datasetProfiler.declareRegressionRequest(regressionRequest);
         datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
 		datasetProfiler.declareDominanceParameters(
 				DominanceColumnSelectionMode.EXHAUSTIVE,

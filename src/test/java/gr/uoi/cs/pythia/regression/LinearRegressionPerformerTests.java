@@ -31,18 +31,18 @@ public class LinearRegressionPerformerTests {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
 		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		DecimalFormat decimalFormat = new DecimalFormat("#.###");
-		regressionPerformer.performRegression(dataset, datasetProfile);
+		RegressionProfile result = regressionPerformer.performRegression(dataset, datasetProfile);
 
-		String independentVariableName = RegressionProfile.getIndependentVariablesNames().get(0);
-		String dependentVariableName = RegressionProfile.getDependentVariableName();
-		RegressionType regressionType = RegressionProfile.getType();
-		double slope = Double.parseDouble(decimalFormat.format(RegressionProfile.getSlopes().get(0)));
-		double intercept = Double.parseDouble(decimalFormat.format(RegressionProfile.getIntercept()));
-		List<Double> independentVariablesValues = RegressionProfile.getIndependentVariablesValues().get(0);
-		List<Double> dependentVariablesValues = RegressionProfile.getDependentVariableValues();
-		List<Double> correlations = RegressionProfile.getCorrelations();
-		List<Double> pValues = RegressionProfile.getpValues();
-		Double error = RegressionProfile.getError();
+		String independentVariableName = result.getIndependentVariablesNames().get(0);
+		String dependentVariableName = result.getDependentVariableName();
+		RegressionType regressionType = result.getType();
+		double slope = Double.parseDouble(decimalFormat.format(result.getSlopes().get(0)));
+		double intercept = Double.parseDouble(decimalFormat.format(result.getIntercept()));
+		List<Double> independentVariablesValues = result.getIndependentVariablesValues().get(0);
+		List<Double> dependentVariablesValues = result.getDependentVariableValues();
+		List<Double> correlations = result.getCorrelations();
+		List<Double> pValues = result.getpValues();
+		Double error = result.getError();
 		
 		//check if RegressionProfile is updated correctly
 		assertEquals("tax", independentVariableName);

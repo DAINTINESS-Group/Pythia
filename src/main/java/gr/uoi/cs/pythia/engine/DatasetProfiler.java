@@ -47,6 +47,7 @@ import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.regression.IRegressionPerformer;
 import gr.uoi.cs.pythia.regression.RegressionParameters;
 import gr.uoi.cs.pythia.regression.RegressionPerformerFactory;
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -64,7 +65,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private boolean hasComputedAllPairsCorrelations;
 	private OutlierType outlierType;
 	private double outlierThreshold;
-	private RegressionParameters regressionParameters;
+	private RegressionRequest regressionRequest;
 
 	private HighlightsManagerInterface highlightsManager;
 	
@@ -150,9 +151,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	@Override
-	public void declareRegressionParameters(List<String> independentVariables, String dependentVariable,
-			RegressionType regressionType, Double precision) {
-		this.regressionParameters = new RegressionParameters(independentVariables, dependentVariable, regressionType, precision);
+	public void declareRegressionRequest(RegressionRequest regressionRequest) {
+		this.regressionRequest = regressionRequest;
 	}
 	
 	@Override
@@ -169,12 +169,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		if (parameters.shouldRunRegression()) performRegression();
 		
-		//this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
-		//		parameters.shouldRunHistograms(),
-		//		parameters.shouldRunAllPairsCorrelations(),
-		//		parameters.shouldRunDecisionTrees(),
-		//		parameters.shouldRunDominancePatterns(),
-		//		parameters.shouldRunOutlierDetection());
+		this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
+				parameters.shouldRunHistograms(),
+				parameters.shouldRunAllPairsCorrelations(),
+				parameters.shouldRunDecisionTrees(),
+				parameters.shouldRunDominancePatterns(),
+				parameters.shouldRunOutlierDetection());
 		
 		return datasetProfile;
 	}
@@ -291,11 +291,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant start = Instant.now();
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		
+		for(RegressionParameters regressionParameters : regressionRequest.getRegressionParameters()) {
+			RegressionPerformerFactory factory = new RegressionPerformerFactory();
+			IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
 
-		RegressionPerformerFactory factory = new RegressionPerformerFactory();
-		IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
-
-		regressionPerformer.performRegression(dataset, datasetProfile);
+			regressionPerformer.performRegression(dataset, datasetProfile);
+		}
 
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
