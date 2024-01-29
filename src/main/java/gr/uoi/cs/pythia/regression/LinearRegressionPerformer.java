@@ -19,8 +19,8 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 	private double intercept;
 	private double slope;
 	
-	public LinearRegressionPerformer(String dependentVariable, String independentVariable) {
-		super();
+	public LinearRegressionPerformer(String dependentVariable, String independentVariable, DatasetProfile datasetProfile) {
+		super(datasetProfile);
 		this.dependentVariable = dependentVariable;
 		this.independentVariable = independentVariable;
 	}
@@ -32,7 +32,7 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 	}
 	
 	@Override
-	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset) {
 		SimpleRegression regression = new SimpleRegression();
 		List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 		List<Double> independentVariableValues = getColumnValues(dataset, independentVariable);
@@ -47,18 +47,13 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 		        regression.addData(independentValue, dependentValue);
 		    }
 		}
-
 		
 		//perform regression
 		intercept = regression.getIntercept();
 		slope = regression.getSlope();
-		List<Double> correlations = getCorrelations(datasetProfile, dependentVariable, Arrays.asList(independentVariable));
+		List<Double> correlations = getCorrelations(dependentVariable, Arrays.asList(independentVariable));
 		List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
 		Double error = regression.getMeanSquareError();
-		
-		//System.out.println("correlation = " + correlations.get(0));
-		//System.out.println("pvalue = " + pValues.get(0));
-		//System.out.println("error = " + error);
 
 		// Save output to RegressionProfile
 		RegressionProfile result = this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),

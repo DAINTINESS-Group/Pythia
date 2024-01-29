@@ -4,7 +4,7 @@
 - age
 
 ## Independent Variables
-- 
+
 
 ## Results
 

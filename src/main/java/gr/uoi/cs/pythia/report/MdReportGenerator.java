@@ -53,10 +53,16 @@ public class MdReportGenerator implements IReportGenerator {
 			content += "# " + currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
 
 		    content += "## Dependent Variable\n";
-		    content += "- " + currentProfile.getDependentVariableName() + "\n\n";
-
+		    content += "- " + currentProfile.getDependentVariable().getName() + "\n\n";
 		    content += "## Independent Variables\n";
-		    content += "- " + String.join(", ", currentProfile.getIndependentVariablesNames()) + "\n\n";
+		    if (currentProfile.getIndependentVariables().size() > 0) {
+			    content += "- " + currentProfile.getIndependentVariables().get(0).getName();
+
+			    for (int j = 1; j < currentProfile.getIndependentVariables().size(); j++) {
+			        content += ", " + currentProfile.getIndependentVariables().get(j).getName();
+			    }
+			}
+		    content += "\n\n";
 
 		    content += "## Results\n\n";
 		    content += "### Information about Independent Variables\n";
@@ -194,20 +200,20 @@ public class MdReportGenerator implements IReportGenerator {
 	    if (profile.getType() == RegressionType.LINEAR ||
 	    		profile.getType() == RegressionType.MULTIPLE_LINEAR ||
 	    				profile.getType() == RegressionType.AUTOMATED) {
-	        for (int i = 0; i < profile.getIndependentVariablesNames().size(); i++) {
+	        for (int i = 0; i < profile.getIndependentVariables().size(); i++) {
 	            independentPart += " + " + profile.getSlopes().get(i) +
-	                    "\\*" + profile.getIndependentVariablesNames().get(i);
+	                    "\\*" + profile.getIndependentVariables().get(i).getName();
 	        }
 	    } else if (profile.getType() == RegressionType.POLYNOMIAL) {
 	        for (int i = 0; i < profile.getSlopes().size(); i++) {
-	            String variable = profile.getIndependentVariablesNames().get(0);
+	            String variable = profile.getIndependentVariables().get(0).getName();
 	            String power = String.valueOf(i + 1);
 	            independentPart += " + " + profile.getSlopes().get(i) +
 	                    "\\*" + variable + "<sup>" + power + "</sup>";
 	        }
 	    }
 
-	    return profile.getDependentVariableName() + " = " +
+	    return profile.getDependentVariable().getName() + " = " +
 	    profile.getIntercept() + independentPart;
 	}
 	
@@ -218,8 +224,8 @@ public class MdReportGenerator implements IReportGenerator {
 		    content += "|--------|-------|-------------|---------|\n";
 		    
 		    // Populate the table with data
-		    for (int i = 0; i < profile.getIndependentVariablesNames().size(); i++) {
-		        content += "| " + profile.getIndependentVariablesNames().get(i) + " | ";
+		    for (int i = 0; i < profile.getIndependentVariables().size(); i++) {
+		        content += "| " + profile.getIndependentVariables().get(i).getName() + " | ";
 		        content += profile.getSlopes().get(i) + " | ";
 		        content += profile.getCorrelations().get(i) + " | ";
 		        content += profile.getpValues().get(i) + " |\n";
@@ -230,8 +236,8 @@ public class MdReportGenerator implements IReportGenerator {
 		    content += "|--------|-------------|---------|\n";
 		    
 		    // Populate the table with data
-		    for (int i = 0; i < profile.getIndependentVariablesNames().size(); i++) {
-		        content += "| " + profile.getIndependentVariablesNames().get(i) + " | ";
+		    for (int i = 0; i < profile.getIndependentVariables().size(); i++) {
+		        content += "| " + profile.getIndependentVariables().get(i).getName() + " | ";
 		        content += profile.getCorrelations().get(i) + " | ";
 		        content += profile.getpValues().get(i) + " |\n";
 		    }

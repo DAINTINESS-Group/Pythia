@@ -30,8 +30,8 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	private List<Double> slopes;
 	
 	
-	public MultipleLinearRegressionPerformer(String dependentVariable, List<String> independentVariables) {
-		super();
+	public MultipleLinearRegressionPerformer(String dependentVariable, List<String> independentVariables, DatasetProfile datasetProfile) {
+		super(datasetProfile);
 		this.dependentVariable = dependentVariable;
 		this.independentVariables = independentVariables;
 		slopes = new ArrayList<>();
@@ -43,7 +43,7 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	}
 	
 	@Override
-	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset) {
 	    // Get the values of the relevant columns
 	    List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 	    List<List<Double>> independentVariablesValues = new ArrayList<>();
@@ -77,15 +77,9 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	        slopes.add(coefficients.apply(i));
 	    }
 	    
-	    List<Double> correlations = getCorrelations(datasetProfile, dependentVariable, independentVariables);
+	    List<Double> correlations = getCorrelations(dependentVariable, independentVariables);
 		List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
 		Double error = model.summary().meanSquaredError();
-		
-		//for(int i =0; i<correlations.size(); i++)
-		//	System.out.println(i+"correlation = " + correlations.get(i));
-		//for(int i =0; i<pValues.size(); i++)
-		//	System.out.println(i+"pvalue = " + pValues.get(i));
-		//System.out.println("error = " + error);
 
 	    // Save output to RegressionProfile
 		RegressionProfile result = this.setupRegressionProfile(independentVariables, independentVariablesValues,

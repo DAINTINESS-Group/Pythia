@@ -9,16 +9,24 @@ import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public abstract class GeneralRegression implements IRegressionPerformer{
+	
+	protected DatasetProfile datasetProfile;
+	
+	public GeneralRegression(DatasetProfile datasetProfile) {
+		this.datasetProfile = datasetProfile;
+	}
+
 	@Override
 	public abstract RegressionType getRegressionType();
 
 	@Override
-	public abstract RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) ;
+	public abstract RegressionProfile performRegression(Dataset<Row> dataset) ;
 
 	
 	//this method saves the information of the output of the regression
@@ -35,9 +43,12 @@ public abstract class GeneralRegression implements IRegressionPerformer{
 		
 			RegressionProfile newRegression = new RegressionProfile();
 			
-			newRegression.setIndependentVariablesNames(independentVariablesNames);
-			newRegression.setIndependentVariablesValues(independentVariablesValues);
-			newRegression.setDependentVariableName(dependentVariableName);
+			List<Column> independentVariables = new ArrayList<Column>();
+			for(String columnName : independentVariablesNames)	independentVariables.add(datasetProfile.getColumn(columnName));
+			
+			newRegression.setIndependentVariables(independentVariables);
+			newRegression.setIndependentVariablesValues(independentVariablesValues);		
+			newRegression.setDependentVariable(datasetProfile.getColumn(dependentVariableName));
 			newRegression.setDependentVariableValues(dependentVariableValues);
 			newRegression.setType(regressionType);
 			newRegression.setSlopes(slopes);
@@ -64,7 +75,7 @@ public abstract class GeneralRegression implements IRegressionPerformer{
 		return Double.parseDouble(object.toString());
 	}
 	
-	protected static List<Double> calculatePValues(List<Double> correlations, int sampleSize) {
+	protected List<Double> calculatePValues(List<Double> correlations, int sampleSize) {
         List<Double> pValues = new ArrayList<>();
 
         int degreesOfFreedom = sampleSize - 2;
@@ -78,7 +89,7 @@ public abstract class GeneralRegression implements IRegressionPerformer{
         return pValues;
     }
 	
-	protected static List<Double> getCorrelations(DatasetProfile datasetProfile, String dependentName, List<String> independentNames){
+	protected List<Double> getCorrelations(String dependentName, List<String> independentNames){
 		List<Double> correlations = new ArrayList<>();
 		for(String independentName : independentNames) {
 			correlations.add(getCorrelation(datasetProfile, dependentName, independentName));
@@ -86,13 +97,12 @@ public abstract class GeneralRegression implements IRegressionPerformer{
 		return correlations;
 	}
 	
-	private static Double getCorrelation(DatasetProfile datasetProfile, String dependent, String independent) {
+	private Double getCorrelation(DatasetProfile datasetProfile, String dependent, String independent) {
 		return datasetProfile.getColumn(dependent).getCorrelationsProfile().getAllCorrelations().get(independent);
 	}
 
     private static TDistribution getTDistribution(int degreesOfFreedom) {
         return new TDistribution(degreesOfFreedom);
     }
-
 	
 }

@@ -22,8 +22,8 @@ public class AutomatedRegressionPerformer extends GeneralRegression  {
 	private List<String> independentVariables;
 	private double dependenceDegree;
 	
-	public AutomatedRegressionPerformer(String dependentVariable, double dependenceDegree) {
-		super();
+	public AutomatedRegressionPerformer(String dependentVariable, double dependenceDegree, DatasetProfile datasetProfile) {
+		super(datasetProfile);
 		this.dependentVariable = dependentVariable;
 		this.dependenceDegree = dependenceDegree;
 		this.independentVariables = new ArrayList<>();
@@ -35,7 +35,7 @@ public class AutomatedRegressionPerformer extends GeneralRegression  {
 	}
 	
 	@Override
-	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset) {
 		//setup all independent candidates and their correlations
 		List<String> independentCandidatesNames = new ArrayList<>();
 		List<Double> independentCandidatesCorValues = new ArrayList<>();
@@ -54,8 +54,8 @@ public class AutomatedRegressionPerformer extends GeneralRegression  {
 				independentVariables.add(independentCandidatesNames.get(i));
 			}
 		}
-		RegressionProfile result = new MultipleLinearRegressionPerformer(dependentVariable, independentVariables)
-			.performRegression(dataset, datasetProfile);
+		RegressionProfile result = new MultipleLinearRegressionPerformer(dependentVariable, independentVariables, datasetProfile)
+			.performRegression(dataset);
 		
 		result.setType(RegressionType.AUTOMATED);
 		return result;

@@ -7,10 +7,10 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class RegressionProfile {
 	
-	private List<String> independentVariablesNames;
+	private List<Column> independentVariables;
 	private List<List<Double>> independentVariablesValues;
 	
-	private String dependentVariableName;
+	private Column dependentVariable;
 	private List<Double> dependentVariableValues;
 	
 	private RegressionType type;
@@ -24,7 +24,7 @@ public class RegressionProfile {
 	private Double error;
 		
 	public RegressionProfile() {
-		independentVariablesNames = new ArrayList<>();
+		independentVariables = new ArrayList<>();
 		independentVariablesValues = new ArrayList<>();
 		dependentVariableValues = new ArrayList<>();
 		slopes = new ArrayList<>();
@@ -32,8 +32,8 @@ public class RegressionProfile {
 		pValues = new ArrayList<>();
 	}
 
-	public List<String> getIndependentVariablesNames() {
-		return independentVariablesNames;
+	public List<Column> getIndependentVariables() {
+		return independentVariables;
 	}
 
 
@@ -42,8 +42,8 @@ public class RegressionProfile {
 	}
 
 
-	public String getDependentVariableName() {
-		return dependentVariableName;
+	public Column getDependentVariable() {
+		return dependentVariable;
 	}
 
 
@@ -82,8 +82,8 @@ public class RegressionProfile {
 	}
 
 
-	public void setIndependentVariablesNames(List<String> independentVariablesNames) {
-		this.independentVariablesNames = independentVariablesNames;
+	public void setIndependentVariables(List<Column> independentVariables) {
+		this.independentVariables = independentVariables;
 	}
 
 
@@ -92,8 +92,8 @@ public class RegressionProfile {
 	}
 
 
-	public void setDependentVariableName(String dependentVariableName) {
-		this.dependentVariableName = dependentVariableName;
+	public void setDependentVariable(Column dependentVariable) {
+		this.dependentVariable = dependentVariable;
 	}
 
 
@@ -136,16 +136,16 @@ public class RegressionProfile {
 	public String toString() {
 		String independentPart = "";
 		if(type == RegressionType.LINEAR || type == RegressionType.MULTIPLE_LINEAR || type == RegressionType.AUTOMATED) {
-			for(int i=0; i<independentVariablesNames.size();i++) {
-				independentPart += " + " + slopes.get(i) + "*" + independentVariablesNames.get(i);
+			for(int i=0; i<independentVariables.size();i++) {
+				independentPart += " + " + slopes.get(i) + "*" + independentVariables.get(i).getName();
 			}
 		}
 		else if(type == RegressionType.POLYNOMIAL) {
 			for(int i=0; i<slopes.size();i++) {
-				independentPart += " + " + slopes.get(i) + "*" + independentVariablesNames.get(0) + "^(" + (i+1) + ")";
+				independentPart += " + " + slopes.get(i) + "*" + independentVariables.get(0).getName() + "^(" + (i+1) + ")";
 			}
 		}
-		return dependentVariableName + " = " + intercept + independentPart;
+		return dependentVariable.getName() + " = " + intercept + independentPart;
 	}
 
 }

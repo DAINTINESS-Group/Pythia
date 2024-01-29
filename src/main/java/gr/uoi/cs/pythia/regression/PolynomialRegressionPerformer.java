@@ -26,8 +26,8 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	private List<Double> slopes;
 	
 	
-	public PolynomialRegressionPerformer(String dependentVariable, String independentVariable, int degree) {
-		super();
+	public PolynomialRegressionPerformer(String dependentVariable, String independentVariable, int degree, DatasetProfile datasetProfile) {
+		super(datasetProfile);
 		this.dependentVariable = dependentVariable;
 		this.independentVariable = independentVariable;
 		this.degree = degree;
@@ -39,7 +39,7 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	}
 	
 	@Override
-	public RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset) {
 	    // Get the values of the relevant columns
 	    List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 	    List<Double> independentVariableValues = getColumnValues(dataset, independentVariable);
@@ -81,7 +81,7 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	    // Calculate MSE
 	    double meanSquaredError = sumOfSquaredResiduals / dependentVariableValues.size();
 
-	    List<Double> correlations = getCorrelations(datasetProfile, dependentVariable, Arrays.asList(independentVariable));
+	    List<Double> correlations = getCorrelations(dependentVariable, Arrays.asList(independentVariable));
 	    List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
 
 	    // Save output to RegressionProfile

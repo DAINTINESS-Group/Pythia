@@ -2,6 +2,7 @@ package gr.uoi.cs.pythia.regression;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -22,19 +24,19 @@ public class LinearRegressionPerformerTests {
 	
 	@Before
 	public void init() {
+		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		regressionPerformer = new RegressionPerformerFactory().createRegressionPerformer(
-				new RegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null));
+				new RegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null), datasetProfile);
 	}
 
 	@Test
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
-		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		DecimalFormat decimalFormat = new DecimalFormat("#.###");
-		RegressionProfile result = regressionPerformer.performRegression(dataset, datasetProfile);
-
-		String independentVariableName = result.getIndependentVariablesNames().get(0);
-		String dependentVariableName = result.getDependentVariableName();
+		RegressionProfile result = regressionPerformer.performRegression(dataset);
+		
+		String independentVariableName = result.getIndependentVariables().get(0).getName();
+		String dependentVariableName = result.getDependentVariable().getName();
 		RegressionType regressionType = result.getType();
 		double slope = Double.parseDouble(decimalFormat.format(result.getSlopes().get(0)));
 		double intercept = Double.parseDouble(decimalFormat.format(result.getIntercept()));

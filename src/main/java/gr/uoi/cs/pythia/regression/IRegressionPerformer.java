@@ -12,6 +12,6 @@ public interface IRegressionPerformer {
 	
 	RegressionType getRegressionType();
 	
-	RegressionProfile performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile); //discuss return type
+	RegressionProfile performRegression(Dataset<Row> dataset); //discuss return type
 
 }

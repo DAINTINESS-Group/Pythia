@@ -293,9 +293,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 		
 		for(RegressionParameters regressionParameters : regressionRequest.getRegressionParameters()) {
 			RegressionPerformerFactory factory = new RegressionPerformerFactory();
-			IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
+			IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters, datasetProfile);
 
-			regressionPerformer.performRegression(dataset, datasetProfile);
+			regressionPerformer.performRegression(dataset);
 		}
 
 		Instant end = Instant.now();

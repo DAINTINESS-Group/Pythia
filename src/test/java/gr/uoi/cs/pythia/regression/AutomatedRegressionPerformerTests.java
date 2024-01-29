@@ -12,6 +12,7 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -22,20 +23,20 @@ private IRegressionPerformer regressionPerformer;
 	
 	@Before
 	public void init() {
+		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		regressionPerformer = new RegressionPerformerFactory().createRegressionPerformer(
-				new RegressionParameters(null, "price", RegressionType.AUTOMATED, 0.05));
+				new RegressionParameters(null, "price", RegressionType.AUTOMATED, 0.05), datasetProfile);
 	}
 	
 	
 	@Test
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
-		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
-		RegressionProfile result = regressionPerformer.performRegression(dataset, datasetProfile);
+		RegressionProfile result = regressionPerformer.performRegression(dataset);		
 		
-		
-		List<String> independentVariableNames = result.getIndependentVariablesNames();
-		String dependentVariableName = result.getDependentVariableName();
+		List<String> independentVariableNames = new ArrayList<String>();
+		for(Column column : result.getIndependentVariables()) independentVariableNames.add(column.getName());
+		String dependentVariableName = result.getDependentVariable().getName();
 		RegressionType regressionType = result.getType();
 		List<Double> actualSlopes = result.getSlopes();
 		double intercept = result.getIntercept();
