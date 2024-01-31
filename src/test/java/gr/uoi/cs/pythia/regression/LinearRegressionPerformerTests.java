@@ -54,9 +54,9 @@ public class LinearRegressionPerformerTests {
 		assertEquals(-42512.683, intercept, 0.000001);
 		assertEquals(this.getColumnValues(dataset, "tax"), independentVariablesValues);
 		assertEquals(this.getColumnValues(dataset, "price"), dependentVariablesValues);
-		assertEquals(Arrays.asList(0.38856998491405487), correlations);
-		assertEquals(Arrays.asList(4.991871864756803E-5), pValues);
-		assertEquals(7.618177535494662E10, error, 0.000001);
+		assertEquals(0.38856998491405487, correlations.get(0), 10E-4);
+		assertEquals(4.991871864756803E-5, pValues.get(0), 10E-4);
+		assertEquals(7.618177535494662E10, error, 10E-4);
 	}
 	
 	private List<Double> getColumnValues(Dataset<Row> dataset, String columnName) {

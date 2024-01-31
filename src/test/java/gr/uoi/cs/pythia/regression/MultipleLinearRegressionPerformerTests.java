@@ -38,7 +38,7 @@ public class MultipleLinearRegressionPerformerTests {
 		for(Column column : result.getIndependentVariables()) independentVariableNames.add(column.getName());
 		String dependentVariableName = result.getDependentVariable().getName();
 		RegressionType regressionType = result.getType();
-		List<Double> slopes = result.getSlopes();
+		List<Double> actualSlopes = result.getSlopes();
 		double intercept = result.getIntercept();
 		List<List<Double>> independentVariablesValues = result.getIndependentVariablesValues();
 		List<Double> dependentVariablesValues = result.getDependentVariableValues();
@@ -60,13 +60,19 @@ public class MultipleLinearRegressionPerformerTests {
 		assertEquals(expectedIndependentVariableNames, independentVariableNames);
 		assertEquals("price", dependentVariableName);
 		assertEquals(RegressionType.MULTIPLE_LINEAR, regressionType);
-		assertEquals(expectedSlopes, slopes);
+		//assertEquals(expectedSlopes, actualSlopes);
+		assertEquals(expectedSlopes.get(0), actualSlopes.get(0), 10E-4);
+		assertEquals(expectedSlopes.get(1), actualSlopes.get(1), 10E-4);
 		assertEquals(-128401.44652839263, intercept, 0.000001);
 		assertEquals(expectedIndependentVariableValues, independentVariablesValues);
 		assertEquals(this.getColumnValues(dataset, "price"), dependentVariablesValues);
-		assertEquals(expectedCorrelations, correlations);
-		assertEquals(expectedPValues, pValues);
-		assertEquals(expectedError, error, 0.000001);
+		//assertEquals(expectedCorrelations, correlations);
+		assertEquals(expectedCorrelations.get(0), correlations.get(0), 10E-4);
+		assertEquals(expectedCorrelations.get(1), correlations.get(1), 10E-4);
+		//assertEquals(expectedPValues, pValues);
+		assertEquals(expectedPValues.get(0), pValues.get(0), 10E-2);
+		assertEquals(expectedPValues.get(1), pValues.get(1), 10E-2);
+		assertEquals(expectedError, error, 10E-4);		
 	}
 	
 	

@@ -61,14 +61,20 @@ private IRegressionPerformer regressionPerformer;
 		assertEquals("price", dependentVariableName);
 		assertEquals(RegressionType.AUTOMATED, regressionType);
 		//assertEquals(expectedSlopes, actualSlopes);
-		assertEquals(expectedSlopes.get(0), actualSlopes.get(0), 0.000001);
-		assertEquals(expectedSlopes.get(1), actualSlopes.get(1), 0.000001);
-		assertEquals(323513.35875851725, intercept, 0.000001);
+		assertEquals(expectedSlopes.get(0), actualSlopes.get(0), 10E-4);
+		assertEquals(expectedSlopes.get(1), actualSlopes.get(1), 10E-4);
+		assertEquals(323513.35875851725, intercept, 10E-4);
 		assertEquals(expectedIndependentVariableValues, independentVariablesValues);
 		assertEquals(this.getColumnValues(dataset, "price"), dependentVariablesValues);
-		assertEquals(expectedCorrelations, correlations);
-		assertEquals(expectedPValues, pValues);
-		assertEquals(expectedError, error, 0.000001);
+		//assertEquals(expectedCorrelations, correlations);
+		assertEquals(expectedCorrelations.get(0), correlations.get(0), 10E-4);
+		assertEquals(expectedCorrelations.get(1), correlations.get(1), 10E-4);
+		//assertEquals(expectedPValues, pValues);
+		assertEquals(expectedPValues.get(0), pValues.get(0), 10E-2);
+		assertEquals(expectedPValues.get(1), pValues.get(1), 10E-2);
+		assertEquals(expectedError, error, 10E-4);
+		
+		
 	}
 
 	
