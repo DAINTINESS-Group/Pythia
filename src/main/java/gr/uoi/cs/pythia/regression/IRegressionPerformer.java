@@ -4,6 +4,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public interface IRegressionPerformer {
@@ -11,6 +12,6 @@ public interface IRegressionPerformer {
 	
 	RegressionType getRegressionType();
 	
-	void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile); //discuss return type
+	RegressionProfile performRegression(Dataset<Row> dataset); //discuss return type
 
 }

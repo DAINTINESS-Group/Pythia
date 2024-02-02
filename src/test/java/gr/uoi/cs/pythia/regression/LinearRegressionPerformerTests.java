@@ -14,46 +14,50 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
+import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class LinearRegressionPerformerTests {
 	
-	private RegressionProfile regressionProfile;
 	private IRegressionPerformer regressionPerformer;
 	
 	@Before
 	public void init() {
-		regressionProfile = new RegressionProfile();
+		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		regressionPerformer = new RegressionPerformerFactory().createRegressionPerformer(
-				new RegressionParameters(Arrays.asList("year"), "price", RegressionType.LINEAR));
+				new RegressionParameters(Arrays.asList("tax"), "price", RegressionType.LINEAR, null), datasetProfile);
 	}
 
 	@Test
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
-		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		DecimalFormat decimalFormat = new DecimalFormat("#.###", new DecimalFormatSymbols(Locale.ENGLISH));
-		regressionPerformer.performRegression(dataset, datasetProfile);
-		
-		
-		String independentVariableName = datasetProfile.getRegressionProfile().getIndependentVariablesNames().get(0);
-		String dependentVariableName = datasetProfile.getRegressionProfile().getDependentVariableName();
-		RegressionType regressionType = datasetProfile.getRegressionProfile().getType();
-		double slope = Double.parseDouble(decimalFormat.format(datasetProfile.getRegressionProfile().getSlopes().get(0)));
-		double intercept = Double.parseDouble(decimalFormat.format(datasetProfile.getRegressionProfile().getIntercept()));
-		List<Double> independentVariablesValues = datasetProfile.getRegressionProfile().getIndependentVariablesValues().get(0);
-		List<Double> dependentVariablesValues = datasetProfile.getRegressionProfile().getDependentVariableValues();
+		RegressionProfile result = regressionPerformer.performRegression(dataset);
+
+		String independentVariableName = result.getIndependentVariables().get(0).getName();
+		String dependentVariableName = result.getDependentVariable().getName();
+		RegressionType regressionType = result.getType();
+		double slope = Double.parseDouble(decimalFormat.format(result.getSlopes().get(0)));
+		double intercept = Double.parseDouble(decimalFormat.format(result.getIntercept()));
+		List<Double> independentVariablesValues = result.getIndependentVariablesValues().get(0);
+		List<Double> dependentVariablesValues = result.getDependentVariableValues();
+		List<Double> correlations = result.getCorrelations();
+		List<Double> pValues = result.getpValues();
+		Double error = result.getError();
 		
 		//check if RegressionProfile is updated correctly
-		assertEquals("year", independentVariableName);
+		assertEquals("tax", independentVariableName);
 		assertEquals("price", dependentVariableName);
 		assertEquals(RegressionType.LINEAR, regressionType);
-		assertEquals(-36795.875, slope, 0.000001);
-		assertEquals(7.4341387186E7, intercept, 0.000001);
-		assertEquals(this.getColumnValues(dataset, "year"), independentVariablesValues);
+		assertEquals(1810.461, slope, 0.000001);
+		assertEquals(-42512.683, intercept, 0.000001);
+		assertEquals(this.getColumnValues(dataset, "tax"), independentVariablesValues);
 		assertEquals(this.getColumnValues(dataset, "price"), dependentVariablesValues);
+		assertEquals(0.38856998491405487, correlations.get(0), 10E-4);
+		assertEquals(4.991871864756803E-5, pValues.get(0), 10E-4);
+		assertEquals(7.618177535494662E10, error, 10E-4);
 	}
 	
 	private List<Double> getColumnValues(Dataset<Row> dataset, String columnName) {

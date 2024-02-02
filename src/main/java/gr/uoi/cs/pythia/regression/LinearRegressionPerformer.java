@@ -9,17 +9,18 @@ import org.apache.spark.sql.Row;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class LinearRegressionPerformer implements IRegressionPerformer {
+public class LinearRegressionPerformer extends GeneralRegression  {
 
 	private String dependentVariable;
 	private String independentVariable;
 	private double intercept;
 	private double slope;
 	
-	public LinearRegressionPerformer(String dependentVariable, String independentVariable) {
-		super();
+	public LinearRegressionPerformer(String dependentVariable, String independentVariable, DatasetProfile datasetProfile) {
+		super(datasetProfile);
 		this.dependentVariable = dependentVariable;
 		this.independentVariable = independentVariable;
 	}
@@ -31,45 +32,38 @@ public class LinearRegressionPerformer implements IRegressionPerformer {
 	}
 	
 	@Override
-	public void performRegression(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+	public RegressionProfile performRegression(Dataset<Row> dataset) {
 		SimpleRegression regression = new SimpleRegression();
 		List<Double> dependentVariableValues = getColumnValues(dataset, dependentVariable);
 		List<Double> independentVariableValues = getColumnValues(dataset, independentVariable);
 		
-		for(int i = 0; i<dependentVariableValues.size(); i++) {
-			regression.addData(independentVariableValues.get(i), dependentVariableValues.get(i));
+		for (int i = 0; i < dependentVariableValues.size(); i++) {
+		    double independentValue = independentVariableValues.get(i);
+		    double dependentValue = dependentVariableValues.get(i);
+
+		    if (Double.isNaN(independentValue) || Double.isNaN(dependentValue)) {
+		        continue;
+		    } else {
+		        regression.addData(independentValue, dependentValue);
+		    }
 		}
 		
-		//perform regression to calculate intercept and slope
+		//perform regression
 		intercept = regression.getIntercept();
 		slope = regression.getSlope();
-		
-		
-		//save output
-		datasetProfile.getRegressionProfile().setIndependentVariablesNames(Arrays.asList(independentVariable));
-		datasetProfile.getRegressionProfile().addIndependentVariablesValues(independentVariableValues);
-		datasetProfile.getRegressionProfile().setDependentVariableName(dependentVariable);
-		datasetProfile.getRegressionProfile().setDependentVariableValues(dependentVariableValues);
-		datasetProfile.getRegressionProfile().setType(RegressionType.LINEAR);
-		datasetProfile.getRegressionProfile().setSlopes(Arrays.asList(slope));
-		datasetProfile.getRegressionProfile().setIntercept(intercept);
+		List<Double> correlations = getCorrelations(dependentVariable, Arrays.asList(independentVariable));
+		List<Double> pValues = calculatePValues(correlations, dependentVariableValues.size());
+		Double error = regression.getMeanSquareError();
 
-		//DEBUG prints
-		System.out.println(datasetProfile.getRegressionProfile());
-	}
-	
-	private List<Double> getColumnValues(Dataset<Row> dataset, String columnName) {
-		return dataset
-				.select(columnName)
-				.collectAsList()
-				.stream()
-				.map(s -> parseColumnValue(s.get(0)))
-				.collect(Collectors.toList());
-	}
-	
-	private Double parseColumnValue(Object object) {
-		if (object == null) return Double.NaN;
-		return Double.parseDouble(object.toString());
+		// Save output to RegressionProfile
+		RegressionProfile result = this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
+				dependentVariable, dependentVariableValues, RegressionType.LINEAR,
+				Arrays.asList(slope), intercept, correlations, pValues, error);
+		
+		//DEBUG print
+		System.out.println(result);
+	    datasetProfile.addRegressionProfile(result);
+	    return result;
 	}
 	
 }

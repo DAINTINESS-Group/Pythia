@@ -47,6 +47,7 @@ import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.regression.IRegressionPerformer;
 import gr.uoi.cs.pythia.regression.RegressionParameters;
 import gr.uoi.cs.pythia.regression.RegressionPerformerFactory;
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 import gr.uoi.cs.pythia.report.IReportGenerator;
 import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -64,7 +65,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private boolean hasComputedAllPairsCorrelations;
 	private OutlierType outlierType;
 	private double outlierThreshold;
-	private RegressionParameters regressionParameters;
+	private RegressionRequest regressionRequest;
 
 	private HighlightsManagerInterface highlightsManager;
 	
@@ -150,8 +151,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	@Override
-	public void declareRegressionParameters(List<String> independentVariables, String dependentVariable, RegressionType regressionType) {
-		this.regressionParameters = new RegressionParameters(independentVariables, dependentVariable, regressionType);
+	public void declareRegressionRequest(RegressionRequest regressionRequest) {
+		this.regressionRequest = regressionRequest;
 	}
 	
 	@Override
@@ -290,14 +291,16 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant start = Instant.now();
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		
-		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
-		
-		RegressionPerformerFactory factory = new RegressionPerformerFactory();
-		IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters);
-		regressionPerformer.performRegression(dataset, datasetProfile);
-		
+		for(RegressionParameters regressionParameters : regressionRequest.getRegressionParameters()) {
+			RegressionPerformerFactory factory = new RegressionPerformerFactory();
+			IRegressionPerformer regressionPerformer = factory.createRegressionPerformer(regressionParameters, datasetProfile);
+
+			regressionPerformer.performRegression(dataset);
+		}
+
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
 		logger.info(String.format("Duration of perfomRegression: %s / %sms", duration, duration.toMillis()));
 	}
 

@@ -46,5 +46,12 @@ public class TxtReportTests {
             new File(reportPath + File.separator + "outliers_report.txt"))
             .replace(AllReportTests.reportResource.getDatasetPath(), "");
     assertEquals(expectedOutliersReport, actualOutliersReport);
+    
+    String expectedRegressionReport = TestsUtilities.getExpectedDatasetReport(
+            "people/expected_people_regression_report.txt");
+    String actualRegressionReport = TestsUtilities.getTextFromFile(
+            new File(reportPath + File.separator + "regression_report.txt"))
+            .replace(AllReportTests.reportResource.getDatasetPath(), "");
+    assertEquals(expectedRegressionReport, actualRegressionReport);
   }
 }

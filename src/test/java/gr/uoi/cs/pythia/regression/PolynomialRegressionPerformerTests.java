@@ -1,6 +1,6 @@
 package gr.uoi.cs.pythia.regression;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -18,22 +18,22 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 
-public class MultipleLinearRegressionPerformerTests {
-
+public class PolynomialRegressionPerformerTests {
+	
 	private IRegressionPerformer regressionPerformer;
 	
 	@Before
 	public void init() {
 		DatasetProfile datasetProfile = AllRegressionTests.regressionResource.getDatasetProfile();
 		regressionPerformer = new RegressionPerformerFactory().createRegressionPerformer(
-				new RegressionParameters(Arrays.asList("tax", "mileage"), "price", RegressionType.MULTIPLE_LINEAR, null), datasetProfile);
+				new RegressionParameters(Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3), datasetProfile);
 	}
 	
 	@Test
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
-		RegressionProfile result = regressionPerformer.performRegression(dataset);		
-		
+		RegressionProfile result = regressionPerformer.performRegression(dataset);
+
 		List<String> independentVariableNames = new ArrayList<String>();
 		for(Column column : result.getIndependentVariables()) independentVariableNames.add(column.getName());
 		String dependentVariableName = result.getDependentVariable().getName();
@@ -46,33 +46,29 @@ public class MultipleLinearRegressionPerformerTests {
 		List<Double> pValues = result.getpValues();
 		Double error = result.getError();
 		
-		
-		List<String> expectedIndependentVariableNames = Arrays.asList("tax", "mileage");
-		List<Double> expectedSlopes = Arrays.asList(1964.621239301185, 2.0948300062243033);
+		List<String> expectedIndependentVariableNames = Arrays.asList("tax");
+		List<Double> expectedSlopes = Arrays.asList(811.2520519248908, -25.790157115742034, 0.18310031672830665);
 		List<List<Double>> expectedIndependentVariableValues = new ArrayList<>();
 		for(String var : expectedIndependentVariableNames)
 			expectedIndependentVariableValues.add(getColumnValues(dataset, var));
-		List<Double> expectedCorrelations = Arrays.asList(0.38856998491405487, 0.048884109708816625);
-		List<Double> expectedPValues = Arrays.asList(4.991871864756803E-5, 0.6238805188017977);
-		Double expectedError = 7.294738058981244E10;
+		List<Double> expectedCorrelations = Arrays.asList(0.38856998491405487);
+		List<Double> expectedPValues = Arrays.asList(4.991871864756803E-5);
+		Double expectedError = 6.375127570620995E10;
 		
 		//check if RegressionProfile is updated correctly
 		assertEquals(expectedIndependentVariableNames, independentVariableNames);
 		assertEquals("price", dependentVariableName);
-		assertEquals(RegressionType.MULTIPLE_LINEAR, regressionType);
-		//assertEquals(expectedSlopes, actualSlopes);
+		assertEquals(RegressionType.POLYNOMIAL, regressionType);
 		assertEquals(expectedSlopes.get(0), actualSlopes.get(0), 10E-4);
 		assertEquals(expectedSlopes.get(1), actualSlopes.get(1), 10E-4);
-		assertEquals(-128401.44652839263, intercept, 0.000001);
+		assertEquals(expectedSlopes.get(2), actualSlopes.get(2), 10E-4);
+		assertEquals(25968.84704916376, intercept, 0.000001);
 		assertEquals(expectedIndependentVariableValues, independentVariablesValues);
 		assertEquals(this.getColumnValues(dataset, "price"), dependentVariablesValues);
-		//assertEquals(expectedCorrelations, correlations);
 		assertEquals(expectedCorrelations.get(0), correlations.get(0), 10E-4);
-		assertEquals(expectedCorrelations.get(1), correlations.get(1), 10E-4);
-		//assertEquals(expectedPValues, pValues);
 		assertEquals(expectedPValues.get(0), pValues.get(0), 10E-2);
-		assertEquals(expectedPValues.get(1), pValues.get(1), 10E-2);
-		assertEquals(expectedError, error, 10E-4);		
+		assertEquals(expectedError, error, 10E-4);
+		
 	}
 	
 	

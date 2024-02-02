@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
 public class DatasetProfile {
@@ -8,7 +9,7 @@ public class DatasetProfile {
   private final String path;
   private final List<Column> columns;
   private final PatternsProfile patternsProfile;
-  private final RegressionProfile regressionProfile;
+  private List<RegressionProfile> regressionProfiles;
   private String auxiliaryDataOutputDirectory;
   private HighlightsProfile highlightsProfile;
   
@@ -17,7 +18,7 @@ public class DatasetProfile {
     this.path = path;
     this.columns = columns;
     this.patternsProfile = new PatternsProfile();
-    this.regressionProfile = new RegressionProfile();
+    this.regressionProfiles = new ArrayList<RegressionProfile>();
     this.highlightsProfile = null;
   }
 
@@ -32,13 +33,25 @@ public class DatasetProfile {
   public List<Column> getColumns() {
     return columns;
   }
+  
+  public Column getColumn(String name) {
+      for (Column column : columns) {
+          if (column.getName().equals(name)) {
+              return column;
+          }
+      }return null;
+  }
 
   public PatternsProfile getPatternsProfile() {
     return patternsProfile;
   }
   
-  public RegressionProfile getRegressionProfile() {
-	  return regressionProfile;
+  public List<RegressionProfile> getRegressionProfiles() {
+	  return regressionProfiles;
+  }
+  
+  public void addRegressionProfile(RegressionProfile regressionProfile) {
+	  regressionProfiles.add(regressionProfile);
   }
 
   public String getAuxiliaryDataOutputDirectory() {

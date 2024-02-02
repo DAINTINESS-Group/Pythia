@@ -1,0 +1,23 @@
+1. Automated Regression
+
+Dependent Variable: age
+
+
+
+-> Results
+
+-Information about Independent Variables
+Column	|	Slope	|	Correlation	|	p-value (Null hypothesis for p-value of each column X -> Dependent variable and X are not correlated)
+-------------------------------------------------
+
+
+
+-General Information
+Intercept: 33.0
+Error (MSE): 164.66666666666669
+Regression Type: Automated Regression
+Formula: age = 33.0
+
+
+
+

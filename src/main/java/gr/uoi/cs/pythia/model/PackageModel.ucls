@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <package id="1" language="java" name="gr.uoi.cs.pythia.model" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="499" y="30"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="gr.uoi.cs.pythia.model.dominance" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/dominance" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="109" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="gr.uoi.cs.pythia.model.highlights" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/highlights" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="358" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="gr.uoi.cs.pythia.model.outlier" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/outlier" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="594" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="gr.uoi.cs.pythia.model.regression" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/regression" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="833" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="gr.uoi.cs.pythia.model.histogram" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/histogram" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1083" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="gr.uoi.cs.pythia.model.decisiontree" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/model/decisiontree" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1337" y="222"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
