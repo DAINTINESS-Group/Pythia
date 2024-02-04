@@ -1,7 +1,7 @@
 package gr.uoi.cs.pythia.patterns;
 
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_HIGH;
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_LOW;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_HIGH;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_LOW;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -12,8 +12,6 @@ import java.util.List;
 
 import gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory;
 import gr.uoi.cs.pythia.patterns.dominance.IDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.dominance.OptimizedHighDominanceAlgo;
-import gr.uoi.cs.pythia.patterns.dominance.OptimizedLowDominanceAlgo;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -44,8 +42,8 @@ public class DominanceAlgoTests {
 		// Create high & low dominance pattern algo objects
 		// Default to the optimized dominance algo versions
 		DominanceAlgoFactory factory = new DominanceAlgoFactory();
-		highDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_HIGH, dataset);
-		lowDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_LOW, dataset);
+		highDominanceAlgo = factory.generateDominanceAlgo(V01_HIGH, dataset);
+		lowDominanceAlgo = factory.generateDominanceAlgo(V01_LOW, dataset);
 	}
 	
 	@Test

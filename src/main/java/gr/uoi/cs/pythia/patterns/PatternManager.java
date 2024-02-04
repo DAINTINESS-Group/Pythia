@@ -17,8 +17,8 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
 import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
 
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_HIGH;
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.OPTIMIZED_LOW;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_HIGH;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_LOW;
 
 public class PatternManager implements IPatternManager {
 
@@ -50,8 +50,8 @@ public class PatternManager implements IPatternManager {
   private void initializePatternAlgos() {
       // Default to the optimized dominance algo versions
       DominanceAlgoFactory factory = new DominanceAlgoFactory();
-      highDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_HIGH, dataset);
-      lowDominanceAlgo = factory.generateDominanceAlgo(OPTIMIZED_LOW, dataset);
+      highDominanceAlgo = factory.generateDominanceAlgo(V01_HIGH, dataset);
+      lowDominanceAlgo = factory.generateDominanceAlgo(V01_LOW, dataset);
   }
 
  

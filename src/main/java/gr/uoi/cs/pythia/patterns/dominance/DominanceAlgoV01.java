@@ -13,9 +13,14 @@ import org.apache.spark.sql.Row;
 
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 
-public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
+/*
+    V01: Optimized such that distinct coordinate values in double coordinate dominance
+    are not fetched via query, but rather via the aggregate query result.
+    (see: getDistinctValuesFromQueryResult method)
+ */
+public class DominanceAlgoV01 implements IDominanceAlgo {
 
-    private final Logger logger = Logger.getLogger(DominanceAlgo.class);
+    private final Logger logger = Logger.getLogger(DominanceAlgoV01.class);
 
     private static final String TOTAL = "total";
     private static final String PARTIAL = "partial";
@@ -27,12 +32,11 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
 
     private final Dataset<Row> dataset;
 
-    protected abstract boolean isDominant(double valueA, double valueB);
+    private final IDominanceComparator comparator;
 
-    public abstract String getDominanceType();
-
-    public OptimizedDominanceAlgo(Dataset<Row> dataset) {
+    public DominanceAlgoV01(Dataset<Row> dataset, IDominanceComparator comparator) {
         this.dataset = dataset;
+        this.comparator = comparator;
     }
 
     @Override
@@ -48,12 +52,12 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         Duration duration = Duration.between(start, end);
         logger.info(String.format("Duration of single-coordinate %s dominance "
                         + "runAggregateQuery for measurement '%s' and coordinate '%s': %s / %sms",
-                getDominanceType(), measurementColName, xCoordinateColName,
+                comparator.getDominanceType(), measurementColName, xCoordinateColName,
                 duration, duration.toMillis()));
 
         // Initialize a dominance result object
         DominanceResult dominanceResult = new DominanceResult(
-                getDominanceType(), "sum",
+                comparator.getDominanceType(), "sum",
                 measurementColName, xCoordinateColName);
 
         // Check for dominance
@@ -79,7 +83,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         logger.info(String.format("Duration of double-coordinate %s dominance "
                         + "runAggregateQuery for measurement '%s' "
                         + "and coordinates '%s', '%s': %s / %sms",
-                getDominanceType(), measurementColName, xCoordinateColName, yCoordinateColName,
+                comparator.getDominanceType(), measurementColName, xCoordinateColName, yCoordinateColName,
                 duration, duration.toMillis()));
 
         start = Instant.now();
@@ -93,12 +97,12 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         duration = Duration.between(start, end);
         logger.info(String.format("Duration of double-coordinate %s dominance "
                         + "getDistinctValuesFromQueryResult method for coordinates '%s', '%s': %s / %sms",
-                getDominanceType(), xCoordinateColName,
+                comparator.getDominanceType(), xCoordinateColName,
                 yCoordinateColName, duration, duration.toMillis()));
 
         // Initialize a dominance result object
         DominanceResult dominanceResult = new DominanceResult(
-                getDominanceType(), "sum",
+                comparator.getDominanceType(), "sum",
                 measurementColName, xCoordinateColName, yCoordinateColName,
                 queryResult);
 
@@ -148,13 +152,13 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
                 double aggValueB = parseAggregateValue(rowB);
                 if (Double.isNaN(aggValueB)) continue;
                 if (isSameRow(rowA, rowB)) continue;
-                if (isDominant(aggValueA, aggValueB)) dominatedValues++;
+                if (comparator.isDominant(aggValueA, aggValueB)) dominatedValues++;
             }
 
             double dominancePercentage = (double) dominatedValues
                     / (double) (queryResult.size() - 1) * 100;
             String dominanceType = determineDominanceType(
-                    dominancePercentage, getDominanceType());
+                    dominancePercentage, comparator.getDominanceType());
 
             dominanceResult.addIdentificationResult(
                     xCoordinate,
@@ -167,7 +171,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         Duration duration = Duration.between(start, end);
         logger.info(String.format("Duration of single-coordinate %s dominance algorithm check:"
                         + " %s / %sms / %sns",
-                getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
+                comparator.getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
 
         start = Instant.now();
 
@@ -178,7 +182,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         duration = Duration.between(start, end);
         logger.info(String.format("Duration of single-coordinate %s dominance top-K filtering:"
                         + " %s / %sms / %sns\n",
-                getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
+                comparator.getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
     }
 
     // This method actually performs the check for dominance with 2 coordinates.
@@ -205,7 +209,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
                     double aggValueB = getAggValue(xCoordinateB, yCoordinate, queryResult);
                     if (Double.isNaN(aggValueA)) continue;
                     if (Double.isNaN(aggValueB)) continue;
-                    if (isDominant(aggValueA, aggValueB)) {
+                    if (comparator.isDominant(aggValueA, aggValueB)) {
                         onYValuesForCurrentXCoordinate.add(yCoordinate);
                         isADominatesB = true;
                     } else {
@@ -221,7 +225,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
             double dominancePercentage = (double) dominatedXValues.size()
                     / (double) (xCoordinates.size() - 1) * 100;
             String dominanceType = determineDominanceType(
-                    dominancePercentage, getDominanceType());
+                    dominancePercentage, comparator.getDominanceType());
 
             dominanceResult.addIdentificationResult(
                     xCoordinateA,
@@ -237,7 +241,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         Duration duration = Duration.between(start, end);
         logger.info(String.format("Duration of double-coordinate %s dominance algorithm check: "
                         + "%s / %sms / %sns",
-                getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
+                comparator.getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
 
         start = Instant.now();
 
@@ -248,7 +252,7 @@ public abstract class OptimizedDominanceAlgo implements IDominanceAlgo {
         duration = Duration.between(start, end);
         logger.info(String.format("Duration of double-coordinate %s dominance top-K filtering: "
                         + "%s / %sms / %sns\n",
-                getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
+                comparator.getDominanceType(), duration, duration.toMillis(), duration.toNanos()));
     }
 
     // Sort the latest identification results in descending order based on dominance percentage.
