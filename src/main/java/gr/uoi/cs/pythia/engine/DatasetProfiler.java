@@ -38,7 +38,6 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
@@ -255,7 +254,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (!hasDeclaredDominanceParameters()) {
 			logger.info(String.format(
 					"Dominance parameters not declared. " +
-					"Skipped highlight pattern identification for dataset %s", datasetProfile.getAlias()));
+					"Skipped dominance identification for dataset %s", datasetProfile.getAlias()));
 			return;
 		}
 		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
@@ -263,12 +262,11 @@ public class DatasetProfiler implements IDatasetProfiler {
 		IPatternManagerFactory factory = new IPatternManagerFactory();
 		IPatternManager patternManager = factory.createPatternManager(
 				dataset, datasetProfile, dominanceParameters, outlierType, outlierThreshold);
-		patternManager.identifyDominancePatterns();
-		logger.info(String.format("Identified highlight patterns for dataset %s", datasetProfile.getAlias()));
+		patternManager.identifyDominance();
+		logger.info(String.format("Identified dominance for dataset %s", datasetProfile.getAlias()));
 		
-		Instant end = Instant.now();
-		Duration duration = Duration.between(start, end);
-		logger.info(String.format("Duration of identifyHighlightPatterns: %s / %sms", duration, duration.toMillis()));
+		Duration duration = Duration.between(start, Instant.now());
+		logger.info(String.format("Duration of identifyDominancePatterns: %s / %sms", duration, duration.toMillis()));
 	}
 	
 	private void identifyOutliers() throws IOException {

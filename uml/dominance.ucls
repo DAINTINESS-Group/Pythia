@@ -4,7 +4,7 @@
   <class id="1" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoV00" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceAlgoV00.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="813" y="1078"/>    
+    <position height="-1" width="-1" x="726" y="989"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -53,7 +53,7 @@
   <class id="6" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceParameters" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceParameters.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="12" y="673"/>    
+    <position height="-1" width="-1" x="24" y="673"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -73,7 +73,7 @@
   <class id="8" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceAlgoFactory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="628" y="1524"/>    
+    <position height="-1" width="-1" x="560" y="1521"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="true" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -83,7 +83,7 @@
   <class id="9" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoV01" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceAlgoV01.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1234" y="1078"/>    
+    <position height="-1" width="-1" x="1027" y="989"/>    
     <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -120,140 +120,220 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <dependency id="13">    
-    <bendpoint x="1708" y="230"/>    
+  <class id="13" language="java" name="gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoV02" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance/DominanceAlgoV02.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1319" y="1025"/>    
+    <display autosize="true" stereotype="false" package="true" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="14">    
+    <bendpoint x="-99" y="429"/>    
+    <bendpoint x="-95" y="1521"/>    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="5"/>  
+    <end type="TARGET" refId="8"/>  
   </dependency>  
-  <realization id="14">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="10"/>  
+  <realization id="15">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
   </realization>  
-  <association id="15">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="16" name="dominanceColumnSelectionMode">        
-        <position height="0" width="0" x="-903" y="442"/>      
+  <association id="16">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="17" name="lowDominanceResult">        
+        <position height="18" width="109" x="1514" y="721"/>      
       </attribute>      
-      <multiplicity id="17" minimum="0" maximum="1">        
-        <position height="0" width="0" x="-903" y="442"/>      
+      <multiplicity id="18" minimum="0" maximum="1">        
+        <position height="16" width="23" x="1614" y="745"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="18">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
   <association id="19">    
-    <bendpoint x="676" y="402"/>    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="20" name="lowDominanceAlgo">        
-        <position height="18" width="101" x="689" y="437"/>      
-      </attribute>      
-      <multiplicity id="21" minimum="0" maximum="1">        
-        <position height="16" width="23" x="799" y="428"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="22">    
-    <bendpoint x="886" y="1513"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="23" name="comparator"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <association id="26">    
     <bendpoint x="110" y="992"/>    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="27" name="dominanceColumnSelectionMode">        
+      <attribute id="20" name="dominanceColumnSelectionMode">        
         <position height="18" width="165" x="-19" y="994"/>      
       </attribute>      
-      <multiplicity id="28" minimum="0" maximum="1">        
+      <multiplicity id="21" minimum="0" maximum="1">        
         <position height="16" width="23" x="125" y="972"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="29">    
+  <realization id="22">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <realization id="23">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
+  </realization>  
+  <association id="24">    
+    <bendpoint x="13" y="494"/>    
     <bendpoint x="13" y="531"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="dominanceParameters">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <attribute id="25" name="dominanceParameters">        
+        <position height="0" width="0" x="12" y="0"/>      
       </attribute>      
-      <multiplicity id="31" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="26" minimum="0" maximum="1">        
+        <position height="0" width="0" x="12" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="32">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <realization id="33">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="7"/>  
-  </realization>  
-  <dependency id="34">    
-    <bendpoint x="1156" y="616"/>    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <dependency id="35">    
-    <bendpoint x="630" y="586"/>    
+  <association id="27">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="28" name="dominanceColumnSelectionMode">        
+        <position height="0" width="0" x="-903" y="442"/>      
+      </attribute>      
+      <multiplicity id="29" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-903" y="442"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="30">    
+    <bendpoint x="557" y="582"/>    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="7"/>  
   </dependency>  
-  <dependency id="36">    
+  <association id="31">    
+    <bendpoint x="1630" y="882"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="32" name="highDominanceResult">        
+        <position height="18" width="111" x="1519" y="866"/>      
+      </attribute>      
+      <multiplicity id="33" minimum="0" maximum="1">        
+        <position height="16" width="23" x="1612" y="892"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="34">    
+    <bendpoint x="1708" y="230"/>    
     <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="2"/>  
+    <end type="TARGET" refId="5"/>  
   </dependency>  
-  <association id="37">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="38" name="comparator"/>      
-      <multiplicity id="39" minimum="0" maximum="1"/>    
+  <association id="35">    
+    <bendpoint x="886" y="1513"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="36" name="comparator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="37" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="40">    
-    <end type="SOURCE" refId="1"/>    
+  <dependency id="38">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <realization id="39">    
+    <bendpoint x="1176" y="696"/>    
+    <end type="SOURCE" refId="13"/>    
     <end type="TARGET" refId="7"/>  
   </realization>  
-  <realization id="41">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="10"/>  
-  </realization>  
-  <dependency id="42">    
-    <bendpoint x="-99" y="429"/>    
-    <bendpoint x="-80" y="1540"/>    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <association id="43">    
-    <bendpoint x="958" y="258"/>    
+  <association id="40">    
+    <bendpoint x="1606" y="412"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="44" name="highDominanceAlgo">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <attribute id="41" name="highDominanceResults">        
+        <position height="18" width="117" x="1486" y="409"/>      
       </attribute>      
-      <multiplicity id="45" minimum="0" maximum="1">        
+      <multiplicity id="42" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="1619" y="414"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="43">    
+    <bendpoint x="1243" y="1513"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="44" name="highComparator"/>      
+      <multiplicity id="45" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="46">    
+    <bendpoint x="1188" y="1444"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="47" name="lowComparator">        
+        <position height="18" width="82" x="1099" y="1434"/>      
+      </attribute>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="49">    
+    <bendpoint x="1173" y="631"/>    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="50">    
+    <bendpoint x="939" y="617"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="51">    
+    <bendpoint x="967" y="1424"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="52" name="comparator">        
+        <position height="18" width="63" x="924" y="1453"/>      
+      </attribute>      
+      <multiplicity id="53" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <bendpoint x="960" y="424"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="55" name="dominanceAlgo"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="57">    
+    <bendpoint x="1626" y="360"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="58" name="lowDominanceResults">        
+        <position height="18" width="115" x="1519" y="324"/>      
+      </attribute>      
+      <multiplicity id="59" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="1604" y="362"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="60">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <realization id="61">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="7"/>  
+  </realization>  
+  <dependency id="62">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

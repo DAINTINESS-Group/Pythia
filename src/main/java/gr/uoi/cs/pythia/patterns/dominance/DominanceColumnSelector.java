@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
@@ -16,6 +17,7 @@ import gr.uoi.cs.pythia.model.DatasetProfile;
 // TODO maybe add interface-factory for the different selection modes.
 public class DominanceColumnSelector {
 
+  private final Logger logger = Logger.getLogger(DominanceColumnSelector.class);
   private static final double CORRELATIONS_THRESHOLD = 0.6;
   private static final int DISTINCT_VALUES_THRESHOLD = 20;
 
@@ -65,6 +67,7 @@ public class DominanceColumnSelector {
       selectInterestingMeasurementColumns(datasetProfile);
     }
     validateMeasurementColumns(datasetProfile);
+    logger.info(String.format("Selected measurement columns: %s", measurementColumns));
     return measurementColumns;
   }
 
@@ -75,6 +78,7 @@ public class DominanceColumnSelector {
       selectInterestingCoordinateColumns(datasetProfile, dataset);
     }
     validateCoordinateColumns(datasetProfile);
+    logger.info(String.format("Selected coordinate columns: %s", coordinateColumns));
     return coordinateColumns;
   }
 

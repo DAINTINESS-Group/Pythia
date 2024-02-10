@@ -2,6 +2,8 @@ package gr.uoi.cs.pythia.patterns.dominance;
 
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 
+import java.util.Map;
+
 public interface IDominanceAlgo {
 
     /**
@@ -10,14 +12,15 @@ public interface IDominanceAlgo {
      * Afterwards, the single coordinate dominance algorithm is executed on the query result.
      * The findings are stored on a newly created DominanceResult object.
      *
-     * @param measurementColName - A String with the name of the measurement column.
-     * @param xCoordinateColName - A String with the name of the X coordinate column.
+     * @param measurement - A String with the name of the measurement column.
+     * @param xCoordinate - A String with the name of the X coordinate column.
      *
-     * @return A DominanceResult object that contains the analysis findings.
+     * @return A HashMap of DominanceResult objects that contains the analysis findings for high
+     * and/or low dominance, under the keys "high" and "low" respectively.
      */
-    DominanceResult identifyDominanceWithOneCoordinate(
-            String measurementColName,
-            String xCoordinateColName);
+    Map<String, DominanceResult> identifySingleCoordinateDominance(
+            String measurement,
+            String xCoordinate);
 
     /**
      * This is the main method responsible for identifying double coordinate dominance.
@@ -25,14 +28,15 @@ public interface IDominanceAlgo {
      * Afterwards, the double coordinate dominance algorithm is executed on the query result.
      * The findings are stored on a newly created DominanceResult object.
      *
-     * @param measurementColName - A String with the name of the measurement column.
-     * @param xCoordinateColName - A String with the name of the X coordinate column.
-     * @param yCoordinateColName - A String with the name of the Y coordinate column.
+     * @param measurement - A String with the name of the measurement column.
+     * @param xCoordinate - A String with the name of the X coordinate column.
+     * @param yCoordinate - A String with the name of the Y coordinate column.
      *
-     * @return A DominanceResult object that contains the analysis findings.
+     * @return A HashMap of DominanceResult objects that contains the analysis findings for high
+     * and/or low dominance, under the keys "high" and "low" respectively.
      */
-    DominanceResult identifyDominanceWithTwoCoordinates(
-            String measurementColName,
-            String xCoordinateColName,
-            String yCoordinateColName);
+    Map<String, DominanceResult> identifyDoubleCoordinateDominance(
+            String measurement,
+            String xCoordinate,
+            String yCoordinate);
 }

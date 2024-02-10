@@ -1,7 +1,6 @@
 package gr.uoi.cs.pythia.patterns;
 
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_HIGH;
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V01_LOW;
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.*;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -9,6 +8,7 @@ import static org.junit.Assert.assertThrows;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory;
 import gr.uoi.cs.pythia.patterns.dominance.IDominanceAlgo;
@@ -23,110 +23,315 @@ import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 public class DominanceAlgoTests {
 
 	private Dataset<Row> dataset;
-	private IDominanceAlgo highDominanceAlgo;
-	private IDominanceAlgo lowDominanceAlgo;
-	private String measurementColName;
-	private String xCoordinateColName;
-	private String yCoordinateColName;
+	private IDominanceAlgo highDominanceAlgoV00;
+	private IDominanceAlgo lowDominanceAlgoV00;
+	private IDominanceAlgo highDominanceAlgoV01;
+	private IDominanceAlgo lowDominanceAlgoV01;
+	private IDominanceAlgo highDominanceAlgoV02;
+	private IDominanceAlgo lowDominanceAlgoV02;
+	private IDominanceAlgo dominanceAlgoV02;
+	private String measurement;
+	private String xCoordinate;
+	private String yCoordinate;
 	
 	@Before
 	public void init() throws AnalysisException {
 		// Set column names
-		measurementColName = "price";
-		xCoordinateColName = "model";
-		yCoordinateColName = "year";
+		measurement = "price";
+		xCoordinate = "model";
+		yCoordinate = "year";
 		
 		// Get dataset
 		dataset = AllPatternTests.patternsResource.getDataset();
 		
-		// Create high & low dominance pattern algo objects
-		// Default to the optimized dominance algo versions
+		// Create dominance algo objects
 		DominanceAlgoFactory factory = new DominanceAlgoFactory();
-		highDominanceAlgo = factory.generateDominanceAlgo(V01_HIGH, dataset);
-		lowDominanceAlgo = factory.generateDominanceAlgo(V01_LOW, dataset);
+		highDominanceAlgoV00 = factory.generateDominanceAlgo(V00_HIGH, dataset);
+		lowDominanceAlgoV00 = factory.generateDominanceAlgo(V00_LOW, dataset);
+		highDominanceAlgoV01 = factory.generateDominanceAlgo(V01_HIGH, dataset);
+		lowDominanceAlgoV01 = factory.generateDominanceAlgo(V01_LOW, dataset);
+		highDominanceAlgoV02 = factory.generateDominanceAlgo(V02_HIGH, dataset);
+		lowDominanceAlgoV02 = factory.generateDominanceAlgo(V02_LOW, dataset);
+		dominanceAlgoV02 = factory.generateDominanceAlgo(V02_HIGH_AND_LOW, dataset);
 	}
 	
 	@Test
-	public void testIdentifyHighDominanceWithOneCoordinate() {
-		DominanceResult expectedHighDominanceResults = 
-				createExpectedHighDominanceResultsForOneCoordinate();
+	public void testIdentifyHighAndLowSingleCoordinateDominanceV02() {
+		DominanceResult expectedHighDominanceResults = createExpectedSingleCoordHighDominanceResults();
+		DominanceResult expectedLowDominanceResults = createExpectedSingleCoordLowDominanceResults();
 
-		DominanceResult actualHighDominanceResults = highDominanceAlgo
-				.identifyDominanceWithOneCoordinate(measurementColName, xCoordinateColName);
-		
+		Map<String, DominanceResult> results;
+		results = dominanceAlgoV02.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+		DominanceResult actualLowDominanceResults = results.get("low");
+
 		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
-		
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateHighDominanceV02() {
+		DominanceResult expectedHighDominanceResults = createExpectedSingleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV02.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateHighDominanceV01() {
+		DominanceResult expectedHighDominanceResults = createExpectedSingleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV01.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateHighDominanceV00() {
+		DominanceResult expectedHighDominanceResults = createExpectedSingleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV00.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateLowDominanceV02() {
+		DominanceResult expectedLowDominanceResults = createExpectedSingleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV02.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateLowDominanceV01() {
+		DominanceResult expectedLowDominanceResults = createExpectedSingleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV01.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifySingleCoordinateLowDominanceV00() {
+		DominanceResult expectedLowDominanceResults = createExpectedSingleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV00.identifySingleCoordinateDominance(measurement, xCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyHighAndLowDoubleCoordinateDominanceV02() {
+		DominanceResult expectedHighDominanceResults = createExpectedDoubleCoordHighDominanceResults();
+		DominanceResult expectedLowDominanceResults = createExpectedDoubleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = dominanceAlgoV02.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyDoubleCoordinateHighDominanceV02() {
+		DominanceResult expectedHighDominanceResults = createExpectedDoubleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV02.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyDoubleCoordinateHighDominanceV01() {
+		DominanceResult expectedHighDominanceResults = createExpectedDoubleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV01.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyDoubleCoordinateHighDominanceV00() {
+		DominanceResult expectedHighDominanceResults = createExpectedDoubleCoordHighDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = highDominanceAlgoV00.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualHighDominanceResults = results.get("high");
+
+		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
 	}
 	
 	@Test
-	public void testIdentifyLowDominanceWithOneCoordinate() {
-		DominanceResult expectedLowDominanceResults = 
-				createExpectedLowDominanceResultsForOneCoordinate();
-		
-		DominanceResult actualLowDominanceResults = lowDominanceAlgo
-				.identifyDominanceWithOneCoordinate(
-						measurementColName, xCoordinateColName);
-		
+	public void testIdentifyDoubleCoordinateLowDominanceV02() {
+		DominanceResult expectedLowDominanceResults = createExpectedDoubleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV02.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyDoubleCoordinateLowDominanceV01() {
+		DominanceResult expectedLowDominanceResults = createExpectedDoubleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV01.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
+		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
+	}
+
+	@Test
+	public void testIdentifyDoubleCoordinateLowDominanceV00() {
+		DominanceResult expectedLowDominanceResults = createExpectedDoubleCoordLowDominanceResults();
+
+		Map<String, DominanceResult> results;
+		results = lowDominanceAlgoV00.identifyDoubleCoordinateDominance(measurement, xCoordinate, yCoordinate);
+		DominanceResult actualLowDominanceResults = results.get("low");
+
 		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
 	}
 	
 	@Test
-	public void testIdentifyHighDominanceWithTwoCoordinates() {
-		DominanceResult expectedHighDominanceResults = 
-				createExpectedHighDominanceResultsForTwoCoordinates();
-		
-		DominanceResult actualHighDominanceResults = highDominanceAlgo
-				.identifyDominanceWithTwoCoordinates(
-						measurementColName, xCoordinateColName, yCoordinateColName);
-		
-		assertResultsAreEqual(expectedHighDominanceResults, actualHighDominanceResults);
+	public void testIdentifyWithInvalidXCoordinateV02() {
+		assertThrows(AnalysisException.class, () -> {
+			dominanceAlgoV02.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV02.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV02.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+	}
+
+	@Test
+	public void testIdentifyWithInvalidXCoordinateV01() {
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV01.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV01.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+	}
+
+	@Test
+	public void testIdentifyWithInvalidXCoordinateV00() {
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV00.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV00.identifySingleCoordinateDominance(
+					measurement, "INVALID_COORDINATE");
+		});
+	}
+
+	@Test
+	public void testIdentifyWithInvalidYCoordinateV02() {
+		assertThrows(AnalysisException.class, () -> {
+			dominanceAlgoV02.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV02.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV02.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+	}
+
+	@Test
+	public void testIdentifyWithInvalidYCoordinateV01() {
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV01.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV01.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+	}
+
+	@Test
+	public void testIdentifyWithInvalidYCoordinateV00() {
+		assertThrows(AnalysisException.class, () -> {
+			highDominanceAlgoV00.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV00.identifyDoubleCoordinateDominance(
+					measurement, xCoordinate, "INVALID_COORDINATE");
+		});
 	}
 	
 	@Test
-	public void testIdentifyLowDominanceWithTwoCoordinates() {
-		DominanceResult expectedLowDominanceResults = 
-				createExpectedLowDominanceResultsForTwoCoordinates();
-		
-		DominanceResult actualLowDominanceResults = lowDominanceAlgo
-				.identifyDominanceWithTwoCoordinates(
-						measurementColName, xCoordinateColName, yCoordinateColName);
-		
-		assertResultsAreEqual(expectedLowDominanceResults, actualLowDominanceResults);
-	}
-	
-	@Test
-	public void testIdentifyWithInvalidXCoordinate() {
+	public void testIdentifyWithInvalidMeasurementV02() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominanceAlgo.identifyDominanceWithOneCoordinate(
-					measurementColName, "INVALID_COORDINATE");
+			dominanceAlgoV02.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominanceAlgo.identifyDominanceWithOneCoordinate(
-					measurementColName, "INVALID_COORDINATE");
+			highDominanceAlgoV02.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
+		});
+		assertThrows(AnalysisException.class, () -> {
+			lowDominanceAlgoV02.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 	}
-	
+
 	@Test
-	public void testIdentifyWithInvalidYCoordinate() {
+	public void testIdentifyWithInvalidMeasurementV01() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominanceAlgo.identifyDominanceWithTwoCoordinates(
-					measurementColName, xCoordinateColName, "INVALID_COORDINATE");
+			highDominanceAlgoV01.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
-					measurementColName, xCoordinateColName, "INVALID_COORDINATE");
+			lowDominanceAlgoV01.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 	}
-	
+
 	@Test
-	public void testIdentifyWithInvalidMeasurement() {
+	public void testIdentifyWithInvalidMeasurementV00() {
 		assertThrows(AnalysisException.class, () -> {
-			highDominanceAlgo.identifyDominanceWithTwoCoordinates(
-					"INVALID_MEASUREMENT", xCoordinateColName, yCoordinateColName);
+			highDominanceAlgoV00.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 		assertThrows(AnalysisException.class, () -> {
-			lowDominanceAlgo.identifyDominanceWithTwoCoordinates(
-					"INVALID_MEASUREMENT", xCoordinateColName, yCoordinateColName);
+			lowDominanceAlgoV00.identifyDoubleCoordinateDominance(
+					"INVALID_MEASUREMENT", xCoordinate, yCoordinate);
 		});
 	}
 	
@@ -142,10 +347,10 @@ public class DominanceAlgoTests {
 		assertArrayEquals(expected.getIdentificationResults().toArray(), actual.getIdentificationResults().toArray());
 	}
 
-	private DominanceResult createExpectedHighDominanceResultsForOneCoordinate() {
+	private DominanceResult createExpectedSingleCoordHighDominanceResults() {
 		DominanceResult expected = new DominanceResult(
-				"high", "sum", 
-				measurementColName, xCoordinateColName);
+				"high", "sum",
+				measurement, xCoordinate);
 		expected.addIdentificationResult("Q3", 9956610.0, 100.0, true, "total high");
 		expected.addIdentificationResult("Q5", 2865320.0, 87.5, true, "partial high");
 		expected.addIdentificationResult("A3", 1897299.0, 75.0, true, "partial high");
@@ -156,10 +361,10 @@ public class DominanceAlgoTests {
 		return expected;
 	}
 	
-	private DominanceResult createExpectedLowDominanceResultsForOneCoordinate() {
+	private DominanceResult createExpectedSingleCoordLowDominanceResults() {
 		DominanceResult expected = new DominanceResult(
-				"low", "sum", 
-				measurementColName, xCoordinateColName);
+				"low", "sum",
+				measurement, xCoordinate);
 		
 		expected.addIdentificationResult("A4", 6500.0, 100.0, true, "total low");
 		expected.addIdentificationResult("S4", 23700.0, 87.5, true, "partial low");
@@ -171,10 +376,10 @@ public class DominanceAlgoTests {
 	}
 	
 	@SuppressWarnings("serial")
-	private DominanceResult createExpectedHighDominanceResultsForTwoCoordinates() {
+	private DominanceResult createExpectedDoubleCoordHighDominanceResults() {
 		DominanceResult expected = new DominanceResult(
-				"high", "sum", 
-				measurementColName, xCoordinateColName, yCoordinateColName, null);
+				"high", "sum",
+				measurement, xCoordinate, yCoordinate, null);
 		expected.addIdentificationResult(
 				"Q3", Arrays.asList("A1", "A3", "A4", "A5", "A6", "Q2", "Q5", "S4"), 
 				new HashMap<String, List<String>>()
@@ -241,10 +446,10 @@ public class DominanceAlgoTests {
 	}
 	
 	@SuppressWarnings("serial")
-	private DominanceResult createExpectedLowDominanceResultsForTwoCoordinates() {
+	private DominanceResult createExpectedDoubleCoordLowDominanceResults() {
 		DominanceResult expected = new DominanceResult(
-				"low", "sum", 
-				measurementColName, xCoordinateColName, yCoordinateColName, null);
+				"low", "sum",
+				measurement, xCoordinate, yCoordinate, null);
 		expected.addIdentificationResult(
 				"A4", Arrays.asList("A1", "A3", "A5", "A6", "Q2", "Q3", "Q5", "S4"), 
 				new HashMap<String, List<String>>()
