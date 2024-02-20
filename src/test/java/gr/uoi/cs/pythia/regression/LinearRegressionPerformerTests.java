@@ -2,8 +2,10 @@ package gr.uoi.cs.pythia.regression;
 
 import static org.junit.Assert.*;
 
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.text.DecimalFormat;
 
@@ -30,9 +32,9 @@ public class LinearRegressionPerformerTests {
 	@Test
 	public void testPerformRegression() {
 		Dataset<Row> dataset = AllRegressionTests.regressionResource.getDataset();
-		DecimalFormat decimalFormat = new DecimalFormat("#.###");
+		DecimalFormat decimalFormat = new DecimalFormat("#.###", new DecimalFormatSymbols(Locale.ENGLISH));
 		RegressionProfile result = regressionPerformer.performRegression(dataset);
-		
+
 		String independentVariableName = result.getIndependentVariables().get(0).getName();
 		String dependentVariableName = result.getDependentVariable().getName();
 		RegressionType regressionType = result.getType();

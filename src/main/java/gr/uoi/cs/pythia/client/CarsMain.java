@@ -41,7 +41,7 @@ public class CarsMain {
 
     datasetProfiler.registerDataset(alias, path, schema);
     datasetProfiler.declareDominanceParameters(
-            DominanceColumnSelectionMode.SMART,
+            DominanceColumnSelectionMode.USER_SPECIFIED_ONLY,
             new String[] {"price"},
             new String[] {"model", "year"}
     );

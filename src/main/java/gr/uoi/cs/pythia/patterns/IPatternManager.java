@@ -5,6 +5,7 @@ import java.io.IOException;
 public interface IPatternManager {
 
   /**
+   * TODO This is no longer accurate - update this - probably when patterns package gets removed
    * This is the main method regarding highlight pattern identification in Pythia.
    * Internally, this method calls a dedicated method for each supported pattern,
    * where data preparation, such as measurement & coordinate column selection,
@@ -13,9 +14,7 @@ public interface IPatternManager {
    * generated results are added to result objects lists in the PatternsProfile model
    * class.
    */
-  void identifyDominancePatterns()
-          throws IOException;
-  
-  void identifyOutliers()
-          throws IOException;
+  void identifyDominance() throws IOException;
+
+  void identifyOutliers() throws IOException;
 }
