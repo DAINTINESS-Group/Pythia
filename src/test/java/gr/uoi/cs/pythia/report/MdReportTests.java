@@ -53,5 +53,12 @@ public class MdReportTests {
             new File(reportPath + File.separator + "regression_report.md"))
             .replace(AllReportTests.reportResource.getDatasetPath(), "");
     assertEquals(expectedRegressionReport, actualRegressionReport);
+    
+    String expectedClusteringReport = TestsUtilities.getExpectedDatasetReport(
+            "people/expected_people_clustering_report.md");
+    String actualClusteringReport = TestsUtilities.getTextFromFile(
+            new File(reportPath + File.separator + "clustering_report.md"))
+            .replace(AllReportTests.reportResource.getDatasetPath(), "");
+    assertEquals(expectedClusteringReport, actualClusteringReport);
   }
 }

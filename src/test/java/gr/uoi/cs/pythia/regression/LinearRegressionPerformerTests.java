@@ -2,7 +2,6 @@ package gr.uoi.cs.pythia.regression;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.regression.RegressionType;

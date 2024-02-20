@@ -8,6 +8,7 @@ import org.apache.spark.sql.types.StructType;
 
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
@@ -98,6 +99,8 @@ public interface IDatasetProfiler {
 	 * ADD COMMENTS HERE
 	 */
 	void declareRegressionRequest(RegressionRequest regressionRequest);
+	
+	void declareClusteringParameters(ClusteringType clusteringType, int K, List<String> selectedFeatures);
 
 	/**
 	 * 

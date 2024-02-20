@@ -55,6 +55,7 @@ public class HistogramResource extends ExternalResource {
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
 		boolean shouldRunRegression = false;
+		boolean shouldRunClustering = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
 
@@ -64,7 +65,7 @@ public class HistogramResource extends ExternalResource {
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
-						shouldRunRegression,
+						shouldRunRegression, shouldRunClustering,
 						highlightParameters));
 
     }

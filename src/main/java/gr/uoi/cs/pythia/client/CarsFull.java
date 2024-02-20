@@ -48,7 +48,7 @@ public class CarsFull {
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = false;
-
+    boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
     
@@ -62,6 +62,7 @@ public class CarsFull {
                     shouldRunDominancePatterns,
                     shouldRunOutlierDetection,
                     shouldRunRegression,
+                    shouldRunClustering,
                     highlightParameters));
 
 

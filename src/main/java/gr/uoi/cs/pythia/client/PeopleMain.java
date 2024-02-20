@@ -80,6 +80,7 @@ public class PeopleMain {
     	boolean shouldRunDominancePatterns = true;
     	boolean shouldRunOutlierDetection = false;
     	boolean shouldRunRegression = false;
+    	boolean shouldRunClustering = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
         // 9. Create a DatasetProfilerParameters object with the parameters specified in step 8
@@ -93,6 +94,7 @@ public class PeopleMain {
                 shouldRunDominancePatterns,
                 shouldRunOutlierDetection,
                 shouldRunRegression,
+                shouldRunClustering,
                 highlightParameters);
         datasetProfiler.computeProfileOfDataset(parameters);
 

@@ -13,6 +13,7 @@ import org.apache.spark.sql.types.StructType;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.regression.RegressionParameters;
@@ -58,6 +59,15 @@ public class CarsMain {
     		Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3));
     datasetProfiler.declareRegressionRequest(regressionRequest);
     
+    datasetProfiler.declareClusteringParameters(ClusteringType.KMEANS, 5,
+    		Arrays.asList("manufacturer", "model", "fuelType"));
+    //datasetProfiler.declareClusteringParameters(ClusteringType.DIVISIVE, 5,
+    //		Arrays.asList("transmission", "fuelType"));
+    //datasetProfiler.declareClusteringParameters(ClusteringType.GRAPH_BASED, 5,
+    //		Arrays.asList("manufacturer", "model", "transmission", "fuelType"));
+    //datasetProfiler.declareClusteringParameters(ClusteringType.DBSCAN, 5,
+    //	Arrays.asList("manufacturer", "model", "fuelType"));
+    
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
     boolean shouldRunAllPairsCorrelations = true;
@@ -65,6 +75,7 @@ public class CarsMain {
     boolean shouldRunDominancePatterns = false;
     boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = true;
+    boolean shouldRunClustering = true;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 
@@ -78,6 +89,7 @@ public class CarsMain {
                     shouldRunDominancePatterns,
                     shouldRunOutlierDetection,
                     shouldRunRegression,
+                    shouldRunClustering,
                     highlightParameters));
 
 

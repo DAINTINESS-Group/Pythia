@@ -22,6 +22,9 @@ import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import gr.uoi.cs.pythia.clustering.ClusteringParameters;
+import gr.uoi.cs.pythia.clustering.ClusteringPerformerFactory;
+import gr.uoi.cs.pythia.clustering.IClusteringPerformer;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
@@ -36,6 +39,7 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.LabeledColumn;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -66,6 +70,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private OutlierType outlierType;
 	private double outlierThreshold;
 	private RegressionRequest regressionRequest;
+	private ClusteringParameters clusteringParameters;
 
 	private HighlightsManagerInterface highlightsManager;
 	
@@ -156,6 +161,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	
 	@Override
+	public void declareClusteringParameters(ClusteringType clusteringType, int K, List<String> selectedFeatures) {
+		this.clusteringParameters = new ClusteringParameters(clusteringType, K, selectedFeatures);
+		System.out.println("Declaring clustering parameters");
+	}
+	
+	@Override
 	public DatasetProfile computeProfileOfDataset(DatasetProfilerParameters parameters) 
 			throws IOException {
 		String path = parameters.getAuxiliaryDataOutputDirectory();
@@ -168,6 +179,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (parameters.shouldRunDominancePatterns()) identifyDominancePatterns();
 		if (parameters.shouldRunOutlierDetection()) identifyOutliers();
 		if (parameters.shouldRunRegression()) performRegression();
+		if (parameters.shouldRunClustering()) performClustering();
 		
 		this.extractHighlightsForStorytelling(parameters.getHighLightsParameters(), parameters.shouldRunDescriptiveStats(),
 				parameters.shouldRunHistograms(),
@@ -302,6 +314,19 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
 		logger.info(String.format("Duration of perfomRegression: %s / %sms", duration, duration.toMillis()));
+	}
+	
+	private void performClustering() throws IOException {
+		Instant start = Instant.now();
+		
+		ClusteringPerformerFactory clusteringFactory = new ClusteringPerformerFactory();
+		IClusteringPerformer clusteringPerformer = clusteringFactory.createClusteringPerformer(clusteringParameters, datasetProfile);
+		clusteringPerformer.performClustering(dataset);		
+		
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Performed clustering for dataset %s", datasetProfile.getAlias()));
+		logger.info(String.format("Duration of performClustering: %s / %sms", duration, duration.toMillis()));
 	}
 
 	@Override

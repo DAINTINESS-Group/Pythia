@@ -1,7 +1,5 @@
 package gr.uoi.cs.pythia.regression;
 
-import java.util.List;
-
 import gr.uoi.cs.pythia.model.DatasetProfile;
 
 public class RegressionPerformerFactory {

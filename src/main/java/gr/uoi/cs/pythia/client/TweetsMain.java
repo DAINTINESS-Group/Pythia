@@ -83,6 +83,7 @@ public class TweetsMain {
 	boolean shouldRunDominancePatterns = false;
 	boolean shouldRunOutlierDetection = false;
 	boolean shouldRunRegression = false;
+	boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
 	datasetProfiler.computeProfileOfDataset(
@@ -95,6 +96,7 @@ public class TweetsMain {
 					shouldRunDominancePatterns,
 					shouldRunOutlierDetection,
 					shouldRunRegression,
+					shouldRunClustering,
 					highlightParameters));
     
     datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, "");

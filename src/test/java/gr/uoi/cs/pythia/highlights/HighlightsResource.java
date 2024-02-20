@@ -58,6 +58,7 @@ public class HighlightsResource extends ExternalResource {
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = true;
 		boolean shouldRunRegression = false;
+		boolean shouldRunClustering = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, 1.0);
 
 
@@ -67,7 +68,7 @@ public class HighlightsResource extends ExternalResource {
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
-						shouldRunRegression,
+						shouldRunRegression, shouldRunClustering,
 						highlightParameters));
 	}
     

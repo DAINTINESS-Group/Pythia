@@ -44,6 +44,7 @@ public class DataScienceSalariesMain {
     boolean shouldRunDominancePatterns = true;
     boolean shouldRunOutlierDetection = false;
     boolean shouldRunRegression = false;
+    boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
     datasetProfiler.computeProfileOfDataset(
@@ -56,6 +57,7 @@ public class DataScienceSalariesMain {
                     shouldRunDominancePatterns,
                     shouldRunOutlierDetection,
                     shouldRunRegression,
+                    shouldRunClustering,
                     highlightParameters));
 
     datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, "");

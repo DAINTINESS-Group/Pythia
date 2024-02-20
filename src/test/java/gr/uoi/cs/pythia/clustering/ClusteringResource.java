@@ -1,8 +1,7 @@
-package gr.uoi.cs.pythia.regression;
+package gr.uoi.cs.pythia.clustering;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
@@ -15,14 +14,13 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
-public class RegressionResource extends ExternalResource{
-	
+public class ClusteringResource extends ExternalResource{
+
 	private Dataset<Row> dataset;
     private DatasetProfile datasetProfile;
     
@@ -37,7 +35,7 @@ public class RegressionResource extends ExternalResource{
     @Override
     protected void before() throws Throwable {
         super.before();
-        TestsUtilities.setupResultsDir("regression");
+        TestsUtilities.setupResultsDir("clustering");
         initializeProfile();
     }
     
@@ -61,11 +59,10 @@ public class RegressionResource extends ExternalResource{
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
 				new DatasetProfilerParameters(
-						TestsUtilities.getResultsDir("regression"),
+						TestsUtilities.getResultsDir("clustering"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
 						shouldRunDominancePatterns, shouldRunOutlierDetection,
 						shouldRunRegression, shouldRunClustering, highlightParameters));
     }
-
 }

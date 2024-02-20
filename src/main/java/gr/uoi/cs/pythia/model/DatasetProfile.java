@@ -10,6 +10,7 @@ public class DatasetProfile {
   private final List<Column> columns;
   private final PatternsProfile patternsProfile;
   private List<RegressionProfile> regressionProfiles;
+  private ClusteringProfile clusteringProfile;
   private String auxiliaryDataOutputDirectory;
   private HighlightsProfile highlightsProfile;
   
@@ -69,7 +70,19 @@ public class DatasetProfile {
 	  return  this.highlightsProfile;
   }
   
-  @Override
+  public ClusteringProfile getClusteringProfile() {
+	return clusteringProfile;
+	}
+	
+	public void setRegressionProfiles(List<RegressionProfile> regressionProfiles) {
+		this.regressionProfiles = regressionProfiles;
+	}
+	
+	public void setClusteringProfile(ClusteringProfile clusteringProfile) {
+		this.clusteringProfile = clusteringProfile;
+	}
+
+@Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
     for (Column column : columns) {

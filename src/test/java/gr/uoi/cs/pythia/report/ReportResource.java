@@ -10,6 +10,7 @@ import org.junit.rules.ExternalResource;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
@@ -55,6 +56,9 @@ public class ReportResource extends ExternalResource {
 				DominanceColumnSelectionMode.EXHAUSTIVE,
 				null, null);
 		
+		datasetProfiler.declareClusteringParameters(ClusteringType.KMEANS, 3,
+	    		Arrays.asList("name"));
+		
 		boolean shouldRunDescriptiveStats = true;
 		boolean shouldRunHistograms = true;
 		boolean shouldRunAllPairsCorrelations = true;
@@ -62,6 +66,7 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunDominancePatterns = true;
 		boolean shouldRunOutlierDetection = false;
 		boolean shouldRunRegression = true;
+		boolean shouldRunClustering = true;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 
@@ -70,7 +75,7 @@ public class ReportResource extends ExternalResource {
 						TestsUtilities.getResultsDir("report"), shouldRunDescriptiveStats,
 						shouldRunHistograms, shouldRunAllPairsCorrelations,
 						shouldRunDecisionTrees, shouldRunDominancePatterns,
-						shouldRunOutlierDetection, shouldRunRegression, highlightParameters));
+						shouldRunOutlierDetection,  shouldRunRegression, shouldRunClustering, highlightParameters));
 
     }
     

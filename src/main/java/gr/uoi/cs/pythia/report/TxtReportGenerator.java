@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import gr.uoi.cs.pythia.clustering.Cluster;
+import gr.uoi.cs.pythia.model.ClusteringProfile;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.PatternsProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -23,6 +26,7 @@ public class TxtReportGenerator implements IReportGenerator {
 	private static final String lowDominanceReportFileName = "low_dominance_report.txt";
 	private static final String outliersReportFileName = "outliers_report.txt";
 	private static final String regressionReportFileName = "regression_report.txt";
+	private static final String clusteringReportFileName = "clustering_report.txt";
 
 	private static final boolean isExtensiveReport = true;
 	
@@ -31,6 +35,28 @@ public class TxtReportGenerator implements IReportGenerator {
 		produceStatisticalProfileReport(datasetProfile, outputDirectoryPath);
 		producePatternsProfileReports(datasetProfile, outputDirectoryPath);
 		produceRegressionProfileReport(datasetProfile, outputDirectoryPath);
+		produceClusteringProfileReport(datasetProfile, outputDirectoryPath);
+	}
+	
+	private void produceClusteringProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException {
+		String content = "";
+		//first section (with title)
+		content += getClusteringTitle(datasetProfile.getClusteringProfile()) + "\n\n";
+		content += getClusteringMethodOverview(datasetProfile.getClusteringProfile()) + "\n\n";
+		
+		//second section (general information)
+		content += "Clustering Information\n";		
+		content += "-Number of Clusters: " + datasetProfile.getClusteringProfile().getClusters().size() + "\n";
+		content += "-Error: " + datasetProfile.getClusteringProfile().getError() + "\n";
+		content += "-Average Silhouette Score: " + datasetProfile.getClusteringProfile().getAvgSilhouetteScore() + "\n\n\n";
+		
+		//third section (table per cluster)
+		for(Cluster cluster : datasetProfile.getClusteringProfile().getClusters()) {
+			content += getClusterTable(cluster, datasetProfile) + "\n\n";
+		}
+		
+		writeToFile(outputDirectoryPath, clusteringReportFileName, content);
+		return;
 	}
 
 	private void produceRegressionProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException{
@@ -194,6 +220,72 @@ public class TxtReportGenerator implements IReportGenerator {
 				content += profile.getCorrelations().get(i) + "	|	";
 				content += profile.getpValues().get(i) + "\n";
 			}
+		}
+		return content;
+	}
+	
+	private String getClusteringTitle(ClusteringProfile clusteringProfile) {
+		if(clusteringProfile.getType() == ClusteringType.KMEANS)	return "K-Means Clustering";
+		if(clusteringProfile.getType() == ClusteringType.DIVISIVE)	return "Divisive Clustering";
+		if(clusteringProfile.getType() == ClusteringType.GRAPH_BASED)	return "Graph Based Clustering";
+		else	return "DBSCAN Clustering";
+	}
+	
+	private String getClusteringMethodOverview(ClusteringProfile clusteringProfile) {
+		if(clusteringProfile.getType() == ClusteringType.KMEANS) {
+			return "K-means clustering is a popular unsupervised machine learning algorithm used" +"\n"
+					+ " for partitioning a dataset into a predetermined number of clusters. The algorithm" +"\n"
+					+ " aims to minimize the variance within clusters by iteratively assigning data points to" +"\n"
+					+ " the nearest centroid and updating the centroids based on the mean of the data points assigned" +"\n"
+					+ " to each cluster. K-means is widely used for data exploration, pattern recognition, and" +"\n"
+					+ " segmentation tasks, offering simplicity, scalability, and efficiency in handling large datasets.";
+		}
+		if(clusteringProfile.getType() == ClusteringType.DIVISIVE) {
+			return "Divisive clustering is a hierarchical clustering technique" +"\n"
+					+ "that starts with all data points in a single cluster and iteratively" +"\n"
+					+ "divides the dataset into smaller clusters until each data point is in its own cluster" +"\n"
+					+ "or until a stopping criterion is met. At each step, divisive clustering recursively" +"\n"
+					+ "splits clusters based on a chosen criterion, such as maximizing inter-cluster" +"\n"
+					+ "dissimilarity or minimizing intra-cluster variance. Divisive clustering produces" +"\n"
+					+ "a hierarchical tree structure known as a dendrogram, which can be used to explore" +"\n"
+					+ "different levels of granularity in the clustering solution. This approach is valuable" +"\n"
+					+ "for uncovering nested clusters and understanding the hierarchical organization of the data.";
+		}
+		if(clusteringProfile.getType() == ClusteringType.GRAPH_BASED) {
+			return "Graph-based clustering leverages the concept of similarity between data points" +"\n"
+					+ "to construct a graph, where nodes represent data points and edges represent" +"\n"
+					+ "pairwise similarity or affinity between nodes. Commonly used similarity measures" +"\n"
+					+ "include Euclidean distance, cosine similarity, or correlation coefficients." +"\n"
+					+ "Once the graph is constructed, graph clustering algorithms aim to partition the graph" +"\n"
+					+ "into cohesive clusters, where nodes within each cluster are densely connected while nodes" +"\n"
+					+ "between clusters have sparse connections. Graph-based clustering methods, such as spectral" +"\n"
+					+ "clustering and modularity optimization, offer flexibility in handling complex data structures" +"\n"
+					+ "and can effectively capture non-linear relationships and community structures in the data.";
+		}
+		else	return "DBSCAN, short for Density-Based Spatial Clustering of Applications with Noise," +"\n"
+				+ "is a density-based clustering algorithm designed to discover clusters of arbitrary shape in spatial data." +"\n"
+				+ "Unlike centroid-based methods like k-means, DBSCAN does not require specifying the number of clusters" +"\n"
+				+ "in advance. Instead, it groups together closely packed points based on two parameters: epsilon (ε)," +"\n"
+				+ "which defines the radius of neighborhood around each point, and minPoints, which specifies the" +"\n"
+				+ "minimum number of points within the ε-neighborhood to form a dense region. DBSCAN identifies core points," +"\n"
+				+ "border points, and noise points, allowing it to handle outliers and discover clusters of varying shapes" +"\n"
+				+ "and sizes. This algorithm is particularly effective for datasets with non-uniform density and complex" +"\n"
+				+ "geometric structures.";
+	}
+	
+	private String getClusterTable(Cluster cluster, DatasetProfile datasetProfile) {
+		String content = "Cluster " + (cluster.getId()+1) + " (with "+ cluster.getNumOfPoints() +" points)\n";
+		content += "Column	|	Mean	|	Standard Deviation	|	Median	|	Min	|	Max	\n";
+		String[] columnNames = datasetProfile.getClusteringProfile().getResult().columns();	
+		for(int i=0; i<columnNames.length; i++) {
+			if(columnNames[i].equals("cluster") || columnNames[i].equals("features"))	continue;
+			content += columnNames[i];
+			content += "	|	" + cluster.getMean().get(i);
+			content += "	|	" + cluster.getStandardDeviations().get(i);
+			content += "	|	" + cluster.getMedian().get(i);
+			content += "	|	" + cluster.getMin().get(i);
+			content += "	|	" + cluster.getMax().get(i);
+			content += "\n";
 		}
 		return content;
 	}

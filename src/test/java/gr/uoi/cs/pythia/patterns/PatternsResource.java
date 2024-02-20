@@ -56,6 +56,7 @@ public class PatternsResource extends ExternalResource {
 		boolean shouldRunDominancePatterns = false;
 		boolean shouldRunOutlierDetection = false;
 		boolean shouldRunRegression = false;
+		boolean shouldRunClustering = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 		datasetProfile = datasetProfiler.computeProfileOfDataset(
@@ -63,7 +64,8 @@ public class PatternsResource extends ExternalResource {
 						TestsUtilities.getResultsDir("patterns"),
 						shouldRunDescriptiveStats, shouldRunHistograms,
 						shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
-						shouldRunDominancePatterns, shouldRunOutlierDetection, shouldRunRegression,
+						shouldRunDominancePatterns, shouldRunOutlierDetection,
+						shouldRunRegression, shouldRunClustering,
 						highlightParameters));
 	}
     

@@ -12,6 +12,7 @@ public class DatasetProfilerParameters {
   private boolean shouldRunDominancePatterns = false;
   private boolean shouldRunOutlierDetection = false;
   private boolean shouldRunRegression = false;
+  private boolean shouldRunClustering = false;
   private HighlightParameters highLightsParameters = null;
   
   /**
@@ -45,6 +46,7 @@ public class DatasetProfilerParameters {
           boolean shouldRunDominancePatterns,
           boolean shouldRunOutlierDetection,
           boolean shouldRunRegression,
+          boolean shouldRunClustering,
           HighlightParameters highLightsParameters) {
     this.auxiliaryDataOutputDirectory = auxiliaryDataOutputDirectory;
     this.shouldRunDescriptiveStats = shouldRunDescriptiveStats;
@@ -54,6 +56,7 @@ public class DatasetProfilerParameters {
     this.shouldRunDominancePatterns = shouldRunDominancePatterns;
     this.shouldRunOutlierDetection = shouldRunOutlierDetection;
     this.shouldRunRegression = shouldRunRegression;
+    this.shouldRunClustering = shouldRunClustering;
     this.highLightsParameters = highLightsParameters;
   }
 
@@ -87,6 +90,10 @@ public class DatasetProfilerParameters {
 
   public boolean shouldRunRegression() {
 	  return shouldRunRegression;
+  }
+  
+  public boolean shouldRunClustering() {
+	  return shouldRunClustering;
   }
 
   public HighlightParameters getHighLightsParameters() {
