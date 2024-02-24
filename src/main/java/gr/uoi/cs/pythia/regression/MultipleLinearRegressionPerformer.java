@@ -85,9 +85,7 @@ public class MultipleLinearRegressionPerformer extends GeneralRegression {
 		RegressionProfile result = this.setupRegressionProfile(independentVariables, independentVariablesValues,
 				dependentVariable, dependentVariableValues, RegressionType.MULTIPLE_LINEAR,
 				slopes, intercept, correlations, pValues, error);
-		
-		//DEBUG print
-		System.out.println(result);
+
 	    datasetProfile.addRegressionProfile(result);
 	    return result;
 	}

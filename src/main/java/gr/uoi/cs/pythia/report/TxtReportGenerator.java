@@ -40,48 +40,51 @@ public class TxtReportGenerator implements IReportGenerator {
 	
 	private void produceClusteringProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException {
 		String content = "";
-		//first section (with title)
-		content += getClusteringTitle(datasetProfile.getClusteringProfile()) + "\n\n";
-		content += getClusteringMethodOverview(datasetProfile.getClusteringProfile()) + "\n\n";
-		
-		//second section (general information)
-		content += "Clustering Information\n";		
-		content += "-Number of Clusters: " + datasetProfile.getClusteringProfile().getClusters().size() + "\n";
-		content += "-Error: " + datasetProfile.getClusteringProfile().getError() + "\n";
-		content += "-Average Silhouette Score: " + datasetProfile.getClusteringProfile().getAvgSilhouetteScore() + "\n\n\n";
-		
-		//third section (table per cluster)
-		for(Cluster cluster : datasetProfile.getClusteringProfile().getClusters()) {
-			content += getClusterTable(cluster, datasetProfile) + "\n\n";
+		if(datasetProfile.getClusteringProfile()!=null) {
+			//first section (with title)
+			content += getClusteringTitle(datasetProfile.getClusteringProfile()) + "\n\n";
+			content += getClusteringMethodOverview(datasetProfile.getClusteringProfile()) + "\n\n";
+			
+			//second section (general information)
+			content += "Clustering Information\n";		
+			content += "-Number of Clusters: " + datasetProfile.getClusteringProfile().getClusters().size() + "\n";
+			content += "-Error: " + datasetProfile.getClusteringProfile().getError() + "\n";
+			content += "-Average Silhouette Score: " + datasetProfile.getClusteringProfile().getAvgSilhouetteScore() + "\n\n\n";
+			
+			//third section (table per cluster)
+			for(Cluster cluster : datasetProfile.getClusteringProfile().getClusters()) {
+				content += getClusterTable(cluster, datasetProfile) + "\n\n";
+			}
+			writeToFile(outputDirectoryPath, clusteringReportFileName, content);
 		}
-		
-		writeToFile(outputDirectoryPath, clusteringReportFileName, content);
 		return;
 	}
 
 	private void produceRegressionProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException{
 		String content = "";
-		for(int i=0; i<datasetProfile.getRegressionProfiles().size(); i++) {
-			RegressionProfile currentProfile = datasetProfile.getRegressionProfiles().get(i);
-			int currentRegressionId = i+1;
-			content += currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
-			content += "Dependent Variable: " + currentProfile.getDependentVariable().getName() + "\n";
-			if (currentProfile.getIndependentVariables().size() > 0) {
-			    content += "Independent Variables: " + currentProfile.getIndependentVariables().get(0).getName();
+		if(datasetProfile.getRegressionProfiles().size()>0) {
+			for(int i=0; i<datasetProfile.getRegressionProfiles().size(); i++) {
+				RegressionProfile currentProfile = datasetProfile.getRegressionProfiles().get(i);
+				int currentRegressionId = i+1;
+				content += currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
+				content += "Dependent Variable: " + currentProfile.getDependentVariable().getName() + "\n";
+				if (currentProfile.getIndependentVariables().size() > 0) {
+				    content += "Independent Variables: " + currentProfile.getIndependentVariables().get(0).getName();
 
-			    for (int j = 1; j < currentProfile.getIndependentVariables().size(); j++) {
-			        content += ", " + currentProfile.getIndependentVariables().get(j).getName();
-			    }
-			}
-			content += "\n\n\n-> Results\n\n" + "-Information about Independent Variables\n";
-			content += this.getTable(currentProfile);
-			content += "\n\n\n-General Information\n";
-			content += "Intercept: " + currentProfile.getIntercept() + "\n";
-			content += "Error (MSE): " + currentProfile.getError() + "\n";	
-			content += "Regression Type: " + this.getTitle(currentProfile)  + "\n";	
-			content += "Formula: " + this.getFormula(currentProfile);
-			content += "\n\n\n\n\n";
-		}writeToFile(outputDirectoryPath, regressionReportFileName, content);
+				    for (int j = 1; j < currentProfile.getIndependentVariables().size(); j++) {
+				        content += ", " + currentProfile.getIndependentVariables().get(j).getName();
+				    }
+				}
+				content += "\n\n\n-> Results\n\n" + "-Information about Independent Variables\n";
+				content += this.getTable(currentProfile);
+				content += "\n\n\n-General Information\n";
+				content += "Intercept: " + currentProfile.getIntercept() + "\n";
+				content += "Error (MSE): " + currentProfile.getError() + "\n";	
+				content += "Regression Type: " + this.getTitle(currentProfile)  + "\n";	
+				content += "Formula: " + this.getFormula(currentProfile);
+				content += "\n\n\n\n\n";
+			}writeToFile(outputDirectoryPath, regressionReportFileName, content);
+		}
 		return;
 	}
 	
@@ -278,7 +281,7 @@ public class TxtReportGenerator implements IReportGenerator {
 		content += "Column	|	Mean	|	Standard Deviation	|	Median	|	Min	|	Max	\n";
 		String[] columnNames = datasetProfile.getClusteringProfile().getResult().columns();	
 		for(int i=0; i<columnNames.length; i++) {
-			if(columnNames[i].equals("cluster") || columnNames[i].equals("features"))	continue;
+			if(columnNames[i].equals("cluster"))	continue;
 			content += columnNames[i];
 			content += "	|	" + cluster.getMean().get(i);
 			content += "	|	" + cluster.getStandardDeviations().get(i);

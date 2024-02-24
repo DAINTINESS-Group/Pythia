@@ -78,9 +78,6 @@ public abstract class GeneralClusteringPerformer implements IClusteringPerformer
 					.filter(functions.col("cluster").equalTo(clusterId));
 			
 			if(!clusterData.isEmpty()) {
-				//System.out.println("Cluster " + clusterId + " dataset:");
-				//clusterData.show();
-				//check if clusterData is empty and if its true print that
 				double[] meanPoint = calculateMeanPoint(clusterData);
 				Row[] rows = (Row[]) clusterData.collect();
 			    int numOfRows = rows.length;
@@ -163,8 +160,8 @@ public abstract class GeneralClusteringPerformer implements IClusteringPerformer
 	                	rowVector[k] = (Double) row.get(k);
 	                }
 	            }	csvWriter.writeNext(doubleArrayToStringArray(rowVector));
-		    }csvWriter.close();
-            System.out.println("CSV file created successfully.");
+		    }
+		    csvWriter.close();
 		}
 		catch (IOException e) {
 			System.err.println("Error writing to CSV file: " + e.getMessage());

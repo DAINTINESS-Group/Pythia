@@ -11,8 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	KmeansClusteringPerformerTests.class,
 	GraphBasedClusteringPerformerTests.class,
-	DivisiveClusteringPerformerTests.class,
-	DBSCANClusteringPerformerTests.class
+	DivisiveClusteringPerformerTests.class
 })
 public class AllClusteringTests {
 	

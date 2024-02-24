@@ -45,7 +45,6 @@ public class KmeansClusteringPerformer extends GeneralClusteringPerformer{
 
 	    KMeansModel model = kmeans.fit(assembledData);
 	    Dataset<Row> predictions = model.transform(assembledData);
-	    predictions.show();
 	    
 	    double meanSilhuette = calculateMeanSilhouetteScore(predictions, "cluster", "features");
 	    
@@ -53,8 +52,7 @@ public class KmeansClusteringPerformer extends GeneralClusteringPerformer{
 
 	    double error = calculateError(clusters);
 	    
-	    ClusteringProfile result = setupClusteringProfile(ClusteringType.KMEANS, error, predictions, clusters, meanSilhuette);
-	    System.out.println(result);
+	    ClusteringProfile result = setupClusteringProfile(ClusteringType.KMEANS, error, predictions.drop("features"), clusters, meanSilhuette);
 	    datasetProfile.setClusteringProfile(result);
 	    createResultCsv(predictions.drop("features"));
 	    return result;

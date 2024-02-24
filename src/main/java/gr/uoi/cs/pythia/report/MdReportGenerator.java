@@ -53,56 +53,60 @@ public class MdReportGenerator implements IReportGenerator {
 	
 	private void produceClusteringProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException {
         String content = "";
-        // First section (with title)
-        content += "# " + getClusteringTitle(datasetProfile.getClusteringProfile()) + "\n\n";
-        content += getClusteringMethodOverview(datasetProfile.getClusteringProfile()) + "\n\n";
+        if(datasetProfile.getClusteringProfile()!=null) {
+        	// First section (with title)
+            content += "# " + getClusteringTitle(datasetProfile.getClusteringProfile()) + "\n\n";
+            content += getClusteringMethodOverview(datasetProfile.getClusteringProfile()) + "\n\n";
 
-        // Second section (general information)
-        content += "## Clustering Information\n\n";
-        content += "- Number of Clusters: " + datasetProfile.getClusteringProfile().getClusters().size() + "\n";
-        content += "- Error: " + datasetProfile.getClusteringProfile().getError() + "\n";
-        content += "- Average Silhouette Score: " + datasetProfile.getClusteringProfile().getAvgSilhouetteScore() + "\n\n";
+            // Second section (general information)
+            content += "## Clustering Information\n\n";
+            content += "- Number of Clusters: " + datasetProfile.getClusteringProfile().getClusters().size() + "\n";
+            content += "- Error: " + datasetProfile.getClusteringProfile().getError() + "\n";
+            content += "- Average Silhouette Score: " + datasetProfile.getClusteringProfile().getAvgSilhouetteScore() + "\n\n";
 
-        // Third section (table per cluster)
-        for (Cluster cluster : datasetProfile.getClusteringProfile().getClusters()) {
-            content += "## Cluster " + (cluster.getId()+1) + " (with " + cluster.getNumOfPoints() + " points)\n\n";
-            content += getClusterTable(cluster, datasetProfile) + "\n\n";
+            // Third section (table per cluster)
+            for (Cluster cluster : datasetProfile.getClusteringProfile().getClusters()) {
+                content += "## Cluster " + (cluster.getId()+1) + " (with " + cluster.getNumOfPoints() + " points)\n\n";
+                content += getClusterTable(cluster, datasetProfile) + "\n\n";
+            }
+            writeToFile(outputDirectoryPath, clusteringReportFileName, content);
         }
-        writeToFile(outputDirectoryPath, clusteringReportFileName, content);
     }
 	
 	private void produceRegressionProfileReport(DatasetProfile datasetProfile, String outputDirectoryPath) throws IOException {
 		String content = "";
-		for(int i=0; i<datasetProfile.getRegressionProfiles().size(); i++) {
-			RegressionProfile currentProfile = datasetProfile.getRegressionProfiles().get(i);
-			int currentRegressionId = i+1;
-			content += "# " + currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
+		if(datasetProfile.getRegressionProfiles().size()>0) {
+			for(int i=0; i<datasetProfile.getRegressionProfiles().size(); i++) {
+				RegressionProfile currentProfile = datasetProfile.getRegressionProfiles().get(i);
+				int currentRegressionId = i+1;
+				content += "# " + currentRegressionId + ". " + this.getTitle(currentProfile) + "\n\n";
 
-		    content += "## Dependent Variable\n";
-		    content += "- " + currentProfile.getDependentVariable().getName() + "\n\n";
-		    content += "## Independent Variables\n";
-		    if (currentProfile.getIndependentVariables().size() > 0) {
-			    content += "- " + currentProfile.getIndependentVariables().get(0).getName();
+			    content += "## Dependent Variable\n";
+			    content += "- " + currentProfile.getDependentVariable().getName() + "\n\n";
+			    content += "## Independent Variables\n";
+			    if (currentProfile.getIndependentVariables().size() > 0) {
+				    content += "- " + currentProfile.getIndependentVariables().get(0).getName();
 
-			    for (int j = 1; j < currentProfile.getIndependentVariables().size(); j++) {
-			        content += ", " + currentProfile.getIndependentVariables().get(j).getName();
-			    }
-			}
-		    content += "\n\n";
+				    for (int j = 1; j < currentProfile.getIndependentVariables().size(); j++) {
+				        content += ", " + currentProfile.getIndependentVariables().get(j).getName();
+				    }
+				}
+			    content += "\n\n";
 
-		    content += "## Results\n\n";
-		    content += "### Information about Independent Variables\n";
-		    content += this.getTable(currentProfile);
-		    
-		    content += "\n\n### General Information\n";
+			    content += "## Results\n\n";
+			    content += "### Information about Independent Variables\n";
+			    content += this.getTable(currentProfile);
+			    
+			    content += "\n\n### General Information\n";
 
-		    content += "- **Intercept:** " + currentProfile.getIntercept() + "\n";
-		    content += "- **Error (MSE):** " + currentProfile.getError() + "\n";
-		    content += "- **Regression Type:** " + this.getTitle(currentProfile) + "\n";
-		    content += "- **Formula:** " + this.getFormula(currentProfile) + "\n";
+			    content += "- **Intercept:** " + currentProfile.getIntercept() + "\n";
+			    content += "- **Error (MSE):** " + currentProfile.getError() + "\n";
+			    content += "- **Regression Type:** " + this.getTitle(currentProfile) + "\n";
+			    content += "- **Formula:** " + this.getFormula(currentProfile) + "\n";
 
-		    content += "\n<br><br><br>\n\n";
-		}writeToFile(outputDirectoryPath, regressionReportFileName, content);
+			    content += "\n<br><br><br>\n\n";
+			}writeToFile(outputDirectoryPath, regressionReportFileName, content);
+		}
 	}
 
 
@@ -327,7 +331,7 @@ public class MdReportGenerator implements IReportGenerator {
         content.append("|-------|------|---------------------|--------|-----|-----|\n");
         String[] columnNames = datasetProfile.getClusteringProfile().getResult().columns();
         for (int i = 0; i < columnNames.length; i++) {
-            if (columnNames[i].equals("cluster") || columnNames[i].equals("features")) continue;
+            if (columnNames[i].equals("cluster")) continue;
             content.append("| ").append(columnNames[i]).append(" | ");
             content.append(cluster.getMean().get(i)).append(" | ");
             content.append(cluster.getStandardDeviations().get(i)).append(" | ");

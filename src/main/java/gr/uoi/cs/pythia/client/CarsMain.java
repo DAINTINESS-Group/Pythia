@@ -48,34 +48,15 @@ public class CarsMain {
 
 
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
-    RegressionRequest regressionRequest = new RegressionRequest();
-    regressionRequest.addRegression(new RegressionParameters(
-    		Arrays.asList("tax"), "price", RegressionType.LINEAR, null));
-    regressionRequest.addRegression(new RegressionParameters(
-    		Arrays.asList("tax", "mileage"), "price", RegressionType.MULTIPLE_LINEAR, null));
-    regressionRequest.addRegression(new RegressionParameters(
-    		null, "price", RegressionType.AUTOMATED, 0.05));
-    regressionRequest.addRegression(new RegressionParameters(
-    		Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3));
-    datasetProfiler.declareRegressionRequest(regressionRequest);
-    
-    datasetProfiler.declareClusteringParameters(ClusteringType.KMEANS, 5,
-    		Arrays.asList("manufacturer", "model", "fuelType"));
-    //datasetProfiler.declareClusteringParameters(ClusteringType.DIVISIVE, 5,
-    //		Arrays.asList("transmission", "fuelType"));
-    //datasetProfiler.declareClusteringParameters(ClusteringType.GRAPH_BASED, 5,
-    //		Arrays.asList("manufacturer", "model", "transmission", "fuelType"));
-    //datasetProfiler.declareClusteringParameters(ClusteringType.DBSCAN, 5,
-    //	Arrays.asList("manufacturer", "model", "fuelType"));
     
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;
     boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = false;
-    boolean shouldRunDominancePatterns = false;
+    boolean shouldRunDominancePatterns = true;
     boolean shouldRunOutlierDetection = true;
-    boolean shouldRunRegression = true;
-    boolean shouldRunClustering = true;
+    boolean shouldRunRegression = false;
+    boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);
 
 
@@ -102,7 +83,7 @@ public class CarsMain {
             new StructField[]{
                     new StructField("manufacturer", DataTypes.StringType, true, Metadata.empty()),
                     new StructField("model", DataTypes.StringType, true, Metadata.empty()),
-                    new StructField("year", DataTypes.IntegerType, true, Metadata.empty()),
+                    new StructField("year", DataTypes.StringType, true, Metadata.empty()),
                     new StructField("price", DataTypes.DoubleType, true, Metadata.empty()),
                     new StructField("transmission", DataTypes.StringType, true, Metadata.empty()),
                     new StructField("mileage", DataTypes.DoubleType, true, Metadata.empty()),

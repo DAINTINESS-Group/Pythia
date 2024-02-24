@@ -162,7 +162,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 	@Override
 	public void declareClusteringParameters(ClusteringType clusteringType, int K, List<String> selectedFeatures) {
 		this.clusteringParameters = new ClusteringParameters(clusteringType, K, selectedFeatures);
-		System.out.println("Declaring clustering parameters");
 	}
 	
 	@Override

@@ -38,14 +38,12 @@ public class CarsFull {
             new String[] {"model", "year"}
     );
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
-//    datasetProfiler.setOutlierType(OutlierType.NORMALIZED_SCORE);
-//    datasetProfiler.setOutlierThreshold(1.0);
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = true;
     boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = true;
-    boolean shouldRunDominancePatterns = false;
+    boolean shouldRunDominancePatterns = true;
     boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = false;
     boolean shouldRunClustering = false;

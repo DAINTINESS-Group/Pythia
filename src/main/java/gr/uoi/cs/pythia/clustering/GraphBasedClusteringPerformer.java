@@ -46,7 +46,6 @@ public class GraphBasedClusteringPerformer extends GeneralClusteringPerformer{
 	    List<Integer> clusterIds = sortClusters(clusteredIds);
 	    
 	    Dataset<Row> predictions = addColumn("cluster", assembledData, clusterIds);
-	    predictions.show();
 	    
 	    double meanSilhuette = calculateMeanSilhouetteScore(predictions, "cluster", "features");
 	    
@@ -54,8 +53,7 @@ public class GraphBasedClusteringPerformer extends GeneralClusteringPerformer{
 	    
 	    double error = calculateError(clusters);
 	    
-	    ClusteringProfile result = setupClusteringProfile(ClusteringType.GRAPH_BASED, error, predictions, clusters, meanSilhuette);
-	    System.out.println(result);
+	    ClusteringProfile result = setupClusteringProfile(ClusteringType.GRAPH_BASED, error, predictions.drop("features"), clusters, meanSilhuette);
 	    datasetProfile.setClusteringProfile(result);
 	    createResultCsv(predictions.drop("features"));
 	    return result;

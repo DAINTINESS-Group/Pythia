@@ -59,9 +59,7 @@ public class LinearRegressionPerformer extends GeneralRegression  {
 		RegressionProfile result = this.setupRegressionProfile(Arrays.asList(independentVariable), Arrays.asList(independentVariableValues),
 				dependentVariable, dependentVariableValues, RegressionType.LINEAR,
 				Arrays.asList(slope), intercept, correlations, pValues, error);
-		
-		//DEBUG print
-		System.out.println(result);
+
 	    datasetProfile.addRegressionProfile(result);
 	    return result;
 	}

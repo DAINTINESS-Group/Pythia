@@ -1,0 +1,11 @@
+﻿manufacturer,model,year,price,transmission,mileage,fuelType,tax,mpg,engineSize
+audi,A1,2017,12500,Manual,15735,Petrol,150,55.4,1.4
+audi,A6,2016,1650,Automatic,36203,Diesel,20,64.2,2
+audi,A1,2016,11000,Manual,29946,Petrol,30,55.4,1.4
+audi,A4,2017,500,Automatic,25952,Diesel,145,67.3,2
+audi,A3,2019,17300,Manual,1998,Petrol,145,49.6,1
+audi,A1,2016,13900,Automatic,32260,Petrol,30,58.9,1.4
+audi,A6,2016,1325,Automatic,76788,Diesel,30,61.4,2
+audi,A4,2016,500,Manual,75185,Diesel,20,70.6,2
+audi,A3,2015,10200,Manual,46112,Petrol,20,60.1,1.4
+audi,A1,2016,12000,Manual,22451,Petrol,30,55.4,1.4

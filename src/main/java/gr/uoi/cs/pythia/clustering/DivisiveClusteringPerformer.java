@@ -37,7 +37,6 @@ public class DivisiveClusteringPerformer extends GeneralClusteringPerformer{
 
 	    BisectingKMeansModel model = bkm.fit(assembledData);
 	    Dataset<Row> predictions = model.transform(assembledData);
-	    predictions.show();
 
 	    double meanSilhuette = calculateMeanSilhouetteScore(predictions, "cluster", "features");
 
@@ -45,8 +44,7 @@ public class DivisiveClusteringPerformer extends GeneralClusteringPerformer{
 
 	    double error = calculateError(clusters);
 	    
-	    ClusteringProfile result = setupClusteringProfile(ClusteringType.DIVISIVE, error, predictions, clusters, meanSilhuette);
-	    System.out.println(result);
+	    ClusteringProfile result = setupClusteringProfile(ClusteringType.DIVISIVE, error, predictions.drop("features"), clusters, meanSilhuette);
 	    datasetProfile.setClusteringProfile(result);
 	    createResultCsv(predictions.drop("features"));
 	    return result;

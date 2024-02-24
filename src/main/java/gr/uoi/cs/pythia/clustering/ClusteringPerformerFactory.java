@@ -12,8 +12,6 @@ public class ClusteringPerformerFactory {
 				return new DivisiveClusteringPerformer(clusteringParameters.getNumOfClusters(), datasetProfile, clusteringParameters.getSelectedFeatures());
 			case GRAPH_BASED:
 				return new GraphBasedClusteringPerformer(clusteringParameters.getNumOfClusters(), datasetProfile, clusteringParameters.getSelectedFeatures());
-			case DBSCAN:
-				return new DBSCANClusteringPerformer(clusteringParameters.getNumOfClusters(), datasetProfile, clusteringParameters.getSelectedFeatures());
 		}		
 		throw new IllegalArgumentException(
 			String.format("%s clustering is not a supported clustering type.", clusteringParameters.getType()));

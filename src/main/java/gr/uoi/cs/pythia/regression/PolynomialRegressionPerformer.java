@@ -89,8 +89,6 @@ public class PolynomialRegressionPerformer extends GeneralRegression {
 	            dependentVariable, dependentVariableValues, RegressionType.POLYNOMIAL,
 	            slopes, intercept, correlations, pValues, meanSquaredError);
 
-	    // DEBUG print
-	    System.out.println(result);
 	    datasetProfile.addRegressionProfile(result);
 	    return result;
 	}
