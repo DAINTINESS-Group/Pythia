@@ -1,5 +1,5 @@
 <p align="center"> 
-    <img height=170 src="https://cdn.discordapp.com/attachments/326432556037832704/936299117766926406/logo3.png"/> 
+    <img height=170 src="https://github.com/DAINTINESS-Group/Pythia/blob/master/logo.png"/> 
 </p>
 
 ## <div align="center">Pythia</div>

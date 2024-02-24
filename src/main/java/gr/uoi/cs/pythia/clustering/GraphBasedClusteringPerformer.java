@@ -107,7 +107,7 @@ public class GraphBasedClusteringPerformer extends GeneralClusteringPerformer{
         // Convert the list of values to a DataFrame
         Dataset<Row> valuesDF = dataset.sqlContext().createDataFrame(
                 values.stream().map(RowFactory::create).collect(Collectors.toList()),
-                DataTypes.createStructType(List.of(DataTypes.createStructField(columnName, DataTypes.IntegerType, false)))
+                DataTypes.createStructType(Arrays.asList(DataTypes.createStructField(columnName, DataTypes.IntegerType, false)))
         );
 
         // Generate row numbers for joining
