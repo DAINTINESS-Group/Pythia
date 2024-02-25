@@ -1,5 +1,6 @@
 package gr.uoi.cs.pythia;
 
+import gr.uoi.cs.pythia.clustering.AllClusteringTests;
 import gr.uoi.cs.pythia.correlations.AllCorrelationsTests;
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
 import gr.uoi.cs.pythia.patterns.AllPatternTests;
@@ -24,6 +25,7 @@ import org.junit.runners.Suite.SuiteClasses;
         AllRegressionTests.class,
         AllReportTests.class,
         AllWriterTests.class,
-        AllHighlightsTests.class
+        AllHighlightsTests.class,
+        AllClusteringTests.class
 })
 public class AllTests {}

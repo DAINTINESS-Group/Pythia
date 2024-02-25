@@ -52,10 +52,10 @@ public class DataMiningCars {
     		Arrays.asList("tax"), "price", RegressionType.POLYNOMIAL, (double)3));
     datasetProfiler.declareRegressionRequest(regressionRequest);
     
-    //datasetProfiler.declareClusteringParameters(ClusteringType.KMEANS, 4,
-    //		Arrays.asList("manufacturer", "transmission", "fuelType"));
-    datasetProfiler.declareClusteringParameters(ClusteringType.DIVISIVE, 4,
+    datasetProfiler.declareClusteringParameters(ClusteringType.KMEANS, 4,
     		Arrays.asList("manufacturer", "transmission", "fuelType"));
+    //datasetProfiler.declareClusteringParameters(ClusteringType.DIVISIVE, 4,
+    //		Arrays.asList("manufacturer", "transmission", "fuelType"));
     //datasetProfiler.declareClusteringParameters(ClusteringType.GRAPH_BASED, 4,
     //		Arrays.asList("manufacturer", "transmission", "fuelType"));
     

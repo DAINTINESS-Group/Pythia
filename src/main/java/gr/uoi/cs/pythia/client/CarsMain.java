@@ -2,7 +2,6 @@ package gr.uoi.cs.pythia.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
@@ -13,14 +12,10 @@ import org.apache.spark.sql.types.StructType;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
-import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
-import gr.uoi.cs.pythia.regression.RegressionParameters;
-import gr.uoi.cs.pythia.regression.RegressionRequest;
-import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
-import gr.uoi.cs.pythia.model.regression.RegressionType;
+import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
