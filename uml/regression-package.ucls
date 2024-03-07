@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="gr.uoi.cs.pythia.regression.PolynomialRegressionPerformer" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/PolynomialRegressionPerformer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="330" x="221" y="485"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="gr.uoi.cs.pythia.regression.GeneralRegression" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/GeneralRegression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="829" x="471" y="277"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="gr.uoi.cs.pythia.regression.AutomatedRegressionPerformer" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/AutomatedRegressionPerformer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="322" x="593" y="489"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="gr.uoi.cs.pythia.regression.MultipleLinearRegressionPerformer" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/MultipleLinearRegressionPerformer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="360" x="950" y="488"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="gr.uoi.cs.pythia.regression.LinearRegressionPerformer" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/LinearRegressionPerformer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="296" x="1339" y="494"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" language="java" name="gr.uoi.cs.pythia.regression.IRegressionPerformer" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/IRegressionPerformer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="54" width="287" x="743" y="71"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="7" language="java" name="gr.uoi.cs.pythia.regression.RegressionParameters" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/RegressionParameters.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="55" width="349" x="1358" y="116"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="gr.uoi.cs.pythia.regression.RegressionPerformerFactory" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/RegressionPerformerFactory.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="456" x="658" y="767"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="gr.uoi.cs.pythia.regression.RegressionRequest" project="Pythia" 
+    file="/Pythia/src/main/java/gr/uoi/cs/pythia/regression/RegressionRequest.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="321" x="1323" y="339"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="11">    
+    <bendpoint x="102" y="790"/>    
+    <bendpoint x="111" y="104"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="12">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="13" name="regressionParameters">        
+        <position height="18" width="115" x="1573" y="1003"/>      
+      </attribute>      
+      <multiplicity id="14" minimum="0" maximum="2147483647">        
+        <position height="16" width="21" x="1582" y="897"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="15">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="16">    
+    <bendpoint x="1674" y="801"/>    
+    <bendpoint x="1674" y="300"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <realization id="17">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
+  <dependency id="18">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="20">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <generalization id="23">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

@@ -43,7 +43,7 @@ public class DataScienceSalariesMain {
     boolean shouldRunDecisionTrees = false;
     boolean shouldRunDominancePatterns = true;
     boolean shouldRunOutlierDetection = false;
-    boolean shouldRunRegression = false;
+    boolean shouldRunRegression = true;
     boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
