@@ -1,15 +1,9 @@
 package gr.uoi.cs.pythia.report;
 
-import java.io.IOException;
-import java.util.Arrays;
-
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.types.StructType;
-import org.junit.rules.ExternalResource;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
@@ -20,6 +14,12 @@ import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.types.StructType;
+import org.junit.rules.ExternalResource;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ReportResource extends ExternalResource {
 
@@ -28,6 +28,10 @@ public class ReportResource extends ExternalResource {
 
     public IDatasetProfiler getDatasetProfiler() {
         return datasetProfiler;
+    }
+
+    public DatasetProfile getModelProfile(){
+        return datasetProfiler.getDatasetProfile();
     }
 
     public String getDatasetPath() {

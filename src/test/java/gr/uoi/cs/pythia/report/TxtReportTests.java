@@ -1,13 +1,13 @@
 package gr.uoi.cs.pythia.report;
 
-import static org.junit.Assert.assertEquals;
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
-
-import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import static org.junit.Assert.assertEquals;
 
 public class TxtReportTests {
 
@@ -15,6 +15,10 @@ public class TxtReportTests {
   public void testProduceReportTxt() throws IOException {
     String reportPath = TestsUtilities.getResultsDir("report");
     File reportFile = new File(reportPath);
+    //Set TimestampNull
+    DatasetProfile modelProfile =  AllReportTests.reportResource.getModelProfile();
+    modelProfile.setTimestamp(null);
+
     AllReportTests.reportResource.getDatasetProfiler()
     	.generateReport(ReportGeneratorConstants.TXT_REPORT,
     			reportFile.getAbsolutePath());
@@ -22,8 +26,7 @@ public class TxtReportTests {
     String expectedStatisticalReport = TestsUtilities.getExpectedDatasetReport(
     		"people/expected_people_statistical_report.txt");
     String actualStatisticalReport = TestsUtilities.getTextFromFile(
-    		new File(reportPath + File.separator + "statistical_report.txt"))
-    		.replace(AllReportTests.reportResource.getDatasetPath(), "");
+    		new File(reportPath + File.separator + "statistical_report.txt"));
     assertEquals(expectedStatisticalReport, actualStatisticalReport);
     
     String expectedHighDominanceReport = TestsUtilities.getExpectedDatasetReport(

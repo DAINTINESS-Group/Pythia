@@ -12,10 +12,15 @@ import java.nio.file.Paths;
 
 public class TestsUtilities {
 
+    /*
     public static String getDatasetPath(String datasetName) {
         return new File(Resources.getResource("datasets/" + datasetName).getFile())
-                .getAbsolutePath();
+                .getPath();
+    }*/
+    public static String getDatasetPath(String datasetName) {
+        return "src/test/resources/datasets/" + datasetName;
     }
+
 
     public static String getExpectedDatasetReport(String filepath) throws IOException {
         URL url = Resources.getResource("expectedDatasetReports/" + filepath);

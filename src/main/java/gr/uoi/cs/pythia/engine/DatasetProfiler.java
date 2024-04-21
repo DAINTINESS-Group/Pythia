@@ -1,27 +1,7 @@
 package gr.uoi.cs.pythia.engine;
 
-import static org.apache.spark.sql.functions.expr;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataType;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
-
+import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.InfoManager;
+import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.SparkInfoCalculator;
 import gr.uoi.cs.pythia.clustering.ClusteringParameters;
 import gr.uoi.cs.pythia.clustering.ClusteringPerformerFactory;
 import gr.uoi.cs.pythia.clustering.IClusteringPerformer;
@@ -32,8 +12,8 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
-import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
+import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
@@ -56,6 +36,28 @@ import gr.uoi.cs.pythia.report.ReportGeneratorFactory;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.writer.DatasetWriterFactory;
 import gr.uoi.cs.pythia.writer.IDatasetWriter;
+import org.apache.log4j.Logger;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.types.DataType;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.apache.spark.sql.functions.expr;
 
 public class DatasetProfiler implements IDatasetProfiler {
 
@@ -75,20 +77,23 @@ public class DatasetProfiler implements IDatasetProfiler {
 	
 	//package-private for the moment
 	List<HolisticHighlight> holisticHighlights;
-	
+	private final SparkSession sparkSession;
+
+
 	public DatasetProfiler() {
 		SparkConfig sparkConfig = new SparkConfig();
-		this.dataFrameReaderFactory = new IDatasetReaderFactory(
-				SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster())
-						.config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate());
+		sparkSession = SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster()).config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate();
+		this.dataFrameReaderFactory = new IDatasetReaderFactory(sparkSession);
 		this.hasComputedDescriptiveStats = false;
 		this.hasComputedAllPairsCorrelations = false;
 	}
 
 	@Override
 	public void registerDataset(String alias, String path, StructType schema) throws AnalysisException {
+
+		Timestamp executionDateTime = new Timestamp(sparkSession.sparkContext().startTime());
 		Instant start = Instant.now();
-		
+
 		dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
 
 		List<Column> columns = new ArrayList<>();
@@ -96,12 +101,25 @@ public class DatasetProfiler implements IDatasetProfiler {
 		for (int i = 0; i < fields.length; ++i) {
 			columns.add(new Column(i, fields[i].name(), fields[i].dataType().toString()));
 		}
-		datasetProfile = new DatasetProfile(alias, path, columns);
+		datasetProfile = new DatasetProfile(alias, path, columns,executionDateTime);
 		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
-		
+		calculateGeneralInfoDatasetProfile(path);
+
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Duration of registerDataset: %s / %sms", duration, duration.toMillis()));
+
+		//TODO PRINT add-ons- Trial!!
+		logger.info(String.format("DateTime of Profiling %s",datasetProfile.getTimestamp())); // e.g 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profilling 2024-04-18 19:31:45.52
+		logger.info(String.format("numOfLines: %d",datasetProfile.getNumberOfLines() ));
+		logger.info(String.format("fileSize in Mb: %s", datasetProfile.getFileSize()));
+
+	}
+	private void calculateGeneralInfoDatasetProfile(String pathFile){
+		//Todo ??Calculate Time Executation???
+		SparkInfoCalculator calculator = new SparkInfoCalculator(dataset,sparkSession,pathFile);
+		InfoManager manager = new InfoManager(datasetProfile,calculator);
+		manager.runAllCalculations();
 	}
 
 	@Override

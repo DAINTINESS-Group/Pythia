@@ -1,17 +1,5 @@
 package gr.uoi.cs.pythia.client;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-
-import org.apache.log4j.Logger;
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.Metadata;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -19,6 +7,17 @@ import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
+import org.apache.log4j.Logger;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.types.DataTypes;
+import org.apache.spark.sql.types.Metadata;
+import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 //This class contains a main method specifically set up for the 'adult' dataset.
 //Used to assist with development and experimental evaluation.
@@ -43,6 +42,8 @@ public class AdultMain {
 	            new String[] {"hours_per_week"},
 	            new String[] {"native_country", "occupation", "gender"}
 	    );
+		//Danger!!
+		datasetProfiler.declareOutlierParameters(null,0.3); // Ειναι null to threashold !!
 
 	    boolean shouldRunDescriptiveStats = true;
 	    boolean shouldRunHistograms = true;
