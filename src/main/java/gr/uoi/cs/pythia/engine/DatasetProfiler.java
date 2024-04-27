@@ -11,7 +11,7 @@ import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
 import gr.uoi.cs.pythia.generalinfo.InfoManager;
-import gr.uoi.cs.pythia.generalinfo.SparkInfoCalculator;
+import gr.uoi.cs.pythia.generalinfo.SparkBasicInfoCalculator;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
@@ -117,7 +117,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	}
 	private void calculateGeneralInfoDatasetProfile(String pathFile){
 		//Todo ??Calculate Time Executation???
-		SparkInfoCalculator calculator = new SparkInfoCalculator(dataset,sparkSession,pathFile);
+		SparkBasicInfoCalculator calculator = new SparkBasicInfoCalculator(dataset,sparkSession,pathFile);
 		InfoManager manager = new InfoManager(datasetProfile,calculator);
 		manager.runAllCalculations();
 	}

@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-public class SparkInfoCalculator implements IBasicInfoCalculator {
+public class SparkBasicInfoCalculator implements IBasicInfoCalculator {
 
     private final SparkSession session;
     private final Dataset<Row> dataset;
@@ -24,7 +24,7 @@ public class SparkInfoCalculator implements IBasicInfoCalculator {
     public static final long ERROR_VALUE_NUMBER_OF_LINES = -1;
 
 
-    public SparkInfoCalculator(Dataset<Row> dataset, SparkSession session, String pathFile){
+    public SparkBasicInfoCalculator(Dataset<Row> dataset, SparkSession session, String pathFile){
         this.dataset = dataset;
         this.session = session;
         this.pathFile = pathFile;

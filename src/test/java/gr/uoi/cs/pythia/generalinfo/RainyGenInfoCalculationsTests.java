@@ -11,7 +11,7 @@ import static org.junit.Assert.assertNotNull;
 public class RainyGenInfoCalculationsTests {
 
 
-    private SparkInfoCalculator sparkInfoCalculator;
+    private SparkBasicInfoCalculator sparkBasicInfoCalculator;
 
 
     /**
@@ -37,10 +37,10 @@ public class RainyGenInfoCalculationsTests {
         Dataset<Row> nullDataset = null;
         SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkInfoCalculator = new SparkInfoCalculator(nullDataset,session,datasetPath);
-        sparkInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = sparkInfoCalculator.getNumberOfLines();
-        long expectedLines = SparkInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
+        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(nullDataset,session,datasetPath);
+        sparkBasicInfoCalculator.calculateNumberOfLinesInDataset();
+        long calculatedlines = sparkBasicInfoCalculator.getNumberOfLines();
+        long expectedLines = SparkBasicInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
         assertNotNull(calculatedlines);
         assertEquals(expectedLines, calculatedlines);
         //System.out.println(basicInfoSparkManager.getNumberOfLines());
@@ -69,9 +69,9 @@ public class RainyGenInfoCalculationsTests {
         SparkSession sparkSession = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> emptyDataset = sparkSession.emptyDataFrame();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkInfoCalculator = new SparkInfoCalculator(emptyDataset,sparkSession,datasetPath);
-        sparkInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = sparkInfoCalculator.getNumberOfLines();
+        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,sparkSession,datasetPath);
+        sparkBasicInfoCalculator.calculateNumberOfLinesInDataset();
+        long calculatedlines = sparkBasicInfoCalculator.getNumberOfLines();
         long expectedLines = 0;
         assertNotNull(calculatedlines);
         assertEquals(expectedLines, calculatedlines);
@@ -103,10 +103,10 @@ public class RainyGenInfoCalculationsTests {
        // SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkInfoCalculator =  new SparkInfoCalculator(dataset,sessionInManager,datasetPath);
-        sparkInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = sparkInfoCalculator.getFileSize();
-        Double expectedfileSize = SparkInfoCalculator.ERROR_VALUE_FILE_SIZE;
+        sparkBasicInfoCalculator =  new SparkBasicInfoCalculator(dataset,sessionInManager,datasetPath);
+        sparkBasicInfoCalculator.calculateFileSize();
+        Double calculatedfileSize = sparkBasicInfoCalculator.getFileSize();
+        Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
         assertEquals(expectedfileSize, calculatedfileSize);
 
@@ -134,10 +134,10 @@ public class RainyGenInfoCalculationsTests {
         SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
         String datasetPath = null;
-        sparkInfoCalculator = new SparkInfoCalculator(dataset,session,datasetPath);
-        sparkInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = sparkInfoCalculator.getFileSize();
-        Double expectedfileSize = SparkInfoCalculator.ERROR_VALUE_FILE_SIZE;
+        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
+        sparkBasicInfoCalculator.calculateFileSize();
+        Double calculatedfileSize = sparkBasicInfoCalculator.getFileSize();
+        Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
         assertEquals(expectedfileSize, calculatedfileSize);
 
