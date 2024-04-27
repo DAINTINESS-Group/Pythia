@@ -10,7 +10,6 @@ import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.regression.RegressionRequest;
 

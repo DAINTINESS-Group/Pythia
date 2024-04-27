@@ -3,8 +3,6 @@ package gr.uoi.cs.pythia.regression;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.commons.math3.fitting.WeightedObservedPoints;
 import org.apache.commons.math3.fitting.PolynomialCurveFitter;
 import org.apache.spark.sql.Dataset;

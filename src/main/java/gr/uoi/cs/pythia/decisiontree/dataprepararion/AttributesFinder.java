@@ -7,7 +7,6 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructField;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

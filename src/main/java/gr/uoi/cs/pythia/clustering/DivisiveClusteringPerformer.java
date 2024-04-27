@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.spark.ml.clustering.BisectingKMeans;
 import org.apache.spark.ml.clustering.BisectingKMeansModel;
-import org.apache.spark.ml.clustering.BisectingKMeansSummary;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 

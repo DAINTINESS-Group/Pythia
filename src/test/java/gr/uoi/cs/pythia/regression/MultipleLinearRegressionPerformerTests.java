@@ -2,7 +2,6 @@ package gr.uoi.cs.pythia.regression;
 
 import static org.junit.Assert.*;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

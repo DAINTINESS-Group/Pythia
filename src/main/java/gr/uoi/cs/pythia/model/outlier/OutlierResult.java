@@ -16,6 +16,10 @@ public class OutlierResult {
 		this.position = position;
 	}
 
+	public OutlierType getOutlierType() {
+		return outlierType;
+	}
+
 	public String getColumnName() {
 		return columnName;
 	}

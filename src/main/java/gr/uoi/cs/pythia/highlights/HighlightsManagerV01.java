@@ -160,7 +160,7 @@ public class HighlightsManagerV01 implements HighlightsManagerInterface {
 				}
 				Double meanValue = Double.MIN_VALUE;
 				try{ 
-					countValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMean());
+					meanValue = Double.parseDouble(c.getDescriptiveStatisticsProfile().getMean());
 				}catch(NumberFormatException nfe) {
 					;
 				}

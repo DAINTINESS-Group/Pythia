@@ -2,19 +2,10 @@ package gr.uoi.cs.pythia.clustering;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.functions;
-
 import org.apache.spark.ml.clustering.KMeansModel;
-import org.apache.spark.ml.clustering.KMeansSummary;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.spark.ml.clustering.KMeans;
-import org.apache.spark.ml.feature.StringIndexer;
-import org.apache.spark.ml.feature.VectorAssembler;
-
 import gr.uoi.cs.pythia.model.ClusteringProfile;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;

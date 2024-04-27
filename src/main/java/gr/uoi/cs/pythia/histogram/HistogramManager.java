@@ -13,7 +13,6 @@ import org.apache.spark.sql.Row;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +57,8 @@ public class HistogramManager {
                 .collect(Collectors.toList());
     }
 
-    private void createDirectory(Path path) throws IOException {
+    @SuppressWarnings("unused")
+	private void createDirectory(Path path) throws IOException {
         Files.createDirectories(path);
     }
 }

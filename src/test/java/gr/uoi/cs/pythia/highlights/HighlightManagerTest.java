@@ -3,21 +3,21 @@ package gr.uoi.cs.pythia.highlights;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
+//import org.apache.spark.sql.Dataset;
+//import org.apache.spark.sql.Row;
 import org.junit.Test;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
 import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
-import gr.uoi.cs.pythia.patterns.AllPatternTests;
+//import gr.uoi.cs.pythia.patterns.AllPatternTests;
 
 
 public class HighlightManagerTest {
 
 	@Test
     public void fullHHProductionHappyPath() {
-		Dataset<Row> dataset = AllPatternTests.patternsResource.getDataset();
+		//Dataset<Row> dataset = AllPatternTests.patternsResource.getDataset();
 		DatasetProfile datasetProfile = AllHighlightsTests.highlightsResource.getDatasetProfile();
 		HighlightsProfile highlightProfile = datasetProfile.getHighlightsProfile();
 		
@@ -56,6 +56,7 @@ public class HighlightManagerTest {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private void report(List<HolisticHighlight> list, String title) {
 		System.out.println("\n ####################\t" + title + "\t#################### \n");
 		for(HolisticHighlight hh: list) {

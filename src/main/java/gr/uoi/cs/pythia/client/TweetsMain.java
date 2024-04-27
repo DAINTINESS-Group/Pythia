@@ -18,7 +18,7 @@ import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
 import gr.uoi.cs.pythia.labeling.Rule;
 import gr.uoi.cs.pythia.labeling.RuleSet;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
+//import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 import gr.uoi.cs.pythia.util.HighlightParameters;

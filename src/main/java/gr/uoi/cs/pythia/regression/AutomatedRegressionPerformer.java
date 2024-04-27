@@ -3,14 +3,8 @@ package gr.uoi.cs.pythia.regression;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-
-import org.apache.commons.math3.distribution.TDistribution;
-import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
-import org.apache.commons.math3.stat.inference.TestUtils;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;

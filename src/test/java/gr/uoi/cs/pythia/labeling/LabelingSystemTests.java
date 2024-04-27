@@ -4,9 +4,6 @@ import static org.apache.spark.sql.functions.expr;
 import static org.junit.Assert.*;
 
 import gr.uoi.cs.pythia.config.SparkConfig;
-import gr.uoi.cs.pythia.labeling.LabelingSystemConstants;
-import gr.uoi.cs.pythia.labeling.Rule;
-import gr.uoi.cs.pythia.labeling.RuleSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;

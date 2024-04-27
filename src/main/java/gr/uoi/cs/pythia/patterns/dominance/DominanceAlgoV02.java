@@ -454,7 +454,8 @@ public class DominanceAlgoV02 implements IDominanceAlgo {
         return EMPTY;
     }
 
-    private void debugPrintList(String title, List<Row> list)  {
+    @SuppressWarnings("unused")
+	private void debugPrintList(String title, List<Row> list)  {
         String str = title;
         for (Row row : list) {
             for (int i = 0; i < row.length(); i++) {

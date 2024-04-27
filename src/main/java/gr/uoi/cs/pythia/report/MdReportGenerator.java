@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 
 import gr.uoi.cs.pythia.clustering.Cluster;

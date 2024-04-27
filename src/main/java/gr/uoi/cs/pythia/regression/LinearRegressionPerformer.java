@@ -2,8 +2,6 @@ package gr.uoi.cs.pythia.regression;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.commons.math3.stat.regression.SimpleRegression;

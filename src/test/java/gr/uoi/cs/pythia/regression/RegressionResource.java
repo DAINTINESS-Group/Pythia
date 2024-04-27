@@ -2,8 +2,6 @@ package gr.uoi.cs.pythia.regression;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.Arrays;
-
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -15,7 +13,6 @@ import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
