@@ -1,9 +1,9 @@
 package gr.uoi.cs.pythia;
 
-import gr.uoi.cs.pythia.GenInfo.AllGenInfoTests;
 import gr.uoi.cs.pythia.clustering.AllClusteringTests;
 import gr.uoi.cs.pythia.correlations.AllCorrelationsTests;
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
+import gr.uoi.cs.pythia.generalinfo.AllGenInfoTests;
 import gr.uoi.cs.pythia.highlights.AllHighlightsTests;
 import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.labeling.LabelingSystemTests;

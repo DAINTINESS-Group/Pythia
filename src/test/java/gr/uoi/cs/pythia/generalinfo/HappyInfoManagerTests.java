@@ -1,7 +1,5 @@
-package gr.uoi.cs.pythia.GenInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.IBasicInfoCalculator;
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.InfoManager;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import org.junit.Before;
 import org.junit.Test;

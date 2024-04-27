@@ -1,4 +1,5 @@
-package gr.uoi.cs.pythia.DasatetProfileGeneralInfo;
+package gr.uoi.cs.pythia.generalinfo;
+
 import gr.uoi.cs.pythia.model.DatasetProfile;
 
 public class InfoManager {

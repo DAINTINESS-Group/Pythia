@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.DasatetProfileGeneralInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
 /**
  * This interface defines methods for calculating basic information

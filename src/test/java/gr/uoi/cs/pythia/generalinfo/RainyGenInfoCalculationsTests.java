@@ -1,6 +1,5 @@
-package gr.uoi.cs.pythia.GenInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.SparkInfoCalculator;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -43,7 +42,7 @@ public class RainyGenInfoCalculationsTests {
         long calculatedlines = sparkInfoCalculator.getNumberOfLines();
         long expectedLines = SparkInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
         assertNotNull(calculatedlines);
-        assertEquals(calculatedlines,expectedLines);
+        assertEquals(expectedLines, calculatedlines);
         //System.out.println(basicInfoSparkManager.getNumberOfLines());
     }
     /**
@@ -75,7 +74,7 @@ public class RainyGenInfoCalculationsTests {
         long calculatedlines = sparkInfoCalculator.getNumberOfLines();
         long expectedLines = 0;
         assertNotNull(calculatedlines);
-        assertEquals(calculatedlines,expectedLines);
+        assertEquals(expectedLines, calculatedlines);
 
     }
     /**
@@ -101,7 +100,7 @@ public class RainyGenInfoCalculationsTests {
     public void calculateFileSizeRainyV1(){
 
         SparkSession sessionInManager = null;
-        SparkSession session = AllGenInfoTests.genInfoResource.getSession();
+       // SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
         sparkInfoCalculator =  new SparkInfoCalculator(dataset,sessionInManager,datasetPath);
@@ -109,7 +108,7 @@ public class RainyGenInfoCalculationsTests {
         Double calculatedfileSize = sparkInfoCalculator.getFileSize();
         Double expectedfileSize = SparkInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
-        assertEquals(calculatedfileSize,expectedfileSize);
+        assertEquals(expectedfileSize, calculatedfileSize);
 
     }
     /**
@@ -140,7 +139,7 @@ public class RainyGenInfoCalculationsTests {
         Double calculatedfileSize = sparkInfoCalculator.getFileSize();
         Double expectedfileSize = SparkInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
-        assertEquals(calculatedfileSize,expectedfileSize);
+        assertEquals(expectedfileSize, calculatedfileSize);
 
     }
 

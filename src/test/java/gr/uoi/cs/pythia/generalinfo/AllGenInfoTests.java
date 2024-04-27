@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.GenInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;

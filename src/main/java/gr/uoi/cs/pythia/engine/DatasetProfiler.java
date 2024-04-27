@@ -1,7 +1,5 @@
 package gr.uoi.cs.pythia.engine;
 
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.InfoManager;
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.SparkInfoCalculator;
 import gr.uoi.cs.pythia.clustering.ClusteringParameters;
 import gr.uoi.cs.pythia.clustering.ClusteringPerformerFactory;
 import gr.uoi.cs.pythia.clustering.IClusteringPerformer;
@@ -12,6 +10,8 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
+import gr.uoi.cs.pythia.generalinfo.InfoManager;
+import gr.uoi.cs.pythia.generalinfo.SparkInfoCalculator;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.histogram.HistogramManager;

@@ -1,6 +1,5 @@
-package gr.uoi.cs.pythia.GenInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.SparkInfoCalculator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -63,7 +62,7 @@ public class HappyGenInfoCalculationsTests {
         long calculatedlines = sparkInfoCalculator.getNumberOfLines();
         long expectedLines = 108539;
         assertNotNull(calculatedlines);
-        assertEquals(calculatedlines,expectedLines);
+        assertEquals(expectedLines, calculatedlines);
         //System.out.println(basicInfoSparkManager.getNumberOfLines());
     }
 
@@ -91,7 +90,7 @@ public class HappyGenInfoCalculationsTests {
         Double calculatedFileSize = sparkInfoCalculator.getFileSize();
         assertNotNull(calculatedFileSize);
         Double expectedFileSizeInMb = 5.83;
-        assertEquals(calculatedFileSize,expectedFileSizeInMb);
+        assertEquals(expectedFileSizeInMb, calculatedFileSize);
     }
 
 }

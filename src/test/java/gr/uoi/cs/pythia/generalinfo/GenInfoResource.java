@@ -1,6 +1,5 @@
-package gr.uoi.cs.pythia.GenInfo;
+package gr.uoi.cs.pythia.generalinfo;
 
-import gr.uoi.cs.pythia.DasatetProfileGeneralInfo.SparkInfoCalculator;
 import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.reader.IDatasetReaderFactory;
 import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
