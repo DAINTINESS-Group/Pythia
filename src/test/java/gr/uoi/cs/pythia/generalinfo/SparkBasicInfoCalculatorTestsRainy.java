@@ -8,10 +8,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class RainyGenInfoCalculationsTests {
+public class SparkBasicInfoCalculatorTestsRainy {
 
 
-    private SparkBasicInfoCalculator sparkBasicInfoCalculator;
+    private IBasicInfoCalculator basicInfoCalculator;
 
 
     /**
@@ -37,9 +37,9 @@ public class RainyGenInfoCalculationsTests {
         Dataset<Row> nullDataset = null;
         SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(nullDataset,session,datasetPath);
-        sparkBasicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = sparkBasicInfoCalculator.getNumberOfLines();
+        basicInfoCalculator = new SparkBasicInfoCalculator(nullDataset,session,datasetPath);
+        basicInfoCalculator.calculateNumberOfLinesInDataset();
+        long calculatedlines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = SparkBasicInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
         assertNotNull(calculatedlines);
         assertEquals(expectedLines, calculatedlines);
@@ -69,9 +69,9 @@ public class RainyGenInfoCalculationsTests {
         SparkSession sparkSession = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> emptyDataset = sparkSession.emptyDataFrame();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,sparkSession,datasetPath);
-        sparkBasicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = sparkBasicInfoCalculator.getNumberOfLines();
+        basicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,sparkSession,datasetPath);
+        basicInfoCalculator.calculateNumberOfLinesInDataset();
+        long calculatedlines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 0;
         assertNotNull(calculatedlines);
         assertEquals(expectedLines, calculatedlines);
@@ -103,9 +103,9 @@ public class RainyGenInfoCalculationsTests {
        // SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        sparkBasicInfoCalculator =  new SparkBasicInfoCalculator(dataset,sessionInManager,datasetPath);
-        sparkBasicInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = sparkBasicInfoCalculator.getFileSize();
+        basicInfoCalculator =  new SparkBasicInfoCalculator(dataset,sessionInManager,datasetPath);
+        basicInfoCalculator.calculateFileSize();
+        Double calculatedfileSize = basicInfoCalculator.getFileSize();
         Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
         assertEquals(expectedfileSize, calculatedfileSize);
@@ -134,9 +134,9 @@ public class RainyGenInfoCalculationsTests {
         SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
         String datasetPath = null;
-        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
-        sparkBasicInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = sparkBasicInfoCalculator.getFileSize();
+        basicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
+        basicInfoCalculator.calculateFileSize();
+        Double calculatedfileSize = basicInfoCalculator.getFileSize();
         Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(calculatedfileSize);
         assertEquals(expectedfileSize, calculatedfileSize);

@@ -16,8 +16,8 @@ public class GenInfoResource extends ExternalResource {
     private Dataset<Row> dataset;
     private SparkSession session;
     private String datasetPath;
-    private SparkBasicInfoCalculator sparkBasicInfoCalculator;
-
+    private IBasicInfoCalculator basicInfoCalculator;
+    private IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
 
 
     @Override
@@ -30,7 +30,8 @@ public class GenInfoResource extends ExternalResource {
     }
 
     private void createBasicInfoSparkManager() {
-        sparkBasicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
+        basicInfoCalculatorFactory = new IBasicInfoCalculatorFactory();
+        basicInfoCalculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,session,datasetPath);
     }
 
     private void initializeSparkSession() {
@@ -56,8 +57,8 @@ public class GenInfoResource extends ExternalResource {
     public String getDatasetPath() {
         return datasetPath;
     }
-    public SparkBasicInfoCalculator getBasicInfoSparkManager() {
-        return sparkBasicInfoCalculator;
+    public IBasicInfoCalculator getBasicInfoSparkManager() {
+        return basicInfoCalculator;
     }
 
 

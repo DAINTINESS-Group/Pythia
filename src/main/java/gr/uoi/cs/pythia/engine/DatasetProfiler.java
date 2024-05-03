@@ -10,8 +10,8 @@ import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
-import gr.uoi.cs.pythia.generalinfo.InfoManager;
-import gr.uoi.cs.pythia.generalinfo.SparkBasicInfoCalculator;
+import gr.uoi.cs.pythia.generalinfo.IBasicInfoCalculator;
+import gr.uoi.cs.pythia.generalinfo.IBasicInfoCalculatorFactory;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
@@ -63,6 +63,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 
 	private final Logger logger = Logger.getLogger(DatasetProfiler.class);
 	private final IDatasetReaderFactory dataFrameReaderFactory;
+	private IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
 	private DatasetProfile datasetProfile;
 	private Dataset<Row> dataset;
 	private DominanceParameters dominanceParameters;
@@ -84,6 +85,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		SparkConfig sparkConfig = new SparkConfig();
 		sparkSession = SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster()).config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(sparkSession);
+		this.basicInfoCalculatorFactory = new IBasicInfoCalculatorFactory();
 		this.hasComputedDescriptiveStats = false;
 		this.hasComputedAllPairsCorrelations = false;
 	}
@@ -101,9 +103,11 @@ public class DatasetProfiler implements IDatasetProfiler {
 		for (int i = 0; i < fields.length; ++i) {
 			columns.add(new Column(i, fields[i].name(), fields[i].dataType().toString()));
 		}
-		datasetProfile = new DatasetProfile(alias, path, columns,executionDateTime);
+		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,sparkSession,path);
+		long numberOfLines = calculator.getNumberOfLines();
+		Double fileSize = calculator.getFileSize();
+		datasetProfile = new DatasetProfile(alias, path, columns,executionDateTime,numberOfLines,fileSize);
 		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
-		calculateGeneralInfoDatasetProfile(path);
 
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
@@ -114,12 +118,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("numOfLines: %d",datasetProfile.getNumberOfLines() ));
 		logger.info(String.format("fileSize in Mb: %s", datasetProfile.getFileSize()));
 
-	}
-	private void calculateGeneralInfoDatasetProfile(String pathFile){
-		//Todo ??Calculate Time Executation???
-		SparkBasicInfoCalculator calculator = new SparkBasicInfoCalculator(dataset,sparkSession,pathFile);
-		InfoManager manager = new InfoManager(datasetProfile,calculator);
-		manager.runAllCalculations();
 	}
 
 	@Override

@@ -5,13 +5,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-public class HappyGenInfoCalculationsTests {
+public class SparkBasicInfoCalculatorTestsHappy {
 
-    private SparkBasicInfoCalculator sparkBasicInfoCalculator;
+    private IBasicInfoCalculator basicInfoCalculator;
 
     @Before
     public void init() {
-         sparkBasicInfoCalculator = AllGenInfoTests.genInfoResource.getBasicInfoSparkManager();
+         basicInfoCalculator = AllGenInfoTests.genInfoResource.getBasicInfoSparkManager();
     }
 
 
@@ -58,8 +58,8 @@ public class HappyGenInfoCalculationsTests {
 
     @Test
     public void calculateNumberOfLinesInDatasetHappyV1(){
-        sparkBasicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = sparkBasicInfoCalculator.getNumberOfLines();
+        basicInfoCalculator.calculateNumberOfLinesInDataset();
+        long calculatedlines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 108539;
         assertNotNull(calculatedlines);
         assertEquals(expectedLines, calculatedlines);
@@ -86,8 +86,8 @@ public class HappyGenInfoCalculationsTests {
      */
     @Test
     public void calculateFileSizeHappyV1(){
-        sparkBasicInfoCalculator.calculateFileSize();
-        Double calculatedFileSize = sparkBasicInfoCalculator.getFileSize();
+        basicInfoCalculator.calculateFileSize();
+        Double calculatedFileSize = basicInfoCalculator.getFileSize();
         assertNotNull(calculatedFileSize);
         Double expectedFileSizeInMb = 5.83;
         assertEquals(expectedFileSizeInMb, calculatedFileSize);

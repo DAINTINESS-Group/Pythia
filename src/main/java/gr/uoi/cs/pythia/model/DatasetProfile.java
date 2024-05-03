@@ -32,11 +32,13 @@ public class DatasetProfile {
   private HighlightsProfile highlightsProfile;
 
 
-  public DatasetProfile(String alias, String path, List<Column> columns, Timestamp timeStamp) {
+  public DatasetProfile(String alias, String path, List<Column> columns, Timestamp timeStamp, long numberOfLines,Double fileSize) {
     this.alias = alias;
     this.path = path;
     this.columns = columns;
     this.timestamp = timeStamp;
+    this.numberOfLines = numberOfLines;
+    this.fileSize = fileSize;
     this.patternsProfile = new PatternsProfile();
     this.regressionProfiles = new ArrayList<RegressionProfile>();
     this.highlightsProfile = null;
