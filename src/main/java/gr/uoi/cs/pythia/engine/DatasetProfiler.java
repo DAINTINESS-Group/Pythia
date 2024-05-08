@@ -66,7 +66,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private final Logger logger = Logger.getLogger(DatasetProfiler.class);
 	private final IDatasetReaderFactory dataFrameReaderFactory;
 	private IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
-	private CardinalitiesCalculatorFactory cardinalitiesCaclulatorFactory;
+	private final CardinalitiesCalculatorFactory cardinalitiesCaclulatorFactory;
 	private DatasetProfile datasetProfile;
 	private Dataset<Row> dataset;
 	private DominanceParameters dominanceParameters;

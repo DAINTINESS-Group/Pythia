@@ -20,9 +20,9 @@ public class DatasetProfile {
    * - fileSize: Represents the size of the file in bytes.
    * - timestamp: Represents the timestamp indicating when the profile was created.
    */
-  private long numberOfLines;
-  private Double fileSize;
-  private Timestamp timestamp;
+  private final long numberOfLines;
+  private final Double fileSize;
+  private final Timestamp timestamp;
 
 
   private final PatternsProfile patternsProfile;
@@ -40,7 +40,7 @@ public class DatasetProfile {
     this.numberOfLines = numberOfLines;
     this.fileSize = fileSize;
     this.patternsProfile = new PatternsProfile();
-    this.regressionProfiles = new ArrayList<RegressionProfile>();
+    this.regressionProfiles = new ArrayList<>();
     this.highlightsProfile = null;
   }
 
@@ -115,9 +115,7 @@ public class DatasetProfile {
     return timestamp;
   }
 
-  public void setTimestamp(Timestamp timestamp) {
-    this.timestamp = timestamp;
-  }
+
 
   @Override
   public String toString() {
