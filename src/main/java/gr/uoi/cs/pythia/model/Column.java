@@ -10,6 +10,7 @@ public class Column {
   private CorrelationsProfile correlationsProfile;
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
   private Histogram histogram;
+  private CardinalitiesProfile cardinalitiesProfile;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -49,6 +50,10 @@ public class Column {
     this.histogram = histogram;
   }
 
+  public void setCardinalitiesProfile(CardinalitiesProfile cardinalitiesProfile) {
+    this.cardinalitiesProfile = cardinalitiesProfile;
+  }
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
@@ -58,6 +63,11 @@ public class Column {
     stringBuilder.append(String.format("name: %s\n", name));
     stringBuilder.append(String.format("datatype: %s\n", datatype));
     stringBuilder.append("\n");
+
+    if(cardinalitiesProfile != null) {
+      stringBuilder.append(String.format("CardinalitiesProfile:\n%s\n", cardinalitiesProfile.toString()));
+      stringBuilder.append("\n");
+    }
 
     if (descriptiveStatisticsProfile != null) {
       stringBuilder.append("DescriptiveStatisticsProfile:\n");

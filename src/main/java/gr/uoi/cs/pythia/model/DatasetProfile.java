@@ -115,14 +115,6 @@ public class DatasetProfile {
     return timestamp;
   }
 
-  public void setNumberOfLines(long numberOfLines) {
-    this.numberOfLines = numberOfLines;
-  }
-
-  public void setFileSize(Double fileSize) {
-    this.fileSize = fileSize;
-  }
-
   public void setTimestamp(Timestamp timestamp) {
     this.timestamp = timestamp;
   }

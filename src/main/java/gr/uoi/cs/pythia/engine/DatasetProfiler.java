@@ -1,5 +1,7 @@
 package gr.uoi.cs.pythia.engine;
 
+import gr.uoi.cs.pythia.cardinalities.CardinalitiesCalculatorFactory;
+import gr.uoi.cs.pythia.cardinalities.ICardinalitiesCalculator;
 import gr.uoi.cs.pythia.clustering.ClusteringParameters;
 import gr.uoi.cs.pythia.clustering.ClusteringPerformerFactory;
 import gr.uoi.cs.pythia.clustering.IClusteringPerformer;
@@ -64,6 +66,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private final Logger logger = Logger.getLogger(DatasetProfiler.class);
 	private final IDatasetReaderFactory dataFrameReaderFactory;
 	private IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
+	private CardinalitiesCalculatorFactory cardinalitiesCaclulatorFactory;
 	private DatasetProfile datasetProfile;
 	private Dataset<Row> dataset;
 	private DominanceParameters dominanceParameters;
@@ -86,6 +89,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		sparkSession = SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster()).config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(sparkSession);
 		this.basicInfoCalculatorFactory = new IBasicInfoCalculatorFactory();
+		this.cardinalitiesCaclulatorFactory = new CardinalitiesCalculatorFactory();
 		this.hasComputedDescriptiveStats = false;
 		this.hasComputedAllPairsCorrelations = false;
 	}
@@ -101,7 +105,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		List<Column> columns = new ArrayList<>();
 		StructField[] fields = dataset.schema().fields();
 		for (int i = 0; i < fields.length; ++i) {
-			columns.add(new Column(i, fields[i].name(), fields[i].dataType().toString()));
+			String columnName = fields[i].name();
+			String dataType = fields[i].dataType().toString();
+			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCaclulatorFactory.createCardinalitiesCalculator(dataset,columnName);
+			Column column = new Column(i, columnName, dataType);
+			column.setCardinalitiesProfile(cardinalitiesCalculator.createCardinalitiesProfile());
+			columns.add(column);
 		}
 		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,sparkSession,path);
 		long numberOfLines = calculator.getNumberOfLines();
