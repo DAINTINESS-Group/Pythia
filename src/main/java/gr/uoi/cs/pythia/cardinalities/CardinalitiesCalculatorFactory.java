@@ -11,7 +11,7 @@ public class CardinalitiesCalculatorFactory {
     public ICardinalitiesCalculator createCardinalitiesCalculator(Dataset<Row> dataset,String columnName){
         cardinalitiesCalculator= new SparkCardinalitiesCalculator(dataset,columnName);
         executeCalculations();
-        return new SparkCardinalitiesCalculator(dataset,columnName);
+        return cardinalitiesCalculator;
     }
 
 
