@@ -22,7 +22,7 @@ public class DatasetProfile {
    */
   private final long numberOfLines;
   private final Double fileSize;
-  private final Timestamp timestamp;
+  private Timestamp timestamp;
 
 
   private final PatternsProfile patternsProfile;
@@ -115,6 +115,9 @@ public class DatasetProfile {
     return timestamp;
   }
 
+  public void setTimestamp(Timestamp timestamp) {
+    this.timestamp = timestamp;
+  }
 
 
   @Override
@@ -131,6 +134,7 @@ public class DatasetProfile {
             "Timestamp: " + timestamp + "\n\n" +
             "Column Profiles:\n" + stringBuilder;
   }
+
 
 
 }
