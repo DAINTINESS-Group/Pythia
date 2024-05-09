@@ -13,7 +13,7 @@ name: name
 datatype: StringType
 
 CardinalitiesProfile:
-numberOfDistinctValues: 0
+numberOfDistinctValues: 3
 numberOfNullValues: 0
 
 DescriptiveStatisticsProfile:
@@ -31,7 +31,7 @@ name: age
 datatype: IntegerType
 
 CardinalitiesProfile:
-numberOfDistinctValues: 0
+numberOfDistinctValues: 3
 numberOfNullValues: 0
 
 DescriptiveStatisticsProfile:
@@ -64,7 +64,7 @@ name: money
 datatype: IntegerType
 
 CardinalitiesProfile:
-numberOfDistinctValues: 0
+numberOfDistinctValues: 3
 numberOfNullValues: 0
 
 DescriptiveStatisticsProfile:

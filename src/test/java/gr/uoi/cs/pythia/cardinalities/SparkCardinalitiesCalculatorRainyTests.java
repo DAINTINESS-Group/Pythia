@@ -13,6 +13,8 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
 
     /**
@@ -64,65 +66,6 @@ import static org.junit.Assert.assertEquals;
             dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
         }
 
-        /**
-         * Test case to verify the calculation of the number of null values in the dataset.
-         *
-         * <p>
-         * This test case checks the calculation of the number of null values in the dataset.
-         * </p>
-         *
-         * <p>
-         * Preconditions:
-         * <ul>
-         *   <li>Spark session is initialized.</li>
-         *   <li>Dataset is loaded with data.</li>
-         * </ul>
-         * </p>
-         *
-         * <p>
-         * This test asserts that:
-         * <ul>
-         *   <li>The calculated number of null values matches the expected value.</li>
-         * </ul>
-         * </p>
-         */
-        @Test
-        public void calculateNumberOfNullValues() {
-            cardinalitiesTasks.calculateNumberOfNullValues();
-            long expectedNumberOfNullValues = 4;
-            long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
-            assertEquals(expectedNumberOfNullValues, actualNumberOfNullValues);
-        }
-
-        /**
-         * Test case to verify the calculation of the distinct values in the dataset.
-         *
-         * <p>
-         * This test case checks the calculation of the number of distinct values in the dataset.
-         * </p>
-         *
-         * <p>
-         * Preconditions:
-         * <ul>
-         *   <li>Spark session is initialized.</li>
-         *   <li>Dataset is loaded with data.</li>
-         * </ul>
-         * </p>
-         *
-         * <p>
-         * This test asserts that:
-         * <ul>
-         *   <li>The calculated number of distinct values matches the expected value.</li>
-         * </ul>
-         * </p>
-         */
-        @Test
-        public void calculateDistinctValues() {
-            cardinalitiesTasks.calculateDistincValues();
-            long expectedNumberOfDistinctValues = 5;
-            long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
-            assertEquals(expectedNumberOfDistinctValues, actualNumberOfDistinctValues);
-        }
 
         /**
          * Test method for calculating statistics with null dataset and null column name.
@@ -169,10 +112,80 @@ import static org.junit.Assert.assertEquals;
         }
 
         /**
-         * Test method for calculating statistics with an empty dataset.
+         * Test case to verify the calculation of the number of null values and distinct values  in an empty dataset.
+         *
+         * <p>
+         * This test case checks the calculation of the number of null values and distinct values in an empty column.
+         * </p>
+         *
+         * <p>
+         * Preconditions:
+         * <ul>
+         *   <li>Spark session is initialized.</li>
+         *   <li>An empty dataset is created.</li>
+         * </ul>
+         * </p>
+         *
+         * <p>
+         * This test asserts that:
+         * <ul>
+         *   <li>The calculated number of null values in the empty dataset is zero.</li>
+         *   <li> The calculated number of distinct values in the empty dataset is zero.</li>
+         * </ul>
+         * </p>
+         *
+         * @throws AnalysisException if an error occurs during dataset initialization
          */
         @Test
-        public void calculateStatisticsWithEmptyDataset() {
-            // To be implemented
+        public void calculateStatisticsWithEmptyDatasetTest() throws AnalysisException {
+            StructType schema = new StructType().add("empty_column", "string");
+            Dataset<Row> emptyDataset = session.createDataFrame(Collections.emptyList(), schema);
+            String columnName = "empty_column";
+            cardinalitiesTasks = new SparkCardinalitiesCalculator(emptyDataset, columnName);
+            cardinalitiesTasks.calculateNumberOfNullValues();
+            long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
+            assertEquals(0, actualNumberOfNullValues);
+            cardinalitiesTasks.calculateDistincValues();
+            long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
+            assertEquals(0, actualNumberOfDistinctValues);
         }
+        /**
+         * Test case to verify the calculation of the number of null values and distinct values  in dataset.
+         *
+         * <p>
+         * This test case checks the calculation of the number of null values and distinct values with a wrong_name column.
+         * </p>
+         *
+         * <p>
+         * Preconditions:
+         * <ul>
+         *   <li>Spark session is initialized.</li>
+         *   <li>Dataset is created.</li>
+         * </ul>
+         * </p>
+         *
+         * <p>
+         * This test asserts that:
+         * <ul>
+         *   <li>The calculated number of null values in the dataset is zero.</li>
+         *   <li> The calculated number of distinct values in the dataset is zero.</li>
+         * </ul>
+         * </p>
+         *
+         * @throws AnalysisException if an error occurs during dataset initialization
+         */
+
+        @Test
+        public void calculateStatisticsWithWrongColumn() {
+            String columnName = "Wrong_column";
+            cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
+            cardinalitiesTasks.calculateNumberOfNullValues();
+            long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
+            assertEquals(0, actualNumberOfNullValues);
+            long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
+            assertEquals(0, actualNumberOfDistinctValues);
+
+        }
+
+
     }

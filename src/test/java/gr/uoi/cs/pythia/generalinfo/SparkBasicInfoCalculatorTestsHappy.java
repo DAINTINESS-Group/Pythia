@@ -59,10 +59,10 @@ public class SparkBasicInfoCalculatorTestsHappy {
     @Test
     public void calculateNumberOfLinesInDatasetHappyV1(){
         basicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = basicInfoCalculator.getNumberOfLines();
+        long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 108539;
-        assertNotNull(calculatedlines);
-        assertEquals(expectedLines, calculatedlines);
+        assertNotNull(actualLines);
+        assertEquals(expectedLines, actualLines);
         //System.out.println(basicInfoSparkManager.getNumberOfLines());
     }
 
@@ -87,10 +87,10 @@ public class SparkBasicInfoCalculatorTestsHappy {
     @Test
     public void calculateFileSizeHappyV1(){
         basicInfoCalculator.calculateFileSize();
-        Double calculatedFileSize = basicInfoCalculator.getFileSize();
-        assertNotNull(calculatedFileSize);
+        Double actualFileSize = basicInfoCalculator.getFileSize();
+        assertNotNull(actualFileSize);
         Double expectedFileSizeInMb = 5.83;
-        assertEquals(expectedFileSizeInMb, calculatedFileSize);
+        assertEquals(expectedFileSizeInMb, actualFileSize);
     }
 
 }

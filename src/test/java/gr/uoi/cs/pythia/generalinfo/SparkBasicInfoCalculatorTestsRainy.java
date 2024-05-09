@@ -39,10 +39,10 @@ public class SparkBasicInfoCalculatorTestsRainy {
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
         basicInfoCalculator = new SparkBasicInfoCalculator(nullDataset,session,datasetPath);
         basicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = basicInfoCalculator.getNumberOfLines();
+        long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = SparkBasicInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
-        assertNotNull(calculatedlines);
-        assertEquals(expectedLines, calculatedlines);
+        assertNotNull(actualLines);
+        assertEquals(expectedLines, actualLines);
         //System.out.println(basicInfoSparkManager.getNumberOfLines());
     }
     /**
@@ -71,10 +71,10 @@ public class SparkBasicInfoCalculatorTestsRainy {
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
         basicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,sparkSession,datasetPath);
         basicInfoCalculator.calculateNumberOfLinesInDataset();
-        long calculatedlines = basicInfoCalculator.getNumberOfLines();
+        long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 0;
-        assertNotNull(calculatedlines);
-        assertEquals(expectedLines, calculatedlines);
+        assertNotNull(actualLines);
+        assertEquals(expectedLines, actualLines);
 
     }
     /**
@@ -105,10 +105,10 @@ public class SparkBasicInfoCalculatorTestsRainy {
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
         basicInfoCalculator =  new SparkBasicInfoCalculator(dataset,sessionInManager,datasetPath);
         basicInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = basicInfoCalculator.getFileSize();
+        Double actualFileSize = basicInfoCalculator.getFileSize();
         Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
-        assertNotNull(calculatedfileSize);
-        assertEquals(expectedfileSize, calculatedfileSize);
+        assertNotNull(actualFileSize);
+        assertEquals(expectedfileSize, actualFileSize);
 
     }
     /**
@@ -136,10 +136,10 @@ public class SparkBasicInfoCalculatorTestsRainy {
         String datasetPath = null;
         basicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
         basicInfoCalculator.calculateFileSize();
-        Double calculatedfileSize = basicInfoCalculator.getFileSize();
+        Double actualFileSize = basicInfoCalculator.getFileSize();
         Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
-        assertNotNull(calculatedfileSize);
-        assertEquals(expectedfileSize, calculatedfileSize);
+        assertNotNull(actualFileSize);
+        assertEquals(expectedfileSize, actualFileSize);
 
     }
 
