@@ -46,7 +46,7 @@ public class DecisionTreeResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IllegalAccessException {
         StructType schema = TestsDatasetSchemas.getCarseatsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        datasetProfiler.registerDataset("carseats", TestsUtilities.getDatasetPath("carseats.csv"), schema);
+        datasetProfiler.registerDataset("carseats", TestsUtilities.getAbsoluteDatasetPath("carseats.csv"), schema);
         // Get rules
         List<Rule> rules = new ArrayList<>();
         rules.add(new Rule("Sales", LabelingSystemConstants.LEQ, 3, "low"));

@@ -116,7 +116,7 @@ public class MdReportGenerator implements IReportGenerator {
 
 	private String getReportString(DatasetProfile datasetProfile) {
         StringBuilder bobOMastoras = new StringBuilder();
-        bobOMastoras.append(new MdHeader(datasetProfile.getAlias()));
+        bobOMastoras.append(new MdHeader(datasetProfile.getAlias(),datasetProfile));
         bobOMastoras.append(new MdDescriptiveStatistics(datasetProfile.getColumns()));
         bobOMastoras.append(new MdCorrelations(datasetProfile.getColumns()));
         bobOMastoras.append(new MdDecisionTrees(datasetProfile));

@@ -42,7 +42,7 @@ public class ClusteringResource extends ExternalResource{
     private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
     	StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        String datasetPath = TestsUtilities.getDatasetPath("cars_10.csv");
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_10.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);

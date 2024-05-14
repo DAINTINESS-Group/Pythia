@@ -23,7 +23,7 @@ public class DecisionTreeOptimizerTests {
     @Before
     public void init() {
         StructType schema = TestsDatasetSchemas.getTweetsCsvSchema();
-        String filePath = TestsUtilities.getDatasetPath("tweets.csv");
+        String filePath = TestsUtilities.getAbsoluteDatasetPath("tweets.csv");
         dataset = SparkSession.builder()
                 .getOrCreate()
                 .read()

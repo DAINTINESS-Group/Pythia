@@ -42,7 +42,7 @@ public class HistogramResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IllegalAccessException, IOException {
         StructType schema = TestsDatasetSchemas.getBreastCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        datasetProfiler.registerDataset("breast-w", TestsUtilities.getDatasetPath("breast-w.csv"), schema);
+        datasetProfiler.registerDataset("breast-w", TestsUtilities.getAbsoluteDatasetPath("breast-w.csv"), schema);
         
         // Get dataset
         Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);

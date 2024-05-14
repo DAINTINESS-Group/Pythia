@@ -43,7 +43,7 @@ public class GenInfoResource extends ExternalResource {
 
     private void initializeDatasetWithReadTask() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getDatasetPath("carsEdit100kMore.csv");
+        datasetPath = TestsUtilities.getAbsoluteDatasetPath("carsEdit100kMore.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
     }

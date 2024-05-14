@@ -1,20 +1,25 @@
 package gr.uoi.cs.pythia.report.md.components;
 
+import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
+
+import java.sql.Timestamp;
 
 public class MdHeader {
 
     private final String datasetAlias;
+    private final DatasetProfile datasetProfile;
 
-    public MdHeader(String datasetAlias) {
+    public MdHeader(String datasetAlias,DatasetProfile datasetProfile) {
         this.datasetAlias = datasetAlias;
+        this.datasetProfile = datasetProfile;
     }
-
     // TODO: add more info of which dataset, author etc, after the title
     @Override
     public String toString() {
         return getLogoImage() + "\n" +
-               getTitle() + "\n";
+               getTitle() + "\n"+
+                getDescription()+"\n";
     }
 
     private String getLogoImage() {
@@ -26,4 +31,22 @@ public class MdHeader {
         String text = String.format("Statistical Profile of \"%s\"",  datasetAlias);
         return MdBasicStructures.center(MdBasicStructures.heading1(text));
     }
+
+    private String getDescription() {
+        String pathText = String.format("**Path:** %s<br>", datasetProfile.getPath());
+        String linesText = String.format("**Number of Lines:** %d<br>", datasetProfile.getNumberOfLines());
+        String sizeText = String.format("**File Size:** %.2f Mb<br>", datasetProfile.getFileSize());
+        String timestampText = String.format("**Timestamp:** %s<br>", datasetProfile.getTimestamp() +" "+datasetProfile.getZoneId());
+
+        StringBuilder description = new StringBuilder();
+        description.append(pathText).append("\n")
+                .append(linesText).append("\n")
+                .append(sizeText).append("\n")
+                .append(timestampText).append("\n");
+
+        return MdBasicStructures.center(description.toString());
+    }
+
+
+
 }

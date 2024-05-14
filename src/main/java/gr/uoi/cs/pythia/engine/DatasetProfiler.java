@@ -99,8 +99,9 @@ public class DatasetProfiler implements IDatasetProfiler {
 
 		Timestamp executionDateTime = new Timestamp(sparkSession.sparkContext().startTime());
 		Instant start = Instant.now();
-
-		dataset = dataFrameReaderFactory.createDataframeReader(path, schema).read();
+		File file = new File(path);
+		String absolutePath = file.getAbsolutePath();
+		dataset = dataFrameReaderFactory.createDataframeReader(absolutePath, schema).read();
 
 		List<Column> columns = new ArrayList<>();
 		StructField[] fields = dataset.schema().fields();
@@ -112,11 +113,11 @@ public class DatasetProfiler implements IDatasetProfiler {
 			column.setCardinalitiesProfile(cardinalitiesCalculator.createCardinalitiesProfile());
 			columns.add(column);
 		}
-		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,path);
+		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,absolutePath);
 		long numberOfLines = calculator.getNumberOfLines();
 		Double fileSize = calculator.getFileSize();
-		datasetProfile = new DatasetProfile(alias, path, columns,executionDateTime,numberOfLines,fileSize);
-		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, path));
+		datasetProfile = new DatasetProfile(alias, absolutePath, columns,executionDateTime,numberOfLines,fileSize);
+		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, absolutePath));
 
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);

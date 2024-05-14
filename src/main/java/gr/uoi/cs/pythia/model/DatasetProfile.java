@@ -1,8 +1,9 @@
 package gr.uoi.cs.pythia.model;
 
 import gr.uoi.cs.pythia.model.highlights.HighlightsProfile;
-
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DatasetProfile {
   private final long numberOfLines;
   private final Double fileSize;
   private Timestamp timestamp;
-
+  private ZoneId zoneId;
 
   private final PatternsProfile patternsProfile;
   private final List<RegressionProfile> regressionProfiles;
@@ -36,6 +37,12 @@ public class DatasetProfile {
     this.path = path;
     this.columns = columns;
     this.timestamp = timeStamp;
+    try {
+      LocalDateTime localDateTime = timestamp.toLocalDateTime();
+      this.zoneId = localDateTime.atZone(ZoneId.systemDefault()).getZone();
+    } catch (Exception e) {
+      this.zoneId = null;
+    }
     this.numberOfLines = numberOfLines;
     this.fileSize = fileSize;
     this.patternsProfile = new PatternsProfile();
@@ -114,6 +121,15 @@ public class DatasetProfile {
   }
 
 
+  public ZoneId getZoneId() {
+    return zoneId;
+  }
+
+
+  public void setZoneId(ZoneId zoneId) {
+    this.zoneId = zoneId;
+  }
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
@@ -124,8 +140,8 @@ public class DatasetProfile {
             "Alias: " + alias + "\n" +
             "Path: " + path + "\n" +
             "Number of Lines: " + numberOfLines + "\n" +
-            "File Size: " + fileSize + "\n" +
-            "Timestamp: " + timestamp + "\n\n" +
+            "File Size: " + fileSize +" Mb" +"\n" +
+            "Timestamp: " + timestamp +" "+zoneId +"\n\n" +
             "Column Profiles:\n" + stringBuilder;
   }
 

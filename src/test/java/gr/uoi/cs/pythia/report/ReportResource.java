@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class ReportResource extends ExternalResource {
 
     private IDatasetProfiler datasetProfiler;
+    private String absoluteDatasetPath;
     private String datasetPath;
 
     public IDatasetProfiler getDatasetProfiler() {
@@ -34,6 +35,9 @@ public class ReportResource extends ExternalResource {
         return datasetProfiler.getDatasetProfile();
     }
 
+    public String getAbsoluteDatasetPath() {
+        return absoluteDatasetPath;
+    }
     public String getDatasetPath() {
         return datasetPath;
     }
@@ -48,8 +52,9 @@ public class ReportResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IOException {
         StructType schema = TestsDatasetSchemas.getPeopleJsonSchema();
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        absoluteDatasetPath = TestsUtilities.getAbsoluteDatasetPath("people.json");
         datasetPath = TestsUtilities.getDatasetPath("people.json");
-        datasetProfiler.registerDataset("people", datasetPath, schema);
+        datasetProfiler.registerDataset("people", absoluteDatasetPath, schema);
         datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 3.0);
         RegressionRequest regressionRequest = new RegressionRequest();
         regressionRequest.addRegression(new RegressionParameters(

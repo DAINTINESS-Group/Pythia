@@ -43,7 +43,7 @@ public class HighlightsResource extends ExternalResource {
 	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
-        String datasetPath = TestsUtilities.getDatasetPath("cars_100.csv");
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
         
         // Get dataset

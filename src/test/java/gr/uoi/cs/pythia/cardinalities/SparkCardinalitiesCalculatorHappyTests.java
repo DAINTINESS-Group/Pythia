@@ -13,8 +13,6 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -89,7 +87,7 @@ public class SparkCardinalitiesCalculatorHappyTests {
      */
     private void initializeDatasetWithReadTask() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getDatasetPath("car_20_NotNullEmptyValues.csv");
+        datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NotNullEmptyValues.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
     }
@@ -217,7 +215,7 @@ public class SparkCardinalitiesCalculatorHappyTests {
 
     private void initializeDatasetWithReadTaskVersionWithNulls() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getDatasetPath("car_20_NullEmpty.csv");
+        datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
         StructField[] fields = dataset.schema().fields();

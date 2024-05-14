@@ -2,8 +2,8 @@ DatasetProfile
 Alias: people
 Path: src/test/resources/datasets/people.json
 Number of Lines: 3
-File Size: 0.0
-Timestamp: null
+File Size: 0.0 Mb
+Timestamp: null null
 
 Column Profiles:
 =============================================================================

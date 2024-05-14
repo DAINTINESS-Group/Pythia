@@ -61,7 +61,7 @@ import static org.junit.Assert.assertEquals;
          */
         private void initializeDatasetWithReadTask() throws AnalysisException {
             IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-            datasetPath = TestsUtilities.getDatasetPath("car_20_NullEmpty.csv");
+            datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
             StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
             dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
         }

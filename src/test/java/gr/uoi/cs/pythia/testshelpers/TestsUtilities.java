@@ -12,11 +12,16 @@ import java.nio.file.Paths;
 
 public class TestsUtilities {
 
-    /*
+    /*original
     public static String getDatasetPath(String datasetName) {
         return new File(Resources.getResource("datasets/" + datasetName).getFile())
                 .getPath();
     }*/
+
+    public static String getAbsoluteDatasetPath(String datasetName) {
+        return new File("src/test/resources/datasets/" + datasetName)
+                .getAbsolutePath();
+    }
     public static String getDatasetPath(String datasetName) {
         return "src/test/resources/datasets/" + datasetName;
     }
