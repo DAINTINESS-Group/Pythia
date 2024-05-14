@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.client;
 import java.io.File;
 import java.io.IOException;
 
+import gr.uoi.cs.pythia.regression.RegressionRequest;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
@@ -36,6 +37,13 @@ public class DataScienceSalariesMain {
             new String[] {"salary_in_usd"},
             new String[] {"experience_level", "work_year"}
     );
+    /**
+     * Missing
+     */
+    //Danger!!
+    datasetProfiler.declareOutlierParameters(null,0.3); // we Have Null pointer exception  threashold !!
+    datasetProfiler.declareRegressionRequest(new RegressionRequest()); //Missing !
+
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = true;

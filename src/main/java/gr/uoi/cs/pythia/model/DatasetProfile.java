@@ -14,7 +14,6 @@ public class DatasetProfile {
 
   /**
    * ADD ONS
-   *
    * This section includes additional information about the dataset:
    * - numberOfLines: Represents the total number of lines in the dataset.
    * - fileSize: Represents the size of the file in bytes.
@@ -26,7 +25,7 @@ public class DatasetProfile {
 
 
   private final PatternsProfile patternsProfile;
-  private List<RegressionProfile> regressionProfiles;
+  private final List<RegressionProfile> regressionProfiles;
   private ClusteringProfile clusteringProfile;
   private String auxiliaryDataOutputDirectory;
   private HighlightsProfile highlightsProfile;
@@ -94,12 +93,7 @@ public class DatasetProfile {
   public ClusteringProfile getClusteringProfile() {
 	return clusteringProfile;
 	}
-	
-	public void setRegressionProfiles(List<RegressionProfile> regressionProfiles) {
-		this.regressionProfiles = regressionProfiles;
-	}
-	
-	public void setClusteringProfile(ClusteringProfile clusteringProfile) {
+    public void setClusteringProfile(ClusteringProfile clusteringProfile) {
 		this.clusteringProfile = clusteringProfile;
 	}
 

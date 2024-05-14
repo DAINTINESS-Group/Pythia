@@ -32,7 +32,7 @@ public class DatasetProfilerParameters {
    *                                      be calculated as part of the dataset profiling analysis.
    * @param shouldRunDominancePatterns    - Boolean value that defines whether the dataset should be
    *                                      evaluated for dominance patterns as part of the dataset profiling analysis.
-   * @param shoudRunRegression				- Boolean value that defines whether the dataset should be
+   * @param shouldRunRegression				- Boolean value that defines whether the dataset should be
    *                                      evaluated for regression as part of the dataset profiling analysis.
    * @param highLightsParameters		- a HighLightsParameters object with (a) the mode of highlightSelection, and, (b) the threshold
    * 

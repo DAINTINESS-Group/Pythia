@@ -65,8 +65,8 @@ public class DatasetProfiler implements IDatasetProfiler {
 
 	private final Logger logger = Logger.getLogger(DatasetProfiler.class);
 	private final IDatasetReaderFactory dataFrameReaderFactory;
-	private IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
-	private final CardinalitiesCalculatorFactory cardinalitiesCaclulatorFactory;
+	private final IBasicInfoCalculatorFactory basicInfoCalculatorFactory;
+	private final CardinalitiesCalculatorFactory cardinalitiesCalculatorFactory;
 	private DatasetProfile datasetProfile;
 	private Dataset<Row> dataset;
 	private DominanceParameters dominanceParameters;
@@ -89,7 +89,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		sparkSession = SparkSession.builder().appName(sparkConfig.getAppName()).master(sparkConfig.getMaster()).config("spark.sql.warehouse.dir", sparkConfig.getSparkWarehouse()).getOrCreate();
 		this.dataFrameReaderFactory = new IDatasetReaderFactory(sparkSession);
 		this.basicInfoCalculatorFactory = new IBasicInfoCalculatorFactory();
-		this.cardinalitiesCaclulatorFactory = new CardinalitiesCalculatorFactory();
+		this.cardinalitiesCalculatorFactory = new CardinalitiesCalculatorFactory();
 		this.hasComputedDescriptiveStats = false;
 		this.hasComputedAllPairsCorrelations = false;
 	}
@@ -107,12 +107,12 @@ public class DatasetProfiler implements IDatasetProfiler {
 		for (int i = 0; i < fields.length; ++i) {
 			String columnName = fields[i].name();
 			String dataType = fields[i].dataType().toString();
-			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCaclulatorFactory.createCardinalitiesCalculator(dataset,columnName);
+			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCalculatorFactory.createCardinalitiesCalculator(dataset,columnName);
 			Column column = new Column(i, columnName, dataType);
 			column.setCardinalitiesProfile(cardinalitiesCalculator.createCardinalitiesProfile());
 			columns.add(column);
 		}
-		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,sparkSession,path);
+		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,path);
 		long numberOfLines = calculator.getNumberOfLines();
 		Double fileSize = calculator.getFileSize();
 		datasetProfile = new DatasetProfile(alias, path, columns,executionDateTime,numberOfLines,fileSize);
@@ -123,7 +123,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Duration of registerDataset: %s / %sms", duration, duration.toMillis()));
 
 		//TODO PRINT add-ons- Trial!!
-		logger.info(String.format("DateTime of Profiling %s",datasetProfile.getTimestamp())); // e.g 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profilling 2024-04-18 19:31:45.52
+		logger.info(String.format("DateTime of Profiling %s",datasetProfile.getTimestamp())); //Preview: 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profiling 2024-04-18 19:31:45.52
 		logger.info(String.format("numOfLines: %d",datasetProfile.getNumberOfLines() ));
 		logger.info(String.format("fileSize in Mb: %s", datasetProfile.getFileSize()));
 
@@ -166,7 +166,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	
 	@Override
 	public void declareOutlierParameters(OutlierType outlierType, double outlierThreshold) {
-		if(null == outlierType) {
+		if(outlierType == null) {
 			this.outlierType = OutlierType.Z_SCORE;
 		}
 		else
@@ -321,7 +321,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
 	}
 	
-	private void performRegression() throws IOException {
+	private void performRegression() {
 		Instant start = Instant.now();
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		
@@ -335,10 +335,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant end = Instant.now();
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Performed regression for dataset %s", datasetProfile.getAlias()));
-		logger.info(String.format("Duration of perfomRegression: %s / %sms", duration, duration.toMillis()));
+		logger.info(String.format("Duration of performRegression: %s / %sms", duration, duration.toMillis()));
 	}
 	
-	private void performClustering() throws IOException {
+	private void performClustering()  {
 		Instant start = Instant.now();
 		
 		ClusteringPerformerFactory clusteringFactory = new ClusteringPerformerFactory();

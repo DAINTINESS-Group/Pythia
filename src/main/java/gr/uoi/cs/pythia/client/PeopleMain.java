@@ -70,7 +70,16 @@ public class PeopleMain {
         // (steps 6 & 7 are optional, however, they are a prerequisite for highlight patterns identification).
     	datasetProfiler.declareDominanceParameters(mode, measurementColumns, coordinateColumns);
 
-    	// 8. Specify the auxiliary data output directory and the desired parts of the analysis procedure 
+
+
+        /**
+         * Missing
+         */
+        //Danger!!
+        datasetProfiler.declareOutlierParameters(null,0.3); // We have null pointer threashold !!
+
+
+        // 8. Specify the auxiliary data output directory and the desired parts of the analysis procedure
     	// that should get executed for the computation of the dataset profile.
     	String auxiliaryDataOutputDirectory = "results";
     	boolean shouldRunDescriptiveStats = true;

@@ -6,8 +6,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    SparkBasicInfoCalculatorTestsHappy.class,
-        SparkBasicInfoCalculatorTestsRainy.class,
+    SparkBasicInfoCalculatorTesterHappy.class,
+        SparkBasicInfoCalculatorTesterRainy.class,
 })
 public class AllGenInfoTests {
 

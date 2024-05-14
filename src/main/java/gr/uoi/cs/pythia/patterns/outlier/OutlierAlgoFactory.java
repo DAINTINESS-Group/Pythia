@@ -10,6 +10,7 @@ public class OutlierAlgoFactory {
 		        return new ZScoreOutlierAlgo(outlierThreshold);
 		      case NORMALIZED_SCORE:
 		      	return new NormalizedScoreOutlierAlgo(outlierThreshold);
+
 		    }
 		    throw new IllegalArgumentException(
 		        String.format("Outlier %s is not a supported outlier type.", type));

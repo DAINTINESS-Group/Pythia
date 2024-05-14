@@ -9,7 +9,6 @@ public interface HighlightsManagerInterface {
 
 	/**
 	 * Returns a list of Highlights from the profiling of a data set
-	 * 
 	 * Depends on a set of flags, one per type of profiling task that we wish to 
 	 * evaluate as a potential highlight
 	 * 

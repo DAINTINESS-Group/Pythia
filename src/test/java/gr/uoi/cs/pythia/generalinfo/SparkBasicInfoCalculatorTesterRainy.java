@@ -4,14 +4,13 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class SparkBasicInfoCalculatorTestsRainy {
+public class SparkBasicInfoCalculatorTesterRainy {
 
 
-    private IBasicInfoCalculator basicInfoCalculator;
+    private SparkBasicInfoCalculator basicInfoCalculator;
 
 
     /**
@@ -21,7 +20,6 @@ public class SparkBasicInfoCalculatorTestsRainy {
      * Rainy Scenario V1:
      * <ul>
      *   <li>Dataset: Null</li>
-     *   <li>Session: Not Null</li>
      * </ul>
      *
      * <p>
@@ -34,16 +32,12 @@ public class SparkBasicInfoCalculatorTestsRainy {
      */
     @Test
     public void calculateNumberOfLinesInDatasetRainyV1(){
-        Dataset<Row> nullDataset = null;
-        SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        basicInfoCalculator = new SparkBasicInfoCalculator(nullDataset,session,datasetPath);
+        basicInfoCalculator = new SparkBasicInfoCalculator(null,datasetPath);
         basicInfoCalculator.calculateNumberOfLinesInDataset();
         long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = SparkBasicInfoCalculator.ERROR_VALUE_NUMBER_OF_LINES;
-        assertNotNull(actualLines);
         assertEquals(expectedLines, actualLines);
-        //System.out.println(basicInfoSparkManager.getNumberOfLines());
     }
     /**
      * Test case to handle the calculation of the number of lines in the dataset under rainy scenario V2.
@@ -52,7 +46,6 @@ public class SparkBasicInfoCalculatorTestsRainy {
      * Rainy Scenario V2:
      * <ul>
      *   <li>Dataset: Empty</li>
-     *   <li>Session: Not Null</li>
      * </ul>
      *
      * <p>
@@ -68,47 +61,16 @@ public class SparkBasicInfoCalculatorTestsRainy {
 
         SparkSession sparkSession = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> emptyDataset = sparkSession.emptyDataFrame();
+
         String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        basicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,sparkSession,datasetPath);
+        basicInfoCalculator = new SparkBasicInfoCalculator(emptyDataset,datasetPath);
         basicInfoCalculator.calculateNumberOfLinesInDataset();
         long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 0;
-        assertNotNull(actualLines);
+
         assertEquals(expectedLines, actualLines);
 
-    }
-    /**
-     * Test case to handle the calculation of the file size in megabytes in the dataset under rainy scenario V1.
-     *
-     * <p>
-     * Rainy Scenario V1:
-     * <ul>
-     *   <li>Dataset: Not Null</li>
-     *   <li>Session: Null</li>
-     * </ul>
-     *
-     * <p>
-     * This test simulates the scenario where the dataset is not null while the session is null.
-     * It asserts that:
-     * <ul>
-     *   <li>The calculated file size is not null.</li>
-     *   <li>The calculated file size matches the expected value (-1.0 for a null session).</li>
-     * </ul>
-     */
 
-    @Test
-    public void calculateFileSizeRainyV1(){
-
-        SparkSession sessionInManager = null;
-       // SparkSession session = AllGenInfoTests.genInfoResource.getSession();
-        Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
-        String datasetPath = AllGenInfoTests.genInfoResource.getDatasetPath();
-        basicInfoCalculator =  new SparkBasicInfoCalculator(dataset,sessionInManager,datasetPath);
-        basicInfoCalculator.calculateFileSize();
-        Double actualFileSize = basicInfoCalculator.getFileSize();
-        Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
-        assertNotNull(actualFileSize);
-        assertEquals(expectedfileSize, actualFileSize);
 
     }
     /**
@@ -117,8 +79,7 @@ public class SparkBasicInfoCalculatorTestsRainy {
      * <p>
      * Rainy Scenario V2:
      * <ul>
-     *   <li>Dataset: Not Null</li>
-     *   <li>Dataset Path: Null</li>
+     *   <li>FilePath: Null</li>
      * </ul>
      *
      * <p>
@@ -131,17 +92,77 @@ public class SparkBasicInfoCalculatorTestsRainy {
      */
     @Test
     public void calculateFileSizeRainyV2(){
-        SparkSession session = AllGenInfoTests.genInfoResource.getSession();
         Dataset<Row> dataset = AllGenInfoTests.genInfoResource.getDataset();
-        String datasetPath = null;
-        basicInfoCalculator = new SparkBasicInfoCalculator(dataset,session,datasetPath);
+        basicInfoCalculator = new SparkBasicInfoCalculator(dataset,null);
         basicInfoCalculator.calculateFileSize();
         Double actualFileSize = basicInfoCalculator.getFileSize();
-        Double expectedfileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
+        Double expectedFileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
         assertNotNull(actualFileSize);
-        assertEquals(expectedfileSize, actualFileSize);
+        assertEquals(expectedFileSize, actualFileSize);
 
     }
+
+    /**
+     * Test case to handle the calculation of the file size in megabytes in the dataset under rainy scenario V3.
+     *
+     * <p>
+     * Rainy Scenario V3:
+     * <ul>
+     *   <li>Dataset: Empty</li>
+     *   <li>FilePath:Not Null</li>
+     * </ul>
+     *
+     * <p>
+     * This test simulates the scenario where the dataset is empty while the dataset path is not Null.
+     * It asserts that:
+     * <ul>
+     *   <li>The calculated file size is not null.</li>
+     *   <li>The calculated file size matches the expected value (0.0 for a empty dataset).</li>
+     * </ul>
+     */
+    @Test
+    public void calculateFileSizeRainyV3(){
+
+        String pathFile = "src/test/resources/datasets/empty.csv";
+        basicInfoCalculator = new SparkBasicInfoCalculator(null,pathFile);
+        Double expectedFileSize = 0.0;
+        basicInfoCalculator.calculateFileSize();
+        Double actualFileSize = basicInfoCalculator.getFileSize();
+        assertNotNull(actualFileSize);
+        assertEquals(expectedFileSize, actualFileSize);
+
+    }
+
+    /**
+     * Test case to handle the calculation of the file size in megabytes in the dataset under rainy scenario V3.
+     *
+     * <p>
+     * Rainy Scenario V3:
+     * <ul>
+     *   <li>FilePath: Wrong Path</li>
+     * </ul>
+     *
+     * <p>
+     * This test simulates the scenario where the dataset is empty while the dataset path is not Null.
+     * It asserts that:
+     * <ul>
+     *   <li>The calculated file size is not null.</li>
+     *   <li>The calculated file size matches the expected value (-1.0 for a empty dataset).</li>
+     * </ul>
+     */
+    @Test
+    public void calculateFileSizeRainyV4(){
+        String pathFile = "WrongPath";
+        basicInfoCalculator = new SparkBasicInfoCalculator(null,pathFile);
+        Double expectedFileSize = SparkBasicInfoCalculator.ERROR_VALUE_FILE_SIZE;
+        basicInfoCalculator.calculateFileSize();
+        Double actualFileSize = basicInfoCalculator.getFileSize();
+        assertNotNull(actualFileSize);
+        assertEquals(expectedFileSize, actualFileSize);
+
+    }
+
+
 
 
 }

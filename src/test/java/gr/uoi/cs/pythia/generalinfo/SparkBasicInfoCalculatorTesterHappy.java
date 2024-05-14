@@ -3,15 +3,15 @@ package gr.uoi.cs.pythia.generalinfo;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-public class SparkBasicInfoCalculatorTestsHappy {
+import static org.junit.Assert.*;
 
-    private IBasicInfoCalculator basicInfoCalculator;
+public class SparkBasicInfoCalculatorTesterHappy {
+
+    private SparkBasicInfoCalculator basicInfoCalculator;
 
     @Before
     public void init() {
-         basicInfoCalculator = AllGenInfoTests.genInfoResource.getBasicInfoSparkManager();
+         basicInfoCalculator = (SparkBasicInfoCalculator) AllGenInfoTests.genInfoResource.getBasicInfoSparkManager();
     }
 
 
@@ -22,7 +22,6 @@ public class SparkBasicInfoCalculatorTestsHappy {
      * Happy Scenario V1:
      * <ul>
      *   <li>Dataset: Not Null</li>
-     *   <li>Session: Not Null</li>
      * </ul>
      *
      * <p>
@@ -31,11 +30,9 @@ public class SparkBasicInfoCalculatorTestsHappy {
      *   <li>The calculated number of lines is not null.</li>
      *   <li>The calculated number of lines matches the expected value.</li>
      * </ul>
-     */
-    /**
+     *
      * This file is a copy of cars_100k.csv with modifications in the last lines
      * such as missing values and empty lines.
-     *
      * Example:
      * <pre>
      * NumberLines
@@ -61,9 +58,8 @@ public class SparkBasicInfoCalculatorTestsHappy {
         basicInfoCalculator.calculateNumberOfLinesInDataset();
         long actualLines = basicInfoCalculator.getNumberOfLines();
         long expectedLines = 108539;
-        assertNotNull(actualLines);
         assertEquals(expectedLines, actualLines);
-        //System.out.println(basicInfoSparkManager.getNumberOfLines());
+
     }
 
 
@@ -74,7 +70,7 @@ public class SparkBasicInfoCalculatorTestsHappy {
      * Happy Scenario V1:
      * <ul>
      *   <li>Dataset: Not Null</li>
-     *   <li>Session: Not Null</li>
+     *   <li>FilePath: Not Null or Wrong </li>
      * </ul>
      *
      * <p>
@@ -84,13 +80,24 @@ public class SparkBasicInfoCalculatorTestsHappy {
      *   <li>The calculated file size matches the expected value in megabytes.</li>
      * </ul>
      */
+
     @Test
     public void calculateFileSizeHappyV1(){
         basicInfoCalculator.calculateFileSize();
         Double actualFileSize = basicInfoCalculator.getFileSize();
         assertNotNull(actualFileSize);
-        Double expectedFileSizeInMb = 5.83;
-        assertEquals(expectedFileSizeInMb, actualFileSize);
+
+        long realSizeExpected = 6114251;
+        assertEquals(realSizeExpected, basicInfoCalculator.getFileSizeInBytes());
+        /*
+         * After asserting the file size in bytes, we use the same function (convertBytesInMegaBytes in SparkBasicInfoCalculator) to convert bytes to megabytes and check if the assertion holds.
+         * The precise conversion from bytes to megabytes is 6114251 / (1024.0 * 1024.0) = 5.8310041427612305,
+         * but the output in AllGenInfoTests.genInfoResource.convertBytesInMegaBytes(realSizeExpected) is 5.83.
+         * Therefore, we need to verify this value with Double actualFileSize = basicInfoCalculator.getFileSize();
+         */
+        Double expectedFileSizeInMb = AllGenInfoTests.genInfoResource.convertBytesInMegaBytes(realSizeExpected);
+        assertEquals(expectedFileSizeInMb , actualFileSize, 0.01);
     }
+
 
 }

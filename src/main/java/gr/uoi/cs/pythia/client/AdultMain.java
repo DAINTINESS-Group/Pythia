@@ -42,8 +42,11 @@ public class AdultMain {
 	            new String[] {"hours_per_week"},
 	            new String[] {"native_country", "occupation", "gender"}
 	    );
+		/**
+		 * Missing
+		 */
 		//Danger!!
-		datasetProfiler.declareOutlierParameters(null,0.3); // Ειναι null to threashold !!
+		//datasetProfiler.declareOutlierParameters(null,0.3); // Null pointer exception  threashold !!
 
 	    boolean shouldRunDescriptiveStats = true;
 	    boolean shouldRunHistograms = true;
