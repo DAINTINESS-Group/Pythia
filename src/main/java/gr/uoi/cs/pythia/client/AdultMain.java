@@ -46,7 +46,7 @@ public class AdultMain {
 		 * Missing
 		 */
 		//Danger!!
-		//datasetProfiler.declareOutlierParameters(null,0.3); // Null pointer exception  threashold !!
+		datasetProfiler.declareOutlierParameters(null,0.3); // Null pointer exception  threashold !!
 
 	    boolean shouldRunDescriptiveStats = true;
 	    boolean shouldRunHistograms = true;
