@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.client;
 import java.io.File;
 import java.io.IOException;
 
+import gr.uoi.cs.pythia.regression.RegressionParameters;
 import gr.uoi.cs.pythia.regression.RegressionRequest;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
@@ -13,6 +14,8 @@ import org.apache.spark.sql.types.StructType;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -41,16 +44,19 @@ public class DataScienceSalariesMain {
      * Missing
      */
     //Danger!!
-    datasetProfiler.declareOutlierParameters(null,0.3); // we Have Null pointer exception  threashold !!
-    datasetProfiler.declareRegressionRequest(new RegressionRequest()); //Missing !
+    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,3.0); // we Have Null pointer exception  threashold !!
+    RegressionRequest regressionRequest = new RegressionRequest();
+//    regressionRequest.addRegression(new RegressionParameters(
+//    		null, "salary_in_usd", RegressionType.AUTOMATED, 0.05));
+    datasetProfiler.declareRegressionRequest(regressionRequest); //Missing !
 
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = true;
     boolean shouldRunAllPairsCorrelations = true;
     boolean shouldRunDecisionTrees = false;
-    boolean shouldRunDominancePatterns = true;
-    boolean shouldRunOutlierDetection = false;
+    boolean shouldRunDominancePatterns = false;
+    boolean shouldRunOutlierDetection = true;
     boolean shouldRunRegression = true;
     boolean shouldRunClustering = false;
     HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);

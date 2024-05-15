@@ -14,7 +14,7 @@
 
 **Path:** src/test/resources/datasets/people.json<br>
 **Number of Lines:** 3<br>
-**File Size:** 0,00 Mb<br>
+**File Size:** 0,00 MB<br>
 **Timestamp:** null null<br>
 
 

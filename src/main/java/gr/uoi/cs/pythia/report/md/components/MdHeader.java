@@ -35,7 +35,7 @@ public class MdHeader {
     private String getDescription() {
         String pathText = String.format("**Path:** %s<br>", datasetProfile.getPath());
         String linesText = String.format("**Number of Lines:** %d<br>", datasetProfile.getNumberOfLines());
-        String sizeText = String.format("**File Size:** %.2f Mb<br>", datasetProfile.getFileSize());
+        String sizeText = String.format("**File Size:** %.2f MB<br>", datasetProfile.getFileSize());
         String timestampText = String.format("**Timestamp:** %s<br>", datasetProfile.getTimestamp() +" "+datasetProfile.getZoneId());
 
         StringBuilder description = new StringBuilder();

@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.client;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
 import gr.uoi.cs.pythia.util.HighlightParameters;
@@ -46,7 +47,7 @@ public class AdultMain {
 		 * Missing
 		 */
 		//Danger!!
-		datasetProfiler.declareOutlierParameters(null,0.3); // Null pointer exception  threashold !!
+		datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,2.5); 
 
 	    boolean shouldRunDescriptiveStats = true;
 	    boolean shouldRunHistograms = true;

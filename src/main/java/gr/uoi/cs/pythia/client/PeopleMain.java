@@ -71,12 +71,7 @@ public class PeopleMain {
     	datasetProfiler.declareDominanceParameters(mode, measurementColumns, coordinateColumns);
 
 
-
-        /**
-         * Missing
-         */
-        //Danger!!
-        datasetProfiler.declareOutlierParameters(null,0.3); // We have null pointer threashold !!
+        datasetProfiler.declareOutlierParameters(null,2.0); // We have null expecting to be autocompleted !!
 
 
         // 8. Specify the auxiliary data output directory and the desired parts of the analysis procedure

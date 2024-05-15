@@ -140,7 +140,7 @@ public class DatasetProfile {
             "Alias: " + alias + "\n" +
             "Path: " + path + "\n" +
             "Number of Lines: " + numberOfLines + "\n" +
-            "File Size: " + fileSize +" Mb" +"\n" +
+            "File Size: " + fileSize +" MB" +"\n" +
             "Timestamp: " + timestamp +" "+zoneId +"\n\n" +
             "Column Profiles:\n" + stringBuilder;
   }
