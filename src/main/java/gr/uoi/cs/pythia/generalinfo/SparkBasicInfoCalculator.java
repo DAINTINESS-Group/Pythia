@@ -16,7 +16,7 @@ public class SparkBasicInfoCalculator implements IBasicInfoCalculator {
 
     private final Dataset<Row> dataset;
     private long numberOfLines;
-    private final String pathFile;
+    private String pathFile;
     private Double fileSize;
     private long fileSizeInBytes;
 
@@ -69,5 +69,9 @@ public class SparkBasicInfoCalculator implements IBasicInfoCalculator {
     public long getFileSizeInBytes() {
         return fileSizeInBytes;
     }
+    public String setPathFile(String pathFile) {
+        return this.pathFile = pathFile ;
+    }
+
 
 }

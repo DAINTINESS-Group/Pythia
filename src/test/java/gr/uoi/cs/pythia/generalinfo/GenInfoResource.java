@@ -10,8 +10,6 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
 import org.junit.rules.ExternalResource;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class GenInfoResource extends ExternalResource {
 
@@ -24,7 +22,6 @@ public class GenInfoResource extends ExternalResource {
     @Override
     protected void before() throws Throwable {
         super.before();
-
         initializeSparkSession();
         initializeDatasetWithReadTask();
         createBasicInfoSparkManager();
@@ -46,11 +43,6 @@ public class GenInfoResource extends ExternalResource {
         datasetPath = TestsUtilities.getAbsoluteDatasetPath("carsEdit100kMore.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
-    }
-
-    public Double convertBytesInMegaBytes(long fileSizeInBytes){
-            BigDecimal fileSizeInMB = BigDecimal.valueOf(fileSizeInBytes).divide(BigDecimal.valueOf(1024 * 1024),2, RoundingMode.HALF_EVEN);
-            return fileSizeInMB.doubleValue();
     }
 
 

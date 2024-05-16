@@ -3,7 +3,6 @@ package gr.uoi.cs.pythia.report.md.components;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
 
-import java.sql.Timestamp;
 
 public class MdHeader {
 
@@ -35,16 +34,15 @@ public class MdHeader {
     private String getDescription() {
         String pathText = String.format("**Path:** %s<br>", datasetProfile.getPath());
         String linesText = String.format("**Number of Lines:** %d<br>", datasetProfile.getNumberOfLines());
-        String sizeText = String.format("**File Size:** %.2f MB<br>", datasetProfile.getFileSize());
+        String sizeText = String.format("**File Size:** %s MB<br>", datasetProfile.getFileSize());
         String timestampText = String.format("**Timestamp:** %s<br>", datasetProfile.getTimestamp() +" "+datasetProfile.getZoneId());
 
-        StringBuilder description = new StringBuilder();
-        description.append(pathText).append("\n")
-                .append(linesText).append("\n")
-                .append(sizeText).append("\n")
-                .append(timestampText).append("\n");
+        String description = pathText + "\n" +
+                linesText + "\n" +
+                sizeText + "\n" +
+                timestampText + "\n";
 
-        return MdBasicStructures.center(description.toString());
+        return MdBasicStructures.center(description);
     }
 
 

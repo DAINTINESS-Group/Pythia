@@ -2,7 +2,8 @@ package gr.uoi.cs.pythia.generalinfo;
 
 import org.junit.Before;
 import org.junit.Test;
-
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import static org.junit.Assert.*;
 
 public class SparkBasicInfoCalculatorTesterHappy {
@@ -83,9 +84,10 @@ public class SparkBasicInfoCalculatorTesterHappy {
 
     @Test
     public void calculateFileSizeHappyV1(){
+        String fileName = "src/test/resources/datasets/data.csv";
+        createFileWithGivenSize(fileName,6114251);
+        basicInfoCalculator.setPathFile(fileName);
         basicInfoCalculator.calculateFileSize();
-        Double actualFileSize = basicInfoCalculator.getFileSize();
-        assertNotNull(actualFileSize);
 
         long realSizeExpected = 6114251;
         assertEquals(realSizeExpected, basicInfoCalculator.getFileSizeInBytes());
@@ -95,8 +97,18 @@ public class SparkBasicInfoCalculatorTesterHappy {
          * but the output in AllGenInfoTests.genInfoResource.convertBytesInMegaBytes(realSizeExpected) is 5.83.
          * Therefore, we need to verify this value with Double actualFileSize = basicInfoCalculator.getFileSize();
          */
-        Double expectedFileSizeInMb = AllGenInfoTests.genInfoResource.convertBytesInMegaBytes(realSizeExpected);
+        double expectedFileSizeInMb = 5.83;
+        Double actualFileSize = basicInfoCalculator.getFileSize();
+        assertNotNull(actualFileSize);
         assertEquals(expectedFileSizeInMb , actualFileSize, 0.01);
+    }
+
+    private void createFileWithGivenSize(String fileName,long targetSizeBytes){
+        try (RandomAccessFile file = new RandomAccessFile(fileName, "rw")) {
+            file.setLength(targetSizeBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

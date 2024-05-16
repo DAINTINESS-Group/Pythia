@@ -126,7 +126,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		//TODO PRINT add-ons- Trial!!
 		logger.info(String.format("DateTime of Profiling %s",datasetProfile.getTimestamp())); //Preview: 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profiling 2024-04-18 19:31:45.52
 		logger.info(String.format("numOfLines: %d",datasetProfile.getNumberOfLines() ));
-		logger.info(String.format("fileSize in Mb: %s", datasetProfile.getFileSize()));
+		logger.info(String.format("fileSize in MB: %s", datasetProfile.getFileSize()));
 
 	}
 
