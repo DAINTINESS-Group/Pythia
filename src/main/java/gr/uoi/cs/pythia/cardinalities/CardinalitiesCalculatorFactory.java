@@ -10,14 +10,10 @@ public class CardinalitiesCalculatorFactory {
 
     public ICardinalitiesCalculator createCardinalitiesCalculator(Dataset<Row> dataset,String columnName){
         cardinalitiesCalculator= new SparkCardinalitiesCalculator(dataset,columnName);
-        executeCalculations();
         return cardinalitiesCalculator;
     }
 
 
-    private void executeCalculations(){
-        cardinalitiesCalculator.calculateNumberOfNullValues();
-        cardinalitiesCalculator.calculateDistincValues();
-    }
+
 
 }

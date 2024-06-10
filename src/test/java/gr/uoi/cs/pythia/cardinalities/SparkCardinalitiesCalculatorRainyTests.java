@@ -73,12 +73,11 @@ import static org.junit.Assert.assertEquals;
         @Test
         public void calculateStatisticsWithNullDatasetAndColumnName() {
             cardinalitiesTasks = factory.createCardinalitiesCalculator(null, null);
-            cardinalitiesTasks.calculateDistincValues();
-            cardinalitiesTasks.calculateNumberOfNullValues();
+
             long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
-            assertEquals(0, actualNumberOfNullValues);
+            assertEquals(-1, actualNumberOfNullValues);
             long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
-            assertEquals(0, actualNumberOfDistinctValues);
+            assertEquals(-1, actualNumberOfDistinctValues);
         }
 
         /**
@@ -89,12 +88,11 @@ import static org.junit.Assert.assertEquals;
             StructField[] fields = dataset.schema().fields();
             String columnName = fields[0].name();
             cardinalitiesTasks = factory.createCardinalitiesCalculator(null, columnName);
-            cardinalitiesTasks.calculateDistincValues();
-            cardinalitiesTasks.calculateNumberOfNullValues();
+
             long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
-            assertEquals(0, actualNumberOfNullValues);
+            assertEquals(-1, actualNumberOfNullValues);
             long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
-            assertEquals(0, actualNumberOfDistinctValues);
+            assertEquals(-1, actualNumberOfDistinctValues);
         }
 
         /**
@@ -103,12 +101,11 @@ import static org.junit.Assert.assertEquals;
         @Test
         public void calculateStatisticsWithValidDatasetAndNullColumnName() {
             cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, null);
-            cardinalitiesTasks.calculateDistincValues();
-            cardinalitiesTasks.calculateNumberOfNullValues();
+            
             long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
-            assertEquals(0, actualNumberOfNullValues);
+            assertEquals(-1, actualNumberOfNullValues);
             long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
-            assertEquals(0, actualNumberOfDistinctValues);
+            assertEquals(-1, actualNumberOfDistinctValues);
         }
 
         /**
@@ -142,10 +139,10 @@ import static org.junit.Assert.assertEquals;
             Dataset<Row> emptyDataset = session.createDataFrame(Collections.emptyList(), schema);
             String columnName = "empty_column";
             cardinalitiesTasks = new SparkCardinalitiesCalculator(emptyDataset, columnName);
-            cardinalitiesTasks.calculateNumberOfNullValues();
+            
             long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
             assertEquals(0, actualNumberOfNullValues);
-            cardinalitiesTasks.calculateDistincValues();
+            
             long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
             assertEquals(0, actualNumberOfDistinctValues);
         }
@@ -179,11 +176,11 @@ import static org.junit.Assert.assertEquals;
         public void calculateStatisticsWithWrongColumn() {
             String columnName = "Wrong_column";
             cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
-            cardinalitiesTasks.calculateNumberOfNullValues();
+            
             long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
-            assertEquals(0, actualNumberOfNullValues);
+            assertEquals(-1, actualNumberOfNullValues);
             long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
-            assertEquals(0, actualNumberOfDistinctValues);
+            assertEquals(-1, actualNumberOfDistinctValues);
 
         }
 

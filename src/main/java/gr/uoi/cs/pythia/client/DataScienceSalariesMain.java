@@ -46,8 +46,8 @@ public class DataScienceSalariesMain {
     //Danger!!
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,3.0); // we Have Null pointer exception  threashold !!
     RegressionRequest regressionRequest = new RegressionRequest();
-//    regressionRequest.addRegression(new RegressionParameters(
-//    		null, "salary_in_usd", RegressionType.AUTOMATED, 0.05));
+    regressionRequest.addRegression(new RegressionParameters(
+    		null, "salary_in_usd", RegressionType.AUTOMATED, 0.05));
     datasetProfiler.declareRegressionRequest(regressionRequest); //Missing !
 
 

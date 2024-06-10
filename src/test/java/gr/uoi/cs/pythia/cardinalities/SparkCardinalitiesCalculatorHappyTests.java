@@ -116,7 +116,7 @@ public class SparkCardinalitiesCalculatorHappyTests {
      */
     @Test
     public void calculateNumberOfNullValuesTest() {
-        cardinalitiesTasks.calculateNumberOfNullValues();
+        
         long expectedNumberOfNullValues = 0;
         long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
         assertEquals(expectedNumberOfNullValues, actualNumberOfNullValues);
@@ -148,7 +148,7 @@ public class SparkCardinalitiesCalculatorHappyTests {
 
     @Test
     public void calculateDistinctValuesTest() {
-        cardinalitiesTasks.calculateDistincValues();
+        
         long expectedNumberOfDistinctValues = 5;
         long actualNumberOfDistinctValues = cardinalitiesTasks.getNumberOfDistinctValues();
         assertEquals(expectedNumberOfDistinctValues, actualNumberOfDistinctValues);
@@ -250,7 +250,7 @@ public class SparkCardinalitiesCalculatorHappyTests {
     @Test
     public void calculateNumberOfNullValues() throws AnalysisException {
         initializeDatasetWithReadTaskVersionWithNulls();
-        cardinalitiesTasks.calculateNumberOfNullValues();
+
         long expectedNumberOfNullValues = 4;
         long actualNumberOfNullValues = cardinalitiesTasks.getNumberOfNullValues();
         assertEquals(expectedNumberOfNullValues, actualNumberOfNullValues);

@@ -108,8 +108,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 		for (int i = 0; i < fields.length; ++i) {
 			String columnName = fields[i].name();
 			String dataType = fields[i].dataType().toString();
-			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCalculatorFactory.createCardinalitiesCalculator(dataset,columnName);
 			Column column = new Column(i, columnName, dataType);
+			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCalculatorFactory.createCardinalitiesCalculator(dataset,columnName);
+			cardinalitiesCalculator.getNumberOfDistinctValues();
+			cardinalitiesCalculator.getNumberOfNullValues();
 			column.setCardinalitiesProfile(cardinalitiesCalculator.createCardinalitiesProfile());
 			columns.add(column);
 		}
