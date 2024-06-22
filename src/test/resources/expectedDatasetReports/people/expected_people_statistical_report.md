@@ -22,6 +22,24 @@
 
 <div align="center">
 
+## Cardinalities Statistics
+
+</div>
+
+---
+<div align="center">
+
+| Column | NullValues | DistinctValues |
+| :---: | :---: | :---: |
+| name | 0 | 3 |
+| age | 0 | 3 |
+| money | 0 | 3 |
+
+
+</div>
+
+<div align="center">
+
 ## Descriptive Statistics
 
 </div>

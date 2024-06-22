@@ -110,9 +110,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 			String dataType = fields[i].dataType().toString();
 			Column column = new Column(i, columnName, dataType);
 			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCalculatorFactory.createCardinalitiesCalculator(dataset,columnName);
-			cardinalitiesCalculator.getNumberOfDistinctValues();
-			cardinalitiesCalculator.getNumberOfNullValues();
-			column.setCardinalitiesProfile(cardinalitiesCalculator.createCardinalitiesProfile());
+			column.setCardinalitiesProfile(cardinalitiesCalculator.computeCardinalityProfile());
 			columns.add(column);
 		}
 		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset,absolutePath);

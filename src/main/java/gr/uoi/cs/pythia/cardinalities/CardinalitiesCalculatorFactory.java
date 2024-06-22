@@ -13,7 +13,4 @@ public class CardinalitiesCalculatorFactory {
         return cardinalitiesCalculator;
     }
 
-
-
-
 }

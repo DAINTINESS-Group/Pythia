@@ -43,10 +43,7 @@ public class AdultMain {
 	            new String[] {"hours_per_week"},
 	            new String[] {"native_country", "occupation", "gender"}
 	    );
-		/**
-		 * Missing
-		 */
-		//Danger!!
+
 		datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,2.5); 
 
 	    boolean shouldRunDescriptiveStats = true;

@@ -3,16 +3,19 @@ package gr.uoi.cs.pythia.cardinalities;
 import gr.uoi.cs.pythia.model.CardinalitiesProfile;
 
 /**
- * 
- * @author pvassil
- *
+ * Interface for calculating cardinalities profile.
+ * <p>
+ * Implementations of this interface are responsible for computing the
+ * cardinalities profile of a given Column. The cardinalities profile
+ * typically includes information about the distinct counts of values,
+ * the number of null values.
+ * </p>
  */
 public interface ICardinalitiesCalculator {
-
-    public CardinalitiesProfile createCardinalitiesProfile();
-    public long getNumberOfNullValues();
-    public long getNumberOfDistinctValues();
-    //    public void calculateNumberOfNullValues();
-    //    public void calculateDistincValues();
-
+    /**
+     * @return a {@link CardinalitiesProfile} object containing the
+     * cardinalities information for the column, including distinct counts
+     * and null value counts.
+     */
+    public CardinalitiesProfile computeCardinalityProfile();
 }

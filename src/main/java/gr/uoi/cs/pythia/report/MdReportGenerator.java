@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+import gr.uoi.cs.pythia.report.md.components.*;
 import org.apache.spark.sql.types.DataTypes;
 
 import gr.uoi.cs.pythia.clustering.Cluster;
@@ -18,11 +19,6 @@ import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
-import gr.uoi.cs.pythia.report.md.components.MdCorrelations;
-import gr.uoi.cs.pythia.report.md.components.MdDecisionTrees;
-import gr.uoi.cs.pythia.report.md.components.MdDescriptiveStatistics;
-import gr.uoi.cs.pythia.report.md.components.MdHeader;
-import gr.uoi.cs.pythia.report.md.components.MdHistograms;
 
 public class MdReportGenerator implements IReportGenerator {
 
@@ -117,6 +113,7 @@ public class MdReportGenerator implements IReportGenerator {
 	private String getReportString(DatasetProfile datasetProfile) {
         StringBuilder bobOMastoras = new StringBuilder();
         bobOMastoras.append(new MdHeader(datasetProfile.getAlias(),datasetProfile));
+		bobOMastoras.append(new MdCardinalities(datasetProfile));
         bobOMastoras.append(new MdDescriptiveStatistics(datasetProfile.getColumns()));
         bobOMastoras.append(new MdCorrelations(datasetProfile.getColumns()));
         bobOMastoras.append(new MdDecisionTrees(datasetProfile));

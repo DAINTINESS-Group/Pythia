@@ -53,6 +53,9 @@ public class Column {
   public void setCardinalitiesProfile(CardinalitiesProfile cardinalitiesProfile) {
     this.cardinalitiesProfile = cardinalitiesProfile;
   }
+  public CardinalitiesProfile getCardinalitiesProfile() {
+    return this.cardinalitiesProfile;
+  }
 
   @Override
   public String toString() {

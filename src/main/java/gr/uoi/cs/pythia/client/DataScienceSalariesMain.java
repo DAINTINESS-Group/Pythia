@@ -40,11 +40,8 @@ public class DataScienceSalariesMain {
             new String[] {"salary_in_usd"},
             new String[] {"experience_level", "work_year"}
     );
-    /**
-     * Missing
-     */
-    //Danger!!
-    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,3.0); // we Have Null pointer exception  threashold !!
+
+    datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,3.0);
     RegressionRequest regressionRequest = new RegressionRequest();
     regressionRequest.addRegression(new RegressionParameters(
     		null, "salary_in_usd", RegressionType.AUTOMATED, 0.05));

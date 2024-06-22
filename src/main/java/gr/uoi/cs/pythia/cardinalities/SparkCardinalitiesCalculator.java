@@ -4,6 +4,10 @@ import gr.uoi.cs.pythia.model.CardinalitiesProfile;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.apache.spark.sql.functions.*;
 
@@ -15,54 +19,60 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
     private String columnName;
     private CardinalitiesProfile profile;
 
+
     public SparkCardinalitiesCalculator(Dataset<Row> dataset, String columnName) {
         this.dataset = dataset;
         this.columnName = columnName;
         this.numberOfDistinctValues = -1;
         this.numberOfNullValues = -1;
         this.profile = new CardinalitiesProfile(numberOfDistinctValues,numberOfNullValues);
+
     }
 
     @Override
-    public CardinalitiesProfile createCardinalitiesProfile() {
-        this.profile = new CardinalitiesProfile(numberOfDistinctValues,numberOfNullValues);
+    public  CardinalitiesProfile computeCardinalityProfile() {
+        this.numberOfDistinctValues = this.getNumberOfDistinctValues();
+        this.numberOfNullValues = this.getNumberOfNullValues();
+        this.profile.setNumberOfDistinctValues(numberOfDistinctValues);
+        this.profile.setNumberOfNullValues(numberOfNullValues);
         return this.profile;
     }
 
-    @Override
+
     public long getNumberOfNullValues() {
     	if(this.numberOfNullValues == -1)
     		calculateNumberOfNullValues();
         return numberOfNullValues;
     }
-    
-    @Override
+
+
     public long getNumberOfDistinctValues() {
     	if(this.numberOfDistinctValues == -1)
     		calculateDistinctValues();
         return numberOfDistinctValues;
     }
-    
+
     private void calculateNumberOfNullValues() {
-        //numberOfNullValues = dataset.filter(dataset.col(columnName).isNull().or(dataset.col(columnName).equalTo(""))).count();
-        try {
+        try{
             Column column = col(columnName);
-            Column nullOrEmptyCondition = column.isNull().or(expr("trim(" + columnName + ")").equalTo(""));
-            Column conditionResult = when(nullOrEmptyCondition, true);
-            Column countResult = count(conditionResult);
-
-            
-            //TODO CHECK WHY THIS!!!        
-            Dataset<Row> result = dataset.agg(countResult);
-            Row firstRow = result.first();
-            numberOfNullValues = firstRow.getLong(0);
-
-        } catch (NullPointerException e) {
+            this.numberOfNullValues = dataset.select(column)
+                    .filter(column.isNull().or(trim(column).equalTo("")))
+                    .count();
+        }catch (NullPointerException e) {
             handleException("NullPointerException", e);
         } catch (Exception e) {
             handleException("Exception", e);
         }
-
+        /*
+         List<Row> columnValues = dataset.select(this.column).collectAsList();
+         System.out.println(columnValues);
+         this.numberOfNullValues = 0;
+         for(Row row : columnValues){
+             if (row.get(0) == null || row.get(0).toString().trim().equals("")){
+                 this.numberOfNullValues++;
+             }
+         }
+*/
 
     }
     private static void handleException(String exceptionType, Exception e) {
@@ -72,42 +82,27 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
 
     
     private void calculateDistinctValues() {
-        //numberOfDistinctValues = dataset.select(columnName).distinct().count();
-       /* try {
-            Dataset<Row> selectedColumn = dataset.select(functions.approx_count_distinct(columnName));
-            Row firstRow = selectedColumn.first();
-            numberOfDistinctValues = firstRow.getLong(0);
-        } catch (NullPointerException e) {
-            handleException("NullPointerException", e);
-        } catch (Exception e) {
-            handleException("Exception", e);
-        }*/
         try {
             Column column = col(columnName);
-            Column nullOrEmptyCondition = column.isNotNull().and(expr("trim(" + columnName + ")").notEqual(""));
-            Column countDistinctResult = countDistinct(when(nullOrEmptyCondition, column));
-            
-            //TODO CHECK & FIX
-            Dataset<Row> selectedColumn = dataset.select(countDistinctResult);
-            Row firstRow = selectedColumn.first();
-            numberOfDistinctValues = firstRow.getLong(0);
-            
+            this.numberOfDistinctValues = dataset.select(column)
+                    .filter(column.isNotNull().and(trim(column).notEqual("")))
+                    .distinct()
+                    .count();
         } catch (NullPointerException e) {
             handleException("NullPointerException", e);
         } catch (Exception e) {
             handleException("Exception", e);
         }
+        /*
+        //USE hashSet
+        Column column = col(columnName);
+        Set<Object> columnValues = new HashSet<>();
+        for (Object value : dataset.select(column).collectAsList()) { // Danger collect asLIst -> out of memory !!
+            if(value == null || value.toString().trim().equals("")){
+                columnValues.add(value);
+            }
+        }*/
 
-    }
-
-
-    //TODO maybe add sth like this to the Interface
-    private CardinalitiesProfile computeCardinalityProfile() {
-    	this.numberOfDistinctValues = this.getNumberOfDistinctValues();
-    	this.numberOfNullValues = this.getNumberOfNullValues();
-    	this.profile.setNumberOfDistinctValues(numberOfDistinctValues);
-    	this.profile.setNumberOfNullValues(numberOfNullValues);
-    	return this.profile;
     }
 
 }
