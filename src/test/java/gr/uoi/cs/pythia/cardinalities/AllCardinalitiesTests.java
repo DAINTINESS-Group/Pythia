@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         SparkCardinalitiesCalculatorHappyScenario1Test.class,
         SparkCardinalitiesCalculatorHappyScenario2Test.class,
-        SparkCardinalitiesCalculatorRainyTestsV1.class
+        SparkCardinalitiesTestsRainy.class
 
 })
 

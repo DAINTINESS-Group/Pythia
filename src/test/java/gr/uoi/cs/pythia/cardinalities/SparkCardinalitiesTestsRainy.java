@@ -20,13 +20,12 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test class for verifying the functionality of the SparkCardinalitiesCalculator under rainy scenarios.
  */
-public class SparkCardinalitiesCalculatorRainyTestsV1 {
+public class SparkCardinalitiesTestsRainy {
 
     private ICardinalitiesCalculator cardinalitiesTasks;
-    private CardinalitiesCalculatorFactory factory = new CardinalitiesCalculatorFactory();
+    private final CardinalitiesCalculatorFactory factory = new CardinalitiesCalculatorFactory();
     private Dataset<Row> dataset;
     private SparkSession session;
-    private String datasetPath;
     private CardinalitiesProfile profile;
 
     /**
@@ -63,7 +62,7 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      */
     private void initializeDatasetWithReadTask() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
     }
@@ -94,11 +93,9 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
         long actualNumberOfDistinctValues = profile.getNumberOfDistinctValues();
         assertEquals(-1, actualNumberOfDistinctValues);
     }
-
     /**
      * Test method for asserting the number of null values calculation with valid column name.
      */
-
     private void setNullDatasetParameter(){
         StructField[] fields = dataset.schema().fields();
         String columnName = fields[0].name();
@@ -108,7 +105,7 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
 
 
     @Test
-    public void assertNumberOfNullValuesWithValidColumnName() throws AnalysisException {
+    public void assertNumberOfNullValuesWithValidColumnName()  {
         setNullDatasetParameter();
         // Assert the number of null values
         long actualNumberOfNullValues = profile.getNumberOfNullValues();
@@ -119,7 +116,7 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      * Test method for asserting the number of distinct values calculation with valid column name.
      */
     @Test
-    public void assertNumberOfDistinctValuesWithValidColumnName() throws AnalysisException {
+    public void assertNumberOfDistinctValuesWithValidColumnName()  {
         setNullDatasetParameter();
         // Assert the number of distinct values
         long actualNumberOfDistinctValues = profile.getNumberOfDistinctValues();
@@ -129,7 +126,6 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
     /**
      * Test method for asserting the number of null values calculation with valid dataset and null column name.
      */
-
     private void setNullColumnNameParameter(){
         // Execute the test scenario
         cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, null);
@@ -159,7 +155,6 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
     /**
      * Test method for asserting the calculation of the number of null values and distinct values in an empty dataset.
      */
-
     private void setupEmptyDataset(){
         String columnName = "empty_column";
         StructType schema = new StructType().add(columnName, "string");
@@ -168,7 +163,6 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
         profile = cardinalitiesTasks.computeCardinalityProfile();
 
     }
-
 
     /**
      * Test case to verify the calculation of the number of null values  in an empty dataset.
@@ -191,11 +185,9 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      *   <li>The calculated number of null values in the empty dataset is zero.</li>
      * </ul>
      * </p>
-     *
-     * @throws AnalysisException if an error occurs during dataset initialization
      */
     @Test
-    public void calculateNullValuesInEmptyDataset() throws AnalysisException {
+    public void calculateNullValuesInEmptyDataset()  {
         setupEmptyDataset();
         // Assert the number of null values
         long actualNumberOfNullValues = profile.getNumberOfNullValues();
@@ -223,18 +215,14 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      *   <li>The calculated number of distinct values in the empty dataset is zero.</li>
      * </ul>
      * </p>
-     *
-     * @throws AnalysisException if an error occurs during dataset initialization
      */
     @Test
-    public void calculateDistinctValuesInEmptyDataset() throws AnalysisException {
+    public void calculateDistinctValuesInEmptyDataset()  {
         setupEmptyDataset();
         // Assert the number of distinct values
         long actualNumberOfDistinctValues = profile.getNumberOfDistinctValues();
         assertEquals(0, actualNumberOfDistinctValues);
     }
-
-
 
     /**
      * Test method for asserting the calculation of the number of null values and distinct values with a wrong column name.
@@ -243,11 +231,7 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
         String columnName = "Wrong_column";
         cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
         profile = cardinalitiesTasks.computeCardinalityProfile();
-
-
     }
-
-
     /**
      * Test case to verify the calculation of the number of null values in dataset.
      *
@@ -269,11 +253,7 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      *   <li>The calculated number of null values in the dataset is -1. We cannot calculate with wrong Column.</li>
      * </ul>
      * </p>
-     *
-     * @throws AnalysisException if an error occurs during dataset initialization
      */
-
-
     @Test
     public void calculateNullValuesWithWrongColumnName() {
         setWrongColumnNameParameter();
@@ -303,8 +283,6 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
      *
      * </ul>
      * </p>
-     *
-     * @throws AnalysisException if an error occurs during dataset initialization
      */
     @Test
     public void calculateDistinctValuesWithWrongColumnName() {
@@ -313,8 +291,6 @@ public class SparkCardinalitiesCalculatorRainyTestsV1 {
         long actualNumberOfDistinctValues = profile.getNumberOfDistinctValues();
         assertEquals(-1, actualNumberOfDistinctValues);
     }
-
-
 
 
 }
