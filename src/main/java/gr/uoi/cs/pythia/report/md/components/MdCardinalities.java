@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import gr.uoi.cs.pythia.model.CardinalitiesProfile;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.DescriptiveStatisticsProfile;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
 import gr.uoi.cs.pythia.report.md.structures.MdTable;
 
@@ -55,10 +53,8 @@ public class MdCardinalities {
             data.addAll(Collections.nCopies(3, null));
             return data;
         }
-        StringBuilder builderNull = new StringBuilder();
-        String nullValues = builderNull.append(profile.getNumberOfNullValues()).toString();
-        StringBuilder builderDistinct = new StringBuilder();
-        String distinctValues = builderDistinct.append(profile.getNumberOfDistinctValues()).toString();
+        String nullValues = String.valueOf(profile.getNumberOfNullValues());
+        String distinctValues = String.valueOf(profile.getNumberOfDistinctValues());
         return Arrays.asList(column.getName(),
                 nullValues,
                 distinctValues);

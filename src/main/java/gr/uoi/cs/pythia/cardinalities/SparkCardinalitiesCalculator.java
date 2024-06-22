@@ -4,11 +4,6 @@ import gr.uoi.cs.pythia.model.CardinalitiesProfile;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import static org.apache.spark.sql.functions.*;
 
 public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
@@ -16,8 +11,8 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
     private final Dataset<Row> dataset;
     private long numberOfDistinctValues;
     private long numberOfNullValues;
-    private String columnName;
-    private CardinalitiesProfile profile;
+    private final String columnName;
+    private final CardinalitiesProfile profile;
 
 
     public SparkCardinalitiesCalculator(Dataset<Row> dataset, String columnName) {
@@ -59,9 +54,9 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
                     .filter(column.isNull().or(trim(column).equalTo("")))
                     .count();
         }catch (NullPointerException e) {
-            handleException("NullPointerException", e);
+            handleException("NullPointerException");
         } catch (Exception e) {
-            handleException("Exception", e);
+            handleException("Exception");
         }
         /*
          List<Row> columnValues = dataset.select(this.column).collectAsList();
@@ -75,9 +70,9 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
 */
 
     }
-    private static void handleException(String exceptionType, Exception e) {
+    private static void handleException(String exceptionType) {
         System.err.println("An " + exceptionType + " occurred while calculating the number of null values");
-        //e.printStackTrace();
+
     }
 
     
@@ -89,9 +84,9 @@ public class SparkCardinalitiesCalculator implements ICardinalitiesCalculator{
                     .distinct()
                     .count();
         } catch (NullPointerException e) {
-            handleException("NullPointerException", e);
+            handleException("NullPointerException");
         } catch (Exception e) {
-            handleException("Exception", e);
+            handleException("Exception");
         }
         /*
         //USE hashSet

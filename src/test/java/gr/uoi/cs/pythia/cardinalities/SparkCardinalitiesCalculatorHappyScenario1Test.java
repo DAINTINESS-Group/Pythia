@@ -14,7 +14,6 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,11 +22,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class SparkCardinalitiesCalculatorHappyScenario1Test {
 
-    private ICardinalitiesCalculator cardinalitiesTasks;
     private Dataset<Row> dataset;
     private SparkSession session;
-    private String datasetPath;
-    private CardinalitiesCalculatorFactory factory;
     private CardinalitiesProfile profile;
 
     /**
@@ -41,8 +37,8 @@ public class SparkCardinalitiesCalculatorHappyScenario1Test {
         initializeDatasetWithReadTask();
         StructField[] fields = dataset.schema().fields();
         String columnName = fields[0].name(); /* Column to Test: manufacturer */
-        factory = new CardinalitiesCalculatorFactory();
-        cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
+        CardinalitiesCalculatorFactory factory = new CardinalitiesCalculatorFactory();
+        ICardinalitiesCalculator cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
         profile = cardinalitiesTasks.computeCardinalityProfile();
     }
 
@@ -92,7 +88,7 @@ public class SparkCardinalitiesCalculatorHappyScenario1Test {
      */
     private void initializeDatasetWithReadTask() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NotNullEmptyValues.csv");
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NotNullEmptyValues.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
     }

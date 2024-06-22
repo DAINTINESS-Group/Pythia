@@ -14,7 +14,6 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,11 +22,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class SparkCardinalitiesCalculatorHappyScenario2Test {
 
-    private ICardinalitiesCalculator cardinalitiesTasks;
     private Dataset<Row> dataset;
     private SparkSession session;
-    private String datasetPath;
-    private CardinalitiesCalculatorFactory factory;
     private CardinalitiesProfile profile;
 
     /**
@@ -41,8 +37,8 @@ public class SparkCardinalitiesCalculatorHappyScenario2Test {
         initializeDatasetWithReadTask();
         StructField[] fields = dataset.schema().fields();
         String columnName = fields[0].name(); /* Column to Test: manufacturer */
-        factory = new CardinalitiesCalculatorFactory();
-        cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
+        CardinalitiesCalculatorFactory factory = new CardinalitiesCalculatorFactory();
+        ICardinalitiesCalculator cardinalitiesTasks = factory.createCardinalitiesCalculator(dataset, columnName);
         profile = cardinalitiesTasks.computeCardinalityProfile();
     }
 
@@ -62,7 +58,6 @@ public class SparkCardinalitiesCalculatorHappyScenario2Test {
      * Initializes the dataset with read task.
      *
      * @throws AnalysisException if an error occurs during dataset initialization
-     *
      * File to test:
      * Column to Test: manufacturer
      * <pre>{@car_20_NullEmpty.csv
@@ -91,7 +86,7 @@ public class SparkCardinalitiesCalculatorHappyScenario2Test {
      */
     private void initializeDatasetWithReadTask() throws AnalysisException {
         IDatasetReaderFactory dataFrameReaderFactory = new IDatasetReaderFactory(session);
-        datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("car_20_NullEmpty.csv");
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         dataset = dataFrameReaderFactory.createDataframeReader(datasetPath, schema).read();
     }
@@ -119,7 +114,7 @@ public class SparkCardinalitiesCalculatorHappyScenario2Test {
      * </p>
      */
     @Test
-    public void calculateNumberOfNullValues() throws AnalysisException {
+    public void calculateNumberOfNullValues() {
         long expectedNumberOfNullValues = 4;
         long actualNumberOfNullValues = profile.getNumberOfNullValues();
         assertEquals(expectedNumberOfNullValues, actualNumberOfNullValues);
@@ -148,7 +143,7 @@ public class SparkCardinalitiesCalculatorHappyScenario2Test {
      * </p>
      */
     @Test
-    public void calculateDistinctValues() throws AnalysisException {
+    public void calculateDistinctValues() {
         long expectedDistinctValues = 1;
         long actualNumberOfNullValues = profile.getNumberOfDistinctValues();
         assertEquals(expectedDistinctValues, actualNumberOfNullValues);
