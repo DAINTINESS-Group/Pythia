@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import gr.uoi.cs.pythia.model.OutlierProfile;
 import org.apache.log4j.Logger;
 
 import gr.uoi.cs.pythia.model.Column;
@@ -358,7 +359,7 @@ public class HighlightsManagerV01 implements HighlightsManagerInterface {
 	private void extractDominanceHighlights() {
 		//logger.info(String.format("Extracted the highlights for the dominance patterns of the dataset"));
 	}
-	
+	/*
 	private List<HolisticHighlight> extractOutlierHighlights() {
 		List<HolisticHighlight> outlierHolisticHLs = new ArrayList<HolisticHighlight>();
 		List<OutlierResult>  outliersResults = datasetProfile.getPatternsProfile().getOutlierResults();
@@ -373,7 +374,32 @@ public class HighlightsManagerV01 implements HighlightsManagerInterface {
 			hHighlight.setSupportingText(" with value " + outlierRes.getValue());
 			holisticHighlights.add(hHighlight);
 			outlierHolisticHLs.add(hHighlight);
+		}*/
+	private List<HolisticHighlight> extractOutlierHighlights() {
+		List<HolisticHighlight> outlierHolisticHLs = new ArrayList<HolisticHighlight>();
+
+		for(Column column: columns) {
+			OutlierProfile columnOutlierProfile = column.getOutlierProfile();
+			if(columnOutlierProfile == null) continue;
+			List<OutlierResult> outlierResultsList = columnOutlierProfile.getOutlierResultList();
+
+			for(OutlierResult outlierResult: outlierResultsList) {
+				HolisticHighlight hHighlight = new HolisticHighlight(
+						"Outlier",
+						column.getName(),
+						"a "+ columnOutlierProfile.getOutlierType() + " calculation algorithm",
+						null,
+						"True",
+						columnOutlierProfile.getOutlierType(),
+						outlierResult.getScore(),
+						null);
+				hHighlight.setSupportingText(" with value " + outlierResult.getValue());
+				holisticHighlights.add(hHighlight);
+				outlierHolisticHLs.add(hHighlight);
+
+			}
 		}
+
 		
 //		IHighlightsReporter outlierHLReporter = this.highlightReporterFactory.createHighlightReporter(HighlightReporterFactory.HighlightReporterType.OUTLIER);
 ////		OutlierHighlightsReporter outlierHLReporter = new OutlierHighlightsReporter();

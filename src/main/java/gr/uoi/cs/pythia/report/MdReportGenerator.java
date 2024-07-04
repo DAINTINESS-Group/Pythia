@@ -1,24 +1,17 @@
 package gr.uoi.cs.pythia.report;
 
+import gr.uoi.cs.pythia.clustering.Cluster;
+import gr.uoi.cs.pythia.model.*;
+import gr.uoi.cs.pythia.model.clustering.ClusteringType;
+import gr.uoi.cs.pythia.model.dominance.DominanceResult;
+import gr.uoi.cs.pythia.model.regression.RegressionType;
+import gr.uoi.cs.pythia.report.md.components.*;
+import org.apache.spark.sql.types.DataTypes;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-
-import gr.uoi.cs.pythia.report.md.components.*;
-import org.apache.spark.sql.types.DataTypes;
-
-import gr.uoi.cs.pythia.clustering.Cluster;
-import gr.uoi.cs.pythia.model.ClusteringProfile;
-import gr.uoi.cs.pythia.model.Column;
-import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.PatternsProfile;
-import gr.uoi.cs.pythia.model.RegressionProfile;
-import gr.uoi.cs.pythia.model.clustering.ClusteringType;
-import gr.uoi.cs.pythia.model.dominance.DominanceResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
-import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class MdReportGenerator implements IReportGenerator {
 
@@ -30,7 +23,7 @@ public class MdReportGenerator implements IReportGenerator {
 	private static final String statisticalReportFileName = "statistical_report.md";
 	private static final String highDominanceReportFileName = "high_dominance_report.md";
 	private static final String lowDominanceReportFileName = "low_dominance_report.md";
-	private static final String outliersReportFileName = "outliers_report.md";
+	//private static final String outliersReportFileName = "outliers_report.md";
 	private static final String regressionReportFileName = "regression_report.md";
 	private static final String clusteringReportFileName = "clustering_report.md";
 
@@ -39,6 +32,9 @@ public class MdReportGenerator implements IReportGenerator {
 	@Override
 	public void produceReport(DatasetProfile datasetProfile, String outputDirectoryPath)
 			throws IOException {
+		// Todo check it
+		//  we can found outliers in StatisticalReport
+		//  we can create a separate file with only outliers info
 		produceStatisticalProfileReport(datasetProfile, outputDirectoryPath);
 		producePatternsProfileReports(datasetProfile, outputDirectoryPath);
 		produceRegressionProfileReport(datasetProfile, outputDirectoryPath);
@@ -115,6 +111,10 @@ public class MdReportGenerator implements IReportGenerator {
         bobOMastoras.append(new MdHeader(datasetProfile.getAlias(),datasetProfile));
 		bobOMastoras.append(new MdCardinalities(datasetProfile));
         bobOMastoras.append(new MdDescriptiveStatistics(datasetProfile.getColumns()));
+		//Todo check it
+		// move outliers separate file
+		bobOMastoras.append(new MdOutlierStatistics(datasetProfile));
+
         bobOMastoras.append(new MdCorrelations(datasetProfile.getColumns()));
         bobOMastoras.append(new MdDecisionTrees(datasetProfile));
         bobOMastoras.append(new MdHistograms(datasetProfile.getColumns()));
@@ -131,7 +131,7 @@ public class MdReportGenerator implements IReportGenerator {
 		List<DominanceResult> lowDominanceResults = patternsProfile.getLowDominanceResults();
 		produceLowDominanceReport(lowDominanceResults, outputDirectoryPath);
 
-		produceOutliersReport(datasetProfile, outputDirectoryPath);
+		//produceOutliersReport(datasetProfile, outputDirectoryPath);
 	}
 
 	private void produceHighDominanceReport(List<DominanceResult> highDominanceResults,
@@ -165,37 +165,6 @@ public class MdReportGenerator implements IReportGenerator {
 				preTagOpen + dominanceResult.dominanceToString(isExtensiveReport) + preTagClose;
 	}
 
-	private void produceOutliersReport(DatasetProfile datasetProfile,
-																		 String outputDirectoryPath) throws IOException {
-		PatternsProfile patternsProfile = datasetProfile.getPatternsProfile();
-		List<OutlierResult> outlierResults = datasetProfile.getPatternsProfile().getOutlierResults();
-
-		StringBuilder str = new StringBuilder(String.format(
-						"# " + patternsProfile.getOutlierType() + " Outlier Pattern Results\n\n" +
-										"Total outliers found: %s\n", outlierResults.size()));
-
-		for (Column column : datasetProfile.getColumns()) {
-			if(isNumericColumn(column)) {
-				int outliersInColumn = patternsProfile.countOutliersInColumn(column.getName());
-				str.append(String.format(horizontalLine +
-												"## Outliers in %s column\n" +
-												"Outliers found: %s\n",
-								column.getName(),
-								outliersInColumn));
-				if (outliersInColumn > 0) {
-					str.append(String.format("%s%-24s%-24s%-24s\n",
-									preTagOpen,
-									"Outlier value", patternsProfile.getOutlierType(), "Position in the column"));
-				}
-				for (OutlierResult result : outlierResults) {
-					if (!Objects.equals(result.getColumnName(), column.getName())) continue;
-					str.append(result.toString());
-				}
-				if (outliersInColumn > 0) str.append(preTagClose);
-			}
-		}
-		writeToFile(outputDirectoryPath, outliersReportFileName, String.valueOf(str));
-	}
 
 	private void writeToFile(String outputDirectoryPath, String fileName, String contents)
 			throws IOException {

@@ -1,16 +1,13 @@
-package gr.uoi.cs.pythia.patterns.outlier;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-
+package gr.uoi.cs.pythia.outliers;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.OutlierProfile;
 import gr.uoi.cs.pythia.model.outlier.OutlierResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
@@ -28,36 +25,30 @@ public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 	}
 	
 	@Override
-	public List<OutlierResult> identifyOutliers(
-			Dataset<Row> dataset, 
-			DatasetProfile datasetProfile) {
-		List<OutlierResult> results = new ArrayList<OutlierResult>();
-		
-		// Debug print
-		//System.out.println("------------------zSCORE--------------------");
-		
+	public void identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 		for (Column column : datasetProfile.getColumns()) {
 			if (isNotNumericColumn(column)) continue;
 			Double mean = getColumnMean(column);
 			Double standardDeviation = getColumnStandardDeviation(column);
 			if (standardDeviation == 0.0) continue;
 			List<Double> values = getColumnValues(dataset, column);
-			
+
+			List<OutlierResult> results = new ArrayList<OutlierResult>();
+
 			for (int index = 0; index < values.size(); index++) {
 				Double value = values.get(index);
 				Double zScore = (value - mean) / standardDeviation;
 				
 				if (Math.abs(zScore) >= Z_SCORE_THRESHOLD) {
-					results.add(new OutlierResult(
-							OutlierType.Z_SCORE, column.getName(), value, zScore, index+1));
+					results.add(new OutlierResult(value, zScore, index+1));
 				}
 			}
+			//TODO Extract Method ??
+			//createOutlierResult(results,Z_SCORE_TEXT);
+			OutlierProfile outlierProfile = new OutlierProfile(results,Z_SCORE_TEXT);
+			column.setOutlierProfile(outlierProfile);
+
 		}
-		
-		return results;
-		
-		// Debug print
-//		System.out.println(results);
 	}
 
 }

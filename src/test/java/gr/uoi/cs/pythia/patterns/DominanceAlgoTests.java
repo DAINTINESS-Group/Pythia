@@ -1,15 +1,6 @@
 package gr.uoi.cs.pythia.patterns;
 
-import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.*;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import gr.uoi.cs.pythia.model.dominance.DominanceResult;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory;
 import gr.uoi.cs.pythia.patterns.dominance.IDominanceAlgo;
 import org.apache.spark.sql.AnalysisException;
@@ -18,7 +9,13 @@ import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.model.dominance.DominanceResult;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.*;
+import static org.junit.Assert.*;
 
 public class DominanceAlgoTests {
 

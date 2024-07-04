@@ -24,6 +24,8 @@ import gr.uoi.cs.pythia.model.LabeledColumn;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.highlights.HolisticHighlight;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
+import gr.uoi.cs.pythia.outliers.IOutlierAlgo;
+import gr.uoi.cs.pythia.outliers.OutlierAlgoFactory;
 import gr.uoi.cs.pythia.patterns.IPatternManager;
 import gr.uoi.cs.pythia.patterns.IPatternManagerFactory;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
@@ -46,7 +48,6 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -58,7 +59,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.apache.spark.sql.functions.expr;
 
 public class DatasetProfiler implements IDatasetProfiler {
@@ -76,7 +76,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private double outlierThreshold;
 	private RegressionRequest regressionRequest;
 	private ClusteringParameters clusteringParameters;
-
 	private HighlightsManagerInterface highlightsManager;
 	
 	//package-private for the moment
@@ -298,14 +297,14 @@ public class DatasetProfiler implements IDatasetProfiler {
 		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
 		IPatternManagerFactory factory = new IPatternManagerFactory();
 		IPatternManager patternManager = factory.createPatternManager(
-				dataset, datasetProfile, dominanceParameters, outlierType, outlierThreshold);
+				dataset, datasetProfile, dominanceParameters/*, outlierType, outlierThreshold*/);
 		patternManager.identifyDominance();
 		logger.info(String.format("Identified dominance for dataset %s", datasetProfile.getAlias()));
 		
 		Duration duration = Duration.between(start, Instant.now());
 		logger.info(String.format("Duration of identifyDominancePatterns: %s / %sms", duration, duration.toMillis()));
 	}
-	
+	/*
 	private void identifyOutliers() throws IOException {
 		Instant start = Instant.now();
 
@@ -320,7 +319,25 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant end = Instant.now();		
 		Duration duration = Duration.between(start, end);
 		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
+	}*/
+
+	private void identifyOutliers() throws IOException {
+		Instant start = Instant.now();
+		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
+		OutlierAlgoFactory factory = new OutlierAlgoFactory();
+
+		//Todo check this call.
+		// in case who have forgot call  declareOutlierParameters in clients , we take nulls. e.g not initialize threshold ,outlierType
+		//declareOutlierParameters(outlierType,outlierThreshold);
+
+		IOutlierAlgo algoOutlier = factory.createOutlierAlgo(this.outlierType,this.outlierThreshold);
+		algoOutlier.identifyOutliers(this.dataset, this.datasetProfile);
+		logger.info(String.format("Identified outliers for dataset %s", datasetProfile.getAlias()));
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
 	}
+
 	
 	private void performRegression() {
 		Instant start = Instant.now();

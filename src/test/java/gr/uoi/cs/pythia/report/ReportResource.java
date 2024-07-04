@@ -60,7 +60,8 @@ public class ReportResource extends ExternalResource {
         regressionRequest.addRegression(new RegressionParameters(
         		null, "age", RegressionType.AUTOMATED, 0.05));
         datasetProfiler.declareRegressionRequest(regressionRequest);
-        datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
+        //datasetProfiler.getDatasetProfile().getPatternsProfile().setOutlierType("Z Score");
+        //datasetProfiler.getDatasetProfile().getOutlierProfile().setOutlierType("Z Score");
 		datasetProfiler.declareDominanceParameters(
 				DominanceColumnSelectionMode.EXHAUSTIVE,
 				null, null);
@@ -73,7 +74,7 @@ public class ReportResource extends ExternalResource {
 		boolean shouldRunAllPairsCorrelations = true;
 		boolean shouldRunDecisionTrees = true;
 		boolean shouldRunDominancePatterns = true;
-		boolean shouldRunOutlierDetection = false;
+		boolean shouldRunOutlierDetection = true;
 		boolean shouldRunRegression = true;
 		boolean shouldRunClustering = true;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.ALL, Double.MIN_VALUE);

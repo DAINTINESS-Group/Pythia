@@ -1,15 +1,5 @@
 package gr.uoi.cs.pythia.patterns;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-
-import org.apache.commons.lang.reflect.FieldUtils;
-import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.StructType;
-import org.junit.rules.ExternalResource;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -18,6 +8,15 @@ import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
 import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
+import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.types.StructType;
+import org.junit.rules.ExternalResource;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
 
 public class PatternsResource extends ExternalResource {
 

@@ -16,5 +16,5 @@ public interface IPatternManager {
    */
   void identifyDominance() throws IOException;
 
-  void identifyOutliers() throws IOException;
+  /*void identifyOutliers() throws IOException;*/
 }

@@ -1,4 +1,4 @@
-package gr.uoi.cs.pythia.patterns.outlier;
+package gr.uoi.cs.pythia.outliers;
 
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 
@@ -12,6 +12,8 @@ public class OutlierAlgoFactory {
 		      	return new NormalizedScoreOutlierAlgo(outlierThreshold);
 
 		    }
+			//TODO return not null OutlierAlgo
+
 		    throw new IllegalArgumentException(
 		        String.format("Outlier %s is not a supported outlier type.", type));
 		  }

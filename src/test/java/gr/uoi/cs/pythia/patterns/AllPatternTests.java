@@ -8,9 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	DominanceColumnSelectorTests.class, 
-	DominanceAlgoTests.class,
-	ZScoreOutlierAlgoTests.class,
-	NormalizedScoreOutlierAlgoTests.class
+	DominanceAlgoTests.class
 })
 public class AllPatternTests {
 

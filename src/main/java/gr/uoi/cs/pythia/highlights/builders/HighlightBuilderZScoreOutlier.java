@@ -3,6 +3,8 @@ package gr.uoi.cs.pythia.highlights.builders;
 import java.util.ArrayList;
 import java.util.List;
 
+import gr.uoi.cs.pythia.model.Column;
+import gr.uoi.cs.pythia.model.OutlierProfile;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -27,6 +29,7 @@ public class HighlightBuilderZScoreOutlier {
 	 *     
 	 * @return a List of outlier highlights
 	 */
+	/*
 	public List<HolisticHighlight> extractHolisticHighlights() {
 		NormalDistribution nd = new NormalDistribution();
 
@@ -45,6 +48,30 @@ public class HighlightBuilderZScoreOutlier {
 
 			fullListHLs.add(hHighlight);
 		}
+
+
+		return fullListHLs;
+	} */
+	public List<HolisticHighlight> extractHolisticHighlights() {
+		NormalDistribution nd = new NormalDistribution();
+
+		List<HolisticHighlight> fullListHLs = new ArrayList<HolisticHighlight>();
+		for(Column column: datasetProfile.getColumns()) {
+			OutlierProfile columnOutlierProfile = column.getOutlierProfile();
+			if(columnOutlierProfile == null) continue;
+			List<OutlierResult> outlierResultsList = columnOutlierProfile.getOutlierResultList();
+			for(OutlierResult outlierResult: outlierResultsList) {
+				String columnName = column.getName();
+				double zscore = outlierResult.getScore();
+				double survivalScore = 1.0 - nd.cumulativeProbability(Math.abs(zscore));
+				HolisticHighlight hHighlight = new HolisticHighlight("Outlier", columnName, "a "+ columnOutlierProfile.getOutlierType() +" calculation algorithm",null, "True", columnOutlierProfile.getOutlierType(),survivalScore, null);
+				//survivalFunction(outlierRes.getScore()), null);
+				hHighlight.setSupportingText(" with value " + outlierResult.getValue());
+				fullListHLs.add(hHighlight);
+			}
+		}
+
+
 
 
 		return fullListHLs;

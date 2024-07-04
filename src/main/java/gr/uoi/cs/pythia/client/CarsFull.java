@@ -28,7 +28,7 @@ public class CarsFull {
     StructType schema = getCarsCsvSchema();
     String alias = "cars";
     String path = String.format(
-            "src%stest%sresources%sdatasets%scars_100.csv",
+            "src%stest%sresources%sdatasets%scars_100k.csv",
             File.separator, File.separator, File.separator, File.separator);
 
     datasetProfiler.registerDataset(alias, path, schema);

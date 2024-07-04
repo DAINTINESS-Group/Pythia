@@ -57,6 +57,9 @@ Histogram:
 [43.8,46.9): 0 values
 [46.9,50]: 1 values
 
+OutlierProfile:
+Not found Outliers,
+TypeOutlier is Z_Score
 =============================================================================
 Column
 position: 2
@@ -90,3 +93,6 @@ Histogram:
 [26,28): 0 values
 [28,30]: 1 values
 
+OutlierProfile:
+Not found Outliers,
+TypeOutlier is Z_Score

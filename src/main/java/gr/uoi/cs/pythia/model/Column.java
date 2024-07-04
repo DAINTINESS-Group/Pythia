@@ -11,6 +11,7 @@ public class Column {
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
   private Histogram histogram;
   private CardinalitiesProfile cardinalitiesProfile;
+  private OutlierProfile outlierProfile;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -89,6 +90,20 @@ public class Column {
       stringBuilder.append(histogram);
       stringBuilder.append("\n");
     }
+    if (outlierProfile != null) {
+      stringBuilder.append("OutlierProfile:\n");
+      stringBuilder.append(outlierProfile);
+      stringBuilder.append("\n");
+    }
     return stringBuilder.toString();
   }
+
+  public void setOutlierProfile(OutlierProfile outlierProfile) {
+    this.outlierProfile = outlierProfile;
+  }
+
+  public OutlierProfile getOutlierProfile() {
+    return this.outlierProfile;
+  }
+
 }

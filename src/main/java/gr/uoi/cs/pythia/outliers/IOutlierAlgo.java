@@ -1,12 +1,10 @@
-package gr.uoi.cs.pythia.patterns.outlier;
+package gr.uoi.cs.pythia.outliers;
 
-import java.util.List;
-
+import gr.uoi.cs.pythia.model.DatasetProfile;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
-import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
+
 
 public interface IOutlierAlgo {
 
@@ -29,6 +27,7 @@ public interface IOutlierAlgo {
 	 * column validity for the given outlier algorithm implementation.
 	 * @return A list of OutlierResult objects, containing all the identified outliers for all applicable columns.
 	 */
-	List<OutlierResult> identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile);
+	void  identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile);
+
 	
 }

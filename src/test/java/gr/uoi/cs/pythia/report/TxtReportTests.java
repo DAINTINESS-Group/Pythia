@@ -43,14 +43,14 @@ public class TxtReportTests {
             new File(reportPath + File.separator + "low_dominance_report.txt"))
             .replace(AllReportTests.reportResource.getAbsoluteDatasetPath(), "");
     assertEquals(expectedLowDominanceReport, actualLowDominanceReport);
-    
+    /*
     String expectedOutliersReport = TestsUtilities.getExpectedDatasetReport(
             "people/expected_people_outliers_report.txt");
     String actualOutliersReport = TestsUtilities.getTextFromFile(
             new File(reportPath + File.separator + "outliers_report.txt"))
             .replace(AllReportTests.reportResource.getAbsoluteDatasetPath(), "");
     assertEquals(expectedOutliersReport, actualOutliersReport);
-    
+    */
     String expectedRegressionReport = TestsUtilities.getExpectedDatasetReport(
             "people/expected_people_regression_report.txt");
     String actualRegressionReport = TestsUtilities.getTextFromFile(

@@ -25,6 +25,9 @@ public class MdReportTests {
             .generateReport(ReportGeneratorConstants.MD_REPORT,
                     reportFile.getAbsolutePath());
 
+    // Todo
+    //  we check outliers in statistical.md
+    //  we will split
     String expectedStatisticalReport = TestsUtilities.getExpectedDatasetReport(
             "people/expected_people_statistical_report.md");
     String actualStatisticalReport = TestsUtilities.getTextFromFile(
@@ -45,14 +48,14 @@ public class MdReportTests {
             new File(reportPath + File.separator + "low_dominance_report.md"))
             .replace(AllReportTests.reportResource.getAbsoluteDatasetPath(), "");
     assertEquals(expectedLowDominanceReport, actualLowDominanceReport);
-
+/*
     String expectedOutliersReport = TestsUtilities.getExpectedDatasetReport(
             "people/expected_people_outliers_report.md");
     String actualOutliersReport = TestsUtilities.getTextFromFile(
             new File(reportPath + File.separator + "outliers_report.md"))
             .replace(AllReportTests.reportResource.getAbsoluteDatasetPath(), "");
     assertEquals(expectedOutliersReport, actualOutliersReport);
-    
+    */
     String expectedRegressionReport = TestsUtilities.getExpectedDatasetReport(
             "people/expected_people_regression_report.md");
     String actualRegressionReport = TestsUtilities.getTextFromFile(

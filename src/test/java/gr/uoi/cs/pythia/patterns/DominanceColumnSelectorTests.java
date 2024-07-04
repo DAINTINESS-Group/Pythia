@@ -1,21 +1,20 @@
 package gr.uoi.cs.pythia.patterns;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThrows;
-
-import java.util.Arrays;
-import java.util.List;
-
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
+import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.junit.Before;
 import org.junit.Test;
 
-import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelector;
-import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThrows;
 
 public class DominanceColumnSelectorTests {
 	

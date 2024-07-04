@@ -1,0 +1,69 @@
+package gr.uoi.cs.pythia.outliers;
+import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
+import gr.uoi.cs.pythia.engine.IDatasetProfiler;
+import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.testshelpers.TestsDatasetSchemas;
+import gr.uoi.cs.pythia.testshelpers.TestsUtilities;
+import gr.uoi.cs.pythia.util.HighlightParameters;
+import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.types.StructType;
+import org.junit.rules.ExternalResource;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+
+public class OutlierResource extends ExternalResource {
+
+    private Dataset<Row> dataset;
+    private DatasetProfile datasetProfile;
+
+    @Override
+    protected void before() throws Throwable {
+        super.before();
+        TestsUtilities.setupResultsDir("outliers");
+        initializeProfile();
+    }
+
+
+    private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
+        StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
+        IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_100.csv");
+        datasetProfiler.registerDataset("cars", datasetPath, schema);
+
+        // Get dataset
+        Field datasetField = FieldUtils.getField(datasetProfiler.getClass(), "dataset", true);
+        dataset = (Dataset<Row>) datasetField.get(datasetProfiler);
+
+        boolean shouldRunDescriptiveStats = true;
+        boolean shouldRunHistograms = false;
+        boolean shouldRunAllPairsCorrelations = true;
+        boolean shouldRunDecisionTrees = false;
+        boolean shouldRunDominancePatterns = false;
+        boolean shouldRunOutlierDetection = false;
+        boolean shouldRunRegression = false;
+        boolean shouldRunClustering = false;
+        HighlightParameters highlightParameters = new HighlightParameters(HighlightParameters.HighlightExtractionMode.ALL, Double.MIN_VALUE);
+
+        datasetProfile = datasetProfiler.computeProfileOfDataset(
+                new DatasetProfilerParameters(
+                        TestsUtilities.getResultsDir("outliers"),
+                        shouldRunDescriptiveStats, shouldRunHistograms,
+                        shouldRunAllPairsCorrelations, shouldRunDecisionTrees,
+                        shouldRunDominancePatterns, shouldRunOutlierDetection,
+                        shouldRunRegression, shouldRunClustering,
+                        highlightParameters));
+    }
+    public Dataset<Row> getDataset() {
+        return dataset;
+    }
+
+    public DatasetProfile getDatasetProfile() {
+        return datasetProfile;
+    }
+}

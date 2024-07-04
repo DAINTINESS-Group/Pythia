@@ -8,17 +8,14 @@ import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceParameters;
 
 public class IPatternManagerFactory {
-	public IPatternManager createPatternManager(
-			Dataset<Row> dataset,
-			DatasetProfile datasetProfile,
-			DominanceParameters dominanceAnalysisParameters,
-			OutlierType outlierType,
-			double outlierThreshold) {
+	public IPatternManager createPatternManager(Dataset<Row> dataset, DatasetProfile datasetProfile, DominanceParameters dominanceAnalysisParameters
+			/*OutlierType outlierType,
+			double outlierThreshold*/) {
 		return new PatternManager(
 				dataset,
 				datasetProfile,
-				dominanceAnalysisParameters,
-				outlierType,
-				outlierThreshold);
+				dominanceAnalysisParameters
+				/*outlierType,
+				outlierThreshold*/);
 	}
 }

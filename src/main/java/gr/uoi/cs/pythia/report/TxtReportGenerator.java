@@ -1,21 +1,18 @@
 package gr.uoi.cs.pythia.report;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-
 import gr.uoi.cs.pythia.clustering.Cluster;
 import gr.uoi.cs.pythia.model.ClusteringProfile;
-import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.PatternsProfile;
 import gr.uoi.cs.pythia.model.RegressionProfile;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import gr.uoi.cs.pythia.model.regression.RegressionType;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 
 public class TxtReportGenerator implements IReportGenerator {
 
@@ -34,6 +31,7 @@ public class TxtReportGenerator implements IReportGenerator {
 			throws IOException {
 		produceStatisticalProfileReport(datasetProfile, outputDirectoryPath);
 		producePatternsProfileReports(datasetProfile, outputDirectoryPath);
+		//produceOutliersReport(datasetProfile,outputDirectoryPath);
 		produceRegressionProfileReport(datasetProfile, outputDirectoryPath);
 		produceClusteringProfileReport(datasetProfile, outputDirectoryPath);
 	}
@@ -102,8 +100,7 @@ public class TxtReportGenerator implements IReportGenerator {
 		
 		List<DominanceResult> lowDominanceResults = patternsProfile.getLowDominanceResults();
 		produceLowDominanceReport(lowDominanceResults, outputDirectoryPath);
-		
-		produceOutliersReport(datasetProfile, outputDirectoryPath);
+
 	}
 	
 	private void produceHighDominanceReport(List<DominanceResult> highDominanceResults,
@@ -141,34 +138,40 @@ public class TxtReportGenerator implements IReportGenerator {
 				dominanceResult.dominanceToString(isExtensiveReport) +
 				queryResultToString;
 	}
-	
+	/*
 	private void produceOutliersReport(DatasetProfile datasetProfile,
 			String outputDirectoryPath) throws IOException {
-		PatternsProfile patternsProfile = datasetProfile.getPatternsProfile();
-		List<OutlierResult> outlierResults = datasetProfile.getPatternsProfile().getOutlierResults();
 
-		StringBuilder str = new StringBuilder(String.format(
-				patternsProfile.getOutlierType() + " Outlier Pattern Results\n\n"
+		List<Column> listColumns =  datasetProfile.getColumns();
+		long sumOfTotalOutliers = 0;
+		String outlierType = new String();
+		for(Column column :listColumns){
+			OutlierProfile profile = column.getOutlierProfile();
+			if(profile == null){continue;}
+			outlierType = profile.getOutlierType().replace("_","");
+			List<OutlierResult> result  = profile.getOutlierResults();
+			sumOfTotalOutliers += result.size();
+		}
+
+		StringBuilder str = new StringBuilder(String.format(outlierType+ " Outlier Results\n\n"
 						+ "Total outliers found: %s\n",
-				outlierResults.size()));
+				sumOfTotalOutliers));
 
-		for (Column column : datasetProfile.getColumns()) {
-			int outliersInColumn = patternsProfile.countOutliersInColumn(column.getName());
+		for (Column column : listColumns) {
+			if(column.getOutlierProfile() == null){continue;}
+			int outliersInColumn = column.getOutlierProfile().getOutlierResults().size();
 			str.append(String.format(horizontalLine + "- Outliers in %s column\n"
 					+ "Outliers found: %s\n", column.getName(), outliersInColumn));
 			if (outliersInColumn > 0) {
-				str.append(String.format("%-24s%-24s%-24s\n",
-						"Outlier value", patternsProfile.getOutlierType(),
-						"Position in the column"));
+				str.append(String.format("%-24s%-24s%-24s\n", "Outlier value",outlierType,"Position in the column"));
 			}
-			for (OutlierResult result : outlierResults) {
-				if (!Objects.equals(result.getColumnName(), column.getName())) continue;
+			for (OutlierResult result : column.getOutlierProfile().getOutlierResults()) {
 				str.append(result.toString());
 			}
 		}
 		writeToFile(outputDirectoryPath, outliersReportFileName, String.valueOf(str));
 	}
-
+*/
 	private void writeToFile(String outputDirectoryPath, String fileName, String contents)
 			throws IOException {
 		String absoluteFileName = new File(String.format("%s%s%s",

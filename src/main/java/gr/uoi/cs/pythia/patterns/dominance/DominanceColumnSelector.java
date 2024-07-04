@@ -137,6 +137,7 @@ public class DominanceColumnSelector {
       List<String> distinctValues = runGetDistinctValuesQuery(dataset, column.getName());
       if (distinctValues.size() > DISTINCT_VALUES_THRESHOLD) continue;
       if (distinctValues.size() == 1) continue;
+      //if(column.getCardinalitiesProfile().getNumberOfDistinctValues() > DISTINCT_VALUES_THRESHOLD) continue;
       coordinateColumns.add(column.getName());
     }
   }

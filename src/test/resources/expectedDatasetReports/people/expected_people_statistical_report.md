@@ -58,6 +58,19 @@
 
 <div align="center">
 
+## Outliers Statistics
+
+</div>
+
+---
+<div align="center">
+
+Not found Outlier Statistics
+
+</div>
+
+<div align="center">
+
 ## Correlations
 
 </div>

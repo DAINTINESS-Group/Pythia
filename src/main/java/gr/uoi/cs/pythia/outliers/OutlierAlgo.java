@@ -1,15 +1,15 @@
-package gr.uoi.cs.pythia.patterns.outlier;
+package gr.uoi.cs.pythia.outliers;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import gr.uoi.cs.pythia.model.Column;
+import gr.uoi.cs.pythia.model.DatasetProfile;
+import gr.uoi.cs.pythia.model.OutlierProfile;
+import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.DataTypes;
 
-import gr.uoi.cs.pythia.model.Column;
-import gr.uoi.cs.pythia.model.DatasetProfile;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An abstract class with reusable code for handling column values and stats
@@ -19,14 +19,21 @@ import gr.uoi.cs.pythia.model.outlier.OutlierResult;
  */
 public abstract class OutlierAlgo {
 
-	public abstract List<OutlierResult> identifyOutliers(
-			Dataset<Row> dataset, 
-			DatasetProfile datasetProfile);
+	//Todo remove identifyOutliers() is useless!!
+	//public abstract void identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile);
 	
 	protected boolean isNotNumericColumn(Column column) {
-		return !(column.getDatatype() == DataTypes.DoubleType.toString() ||
-				column.getDatatype() == DataTypes.IntegerType.toString());
+		return !(column.getDatatype().equals(DataTypes.DoubleType.toString()) ||
+                column.getDatatype().equals(DataTypes.IntegerType.toString()));
 	}
+	/*TODO create extracted method or Interface??
+	   we need a method who update Column about outlierProfile after calculate outlier per column??
+	*
+	* public void createOutlierResult(List<OutlierResult> results,String typeAlgo){
+	*	OutlierProfile outlierProfile = new OutlierProfile(results,typeAlgo);
+	*	column.setOutlierProfile(outlierProfile);
+	*}
+	* */
 
 	protected List<Double> getColumnValues(Dataset<Row> dataset, Column column) {
 		return dataset

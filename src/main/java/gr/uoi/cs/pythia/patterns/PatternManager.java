@@ -5,18 +5,13 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import gr.uoi.cs.pythia.patterns.dominance.*;
 import org.apache.log4j.Logger;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierType;
-import gr.uoi.cs.pythia.patterns.outlier.IOutlierAlgo;
-import gr.uoi.cs.pythia.patterns.outlier.OutlierAlgoFactory;
+
 
 import static gr.uoi.cs.pythia.patterns.dominance.DominanceAlgoFactory.DominanceAlgoVersion.V02_HIGH_AND_LOW;
 
@@ -26,9 +21,9 @@ public class PatternManager implements IPatternManager {
     private final Dataset<Row> dataset;
     private final DatasetProfile datasetProfile;
     private final DominanceParameters dominanceParameters;
-    private final OutlierType outlierType;
+    //private final OutlierType outlierType;
     private final IDominanceAlgo dominanceAlgo;
-    private final IOutlierAlgo outlierAlgo;
+   // private final IOutlierAlgo outlierAlgo;
 
     private final List<DominanceResult> highDominanceResults;
     private final List<DominanceResult> lowDominanceResults;
@@ -36,14 +31,14 @@ public class PatternManager implements IPatternManager {
     public PatternManager(
             Dataset<Row> dataset,
             DatasetProfile datasetProfile,
-            DominanceParameters dominanceParameters,
+            DominanceParameters dominanceParameters/*,
             OutlierType outlierType,
-            double outlierThreshold) {
+            double outlierThreshold*/) {
         this.dataset = dataset;
         this.datasetProfile = datasetProfile;
         this.dominanceParameters = dominanceParameters;
-        this.outlierType = outlierType;
-        outlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(outlierType, outlierThreshold);
+        //this.outlierType = outlierType;
+        //outlierAlgo = new OutlierAlgoFactory().createOutlierAlgo(outlierType, outlierThreshold);
 
         // Default to the latest optimized dominance algo version
         DominanceAlgoFactory factory = new DominanceAlgoFactory();
@@ -54,7 +49,7 @@ public class PatternManager implements IPatternManager {
         lowDominanceResults = new ArrayList<>();
 
     }
-
+    /*
     @Override
     public void identifyOutliers() {
         List<OutlierResult> outlierResults = outlierAlgo.identifyOutliers(dataset, datasetProfile);
@@ -66,7 +61,7 @@ public class PatternManager implements IPatternManager {
         logger.info(String.format(
                 "Identified outliers using the \"%s\" outlier type for dataset: '%s'",
                 outlierType, datasetProfile.getAlias()));
-    }
+    }*/
 
     @Override
     public void identifyDominance() {
