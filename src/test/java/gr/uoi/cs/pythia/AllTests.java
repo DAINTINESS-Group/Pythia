@@ -8,6 +8,7 @@ import gr.uoi.cs.pythia.generalinfo.AllGenInfoTests;
 import gr.uoi.cs.pythia.highlights.AllHighlightsTests;
 import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.labeling.LabelingSystemTests;
+import gr.uoi.cs.pythia.outliers.AllOutlierTests;
 import gr.uoi.cs.pythia.patterns.AllPatternTests;
 import gr.uoi.cs.pythia.regression.AllRegressionTests;
 import gr.uoi.cs.pythia.report.AllReportTests;
@@ -18,18 +19,18 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-        LabelingSystemTests.class,
-        AllHistogramTests.class,
-        AllCorrelationsTests.class,
-        AllDecisionTreeTests.class,
-        AllPatternTests.class,
-        AllRegressionTests.class,
-        AllReportTests.class,
-        AllWriterTests.class,
-        AllHighlightsTests.class,
-        AllClusteringTests.class,
-        AllGenInfoTests.class,
-        AllCardinalitiesTests.class,
-
+    AllCardinalitiesTests.class,
+    AllClusteringTests.class,
+    AllCorrelationsTests.class,
+    AllDecisionTreeTests.class,
+    AllGenInfoTests.class,
+    AllHighlightsTests.class,
+    AllHistogramTests.class,
+    LabelingSystemTests.class,
+    AllOutlierTests.class,
+    AllPatternTests.class,
+    AllRegressionTests.class,
+    AllReportTests.class,
+    AllWriterTests.class
 })
 public class AllTests {}
