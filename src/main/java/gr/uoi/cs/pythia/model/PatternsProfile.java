@@ -3,7 +3,6 @@ package gr.uoi.cs.pythia.model;
 import java.util.ArrayList;
 import java.util.List;
 import gr.uoi.cs.pythia.model.dominance.DominanceResult;
-import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 
 public class PatternsProfile {
 

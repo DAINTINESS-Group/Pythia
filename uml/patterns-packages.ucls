@@ -3,40 +3,31 @@
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
   <package id="1" language="java" name="gr.uoi.cs.pythia.patterns" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="536" y="301"/>    
+    <position height="-1" width="-1" x="520" y="301"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="2" language="java" name="gr.uoi.cs.pythia.patterns.outlier" project="Pythia" 
-    file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/outlier" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="403" y="405"/>    
-    <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
-  </package>  
-  <package id="3" language="java" name="gr.uoi.cs.pythia.patterns.dominance" project="Pythia" 
+  <package id="2" language="java" name="gr.uoi.cs.pythia.patterns.dominance" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/patterns/dominance" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="656" y="405"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
-  <package id="4" language="java" name="gr.uoi.cs.pythia.engine" project="Pythia" 
+  <package id="3" language="java" name="gr.uoi.cs.pythia.engine" project="Pythia" 
     file="/Pythia/src/main/java/gr/uoi/cs/pythia/engine" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="536" y="211"/>    
     <display autosize="true" stereotype="false" sort-features="false" accessors="true"/>  
   </package>  
+  <dependency id="4">    
+    <bendpoint x="652" y="301"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
   <dependency id="5">    
-    <end type="SOURCE" refId="4"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="6">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
-  </dependency>  
-  <dependency id="7">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <dependency id="8">    
-    <bendpoint x="652" y="301"/>    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
