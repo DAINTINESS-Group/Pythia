@@ -12,6 +12,8 @@ public class Column {
   private Histogram histogram;
   private CardinalitiesProfile cardinalitiesProfile;
   private OutlierProfile outlierProfile;
+  private DistributionsValuesProfile distributionsValuesProfile;
+  private Histogram quartilesHistogram;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -58,6 +60,20 @@ public class Column {
     return this.cardinalitiesProfile;
   }
 
+  public Histogram getQuartilesHistogram() {
+    return quartilesHistogram;
+  }
+
+  public void setQuartilesHistogram(Histogram quartilesHistogram) {
+    this.quartilesHistogram = quartilesHistogram;
+  }
+
+  public DistributionsValuesProfile getDistributionsValuesProfile() {
+    return distributionsValuesProfile;
+  }
+  public void setDistributionsValuesProfile(DistributionsValuesProfile distributionsValuesProfile) {
+    this.distributionsValuesProfile = distributionsValuesProfile;
+  }
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
@@ -76,6 +92,11 @@ public class Column {
     if (descriptiveStatisticsProfile != null) {
       stringBuilder.append("DescriptiveStatisticsProfile:\n");
       stringBuilder.append(descriptiveStatisticsProfile);
+      stringBuilder.append("\n");
+    }
+    if(distributionsValuesProfile != null) {
+      stringBuilder.append("DistributionsValuesProfile:\n");
+      stringBuilder.append(distributionsValuesProfile);
       stringBuilder.append("\n");
     }
 
