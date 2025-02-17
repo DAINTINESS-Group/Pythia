@@ -11,9 +11,8 @@ public class Column {
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
   private Histogram histogram;
   private CardinalitiesProfile cardinalitiesProfile;
-  private OutlierProfile outlierProfile;
-  private DistributionsValuesProfile distributionsValuesProfile;
   private Histogram quartilesHistogram;
+  private OutlierProfile outlierProfile;
 
   public Column(int position, String name, String datatype) {
     this.position = position;
@@ -68,11 +67,12 @@ public class Column {
     this.quartilesHistogram = quartilesHistogram;
   }
 
-  public DistributionsValuesProfile getDistributionsValuesProfile() {
-    return distributionsValuesProfile;
+  public OutlierProfile getOutlierProfile(){
+    return outlierProfile;
   }
-  public void setDistributionsValuesProfile(DistributionsValuesProfile distributionsValuesProfile) {
-    this.distributionsValuesProfile = distributionsValuesProfile;
+
+  public void setOutlierProfile(OutlierProfile outlierProfile){
+    this.outlierProfile = outlierProfile;
   }
   @Override
   public String toString() {
@@ -94,11 +94,6 @@ public class Column {
       stringBuilder.append(descriptiveStatisticsProfile);
       stringBuilder.append("\n");
     }
-    if(distributionsValuesProfile != null) {
-      stringBuilder.append("DistributionsValuesProfile:\n");
-      stringBuilder.append(distributionsValuesProfile);
-      stringBuilder.append("\n");
-    }
 
     if (correlationsProfile != null) {
       stringBuilder.append("CorrelationsProfile:\n");
@@ -111,20 +106,8 @@ public class Column {
       stringBuilder.append(histogram);
       stringBuilder.append("\n");
     }
-    if (outlierProfile != null) {
-      stringBuilder.append("OutlierProfile:\n");
-      stringBuilder.append(outlierProfile);
-      stringBuilder.append("\n");
-    }
+
     return stringBuilder.toString();
-  }
-
-  public void setOutlierProfile(OutlierProfile outlierProfile) {
-    this.outlierProfile = outlierProfile;
-  }
-
-  public OutlierProfile getOutlierProfile() {
-    return this.outlierProfile;
   }
 
 }

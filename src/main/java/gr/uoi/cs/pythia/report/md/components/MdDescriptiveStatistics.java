@@ -37,7 +37,7 @@ public class MdDescriptiveStatistics {
 
     private List<String> getTableHeaders() {
         return Arrays.asList("Column", "Count", "Mean",
-                "Standard Deviation", "Median", "Min", "Max");
+                "Standard Deviation","Q1", "Median", "Q3","Min", "Max","modes");
     }
 
     private List<List<String>> getTableData() {
@@ -60,8 +60,11 @@ public class MdDescriptiveStatistics {
                 stats.getCount(),
                 stats.getMean(),
                 stats.getStandardDeviation(),
+                stats.getQ1(),
                 stats.getMedian(),
+                stats.getQ3(),
                 stats.getMin(),
-                stats.getMax());
+                stats.getMax(),
+                stats.modeValuetoString());
     }
 }
