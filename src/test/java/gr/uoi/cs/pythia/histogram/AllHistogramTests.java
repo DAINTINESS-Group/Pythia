@@ -7,7 +7,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-        HistogramTests.class
+        HistogramTests.class,
+        QuartileHistogramTests.class
 })
 public class AllHistogramTests {
 

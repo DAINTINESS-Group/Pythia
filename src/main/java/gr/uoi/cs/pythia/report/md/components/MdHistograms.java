@@ -19,7 +19,7 @@ import gr.uoi.cs.pythia.util.DatatypeFilterer;
 public class MdHistograms {
 
     private final List<Column> columns;
-    private final DecimalFormat decimalFormat = new DecimalFormat("#.###",
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.#####",
             new DecimalFormatSymbols(Locale.ENGLISH));;
 
     public MdHistograms(List<Column> columns) {
@@ -45,7 +45,7 @@ public class MdHistograms {
     }
 
     private String getAllHistograms(){
-        return generateHistogramSection(Column::getQuartilesHistogram);
+        return generateHistogramSection(Column::getHistogram);
     }
     private String getAllQuartileHistograms(){
         return generateHistogramSection(Column::getQuartilesHistogram);

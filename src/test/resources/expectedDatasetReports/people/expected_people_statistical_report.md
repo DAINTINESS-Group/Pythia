@@ -47,11 +47,11 @@
 ---
 <div align="center">
 
-| Column | Count | Mean | Standard Deviation | Median | Min | Max |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| name | 3 | X | X | X | Andy | Michael |
-| age | 3 | 33.0 | 15.716233645501712 | 30 | 19 | 50 |
-| money | 3 | 20.0 | 10.0 | 20 | 10 | 30 |
+| Column | Count | Mean | Standard Deviation | Q1 | Median | Q3 | Min | Max | modes |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| name | 3 | X | X | X | X | X | Andy | Michael | Michael, Andy, Justin |
+| age | 3 | 33.0 | 15.716233645501712 | 19 | 30 | 50 | 19 | 50 | 19, 50, 30 |
+| money | 3 | 20.0 | 10.0 | 10 | 20 | 30 | 10 | 30 | 20, 10, 30 |
 
 
 </div>
@@ -130,6 +130,42 @@ Not found Outlier Statistics
 | [24,26) | 0 |
 | [26,28) | 0 |
 | [28,30] | 1 |
+
+
+</div>
+
+
+<div align="center">
+
+## Quartile Histograms:
+
+</div>
+
+---
+**~ Column: age**
+
+<div align="center">
+
+| Range | Values |
+| :---: | :---: |
+| [19,19.0001) | 1 |
+| [19.0001,30) | 0 |
+| [30,50) | 1 |
+| [50,50.0001] | 1 |
+
+
+</div>
+
+**~ Column: money**
+
+<div align="center">
+
+| Range | Values |
+| :---: | :---: |
+| [10,10.0001) | 1 |
+| [10.0001,20) | 0 |
+| [20,30) | 1 |
+| [30,30.0001] | 1 |
 
 
 </div>

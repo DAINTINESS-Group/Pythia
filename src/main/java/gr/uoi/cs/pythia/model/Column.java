@@ -111,6 +111,11 @@ public class Column {
       stringBuilder.append(quartilesHistogram);
       stringBuilder.append("\n");
     }
+    if(outlierProfile!=null){
+      stringBuilder.append("OutlierProfile:\n");
+      stringBuilder.append(outlierProfile);
+      stringBuilder.append("\n");
+    }
 
     return stringBuilder.toString();
   }
