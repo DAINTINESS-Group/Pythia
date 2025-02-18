@@ -10,11 +10,13 @@ import org.apache.spark.sql.functions;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DescriptiveStatisticsCalculator implements IDescriptiveStatisticsCalculator {
+import static org.apache.spark.sql.functions.col;
+
+public class DescriptiveStatisticsCalculator implements IDescriptiveStatisticsCalculator{
 
     private final static int NUMBER_MODES_OPTIMIZER = 30;
 
-    public void computeDescriptiveStats(Dataset<Row> dataset, DatasetProfile datasetProfile) {
+    public void computeDescriptiveStats(Dataset<Row> dataset, DatasetProfile datasetProfile){
         Dataset<Row> descriptiveStatistics =
                 dataset.summary(
                         DescriptiveStatisticsConstants.COUNT,
@@ -28,11 +30,11 @@ public class DescriptiveStatisticsCalculator implements IDescriptiveStatisticsCa
 
         List<Column> columns = datasetProfile.getColumns();
         Set<String> summaryColumns = new HashSet<>(Arrays.asList(descriptiveStatistics.columns()));
-        for (Column column : columns) {
-            if (summaryColumns.contains(column.getName())) {
+        for(Column column : columns){
+            if(summaryColumns.contains(column.getName())){
                 List<Row> columnNames = descriptiveStatistics.select(column.getName()).collectAsList();
                 List<Object> descriptiveStatisticsRow =
-                        columnNames.stream().map(col -> col.get(0)).collect(Collectors.toList());
+                        columnNames.stream().map(col->col.get(0)).collect(Collectors.toList());
 
                 String count = (String) descriptiveStatisticsRow.get(0);
                 String mean = (String) descriptiveStatisticsRow.get(1);
@@ -44,65 +46,47 @@ public class DescriptiveStatisticsCalculator implements IDescriptiveStatisticsCa
                 String max = (String) descriptiveStatisticsRow.get(7);
 
 
-                List<String> listModes = computeModeValues(dataset,column);
+                List<String> listModes = computeModeValues(dataset, column);
                 DescriptiveStatisticsProfile columnDescriptiveStatisticsProfile =
-                        new DescriptiveStatisticsProfile(count, mean, standardDeviation,q1, median, q3,min, max,listModes);
+                        new DescriptiveStatisticsProfile(count, mean, standardDeviation, q1, median, q3, min, max, listModes);
                 column.setDescriptiveStatisticsProfile(columnDescriptiveStatisticsProfile);
             }
 
         }
     }
 
-    private List<String> computeModeValues(Dataset<Row> dataset, Column column) {
-        // Group by the column, count frequencies, and order by frequency in descending order
-        Dataset<Row> frequencyDataset = dataset
-                .groupBy(column.getName())
-                .count()
-                .orderBy(functions.desc("count"));
+    public List<String> computeModeValues(Dataset<Row> dataset, Column column){
+        // Φιλτράρει τα null και τα κενά
+        Dataset<Row> frequencyDataset = dataset.filter(col(column.getName()).isNotNull()
+                .and(functions.trim(col(column.getName())).notEqual("")));
 
-        // Collect all rows with the highest frequency
-        List<Row> modeRows = frequencyDataset.collectAsList();
-
-        // If there's no data, return an empty list
-        if (modeRows.isEmpty()) {
+        Dataset<Row> grouped = frequencyDataset.groupBy(column.getName()).count();
+        List<Row> modeRows = grouped.orderBy(functions.desc("count")).collectAsList();
+        if(modeRows.isEmpty()){
             return new ArrayList<>();
         }
 
-        // Get the maximum frequency value
-        long maxFrequency = modeRows.get(0).getAs("count");
 
-        // Collect all values with the maximum frequency
+        long maxFrequency = modeRows.get(0).getAs("count");
         List<String> modes = new ArrayList<>();
 
-        for (Row row : modeRows) {
-            // Έλεγχος για null γραμμή
-            if (row == null) {
-                continue; // Παράλειψη null γραμμών
-            }
-            // Εξαγωγή της συχνότητας και έλεγχος για null
+
+        for(Row row : modeRows){
+            if(row == null) { continue; }
             Long currentFrequency = row.getAs("count");
-            if (currentFrequency == null) {
-                continue; // Παράλειψη γραμμών με null συχνότητα
-            }
-
-            // Έλεγχος αν η συχνότητα είναι ίση με τη μέγιστη
-            if (currentFrequency == maxFrequency) {
-                // Εξαγωγή της τιμής της στήλης και έλεγχος για null
+            if(currentFrequency == null) { continue; }
+            if(currentFrequency == maxFrequency){
                 Object columnValue = row.getAs(column.getName());
-                if (columnValue != null) {
-                    modes.add(String.valueOf(columnValue)); // Προσθήκη της τιμής στη λίστα modes
+                if(columnValue != null){
+                    modes.add(String.valueOf(columnValue));
                 }
-
-                // Διακοπή αν φτάσαμε το όριο του NUMBER_MODES_OPTIMIZER
-                if (modes.size() >= NUMBER_MODES_OPTIMIZER) {
+                if(modes.size() >= NUMBER_MODES_OPTIMIZER){
                     break;
                 }
             } else {
-                break; // Διακοπή αν η συχνότητα είναι μικρότερη από τη μέγιστη
+                break;
             }
         }
-
-        // Return the list of mode values
         return modes;
     }
 

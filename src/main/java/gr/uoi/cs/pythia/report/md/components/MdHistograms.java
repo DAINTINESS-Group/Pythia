@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.histogram.Bin;
+import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.report.md.structures.MdBasicStructures;
 import gr.uoi.cs.pythia.report.md.structures.MdTable;
 import gr.uoi.cs.pythia.util.DatatypeFilterer;
@@ -32,22 +34,32 @@ public class MdHistograms {
             return "";
         return getTitle() + "\n" +
                 MdBasicStructures.horizontalLine() + "\n" +
-                getAllHistograms() + "\n";
+                getAllHistograms() + "\n"+
+                MdBasicStructures.center(MdBasicStructures.heading2("Quartile Histograms:"))+"\n"+
+                MdBasicStructures.horizontalLine() + "\n" +
+                getAllQuartileHistograms()+"\n";
     }
 
     private String getTitle() {
         return MdBasicStructures.center(MdBasicStructures.heading2("Histograms"));
     }
 
-    private String getAllHistograms() {
+    private String getAllHistograms(){
+        return generateHistogramSection(Column::getQuartilesHistogram);
+    }
+    private String getAllQuartileHistograms(){
+        return generateHistogramSection(Column::getQuartilesHistogram);
+    }
+    private String generateHistogramSection( Function<Column, Histogram> histogramExtractor){
         StringBuilder stringBuilder = new StringBuilder();
         for (Column column : columns) {
-        	if (column.getHistogram() == null) continue;
+           Histogram histogram = histogramExtractor.apply(column);
+           if(histogram == null){continue;}
             stringBuilder.append(MdBasicStructures.bold(String.format(
                     "~ Column: %s", column.getName())));
             stringBuilder.append("\n\n");
             stringBuilder.append(MdBasicStructures.center(
-                    new MdTable(getTableHeaders(), getTableData(column), MdTable.ALIGNMENT_TYPE.CENTER)
+                    new MdTable(getTableHeaders(), getTableData(histogram), MdTable.ALIGNMENT_TYPE.CENTER)
                             .getTable()
             ));
             stringBuilder.append("\n");
@@ -59,8 +71,8 @@ public class MdHistograms {
         return Arrays.asList("Range", "Values");
     }
 
-    private List<List<String>> getTableData(Column column) {
-        List<Bin> bins = column.getHistogram().getBins();
+    private List<List<String>> getTableData(Histogram histogram) {
+        List<Bin> bins = histogram.getBins();
         List<List<String>> allRowsData = new ArrayList<>();
         for (Bin bin : bins) {
             List<String> rowData = new ArrayList<>();
@@ -70,4 +82,5 @@ public class MdHistograms {
         }
         return allRowsData;
     }
+
 }

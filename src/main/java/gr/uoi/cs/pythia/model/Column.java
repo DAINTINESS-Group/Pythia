@@ -85,7 +85,7 @@ public class Column {
     stringBuilder.append("\n");
 
     if(cardinalitiesProfile != null) {
-      stringBuilder.append(String.format("CardinalitiesProfile:\n%s\n", cardinalitiesProfile.toString()));
+      stringBuilder.append(String.format("CardinalitiesProfile:\n%s\n", cardinalitiesProfile));
       stringBuilder.append("\n");
     }
 
@@ -104,6 +104,11 @@ public class Column {
     if (histogram != null) {
       stringBuilder.append("Histogram:\n");
       stringBuilder.append(histogram);
+      stringBuilder.append("\n");
+    }
+    if(quartilesHistogram !=null){
+      stringBuilder.append("QuartilesHistogram:\n");
+      stringBuilder.append(quartilesHistogram);
       stringBuilder.append("\n");
     }
 

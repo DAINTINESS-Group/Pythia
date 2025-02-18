@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.histogram;
 import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorFactory;
 import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
 import gr.uoi.cs.pythia.histogram.generator.IHistogramGenerator;
+import gr.uoi.cs.pythia.histogram.generator.QuartilesHistogramGenerator;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -44,6 +45,11 @@ public class HistogramManager {
             Histogram histogram = histogramGenerator.generateHistogram(10);
             column.setHistogram(histogram);
             histograms.add(histogram);
+
+            QuartilesHistogramGenerator quartilesHistogramGenerator =  new QuartilesHistogramGenerator(dataset,column);
+            Histogram quartileHistogram = quartilesHistogramGenerator.generateHistogram(10); //Bins not used
+            column.setQuartilesHistogram(quartileHistogram);
+            histograms.add(quartileHistogram);
             // for visualization
 //            createDirectory(Paths.get(outputDirectory.toString(), column.getName()));
             // histogramVisualizer etc...

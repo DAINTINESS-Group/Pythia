@@ -56,13 +56,14 @@ public class DescriptiveStatisticsProfile {
   public String getQ3(){
     return q3;
   }
+
   public List<String> getModeList() {
     return modeList;
   }
   public String modeValuetoString(){
     StringBuilder modeValuesAsString = new StringBuilder();
     if (modeList == null || modeList.isEmpty()) {
-      modeValuesAsString = new StringBuilder("mode: N/A\n");
+      modeValuesAsString = new StringBuilder("null");
     }
     else{
       for(String mode: modeList){
@@ -76,32 +77,33 @@ public class DescriptiveStatisticsProfile {
   }
 
   @Override
-  public String toString() {
+  public String toString(){
     return "count: "
-        + count
-        + '\n'
-        + "mean: "
-        + mean
-        + '\n'
-        + "standardDeviation: "
-        + standardDeviation
-        + '\n'
-        + "q1: "
-        + q1
-        + '\n'
-        + "median: "
-        + median
-        + '\n'
-        + "q3: "
-        + q3
-        + "\n"
-        + "min: "
-        + min
-        + '\n'
-        + "max: "
-        + max
-        + '\n'
-        + "mode: "+modeValuetoString()
-        + "\n";
+            +count
+            +'\n'
+            +"mean: "
+            +mean
+            +'\n'
+            +"standardDeviation: "
+            +standardDeviation
+            +'\n'
+            +"q1: "
+            +q1
+            +'\n'
+            +"median: "
+            +median
+            +'\n'
+            +"q3: "
+            +q3
+            +"\n"
+            +"min: "
+            +min
+            +'\n'
+            +"max: "
+            +max
+            +'\n'
+            +"mode: "
+            +modeValuetoString()
+            +"\n";
   }
 }

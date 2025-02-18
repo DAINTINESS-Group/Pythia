@@ -10,7 +10,7 @@ public class Bin {
     private final double upperBound;
     private final long count;
     private final String upperBoundIncludedText;
-    private final DecimalFormat decimalFormat = new DecimalFormat("#.###",
+    private final DecimalFormat decimalFormat = new DecimalFormat("#.#####",
     		new DecimalFormatSymbols(Locale.ENGLISH));
     
     public Bin(double lowerBound, double upperBound, long count, boolean isUpperBoundIncluded) {
