@@ -33,7 +33,8 @@ public class CorrelationsPanel extends AnalysisPanel { // Inherit from AnalysisP
             }
             mainPanel.add(new JScrollPane(correlationsPanelContainer), BorderLayout.CENTER); // Scrolling for all correlation panels
         } else {
-            mainPanel.add(new JLabel("No columns or correlations profile found.", SwingConstants.CENTER), BorderLayout.CENTER);
+            add(new JLabel("No columns or correlations profile found.", SwingConstants.CENTER), BorderLayout.CENTER);
+            return;
         }
         add(mainPanel, BorderLayout.CENTER); // Add the main panel to the CorrelationsPanel
         revalidate();

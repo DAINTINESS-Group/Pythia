@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -104,28 +105,30 @@ public class StatisticsPanelTest {
      * It checks that a label with the message "No columns found." is displayed.
      */
     @Test
-    public void testCreatePanelContent_NoColumns(){
-        // Create an empty dataset profile
-        DatasetProfile profile = new DatasetProfile();
-        try {
-            setDatasetProfile(profile);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void testCreatePanelContent_NoColumns() throws InterruptedException, InvocationTargetException{
+        SwingUtilities.invokeAndWait(() ->{
+            // Create an empty dataset profile
+            DatasetProfile profile = new DatasetProfile();
+            try {
+                setDatasetProfile(profile);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-        // Create the panel content
-        statisticsPanel.createPanelContent();
+            // Create the panel content
+            statisticsPanel.createPanelContent();
 
-        // Extract the components from the panel
-        Component[] components = statisticsPanel.getComponents();
+            // Extract the components from the panel
+            Component[] components = statisticsPanel.getComponents();
 
-        // Verify that only one component is added and it's a JLabel
-        assertEquals(1, components.length);
-        assertTrue(components[0] instanceof JLabel);
+            // Verify that only one component is added and it's a JLabel
+            assertEquals(1, components.length);
+            assertTrue(components[0] instanceof JLabel);
 
-        JLabel label = (JLabel) components[0];
-        // Verify that the label's text is correct
-        assertEquals("No columns found.", label.getText());
+            JLabel label = (JLabel) components[0];
+            // Verify that the label's text is correct
+            assertEquals("No columns found.", label.getText());
+        });
     }
 
     /**

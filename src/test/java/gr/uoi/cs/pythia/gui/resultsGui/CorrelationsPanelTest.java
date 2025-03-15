@@ -19,8 +19,10 @@ import org.junit.Test;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -166,8 +168,8 @@ public class CorrelationsPanelTest {
         correlationsPanel = new CorrelationsPanel();
         correlationsPanel.createPanelContent();
 
-        JPanel mainPanel = (JPanel) correlationsPanel.getComponent(0);
-        JLabel label = (JLabel) mainPanel.getComponent(0);
+        Component mainPanel = correlationsPanel.getComponent(0);
+        JLabel label = (JLabel) mainPanel;
         assertEquals("No columns or correlations profile found.", label.getText());
     }
 
