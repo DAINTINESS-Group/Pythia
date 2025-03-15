@@ -33,6 +33,8 @@ public class CorrelationsResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IOException {
         StructType schema = TestsDatasetSchemas.getPeopleJsonSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+		CorrelationsMethod correlationsMethod = CorrelationsMethod.PEARSON;
+		datasetProfiler.declareCorrelationsParameters(correlationsMethod);
         String datasetPath = TestsUtilities.getAbsoluteDatasetPath("people.json");
         datasetProfiler.registerDataset("people", datasetPath, schema);
         

@@ -15,6 +15,17 @@ public class Rule {
 
   public String getTargetColumnName() { return targetColumnName; }
 
+  public String getSparkOperator(){
+    return this.sparkOperator;
+  }
+
+  public Object getLimit(){
+    return this.limit;
+  }
+
+  public String getLabel(){
+    return this.label;
+  }
   @Override
   public String toString() {
     return String.format(

@@ -14,7 +14,7 @@ public class RegressionPerformerFactory {
 	    	  			regressionParameters.getIndependentVariables(), datasetProfile);
 	      case POLYNOMIAL:
 	    	  	return new PolynomialRegressionPerformer(regressionParameters.getDependentVariable(),
-	    	  			regressionParameters.getIndependentVariables().get(0), (int)regressionParameters.getPrecision(), datasetProfile);
+	    	  			regressionParameters.getIndependentVariables().get(0), regressionParameters.getPrecision().intValue(), datasetProfile);
 	      case AUTOMATED: 
 	    	  	return new AutomatedRegressionPerformer(regressionParameters.getDependentVariable(),
 	    	  			regressionParameters.getPrecision(), datasetProfile);

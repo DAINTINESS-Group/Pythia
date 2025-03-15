@@ -27,6 +27,10 @@ public class ClusteringProfile {
 		this.avgSilhouetteScore = avgSilhouetteScore;
 	}
 
+	public ClusteringProfile(){
+		//For Testing
+	}
+
 
 	public ClusteringType getType() {
 		return type;

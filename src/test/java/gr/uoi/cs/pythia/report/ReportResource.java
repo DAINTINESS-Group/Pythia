@@ -1,8 +1,11 @@
 package gr.uoi.cs.pythia.report;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import gr.uoi.cs.pythia.model.DatasetProfile;
 import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
@@ -52,6 +55,9 @@ public class ReportResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IOException {
         StructType schema = TestsDatasetSchemas.getPeopleJsonSchema();
         datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        CorrelationsMethod correlationsMethod = CorrelationsMethod.PEARSON;
+        datasetProfiler.declareCorrelationsParameters(correlationsMethod);
+        datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
         absoluteDatasetPath = TestsUtilities.getAbsoluteDatasetPath("people.json");
         datasetPath = TestsUtilities.getDatasetPath("people.json");
         datasetProfiler.registerDataset("people", absoluteDatasetPath, schema);

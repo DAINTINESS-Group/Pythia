@@ -3,6 +3,7 @@ package gr.uoi.cs.pythia.highlights;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
@@ -43,6 +44,8 @@ public class HighlightsResource extends ExternalResource {
 	private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        CorrelationsMethod correlationsMethod = CorrelationsMethod.PEARSON;
+        datasetProfiler.declareCorrelationsParameters(correlationsMethod);
         String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
         

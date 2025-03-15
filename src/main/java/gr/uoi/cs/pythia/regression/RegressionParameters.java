@@ -42,7 +42,7 @@ public class RegressionParameters {
 		this.type = type;
 	}
 
-	public double getPrecision() {
+	public Double getPrecision() {
 		return precision;
 	}
 

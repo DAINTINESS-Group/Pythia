@@ -1,4 +1,5 @@
 package gr.uoi.cs.pythia.outliers;
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -33,6 +34,8 @@ public class OutlierResource extends ExternalResource {
     private void initializeProfile() throws AnalysisException, IOException, IllegalAccessException {
         StructType schema = TestsDatasetSchemas.getCarsCsvSchema();
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
+        CorrelationsMethod correlationsMethod = CorrelationsMethod.PEARSON;
+        datasetProfiler.declareCorrelationsParameters(correlationsMethod);
         String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
 

@@ -4,14 +4,22 @@ import java.util.Map;
 
 public class CorrelationsProfile {
 
-  private final Map<String, Double> allCorrelations;
+  private Map<String, Double> allCorrelations;
 
   public CorrelationsProfile(Map<String, Double> allCorrelations) {
     this.allCorrelations = allCorrelations;
   }
 
+  public CorrelationsProfile(){
+    //For Testing
+  }
+
   public Map<String, Double> getAllCorrelations() {
     return allCorrelations;
+  }
+
+  public void setCorrelations(Map<String, Double> correlations){
+    this.allCorrelations =correlations;
   }
 
   @Override

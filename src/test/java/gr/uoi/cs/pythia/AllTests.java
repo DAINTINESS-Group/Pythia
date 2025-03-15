@@ -3,9 +3,14 @@ package gr.uoi.cs.pythia;
 import gr.uoi.cs.pythia.cardinalities.AllCardinalitiesTests;
 import gr.uoi.cs.pythia.clustering.AllClusteringTests;
 import gr.uoi.cs.pythia.correlations.AllCorrelationsTests;
+import gr.uoi.cs.pythia.datatypeIdentifier.AllTypeStrategyTests;
 import gr.uoi.cs.pythia.decisiontree.AllDecisionTreeTests;
 import gr.uoi.cs.pythia.descriptiveStatistics.DescriptiveStatisticsTest;
 import gr.uoi.cs.pythia.generalinfo.AllGenInfoTests;
+import gr.uoi.cs.pythia.gui.analysisTasksGuiPanelTest.AllAnalysisTasksGuiPanelTests;
+import gr.uoi.cs.pythia.gui.guiButtonPanelTest.AllButtonPanelTest;
+import gr.uoi.cs.pythia.gui.guiScores.AllGuiScoreTests;
+import gr.uoi.cs.pythia.gui.resultsGui.AllResultTests;
 import gr.uoi.cs.pythia.highlights.AllHighlightsTests;
 import gr.uoi.cs.pythia.histogram.AllHistogramTests;
 import gr.uoi.cs.pythia.labeling.LabelingSystemTests;
@@ -34,6 +39,11 @@ import org.junit.runners.Suite.SuiteClasses;
         AllReportTests.class,
         AllWriterTests.class,
         DescriptiveStatisticsTest.class,
+        AllTypeStrategyTests.class,
+        AllAnalysisTasksGuiPanelTests.class,
+        AllButtonPanelTest.class,
+        AllGuiScoreTests.class,
+        AllResultTests.class
 })
 public class AllTests{
 }
