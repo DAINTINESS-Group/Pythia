@@ -43,9 +43,7 @@ public class ResultsPanelManager extends JPanel {
     private JButton createBackButton() {
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> {
-            cardLayout.first(cardPanel);
-            cardLayout.next(cardPanel);
-            cardLayout.next(cardPanel);
+            cardLayout.show(cardPanel, "navigationPanel");
              });
         return backButton;
     }

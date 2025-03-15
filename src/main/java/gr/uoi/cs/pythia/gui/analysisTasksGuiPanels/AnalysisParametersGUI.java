@@ -16,11 +16,15 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
     protected final JTextArea resultArea;
     protected final AnalysisTabsPanel tabsGUI;
     private final ParameterValidator<T> validator;
+    private JPanel mainCardPanel;
+    private CardLayout cardLayout;
 
     public AnalysisParametersGUI(String analysisName, AnalysisTabsPanel tabsGUI, ParameterValidator<T> validator, Consumer<T> parameterSetter, JPanel cardPanel,CardLayout cardLayout) {
         this.tabsGUI = tabsGUI;
         // Callback to set parameters in AppController
         this.validator = validator;
+        this.cardLayout = cardLayout;
+        this.mainCardPanel = cardPanel;
 
 
         setLayout(new BorderLayout());
@@ -56,9 +60,7 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
                 parameterSetter.accept(parameters);
 
                 if(this instanceof ReportGeneratorGUI || this instanceof DatasetWriterGUI){
-                    cardLayout.first(cardPanel);
-                    cardLayout.next(cardPanel);
-                    cardLayout.next(cardPanel);
+                    cardLayout.show(mainCardPanel, "navigationPanel");
 
                 }
                 if (tabsGUI != null) {

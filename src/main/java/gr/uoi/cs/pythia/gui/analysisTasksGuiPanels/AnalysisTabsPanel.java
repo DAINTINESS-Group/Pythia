@@ -106,9 +106,10 @@ public class AnalysisTabsPanel extends JPanel {
                     SwingUtilities.invokeLater(AnalysisTabsPanel.this::hideProgressDialog);
                     //MainWindow.getMainWindow().setOnShowResultsButton();
                     //MainWindow.getMainWindow().showNavigationPanel();
-                    mainCardLayout.first(mainCardPanel);
-                    mainCardLayout.next(mainCardPanel);
-                    mainCardLayout.next(mainCardPanel);
+                    //mainCardLayout.first(mainCardPanel);
+                    //mainCardLayout.next(mainCardPanel);
+                    //mainCardLayout.next(mainCardPanel);
+                    mainCardLayout.show(mainCardPanel, "navigationPanel");
                 }
             }
         };

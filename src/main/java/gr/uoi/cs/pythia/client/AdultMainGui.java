@@ -35,7 +35,6 @@ public class AdultMainGui{
 
 
         AppController.getInstance().setProfiler(datasetProfiler);
-
         datasetProfiler.registerDataset(alias, path);
 
         datasetProfiler.declareDominanceParameters(
