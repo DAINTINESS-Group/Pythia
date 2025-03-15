@@ -25,10 +25,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
 public class ClusteringPanelTest {
 
     private ClusteringPanel clusteringPanel;
+
     /**
      * Setup method before each test.
      * Initializes the ClusteringPanel and sets up fake dataset and clustering profile
@@ -147,12 +147,16 @@ public class ClusteringPanelTest {
     public void testChartsExist() {
         clusteringPanel.createPanelContent();
 
-        // The main panel has 3 sections: NORTH (info), CENTER (charts), and SOUTH (table)
-        Component[] components = clusteringPanel.getComponents();
-        assertEquals(3, components.length);
+        // Get the JScrollPane from the ClusteringPanel
+        JScrollPane scrollPane = (JScrollPane) clusteringPanel.getComponent(0);
+        JViewport viewport = scrollPane.getViewport();
+        JPanel mainPanel = (JPanel) viewport.getView();
 
-        // The CENTER part contains the charts
-        JPanel chartsPanel = (JPanel) components[1];
+        // The main panel should have 3 components: profile, charts, and clusters table
+        assertEquals(3, mainPanel.getComponentCount());
+
+        // The second component is the charts panel
+        JPanel chartsPanel = (JPanel) mainPanel.getComponent(1);
         assertEquals(2, chartsPanel.getComponentCount()); // It should contain 2 charts
     }
 
@@ -164,17 +168,30 @@ public class ClusteringPanelTest {
     public void testClusterTableExists() {
         clusteringPanel.createPanelContent();
 
-        // The main panel has 3 sections: NORTH (info), CENTER (charts), and SOUTH (table)
-        Component[] components = clusteringPanel.getComponents();
-        assertEquals(3, components.length);
+        // Get the JScrollPane from the ClusteringPanel
+        JScrollPane scrollPane = (JScrollPane) clusteringPanel.getComponent(0);
+        JViewport viewport = scrollPane.getViewport();
+        JPanel mainPanel = (JPanel) viewport.getView();
 
-        // The SOUTH part contains the table
-        JScrollPane scrollPane = (JScrollPane) components[2];
-        JTable clusterTable = (JTable) scrollPane.getViewport().getView();
-        assertNotNull(clusterTable);
+        // The main panel should have 3 components: profile, charts, and clusters table
+        assertEquals(3, mainPanel.getComponentCount());
 
-        // The table should have 2 rows for 2 clusters
-        assertEquals(2, clusterTable.getRowCount());
+        // The third component is the clusters panel
+        JPanel clustersPanel = (JPanel) mainPanel.getComponent(2);
+
+        // The clusters panel contains multiple cluster panels (one for each cluster)
+        // Each cluster panel contains a JScrollPane with the table inside
+        for (Component component : clustersPanel.getComponents()) {
+            if (component instanceof JPanel) {
+                JPanel clusterPanel = (JPanel) component;
+                JScrollPane clustersScrollPane = (JScrollPane) clusterPanel.getComponent(0);
+                JTable clusterTable = (JTable) clustersScrollPane.getViewport().getView();
+                assertNotNull(clusterTable);
+
+                // The table should have rows based on the number of columns in the dataset
+                assertEquals(3, clusterTable.getRowCount()); // 3 columns in the fake dataset
+            }
+        }
     }
 
     /**

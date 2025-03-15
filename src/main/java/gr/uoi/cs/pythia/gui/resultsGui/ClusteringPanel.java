@@ -12,36 +12,48 @@ import org.jfree.chart.renderer.xy.StandardXYBarPainter;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+
 public class ClusteringPanel extends AnalysisPanel {
 
-
     ClusteringProfile clusteringProfile;
+
     public ClusteringPanel() {
         super();
     }
 
     @Override
     public void createPanelContent() {
-        setLayout(new BorderLayout());
         clusteringProfile = AppController.getInstance().getDatasetProfile().getClusteringProfile();
-        if(clusteringProfile == null || clusteringProfile.getClusters().isEmpty()){
-          add(new JLabel("No clustering profile found.", SwingConstants.CENTER), BorderLayout.CENTER);
-          return;
-
+        if (clusteringProfile == null || clusteringProfile.getClusters().isEmpty()) {
+            add(new JLabel("No clustering profile found.", SwingConstants.CENTER), BorderLayout.CENTER);
+            return;
         }
+
+        // Create a main panel to hold all components
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
         // Add profile information panel
-        add(createProfilePanel(), BorderLayout.NORTH);
+        mainPanel.add(createProfilePanel());
 
         // Add charts panel
-        add(createChartsPanel(), BorderLayout.CENTER);
+        mainPanel.add(createChartsPanel());
 
         // Add clusters table
-        add(createClustersTable(), BorderLayout.SOUTH);
+        mainPanel.add(createClustersTable());
+
+        // Add the main panel to a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        // Add the scroll pane to the ClusteringPanel
+        setLayout(new BorderLayout());
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     // Method to create the profile information panel
@@ -120,20 +132,42 @@ public class ClusteringPanel extends AnalysisPanel {
     }
 
     // Method to create the clusters table
-    private JScrollPane createClustersTable() {
-        String[] columnNames = {"ID", "Num of Points", "Mean,EXIST_index", "Standard Deviations,EXIST_index", "Median,EXIST_index", "Min,EXIST_index", "Max,EXIST_index", "Error"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    private JPanel createClustersTable() {
+        // Create a panel to hold all cluster tables
+        JPanel clustersPanel = new JPanel();
+        clustersPanel.setLayout(new BoxLayout(clustersPanel, BoxLayout.Y_AXIS));
 
+        // Iterate through each cluster and create a table for it
         for (Cluster cluster : clusteringProfile.getClusters()) {
+            JPanel clusterPanel = createClusterPanel(cluster);
+            clustersPanel.add(clusterPanel);
+            clustersPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing between clusters
+        }
+
+        return clustersPanel;
+    }
+
+    // Method to create a panel for a single cluster
+    private JPanel createClusterPanel(Cluster cluster) {
+        JPanel clusterPanel = new JPanel(new BorderLayout());
+        clusterPanel.setBorder(BorderFactory.createTitledBorder("Cluster " + cluster.getId() + " (with " + cluster.getNumOfPoints() + " points)"));
+
+        // Create a table for the cluster statistics
+        String[] tableColumnNames = {"Column", "Mean", "Standard Deviation", "Median", "Min", "Max"};
+        DefaultTableModel model = new DefaultTableModel(tableColumnNames, 0);
+        String[] list = AppController.getInstance().getDatasetProfile().getClusteringProfile().getResult().columns();
+
+        // Add rows for each column in the cluster
+        for (int i = 0; i < list.length; i++) {
+            if (list[i].equals("cluster")) continue;
+            String columnName = list[i];
             Object[] rowData = {
-                    cluster.getId(),
-                    cluster.getNumOfPoints(),
-                    cluster.getMean().toString(),
-                    cluster.getStandardDeviations().toString(),
-                    cluster.getMedian().toString(),
-                    cluster.getMin().toString(),
-                    cluster.getMax().toString(),
-                    cluster.getError()
+                    columnName,
+                    cluster.getMean().get(i), // Get mean for this column
+                    cluster.getStandardDeviations().get(i), // Get standard deviation for this column
+                    cluster.getMedian().get(i), // Get median for this column
+                    cluster.getMin().get(i), // Get min for this column
+                    cluster.getMax().get(i)  // Get max for this column
             };
             model.addRow(rowData);
         }
@@ -141,6 +175,9 @@ public class ClusteringPanel extends AnalysisPanel {
         JTable clusterTable = new JTable(model);
         clusterTable.setFillsViewportHeight(true);
 
-        return new JScrollPane(clusterTable);
+        // Add the table to the cluster panel
+        clusterPanel.add(new JScrollPane(clusterTable), BorderLayout.CENTER);
+
+        return clusterPanel;
     }
 }
