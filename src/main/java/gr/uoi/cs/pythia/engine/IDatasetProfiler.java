@@ -3,7 +3,12 @@ package gr.uoi.cs.pythia.engine;
 import java.io.IOException;
 import java.util.List;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.datatypeIdentifier.ScoreCalculatorManager;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import org.apache.spark.sql.AnalysisException;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
 
 import gr.uoi.cs.pythia.labeling.RuleSet;
@@ -24,6 +29,17 @@ public interface IDatasetProfiler {
 	 * @throws AnalysisException
 	 */
 	void registerDataset(String alias, String path, StructType schema) throws AnalysisException;
+
+	/**
+	 * Registers a dataset into the system such that profiling can be performed.
+	 *
+	 * @param alias  - Alias of the dataset within Pythia.
+	 * @param path   - Path of the dataset file.
+	 *
+	 * @throws AnalysisException
+	 */
+	void registerDataset(String alias, String path) throws AnalysisException;
+
 
 	/**
 	 * Computes a new labeled column for the registered dataset.
@@ -106,6 +122,16 @@ public interface IDatasetProfiler {
 	 * @return the DatasetProfile object that characterizes the dataset
 	 */
 	DatasetProfile getDatasetProfile();
+
+	Dataset<Row> getDataset();
+
+	void setDataset(Dataset<Row> dataset);
+
+	void declareHistogramParameters(HistogramParameters histogramParameters);
+
+	void declareCorrelationsParameters(CorrelationsMethod method);
+
+	ScoreCalculatorManager getScoreCalculatorManager();
 
 
 

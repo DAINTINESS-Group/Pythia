@@ -1,9 +1,6 @@
 package gr.uoi.cs.pythia.histogram;
 
-import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorFactory;
-import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
-import gr.uoi.cs.pythia.histogram.generator.IHistogramGenerator;
-import gr.uoi.cs.pythia.histogram.generator.QuartilesHistogramGenerator;
+import gr.uoi.cs.pythia.histogram.generator.*;
 import gr.uoi.cs.pythia.model.histogram.Histogram;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -21,10 +18,12 @@ import java.util.stream.Collectors;
 public class HistogramManager {
     private final DatasetProfile datasetProfile;
     private final Dataset<Row> dataset;
+    private HistogramParameters histogramParameters;
 
-    public HistogramManager(DatasetProfile datasetProfile, Dataset<Row> dataset) {
+    public HistogramManager(DatasetProfile datasetProfile, Dataset<Row> dataset,HistogramParameters histogramParameters) {
         this.datasetProfile = datasetProfile;
         this.dataset = dataset;
+        this.histogramParameters = histogramParameters;
     }
 
     public List<Histogram> createAllHistograms() throws IOException {
@@ -41,8 +40,8 @@ public class HistogramManager {
 
         for (Column column : columns) {
             IHistogramGenerator histogramGenerator = histogramGeneratorFactory
-                    .createGenerator(dataset, column, HistogramGeneratorType.KEEP_NANS);
-            Histogram histogram = histogramGenerator.generateHistogram(10);
+                    .createGenerator(dataset, column, histogramParameters.getType());
+            Histogram histogram = histogramGenerator.generateHistogram(histogramParameters.getNumberOfBins());
             column.setHistogram(histogram);
             histograms.add(histogram);
 

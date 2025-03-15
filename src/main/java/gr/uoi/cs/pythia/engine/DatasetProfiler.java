@@ -9,14 +9,17 @@ import gr.uoi.cs.pythia.config.SparkConfig;
 import gr.uoi.cs.pythia.correlations.CorrelationsCalculatorFactory;
 import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import gr.uoi.cs.pythia.correlations.ICorrelationsCalculator;
+import gr.uoi.cs.pythia.datatypeIdentifier.ScoreCalculatorManager;
 import gr.uoi.cs.pythia.decisiontree.DecisionTreeManager;
 import gr.uoi.cs.pythia.descriptivestatistics.DescriptiveStatisticsFactory;
 import gr.uoi.cs.pythia.descriptivestatistics.IDescriptiveStatisticsCalculator;
 import gr.uoi.cs.pythia.generalinfo.IBasicInfoCalculator;
 import gr.uoi.cs.pythia.generalinfo.IBasicInfoCalculatorFactory;
+import gr.uoi.cs.pythia.gui.guiScores.WindowScores;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerFactory;
 import gr.uoi.cs.pythia.highlights.HighlightsManagerInterface;
 import gr.uoi.cs.pythia.histogram.HistogramManager;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import gr.uoi.cs.pythia.labeling.RuleSet;
 import gr.uoi.cs.pythia.model.Column;
 import gr.uoi.cs.pythia.model.DatasetProfile;
@@ -59,6 +62,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import static org.apache.spark.sql.functions.expr;
 
 public class DatasetProfiler implements IDatasetProfiler {
@@ -81,6 +86,10 @@ public class DatasetProfiler implements IDatasetProfiler {
 	//package-private for the moment
 	List<HolisticHighlight> holisticHighlights;
 	private final SparkSession sparkSession;
+
+	private HistogramParameters histogramParameters;
+	private CorrelationsMethod correlationsMethod;
+	private ScoreCalculatorManager scoreCalculatorManager;
 
 
 	public DatasetProfiler() {
@@ -126,6 +135,48 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("DateTime of Profiling %s",datasetProfile.getTimestamp())); //Preview: 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profiling 2024-04-18 19:31:45.52
 		logger.info(String.format("numOfLines: %d",datasetProfile.getNumberOfLines() ));
 		logger.info(String.format("fileSize in MB: %s", datasetProfile.getFileSize()));
+
+	}
+
+	@Override
+	public void registerDataset(String alias, String path ) throws AnalysisException {
+		Timestamp executionDateTime = new Timestamp(sparkSession.sparkContext().startTime());
+		Instant start = Instant.now();
+		File file = new File(path);
+		String absolutePath = file.getAbsolutePath();
+		dataset = dataFrameReaderFactory.createDataframeReader(absolutePath, null).read();
+		scoreCalculatorManager = new ScoreCalculatorManager(dataset);
+		scoreCalculatorManager.calculateScores();
+		Map<String, Map<DataType,Integer>> map = scoreCalculatorManager.getScoresPerColumnMap();
+		new WindowScores(dataset,map);
+		List<Column> columns = new ArrayList<>();
+
+		StructField[] fields = dataset.schema().fields();
+		for(int i = 0; i < fields.length; ++i){
+			String columnName = fields[i].name();
+			String dataType = fields[i].dataType().toString();
+			Column column = new Column(i, columnName, dataType);
+			CardinalitiesCalculatorFactory cardinalitiesCalculatorFactory = new CardinalitiesCalculatorFactory();
+			ICardinalitiesCalculator cardinalitiesCalculator = cardinalitiesCalculatorFactory.createCardinalitiesCalculator(dataset, columnName);
+			column.setCardinalitiesProfile(cardinalitiesCalculator.computeCardinalityProfile());
+			columns.add(column);
+		}
+		IBasicInfoCalculatorFactory basicInfoCalculatorFactory =  new IBasicInfoCalculatorFactory();
+		IBasicInfoCalculator calculator = basicInfoCalculatorFactory.createBasicInfoCalculator(dataset, absolutePath);
+		long numberOfLines = calculator.getNumberOfLines();
+		Double fileSize = calculator.getFileSize();
+		datasetProfile = new DatasetProfile(alias, absolutePath, columns, executionDateTime, numberOfLines, fileSize);
+		logger.info(String.format("Registered Dataset file with alias '%s' at %s", alias, absolutePath));
+
+		Instant end = Instant.now();
+		Duration duration = Duration.between(start, end);
+		logger.info(String.format("Duration of registerDataset: %s / %sms", duration, duration.toMillis()));
+
+		//TODO PRINT add-ons- Trial!!
+		logger.info(String.format("DateTime of Profiling %s", datasetProfile.getTimestamp())); //Preview: 24/04/18 19:31:50 INFO DatasetProfiler: DateTime of Profiling 2024-04-18 19:31:45.52
+		logger.info(String.format("numOfLines: %d", datasetProfile.getNumberOfLines()));
+		logger.info(String.format("fileSize in MB: %s", datasetProfile.getFileSize()));
+
 
 	}
 
@@ -247,7 +298,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private void computeAllHistograms() throws IOException {
 		Instant start = Instant.now();
 		
-		HistogramManager histogramManager = new HistogramManager(datasetProfile, dataset);
+		HistogramManager histogramManager = new HistogramManager(datasetProfile, dataset,histogramParameters);
 		histogramManager.createAllHistograms();
 		logger.info(String.format("Computed Histogram(s) for dataset: '%s'", datasetProfile.getAlias()));
 		
@@ -260,7 +311,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Instant start = Instant.now();
 		
 		CorrelationsCalculatorFactory factory = new CorrelationsCalculatorFactory();
-		ICorrelationsCalculator calculator = factory.createCorrelationsCalculator(CorrelationsMethod.PEARSON);
+		ICorrelationsCalculator calculator = factory.createCorrelationsCalculator(correlationsMethod);
 		calculator.calculateAllPairsCorrelations(dataset, datasetProfile);
 		logger.info(String.format("Computed Correlations Profile for dataset: '%s'", datasetProfile.getAlias()));
 		hasComputedAllPairsCorrelations = true;
@@ -304,22 +355,6 @@ public class DatasetProfiler implements IDatasetProfiler {
 		Duration duration = Duration.between(start, Instant.now());
 		logger.info(String.format("Duration of identifyDominancePatterns: %s / %sms", duration, duration.toMillis()));
 	}
-	/*
-	private void identifyOutliers() throws IOException {
-		Instant start = Instant.now();
-
-		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
-		if (!hasComputedAllPairsCorrelations) computeAllPairsCorrelations();
-		IPatternManagerFactory factory = new IPatternManagerFactory();
-		IPatternManager patternManager = factory.createPatternManager(
-				dataset, datasetProfile, dominanceParameters, outlierType, outlierThreshold);
-		patternManager.identifyOutliers();
-		logger.info(String.format("Identified outliers for dataset %s", datasetProfile.getAlias()));
-		
-		Instant end = Instant.now();		
-		Duration duration = Duration.between(start, end);
-		logger.info(String.format("Duration of identifyOutliers: %s / %sms", duration, duration.toMillis()));
-	}*/
 
 	private void identifyOutliers() throws IOException {
 		Instant start = Instant.now();
@@ -411,6 +446,30 @@ public class DatasetProfiler implements IDatasetProfiler {
 	private boolean hasDeclaredDominanceParameters() {
 		return dominanceParameters != null;
 	}
-	
+
+	@Override
+	public Dataset<Row> getDataset(){
+		return dataset;
+	}
+
+	@Override
+	public void setDataset(Dataset<Row> dataset){
+		this.dataset = dataset;
+	}
+
+	@Override
+	public void declareHistogramParameters(HistogramParameters histogramParameters){
+		this.histogramParameters = histogramParameters;
+	}
+
+	@Override
+	public void declareCorrelationsParameters(CorrelationsMethod method){
+		this.correlationsMethod = method;
+	}
+
+	@Override
+	public ScoreCalculatorManager getScoreCalculatorManager(){
+		return scoreCalculatorManager;
+	}
 
 }

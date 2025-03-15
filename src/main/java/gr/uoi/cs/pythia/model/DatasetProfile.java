@@ -9,9 +9,9 @@ import java.util.List;
 
 public class DatasetProfile {
 
-  private final String alias;
-  private  final String path;
-  private final List<Column> columns;
+  private String alias;
+  private String path;
+  private List<Column> columns;
 
   /**
    * ADD ONS
@@ -20,13 +20,13 @@ public class DatasetProfile {
    * - fileSize: Represents the size of the file in bytes.
    * - timestamp: Represents the timestamp indicating when the profile was created.
    */
-  private final long numberOfLines;
-  private final Double fileSize;
+  private long numberOfLines;
+  private Double fileSize;
   private Timestamp timestamp;
   private ZoneId zoneId;
 
-  private final PatternsProfile patternsProfile;
-  private final List<RegressionProfile> regressionProfiles;
+  private PatternsProfile patternsProfile;
+  private List<RegressionProfile> regressionProfiles;
   private ClusteringProfile clusteringProfile;
   private String auxiliaryDataOutputDirectory;
   private HighlightsProfile highlightsProfile;
@@ -48,6 +48,10 @@ public class DatasetProfile {
     this.patternsProfile = new PatternsProfile();
     this.regressionProfiles = new ArrayList<>();
     this.highlightsProfile = null;
+  }
+
+  public DatasetProfile(){
+    //For Testing
   }
 
   public String getAlias() {
@@ -130,6 +134,20 @@ public class DatasetProfile {
     this.zoneId = zoneId;
   }
 
+  public void setAlias(String alias){
+    this.alias = alias;
+  }
+
+  public void setPatternsProfile(PatternsProfile patternsProfile){
+    this.patternsProfile = patternsProfile;
+  }
+  public void setRegressionProfiles(List<RegressionProfile> regressionProfiles){
+    this.regressionProfiles = regressionProfiles;
+  }
+
+  public void setColumns(List<Column> columnList){
+    this.columns =columnList;
+  }
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();

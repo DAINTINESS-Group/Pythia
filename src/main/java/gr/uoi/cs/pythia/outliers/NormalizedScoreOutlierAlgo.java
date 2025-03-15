@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static gr.uoi.cs.pythia.util.DatatypeFilterer.isNumerical;
+
 public class NormalizedScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
 	private static final String NORMALIZED_SCORE_TEXT = "Normalized_Score";
@@ -31,7 +33,7 @@ public class NormalizedScoreOutlierAlgo extends OutlierAlgo implements IOutlierA
 	public void  identifyOutliers(Dataset<Row> dataset,DatasetProfile datasetProfile){
 		
 		for (Column column : datasetProfile.getColumns()) {
-			if (isNotNumericColumn(column)) continue;
+			if (!isNumerical(column.getDatatype())) continue;
 			Double mean = getColumnMean(column);
 			Double standardDeviation = getColumnStandardDeviation(column);
 			if (standardDeviation == 0.0)		//outlierness is 0 for all, will never exceed the THRESHOLD

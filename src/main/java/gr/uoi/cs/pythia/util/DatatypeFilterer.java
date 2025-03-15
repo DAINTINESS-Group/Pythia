@@ -33,11 +33,19 @@ public class DatatypeFilterer {
         add(DataTypes.StringType.toString());
     }};
 
-    public static boolean isNumerical(DataType dataType) {
+    public static boolean isNumerical(DataType dataType)
+    {
+        if(dataType.toString().startsWith("DecimalType")){
+            return true;
+        }
         return numericalDatatypes.contains(dataType.toString());
     }
 
-    public static boolean isNumerical(String dataType) {
+    public static boolean isNumerical(String dataType)
+    {
+        if(dataType.startsWith("DecimalType")){
+            return true;
+        }
         return numericalDatatypes.contains(dataType);
     }
 

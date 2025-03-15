@@ -19,22 +19,6 @@ import java.util.stream.Collectors;
  */
 public abstract class OutlierAlgo {
 
-	//Todo remove identifyOutliers() is useless!!
-	//public abstract void identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile);
-	
-	protected boolean isNotNumericColumn(Column column) {
-		return !(column.getDatatype().equals(DataTypes.DoubleType.toString()) ||
-                column.getDatatype().equals(DataTypes.IntegerType.toString()));
-	}
-	/*TODO create extracted method or Interface??
-	   we need a method who update Column about outlierProfile after calculate outlier per column??
-	*
-	* public void createOutlierResult(List<OutlierResult> results,String typeAlgo){
-	*	OutlierProfile outlierProfile = new OutlierProfile(results,typeAlgo);
-	*	column.setOutlierProfile(outlierProfile);
-	*}
-	* */
-
 	protected List<Double> getColumnValues(Dataset<Row> dataset, Column column) {
 		return dataset
 				.select(column.getName())

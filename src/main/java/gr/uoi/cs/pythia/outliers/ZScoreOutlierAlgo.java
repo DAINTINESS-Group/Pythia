@@ -9,6 +9,8 @@ import org.apache.spark.sql.Row;
 import java.util.ArrayList;
 import java.util.List;
 
+import static gr.uoi.cs.pythia.util.DatatypeFilterer.isNumerical;
+
 public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
 	private static final String Z_SCORE_TEXT = "Z_Score";
@@ -27,7 +29,7 @@ public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 	@Override
 	public void identifyOutliers(Dataset<Row> dataset, DatasetProfile datasetProfile) {
 		for (Column column : datasetProfile.getColumns()) {
-			if (isNotNumericColumn(column)) continue;
+			if (!isNumerical(column.getDatatype())) continue;
 			Double mean = getColumnMean(column);
 			Double standardDeviation = getColumnStandardDeviation(column);
 			if (standardDeviation == 0.0) continue;

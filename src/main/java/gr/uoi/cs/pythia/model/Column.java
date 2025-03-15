@@ -6,7 +6,7 @@ public class Column {
 
   private final int position;
   private final String name;
-  private final String datatype;
+  private String datatype;
   private CorrelationsProfile correlationsProfile;
   private DescriptiveStatisticsProfile descriptiveStatisticsProfile;
   private Histogram histogram;
@@ -71,9 +71,17 @@ public class Column {
     return outlierProfile;
   }
 
+
+  public void setDatatype(String datatype){
+    this.datatype = datatype;
+  }
+
   public void setOutlierProfile(OutlierProfile outlierProfile){
     this.outlierProfile = outlierProfile;
   }
+
+
+
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
