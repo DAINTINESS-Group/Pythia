@@ -1,8 +1,11 @@
 package gr.uoi.cs.pythia.client;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
@@ -44,7 +47,9 @@ public class AdultMain {
 	            new String[] {"native_country", "occupation", "gender"}
 	    );
 
-		datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE,2.5); 
+
+		datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
+		datasetProfiler.declareCorrelationsParameters(CorrelationsMethod.PEARSON);
 
 	    boolean shouldRunDescriptiveStats = true;
 	    boolean shouldRunHistograms = true;

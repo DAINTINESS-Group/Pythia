@@ -3,6 +3,9 @@ package gr.uoi.cs.pythia.client;
 import java.io.File;
 import java.io.IOException;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
@@ -38,6 +41,8 @@ public class CarsFull {
             new String[] {"model", "year"}
     );
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
+    datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
+    datasetProfiler.declareCorrelationsParameters(CorrelationsMethod.PEARSON);
 
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = true;

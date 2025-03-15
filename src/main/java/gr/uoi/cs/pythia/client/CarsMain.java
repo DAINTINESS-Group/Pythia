@@ -2,21 +2,18 @@ package gr.uoi.cs.pythia.client;
 
 import java.io.File;
 import java.io.IOException;
-
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
 import gr.uoi.cs.pythia.model.outlier.OutlierType;
 import gr.uoi.cs.pythia.patterns.dominance.DominanceColumnSelectionMode;
-
 import gr.uoi.cs.pythia.report.ReportGeneratorConstants;
-
 import gr.uoi.cs.pythia.util.HighlightParameters;
 import gr.uoi.cs.pythia.util.HighlightParameters.HighlightExtractionMode;
 
@@ -43,6 +40,7 @@ public class CarsMain {
 
 
     datasetProfiler.declareOutlierParameters(OutlierType.Z_SCORE, 1.0);
+    datasetProfiler.declareCorrelationsParameters(CorrelationsMethod.PEARSON);
     
     boolean shouldRunDescriptiveStats = true;
     boolean shouldRunHistograms = false;

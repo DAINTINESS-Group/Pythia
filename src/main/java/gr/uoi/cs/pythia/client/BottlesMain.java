@@ -6,6 +6,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
@@ -56,7 +59,7 @@ public static void main(String[] args) throws AnalysisException, IOException {
 	 //		Arrays.asList("EXIST"));
 	 //datasetProfiler.declareClusteringParameters(ClusteringType.GRAPH_BASED, 4,
 	 //		Arrays.asList("EXIST"));
-	 
+
 	 boolean shouldRunDescriptiveStats = false;
 	 boolean shouldRunHistograms = false;
 	 boolean shouldRunAllPairsCorrelations = false;

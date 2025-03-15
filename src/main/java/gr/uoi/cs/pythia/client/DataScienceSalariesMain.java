@@ -3,6 +3,9 @@ package gr.uoi.cs.pythia.client;
 import java.io.File;
 import java.io.IOException;
 
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import gr.uoi.cs.pythia.regression.RegressionParameters;
 import gr.uoi.cs.pythia.regression.RegressionRequest;
 import org.apache.spark.sql.AnalysisException;
@@ -10,7 +13,6 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -46,6 +48,9 @@ public class DataScienceSalariesMain {
     regressionRequest.addRegression(new RegressionParameters(
     		null, "salary_in_usd", RegressionType.AUTOMATED, 0.05));
     datasetProfiler.declareRegressionRequest(regressionRequest); //Missing !
+
+    datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
+    datasetProfiler.declareCorrelationsParameters(CorrelationsMethod.PEARSON);
 
 
     boolean shouldRunDescriptiveStats = true;

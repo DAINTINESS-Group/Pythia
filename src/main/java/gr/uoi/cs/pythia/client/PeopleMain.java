@@ -1,16 +1,18 @@
 package gr.uoi.cs.pythia.client;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
 import gr.uoi.cs.pythia.engine.IDatasetProfiler;
 import gr.uoi.cs.pythia.engine.IDatasetProfilerFactory;
@@ -73,8 +75,14 @@ public class PeopleMain {
 
         datasetProfiler.declareOutlierParameters(null,2.0); // We have null expecting to be autocompleted !!
 
+        // 8.Declare Histogram Parameters
+        datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
 
-        // 8. Specify the auxiliary data output directory and the desired parts of the analysis procedure
+        //9. declare CorrelationsMethod parameters
+        datasetProfiler.declareCorrelationsParameters(CorrelationsMethod.PEARSON);
+
+
+        // 10. Specify the auxiliary data output directory and the desired parts of the analysis procedure
     	// that should get executed for the computation of the dataset profile.
     	String auxiliaryDataOutputDirectory = "results";
     	boolean shouldRunDescriptiveStats = true;
@@ -87,7 +95,7 @@ public class PeopleMain {
     	boolean shouldRunClustering = false;
 	    HighlightParameters highlightParameters = new HighlightParameters(HighlightExtractionMode.NONE, Double.MAX_VALUE);
 
-        // 9. Create a DatasetProfilerParameters object with the parameters specified in step 8
+        // 11. Create a DatasetProfilerParameters object with the parameters specified in step 8
         // and compute the profile of the dataset (this will take a while for big datasets).
         DatasetProfilerParameters parameters =  new DatasetProfilerParameters(
         		auxiliaryDataOutputDirectory,
@@ -102,12 +110,12 @@ public class PeopleMain {
                 highlightParameters);
         datasetProfiler.computeProfileOfDataset(parameters);
 
-        // 10. (Optionally) specify an output directory path for the generated reports
+        // 12. (Optionally) specify an output directory path for the generated reports
         // (unspecified output directory path means that the reports will be generated under the 
         // auxiliary data output directory specified in step 8).
         String outputDirectoryPath = "";
         
-        // 11. Generate a report in plain text and markdown format.
+        // 13. Generate a report in plain text and markdown format.
         datasetProfiler.generateReport(ReportGeneratorConstants.TXT_REPORT, outputDirectoryPath);
         datasetProfiler.generateReport(ReportGeneratorConstants.MD_REPORT, outputDirectoryPath);
     }

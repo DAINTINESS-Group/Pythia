@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 public class AppController{
 
-    private final IDatasetProfiler profiler;
+    private IDatasetProfiler profiler;
     private DatasetProfilerParameters parameters;
     private DatasetProfile datasetProfile;
     private static AppController appController;
@@ -414,5 +414,7 @@ public class AppController{
     }
 
 
-
+    public void setProfiler(IDatasetProfiler datasetProfiler){
+        this.profiler = datasetProfiler;
+    }
 }
