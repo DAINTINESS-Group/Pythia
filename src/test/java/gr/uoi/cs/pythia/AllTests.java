@@ -38,12 +38,8 @@ import org.junit.runners.Suite.SuiteClasses;
         AllRegressionTests.class,
         AllReportTests.class,
         AllWriterTests.class,
-        DescriptiveStatisticsTest.class,
-        /*AllTypeStrategyTests.class,
-        AllAnalysisTasksGuiPanelTests.class,
-        AllButtonPanelTest.class,
-        AllGuiScoreTests.class,
-        AllResultTests.class*/
+        DescriptiveStatisticsTest.class
+
 })
 public class AllTests{
 }
