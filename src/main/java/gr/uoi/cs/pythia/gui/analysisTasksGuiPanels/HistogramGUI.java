@@ -7,12 +7,7 @@ import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import javax.swing.*;
 import java.awt.*;
 
-// HistogramGUI.java
 public class HistogramGUI extends AnalysisParametersGUI<HistogramParameters> {
-    /**
-	 * 
-	 */
-
 
 	public HistogramGUI(AnalysisTabsPanel tabs,JPanel cardPanel, CardLayout cardLayout) {
         super("Histograms", tabs, new HistogramParameterValidator(), AppController.getInstance()::declareHistogramParameters,cardPanel,cardLayout);

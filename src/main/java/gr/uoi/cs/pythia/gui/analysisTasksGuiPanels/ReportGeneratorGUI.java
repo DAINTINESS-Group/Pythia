@@ -10,13 +10,9 @@ import java.awt.*;
 import java.io.File;
 
 public class ReportGeneratorGUI extends AnalysisParametersGUI<ReportParameters> {
-    /**
-	 * 
-	 */
 
 	public ReportGeneratorGUI(JPanel cardPanel, CardLayout cardLayout) {
         super("Report Generator", null, new ReportParameterValidator(), AppController.getInstance()::generateReport,cardPanel,cardLayout);   // No tabsGUI needed
-
 
         JComboBox<String> reportTypeComboBox=new JComboBox<>(new String[]{"TXT", "JSON", "MD"});
         addInputField("Report Type", reportTypeComboBox);

@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class TableStyler {
     public static void styleTable(JTable table) {
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Απενεργοποίηση αυτόματης προσαρμογής μεγέθους
-        table.setFillsViewportHeight(true); // Γέμισμα του viewport
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setFillsViewportHeight(true);
         table.setFont(new Font("Arial", Font.PLAIN, 14));
         table.setRowHeight(25);
 

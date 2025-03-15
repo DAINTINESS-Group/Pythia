@@ -7,7 +7,7 @@ import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 public class ClusteringParameters {
 	
 	private ClusteringType type;
-	private int numOfClusters;
+	private final int numOfClusters;
 	private List<String> selectedFeatures;
 	
 
@@ -39,8 +39,4 @@ public class ClusteringParameters {
 		this.type = type;
 	}
 
-	public void setNumOfClusters(int numOfClusters) {
-		this.numOfClusters = numOfClusters;
-	}
-	
 }

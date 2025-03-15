@@ -1,7 +1,5 @@
 package gr.uoi.cs.pythia.gui.guiScores;
 
-
-
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
@@ -12,12 +10,8 @@ import java.awt.*;
 
 
 public class DataPanel extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 323507408983984248L;
-	private final JTable table;
 
+	private final JTable table;
     public DataPanel(Dataset<Row> dataset, String[] columnNames) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder(

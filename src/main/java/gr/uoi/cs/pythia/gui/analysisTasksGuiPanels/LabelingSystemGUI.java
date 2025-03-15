@@ -15,10 +15,6 @@ import java.util.List;
 
 public class LabelingSystemGUI extends AnalysisParametersGUI<RuleSet>{
 
-    /**
-	 * 
-	 */
-
 	private final List<Rule> rulesList = new ArrayList<>();
     private final JTextArea rulesArea;
 

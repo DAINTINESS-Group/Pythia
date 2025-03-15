@@ -356,7 +356,7 @@ public class DatasetProfiler implements IDatasetProfiler {
 		logger.info(String.format("Duration of identifyDominancePatterns: %s / %sms", duration, duration.toMillis()));
 	}
 
-	private void identifyOutliers() throws IOException {
+	private void identifyOutliers(){
 		Instant start = Instant.now();
 		if (!hasComputedDescriptiveStats) computeDescriptiveStats();
 		OutlierAlgoFactory factory = new OutlierAlgoFactory();

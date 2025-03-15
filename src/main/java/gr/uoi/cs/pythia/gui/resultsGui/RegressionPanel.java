@@ -41,7 +41,6 @@ public class RegressionPanel extends AnalysisPanel {
     private JPanel createRegressionPanel(RegressionProfile profile) {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Προσθήκη Intercept και Error στον τίτλο του πίνακα
         String title = String.format("Regression Profile: %s (Intercept: %.4f, Error: %.4f)",
                 profile.getType(), profile.getIntercept(), profile.getError());
         panel.setBorder(BorderFactory.createTitledBorder(title));
@@ -63,7 +62,7 @@ public class RegressionPanel extends AnalysisPanel {
             return new JTable(new Object[][]{{"Invalid data", "N/A", "N/A", "N/A"}}, columnNames);
         }
 
-        int rowCount = independentVariables.size() + 2; // +2 για Intercept και Error
+        int rowCount = independentVariables.size() + 2; // +2 Intercept,Error
         Object[][] data = new Object[rowCount][columnNames.length];
         for (int i = 0; i < independentVariables.size(); i++) {
             data[i][0] = independentVariables.get(i) != null ? independentVariables.get(i).getName() : "N/A";

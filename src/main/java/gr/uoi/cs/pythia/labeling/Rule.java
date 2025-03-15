@@ -1,10 +1,10 @@
 package gr.uoi.cs.pythia.labeling;
 
 public class Rule {
-  private String targetColumnName;
-  private String sparkOperator;
-  private Number limit;
-  private String label;
+  private final String targetColumnName;
+  private final String sparkOperator;
+  private final Number limit;
+  private final String label;
 
   public Rule(String targetColumnName, String sparkOperator, Number limit, String label) {
     this.targetColumnName = targetColumnName;

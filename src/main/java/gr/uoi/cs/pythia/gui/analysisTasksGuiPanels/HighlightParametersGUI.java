@@ -10,10 +10,6 @@ import java.awt.*;
 
 public class HighlightParametersGUI extends AnalysisParametersGUI<HighlightParameters> {
 
-    /**
-	 * 
-	 */
-
 	private final JComboBox<HighlightParameters.HighlightExtractionMode> extractionModeComboBox = new JComboBox<>(HighlightParameters.HighlightExtractionMode.values());
     private final JTextField numericLimitField = new JTextField(10);
 

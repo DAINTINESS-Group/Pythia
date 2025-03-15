@@ -13,15 +13,8 @@ import java.util.Map;
 
 public class CorrelationsPanel extends AnalysisPanel { // Inherit from AnalysisPanel
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2911930085195678658L;
-
-
 	public CorrelationsPanel( ) {
         super();
-        //createPanelContent();
     }
 
     @Override

@@ -17,8 +17,8 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class PolynomialRegressionPerformer extends GeneralRegression {
 
-	private String dependentVariable;
-	private String independentVariable;
+	private final String dependentVariable;
+	private final String independentVariable;
 	private final int degree;
 	private double intercept;
 	private List<Double> slopes;

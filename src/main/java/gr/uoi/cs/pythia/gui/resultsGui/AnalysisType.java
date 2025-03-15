@@ -13,8 +13,6 @@ public enum AnalysisType {
     HIGHLIGHT("Highlight Parameters"),
     TESTING("Testing");
 
-    // Consistent naming
-
     private final String label;
 
     AnalysisType(String label) {

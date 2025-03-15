@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 public class AppController{
 
-    private IDatasetProfiler profiler;
+    private final IDatasetProfiler profiler;
     private DatasetProfilerParameters parameters;
     private DatasetProfile datasetProfile;
     private static AppController appController;
@@ -412,17 +412,7 @@ public class AppController{
     public String getAuxiliaryPath(){
         return auxiliaryPath;
     }
-    /*
-    public void setDataset(Dataset<Row> dataset){
-        this.dataset = dataset;
-    }
 
-    public void setDatasetProfile(DatasetProfile datasetProfile){
-        this.datasetProfile = datasetProfile;
-    }
-*/
-    public void setProfiler(IDatasetProfiler profiler){
-        this.profiler = profiler;
-    }
+
 
 }

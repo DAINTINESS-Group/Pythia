@@ -13,14 +13,9 @@ import java.util.concurrent.ExecutionException;
 
 public class DatasetInputPanel extends JPanel {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 742659501582583104L;
 	private final JTextField aliasField = new JTextField(20);
     private final JTextField pathField = new JTextField(20);
     private final JTextField pathSchemaField = new JTextField(20);
-
     private final JButton registerButton = new JButton("Register Dataset");
     private final JTextArea resultArea = new JTextArea(5, 20);
     public StructType currentStructType;
@@ -67,7 +62,6 @@ public class DatasetInputPanel extends JPanel {
         };
         aliasField.getDocument().addDocumentListener(updateListener);
         pathField.getDocument().addDocumentListener(updateListener);
-        //pathSchemaField.getDocument().addDocumentListener(updateListener);
     }
 
     private JPanel createPathSelectionPanel(JTextField textField) {
@@ -163,9 +157,6 @@ public class DatasetInputPanel extends JPanel {
     public void updateResultsArea() {
         String alias = aliasField.getText().trim();
         String path = pathField.getText().trim();
-
-        //String schema = (currentStructType != null) ? currentStructType.prettyJson() : "No schema yet";
-
         resultArea.setText(String.format("Dataset Alias: %s\nDataset Path: %s\n", alias, path));
     }
 

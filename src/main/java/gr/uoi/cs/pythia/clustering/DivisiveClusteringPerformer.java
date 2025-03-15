@@ -14,7 +14,7 @@ import gr.uoi.cs.pythia.model.clustering.ClusteringType;
 public class DivisiveClusteringPerformer extends GeneralClusteringPerformer{
 	
 	private final int numOfClusters;
-	private List<String> selectedFeatures;
+	private final List<String> selectedFeatures;
 	
 	public DivisiveClusteringPerformer(int numOfClusters, DatasetProfile datasetProfile, List<String> selectedFeatures) {
 		super(datasetProfile);

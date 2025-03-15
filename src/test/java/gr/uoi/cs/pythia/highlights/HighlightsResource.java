@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import gr.uoi.cs.pythia.correlations.CorrelationsMethod;
+import gr.uoi.cs.pythia.histogram.generator.HistogramGeneratorType;
+import gr.uoi.cs.pythia.histogram.generator.HistogramParameters;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.types.StructType;
+import org.jfree.data.statistics.HistogramType;
 import org.junit.rules.ExternalResource;
 
 import gr.uoi.cs.pythia.engine.DatasetProfilerParameters;
@@ -46,6 +49,7 @@ public class HighlightsResource extends ExternalResource {
         IDatasetProfiler datasetProfiler = new IDatasetProfilerFactory().createDatasetProfiler();
         CorrelationsMethod correlationsMethod = CorrelationsMethod.PEARSON;
         datasetProfiler.declareCorrelationsParameters(correlationsMethod);
+        datasetProfiler.declareHistogramParameters(new HistogramParameters(HistogramGeneratorType.KEEP_NANS,10));
         String datasetPath = TestsUtilities.getAbsoluteDatasetPath("cars_100.csv");
         datasetProfiler.registerDataset("cars", datasetPath, schema);
         

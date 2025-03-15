@@ -23,11 +23,7 @@ public class DataTypeSelectionDialog {
             }
             AppController.getInstance().onDataTypeSelected(selectedType,columnName);
         }
-
-
     }
-
-
 
     public DataType mapStringToDataType(String selectedType) {
         switch (selectedType) {

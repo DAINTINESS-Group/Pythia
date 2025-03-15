@@ -8,9 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ClusteringGUI extends AnalysisParametersGUI<ClusteringParameters> {
-    /**
-	 * 
-	 */
+
 
 	public ClusteringGUI(AnalysisTabsPanel tabsGUI,JPanel cardPanel,CardLayout cardLayout) {
         super("Clustering", tabsGUI, new ClusteringParameterValidator(), AppController.getInstance()::declareClusteringParameters, cardPanel, cardLayout);

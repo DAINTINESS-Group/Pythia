@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame implements NavigationListener{
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -338386314255299400L;
+
 	private final CardLayout cardLayout;
     private final JPanel cardPanel;
     private final ApplicationNavigationPanel navigationPanel;

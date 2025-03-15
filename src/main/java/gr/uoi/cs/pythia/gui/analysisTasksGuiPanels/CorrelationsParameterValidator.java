@@ -13,8 +13,6 @@ public class CorrelationsParameterValidator implements ParameterValidator<Correl
     @Override
     public CorrelationsParameters validateAndCreate(Map<String, JComponent> inputFields) {
         String method = (String) ((JComboBox<?>) inputFields.get("Correlation Method")).getSelectedItem();
-        // You might want to add validation here (e.g., checking if the method is valid)
-
         Map<String, CorrelationsMethod> map = new HashMap<>();
         map.put("PEARSON", CorrelationsMethod.PEARSON);
         CorrelationsMethod correlationsMethod;

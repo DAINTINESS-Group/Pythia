@@ -12,10 +12,6 @@ import java.util.function.Consumer;
 
 public abstract class AnalysisParametersGUI<T> extends JPanel {
 
-    /**
-	 * 
-	 */
-
 	protected final Map<String, JComponent> inputFields = new LinkedHashMap<>(); // Preserve order
     protected final JTextArea resultArea;
     protected final AnalysisTabsPanel tabsGUI;
@@ -25,7 +21,7 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
         this.tabsGUI = tabsGUI;
         // Callback to set parameters in AppController
         this.validator = validator;
-        //this.mainWindow = mainWindow;
+
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -117,6 +113,6 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
     public JTextArea getResultArea(){
         return resultArea;
     }
-    // protected abstract Map<String, JComponent> getInputFields();
+
 
 }

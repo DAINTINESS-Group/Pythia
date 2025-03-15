@@ -14,7 +14,7 @@ import static gr.uoi.cs.pythia.util.DatatypeFilterer.isNumerical;
 public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 
 	private static final String Z_SCORE_TEXT = "Z_Score";
-	private  double Z_SCORE_THRESHOLD;
+	private final double Z_SCORE_THRESHOLD;
 
 	public ZScoreOutlierAlgo(double z_SCORE_THRESHOLD) {
 		super();
@@ -35,7 +35,7 @@ public class ZScoreOutlierAlgo extends OutlierAlgo implements IOutlierAlgo {
 			if (standardDeviation == 0.0) continue;
 			List<Double> values = getColumnValues(dataset, column);
 
-			List<OutlierResult> results = new ArrayList<OutlierResult>();
+			List<OutlierResult> results = new ArrayList<>();
 
 			for (int index = 0; index < values.size(); index++) {
 				Double value = values.get(index);

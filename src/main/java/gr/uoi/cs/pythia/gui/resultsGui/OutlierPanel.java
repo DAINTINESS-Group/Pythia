@@ -21,7 +21,7 @@ import java.awt.*;
 import java.util.List;
 
 
-public class OutlierPanel extends AnalysisPanel { // Inherit from AnalysisPanel
+public class OutlierPanel extends AnalysisPanel {
 
 
 	public OutlierPanel( ) {

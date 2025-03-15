@@ -16,15 +16,10 @@ import java.util.List;
 
 public class RegressionGUI extends AnalysisParametersGUI<RegressionRequest>{
 
-    /**
-	 * 
-	 */
-
 	private final JTextField dependentVariableField;
     private final JTextField independentVariablesField;
     private final JTextField precisionField;
-    private final JComboBox<RegressionType> regressionTypeComboBox; // Make it a field
-    //private final JTextArea regressionsArea; // For displaying added regressions
+    private final JComboBox<RegressionType> regressionTypeComboBox;
     private final RegressionRequest regressionRequest;
 
     public RegressionGUI(AnalysisTabsPanel tabsGUI,JPanel cardPanel,CardLayout cardLayout){

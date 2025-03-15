@@ -7,11 +7,7 @@ import gr.uoi.cs.pythia.outliers.OutlierParameters;
 import javax.swing.*;
 import java.awt.*;
 
-// OutlierAnalysisGUI.java
 public class OutlierAnalysisGUI extends AnalysisParametersGUI<OutlierParameters> {
-    /**
-	 * 
-	 */
 
 	public OutlierAnalysisGUI(AnalysisTabsPanel tabsGUI, JPanel cardPanel,CardLayout cardLayout) {
         super("Outlier", tabsGUI, new OutlierParameterValidator(), AppController.getInstance()::declareOutlierParameters,cardPanel,cardLayout);

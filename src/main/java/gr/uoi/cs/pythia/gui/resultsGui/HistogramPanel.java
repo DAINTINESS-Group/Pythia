@@ -20,17 +20,13 @@ import java.util.List;
 
 public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPanel
 
-
 	public HistogramPanel() {
         super();
-
     }
 
     @Override
     public void createPanelContent() {
-
         List<Column> columnList = AppController.getInstance().getDatasetProfile().getColumns();
-
         if (columnList == null || columnList.isEmpty()) {
             add(new JLabel("No columns found.", SwingConstants.CENTER), BorderLayout.CENTER);
             return;

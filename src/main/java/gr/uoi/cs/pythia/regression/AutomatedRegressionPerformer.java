@@ -12,9 +12,9 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class AutomatedRegressionPerformer extends GeneralRegression  {
 	
-	private String dependentVariable;
-	private List<String> independentVariables;
-	private double dependenceDegree;
+	private final String dependentVariable;
+	private final List<String> independentVariables;
+	private final double dependenceDegree;
 	
 	public AutomatedRegressionPerformer(String dependentVariable, double dependenceDegree, DatasetProfile datasetProfile) {
 		super(datasetProfile);

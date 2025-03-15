@@ -9,10 +9,6 @@ import java.awt.*;
 
 public class DominanceParametersGUI extends AnalysisParametersGUI<DominanceParameters> {
 
-    /**
-	 * 
-	 */
-
 	public DominanceParametersGUI( AnalysisTabsPanel tabsGUI,JPanel cardPanel, CardLayout cardLayout) {
         super("Dominance Patterns", tabsGUI, new DominanceParameterValidator(), AppController.getInstance()::declareDominanceParameters,cardPanel,cardLayout);
 

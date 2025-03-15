@@ -12,11 +12,6 @@ import java.util.List;
 
 public class StatisticsPanel extends AnalysisPanel {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2635233518244620015L;
-
 	public StatisticsPanel() {
         super();
     }
@@ -42,10 +37,10 @@ public class StatisticsPanel extends AnalysisPanel {
         String[] columnNames = {"Column", "Count", "Mean", "Standard Deviation", "Q1", "Median", "Q3", "Min", "Max", "Modes"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         JTable table = new JTable(model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Απενεργοποίηση αυτόματης αλλαγής μεγέθους
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (Column column : columnList) {
             DescriptiveStatisticsProfile profile = column.getDescriptiveStatisticsProfile();
-            if (profile != null) { // Έλεγχος αν υπάρχει προφίλ
+            if (profile != null) {
                 Object[] rowData = {
                         column.getName(),
                         profile.getCount(),
@@ -63,15 +58,13 @@ public class StatisticsPanel extends AnalysisPanel {
                 System.out.println("Added row: " + Arrays.toString(rowData));
             } else {
                 System.out.println("No DescriptiveStatisticsProfile found for column: " + column.getName());
-                // Προσθήκη κενής γραμμής αν δεν υπάρχουν δεδομένα
                 model.addRow(new Object[]{column.getName(), "", "", "", "", "", "", "", "", ""});
             }
         }
 
         for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(150); // Προσαρμογή πλάτους στηλών
+            table.getColumnModel().getColumn(i).setPreferredWidth(150);
         }
-
         return table;
     }
 }

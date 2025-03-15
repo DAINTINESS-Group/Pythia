@@ -10,10 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class AnalysisSelectionPanel extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1191469074235639134L;
+
 	private final JTextArea resultsArea;
     private final JCheckBox[] checkBoxes;
     private String path;
@@ -124,27 +121,7 @@ public class AnalysisSelectionPanel extends JPanel {
         button.setPreferredSize(new Dimension(120, 40));
         return button;
     }
-    /*
-    public void choosePath(JTextField pathField) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        Window parentWindow = SwingUtilities.getWindowAncestor(this);
-        if (parentWindow == null) {
-            parentWindow = SwingUtilities.windowForComponent(this);
-        }
-        if (parentWindow == null) {
-            parentWindow = JOptionPane.getRootFrame();
-        }
-
-        if (parentWindow != null) {
-            if (fileChooser.showOpenDialog(parentWindow) == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                pathField.setText(selectedFile.getAbsolutePath());
-                path = selectedFile.getAbsolutePath();
-            }
-        }
-    }*/
     public void choosePath(JTextField pathField){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -177,10 +154,7 @@ public class AnalysisSelectionPanel extends JPanel {
 
     private void showAnalysisTabs(ArrayList<String> selectedAnalyses) {
         AnalysisTabsPanel tabsGUI = new AnalysisTabsPanel(selectedAnalyses, path,cardPanel,cardLayout);
-
         MainWindow.getMainWindow().setOnShowResultsButton();
-        //cardPanel.add(tabsGUI, "analysisTabs");
-        //cardLayout.show(cardPanel, "analysisTabs");
         MainWindow.getMainWindow().showCard(tabsGUI, "analysisTabs");
     }
 

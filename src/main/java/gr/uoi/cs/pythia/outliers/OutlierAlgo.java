@@ -1,12 +1,9 @@
 package gr.uoi.cs.pythia.outliers;
 
 import gr.uoi.cs.pythia.model.Column;
-//import gr.uoi.cs.pythia.model.DatasetProfile;
-//import gr.uoi.cs.pythia.model.OutlierProfile;
-//import gr.uoi.cs.pythia.model.outlier.OutlierResult;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.types.DataTypes;
+
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -11,48 +11,11 @@ import java.awt.*;
 
 public class ApplicationNavigationPanel extends JPanel{
 
-
-
-	public AnalysisSelectionPanel analysisPanel;
+    public AnalysisSelectionPanel analysisPanel;
     private JButton showResults;
-    JButton editDataType;
+    private JButton editDataType;
     private final JPanel cardPanel;
     private final CardLayout cardLayout;
-    /*
-    public ApplicationNavigationPanel(){
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(245, 245, 245)); // Light gray background
-
-        // Use a more modern look with rounded borders and padding
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Padding around buttons
-
-        JButton registerDatasetButton = createButton("Register Dataset", new Color(40, 167, 69), ()->{
-            DatasetInputPanel datasetFormPanel = new DatasetInputPanel();
-            MainWindow.getMainWindow().showCard(datasetFormPanel, "datasetForm");
-        });
-
-        JButton writeDataButton = createButton("Write Data", new Color(255, 193, 7),
-                ()->MainWindow.getMainWindow().showCard(new DatasetWriterGUI(), "datasetWriterWindow"));
-        JButton generateReportButton = createButton("Generate Report", new Color(153, 51, 255),
-                ()->MainWindow.getMainWindow().showCard(new ReportGeneratorGUI(), "reportGenerator"));
-
-        JButton analysisProfileButton = createButton("Analysis Tasks Profile", new Color(0, 123, 255), ()->{ // Blue color
-            analysisPanel = new AnalysisSelectionPanel();
-            MainWindow.getMainWindow().showCard(analysisPanel, "analysisPanel");
-        });
-
-        add(registerDatasetButton);
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between buttons
-        add(analysisProfileButton);
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between buttons
-        add(generateReportButton);
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between buttons
-        add(writeDataButton);
-        add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between buttons
-
-
-    }*/
 
     public ApplicationNavigationPanel(JPanel cardPanel, CardLayout cardLayout){
 
@@ -147,11 +110,11 @@ public class ApplicationNavigationPanel extends JPanel{
     public void setOnShowResultsButton(){
         if(analysisPanel!=null){
             if(showResults!=null){
-                remove(showResults); // Αφαίρεση του υπάρχοντος κουμπιού "Show Results"
+                remove(showResults);
             }
-            // Δημιουργία του νέου κουμπιού "Show Results"
+
             showResults = createButton("Show Results", new Color(0, 153, 233), ()->{
-                ResultsPanelManager resultsPanel = new ResultsPanelManager(analysisPanel.getCheckBoxes(),cardPanel,cardLayout);
+                ResultsPanelManager resultsPanel = new ResultsPanelManager(analysisPanel.getCheckBoxes(), cardPanel, cardLayout);
                 MainWindow.getMainWindow().showCard(resultsPanel, "resultPanel");
 
             });

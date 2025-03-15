@@ -40,9 +40,7 @@ public abstract class AnalysisPanel extends JPanel {
 				}
 			}
 		};
-
 		worker.execute(); // Now execute the worker
-
 	}
 
 }

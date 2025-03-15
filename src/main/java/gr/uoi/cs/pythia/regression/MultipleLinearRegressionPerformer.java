@@ -21,8 +21,8 @@ import gr.uoi.cs.pythia.model.regression.RegressionType;
 
 public class MultipleLinearRegressionPerformer extends GeneralRegression {
 	
-	private String dependentVariable;
-	private List<String> independentVariables;
+	private final String dependentVariable;
+	private final List<String> independentVariables;
 	private double intercept;
 	private List<Double> slopes;
 	

@@ -15,9 +15,6 @@ import java.util.Map;
 
 public class AnalysisTabsPanel extends JPanel {
 
-    /**
-	 * 
-	 */
 
 	private final JList<String> tabList;
     public final DefaultListModel<String> listModel;
@@ -243,9 +240,6 @@ public class AnalysisTabsPanel extends JPanel {
         listModel.addElement(tabName);
         tabPanels.add(tabContent);
         cardsPanel.add(tabContent, String.valueOf(tabPanels.size() - 1));
-
-        // Show/Hide Compute All Button
-        //computeAllButton.setVisible(listModel.isEmpty()); // Show if there are tabs
     }
 
     public void removeTab(String tabName) {
@@ -265,7 +259,6 @@ public class AnalysisTabsPanel extends JPanel {
 
         }
     }
-
 
     private void showTab(int index) {
         if (index >= 0 && index < tabPanels.size()) { // Check bounds

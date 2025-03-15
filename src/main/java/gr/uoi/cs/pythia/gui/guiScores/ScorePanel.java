@@ -11,10 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class ScorePanel extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -7400743541985730022L;
+
 	private final JTable table;
     private final String[] columnNames;
 
@@ -33,8 +30,8 @@ public class ScorePanel extends JPanel {
         table = new JTable(createScoreModel(scoresPerColumnMap));
         TableStyler.styleTable(table);
 
-        // Προσθήκη του κουμπιού "Edit" ως renderer για την τελευταία στήλη
-        int lastColumnIndex = table.getColumnModel().getColumnCount() - 1; // Τελευταία στήλη
+
+        int lastColumnIndex = table.getColumnModel().getColumnCount() - 1;
         table.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(new ButtonRenderer());
 
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -73,7 +70,7 @@ public class ScorePanel extends JPanel {
             if (scoresPerColumnMap.containsKey(columnName)) {
                 Map<DataType, Integer> scores = scoresPerColumnMap.get(columnName);
                 Object[] rowData = new Object[dataTypes.size() + 2]; // +2  "Column Name","Edit"
-                rowData[0] = columnName; // Το όνομα της στήλης
+                rowData[0] = columnName;
 
                 int i = 1;
                 for (DataType type : dataTypes) {

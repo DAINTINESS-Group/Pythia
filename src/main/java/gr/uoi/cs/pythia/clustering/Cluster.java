@@ -5,9 +5,9 @@ import java.util.List;
 public class Cluster {
 	
 	private int id;
-	private int numOfPoints;
+	private final int numOfPoints;
 	private List<Double> mean;
-	private List<Double> standardDeviations;
+	private final List<Double> standardDeviations;
 	private List<Double> median;
 	private List<Double> min;
 	private List<Double> max;
@@ -71,10 +71,6 @@ public class Cluster {
 		return standardDeviations;
 	}
 
-	public void setNumOfPoints(int numOfPoints) {
-		this.numOfPoints = numOfPoints;
-	}
-
 	public void setMean(List<Double> mean) {
 		this.mean = mean;
 	}
@@ -91,9 +87,7 @@ public class Cluster {
 		this.max = max;
 	}
 
-	public void setStandardDeviations(List<Double> standardDeviations) {
-		this.standardDeviations = standardDeviations;
-	}
+
 	
 	
 }

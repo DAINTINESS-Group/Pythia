@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 
 public class EditClickListener extends MouseAdapter {
 
-
     private final JTable table;
     private final JFrame frame;
     private final DataTypeSelectionDialog selectionDialog;

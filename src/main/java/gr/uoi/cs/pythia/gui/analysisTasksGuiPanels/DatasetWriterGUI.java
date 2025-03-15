@@ -10,16 +10,8 @@ import java.awt.*;
 
 public class DatasetWriterGUI extends AnalysisParametersGUI<DatasetWriterParameters> {
 
-
-
-    /**
-	 * 
-	 */
-
 	public DatasetWriterGUI(JPanel cardPanel, CardLayout cardLayout) {
         super("Dataset Writer",null, new DatasetWriterParameterValidator(), AppController.getInstance()::writeDataset,cardPanel,cardLayout); // No tabsGUI needed
-
-
         addInputField("Dataset Alias", new JTextField(20));
         addInputField("Writer Type", new JComboBox<>(new String[]{DatasetWriterConstants.HADOOP, DatasetWriterConstants.NAIVE}));
         JTextField pathField = new JTextField(20);

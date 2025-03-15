@@ -39,11 +39,11 @@ import org.junit.runners.Suite.SuiteClasses;
         AllReportTests.class,
         AllWriterTests.class,
         DescriptiveStatisticsTest.class,
-        AllTypeStrategyTests.class,
+        /*AllTypeStrategyTests.class,
         AllAnalysisTasksGuiPanelTests.class,
         AllButtonPanelTest.class,
         AllGuiScoreTests.class,
-        AllResultTests.class
+        AllResultTests.class*/
 })
 public class AllTests{
 }

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class HistogramManager {
     private final DatasetProfile datasetProfile;
     private final Dataset<Row> dataset;
-    private HistogramParameters histogramParameters;
+    private final HistogramParameters histogramParameters;
 
     public HistogramManager(DatasetProfile datasetProfile, Dataset<Row> dataset,HistogramParameters histogramParameters) {
         this.datasetProfile = datasetProfile;
@@ -26,7 +26,7 @@ public class HistogramManager {
         this.histogramParameters = histogramParameters;
     }
 
-    public List<Histogram> createAllHistograms() throws IOException {
+    public List<Histogram> createAllHistograms(){
         List<Column> columns = getNumericalColumns();
         if (columns.isEmpty()) {
             return new ArrayList<>();

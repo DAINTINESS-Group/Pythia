@@ -43,7 +43,7 @@ public abstract class GeneralRegression implements IRegressionPerformer{
 		
 			RegressionProfile newRegression = new RegressionProfile();
 			
-			List<Column> independentVariables = new ArrayList<Column>();
+			List<Column> independentVariables = new ArrayList<>();
 			for(String columnName : independentVariablesNames)	independentVariables.add(datasetProfile.getColumn(columnName));
 			
 			newRegression.setIndependentVariables(independentVariables);

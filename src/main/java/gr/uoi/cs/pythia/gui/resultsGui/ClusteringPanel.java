@@ -23,7 +23,6 @@ public class ClusteringPanel extends AnalysisPanel {
     ClusteringProfile clusteringProfile;
     public ClusteringPanel() {
         super();
-
     }
 
     @Override

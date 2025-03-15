@@ -5,10 +5,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 public class ButtonRenderer extends JButton implements TableCellRenderer{
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 6840289856011983727L;
 
 	public ButtonRenderer() {
         setOpaque(true);

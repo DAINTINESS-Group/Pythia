@@ -56,8 +56,6 @@ public class DominanceParameterValidator implements ParameterValidator<Dominance
             }
         }
 
-
-
         return columns;
     }
 }
