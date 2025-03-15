@@ -15,49 +15,50 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 
-public class OutlierPanel extends AnalysisPanel {
+public class OutlierPanel extends AnalysisPanel{
 
-
-	public OutlierPanel( ) {
+    public OutlierPanel(){
         super();
     }
 
     @Override
-    public void createPanelContent() {
+    public void createPanelContent(){
         List<Column> columnList = AppController.getInstance().getDatasetProfile().getColumns();
 
-        if (columnList == null || columnList.isEmpty()) {
+        if(columnList==null || columnList.isEmpty()){
             add(new JLabel("No columns found.", SwingConstants.CENTER), BorderLayout.CENTER);
             return;
         }
 
         JPanel chartsContainer = new JPanel(new GridLayout(0, 1, 10, 10)); // Vertical layout with gaps
-
-        for (Column column : columnList) {
-            JPanel chartPanelWrapper = createOutlierChartPanel(column); // Create panel for each chart
-            chartsContainer.add(chartPanelWrapper);
-        }
-
         JScrollPane scrollPane = new JScrollPane(chartsContainer);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Smoother scrolling
         add(scrollPane, BorderLayout.CENTER); // Add scroll pane to the center
-        this.revalidate();
-        this.repaint();
+
+        for(Column column : columnList){
+            JPanel chartPanelWrapper = createOutlierChartPanel(column); // Create panel for each chart
+            if(chartPanelWrapper!=null){
+                chartsContainer.add(chartPanelWrapper); // Add the panel to the container
+            }
+        }
+
+        // Update the GUI
+        chartsContainer.revalidate();
+        chartsContainer.repaint();
     }
 
-    private JPanel createOutlierChartPanel(Column column) {
+    private JPanel createOutlierChartPanel(Column column){
         List<Row> listValues = AppController.getInstance().getDataset().select(column.getName()).collectAsList();
 
-        if (column.getOutlierProfile() == null || listValues.isEmpty()) {
+        if(column.getOutlierProfile()==null || listValues.isEmpty()){
             JPanel noDataPanel = new JPanel();
-            noDataPanel.add(new JLabel("No data to visualize for " + column.getName()));
-            noDataPanel.setBorder(BorderFactory.createTitledBorder(column.getName() + " Outliers"));
+            noDataPanel.add(new JLabel("No data to visualize for "+column.getName()));
+            noDataPanel.setBorder(BorderFactory.createTitledBorder(column.getName()+" Outliers"));
             return noDataPanel;
         }
 
@@ -67,33 +68,39 @@ public class OutlierPanel extends AnalysisPanel {
         chartPanel.setMouseWheelEnabled(true);
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(column.getName() + " Outliers"));
+        panel.setBorder(BorderFactory.createTitledBorder(column.getName()+" Outliers"));
         panel.add(chartPanel, BorderLayout.CENTER);
         return panel;
     }
 
-
-    private JFreeChart createScatterPlot(Column column, List<Row> list) {
+    private JFreeChart createScatterPlot(Column column, List<Row> list){
         OutlierProfile outlierProfile = column.getOutlierProfile();
-        XYSeries realDataSeries = new XYSeries("Real Data - " + column.getName());
-        XYSeries outlierSeries = new XYSeries("Outliers - " + column.getName());
+        XYSeries realDataSeries = new XYSeries("Real Data - "+column.getName());
+        XYSeries outlierSeries = new XYSeries("Outliers - "+column.getName());
 
-        for (int i = 0; i < list.size(); i++) {
+        if(list==null || list.isEmpty()){
+            return null;
+        }
+
+        for(int i = 0; i < list.size(); i++){
             Row row = list.get(i);
-            if (row == null) {
+            if(row==null){
                 continue; // Skip null rows
             }
-            String valueStr = row.getAs(column.getName()).toString();
+            Object value = row.getAs(column.getName());
+            if(value==null){
+                continue; // Skip null values
+            }
             try {
-                Double value = Double.parseDouble(valueStr);
-                realDataSeries.add(i + 1, value);
+                Double numericValue = Double.parseDouble(value.toString());
+                realDataSeries.add(i+1, numericValue);
             } catch (NumberFormatException e) {
-                System.err.println("Skipping invalid number: " + valueStr);
+                System.err.println("Skipping invalid number: "+value);
             }
         }
 
-        if (outlierProfile != null) {
-            for (OutlierResult result : outlierProfile.getOutlierResultList()) {
+        if(outlierProfile!=null){
+            for(OutlierResult result : outlierProfile.getOutlierResultList()){
                 outlierSeries.add(result.getPosition(), result.getValue());
             }
         }
@@ -103,7 +110,7 @@ public class OutlierPanel extends AnalysisPanel {
         dataset.addSeries(outlierSeries);
 
         JFreeChart chart = ChartFactory.createScatterPlot(
-                "Data and Outlier Analysis for " + column.getName(),
+                "Data and Outlier Analysis for "+column.getName(),
                 "Position", "Value",
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -113,7 +120,7 @@ public class OutlierPanel extends AnalysisPanel {
         return chart;
     }
 
-    private void styleScatterPlot(JFreeChart chart) {
+    private void styleScatterPlot(JFreeChart chart){
         XYPlot plot = chart.getXYPlot();
         plot.setBackgroundPaint(Color.WHITE);
         plot.setDomainGridlinePaint(Color.LIGHT_GRAY);

@@ -16,7 +16,6 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -146,7 +145,8 @@ public class OutlierPanelTest {
      * It ensures that the panel correctly displays data related to outliers.
      */
     @Test
-    public void testCreatePanelContent_WithOutliers() throws NoSuchFieldException, IllegalAccessException {
+    public void testCreatePanelContent_WithOutliers() throws NoSuchFieldException, IllegalAccessException{
+
         // Create fake outlier data
         List<OutlierResult> outliers = Arrays.asList(
                 new OutlierResult(100.0, 1.2, 1), // value = 100.0, score = 1.2, position = 1
@@ -163,14 +163,12 @@ public class OutlierPanelTest {
         columns.add(column);
         DatasetProfile datasetProfile = new DatasetProfile();
         datasetProfile.setColumns(columns);
+
         setPrivateField(AppController.getInstance(), "datasetProfile", datasetProfile);
 
-        // Call the method that creates the panel content
         outlierPanel.createPanelContent();
 
-        // Extract the components of the panel
         Component[] components = outlierPanel.getComponents();
-
         // Verify that the panel has at least one component
         assertTrue(components.length > 0);
 
@@ -182,5 +180,6 @@ public class OutlierPanelTest {
 
         JPanel panel = (JPanel) viewportComponent;
         assertTrue(panel.getComponentCount() > 0);
+
     }
 }

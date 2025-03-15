@@ -16,7 +16,8 @@ public class ApplicationNavigationPanel extends JPanel{
     private JButton editDataType;
     private final JPanel cardPanel;
     private final CardLayout cardLayout;
-
+    private Component spacingComponent;
+    private Component resultsSpacingComponent;
     public ApplicationNavigationPanel(JPanel cardPanel, CardLayout cardLayout){
 
         this.cardPanel = cardPanel;
@@ -107,38 +108,49 @@ public class ApplicationNavigationPanel extends JPanel{
         }
     }
 
-    public void setOnShowResultsButton(){
-        if(analysisPanel!=null){
-            if(showResults!=null){
-                remove(showResults);
+public void setOnShowResultsButton() {
+    if (analysisPanel != null) {
+        if (showResults != null) {
+            remove(showResults);
+            showResults = null;
+        }
+        if (resultsSpacingComponent != null) {
+            remove(resultsSpacingComponent);
+            resultsSpacingComponent = null;
+        }
+        showResults = createButton("Show Results", new Color(0, 153, 233), () -> {
+            ResultsPanelManager resultsPanel = new ResultsPanelManager(analysisPanel.getCheckBoxes(), cardPanel, cardLayout);
+            MainWindow.getMainWindow().showCard(resultsPanel, "resultPanel");
+        });
+        add(showResults);
+        resultsSpacingComponent = Box.createRigidArea(new Dimension(0, 10));
+        add(resultsSpacingComponent);
+        revalidate();
+        repaint();
+    }
+}
+
+    public void setOnEditDatatypesButton() {
+        if (AppController.getInstance().getDatasetProfile() != null) {
+            if (editDataType != null) {
+                remove(editDataType);
+                editDataType = null;
             }
+            if (spacingComponent != null) {
+                remove(spacingComponent);
+                spacingComponent = null;
+            }
+            if (AppController.getInstance().getDataset() != null) {
+                editDataType = createButton("EditDataType", new Color(54, 75, 222), () ->
+                        new WindowScores(AppController.getInstance().getDataset(), AppController.getInstance().getScoreCalculatorManager().getScoresPerColumnMap()));
 
-            showResults = createButton("Show Results", new Color(0, 153, 233), ()->{
-                ResultsPanelManager resultsPanel = new ResultsPanelManager(analysisPanel.getCheckBoxes(), cardPanel, cardLayout);
-                MainWindow.getMainWindow().showCard(resultsPanel, "resultPanel");
-
-            });
-
-            add(showResults);
-            add(Box.createRigidArea(new Dimension(0, 10)));
+                add(editDataType);
+                spacingComponent = Box.createRigidArea(new Dimension(0, 10));
+                add(spacingComponent);
+            }
             revalidate();
             repaint();
         }
     }
 
-    public void setOnEditDatatypesButton(){
-        if(AppController.getInstance().getDatasetProfile()!=null){
-            if(editDataType!=null){
-                remove(editDataType);
-            }
-            if(AppController.getInstance().getDataset()!=null){
-                editDataType = createButton("EditDataType", new Color(54, 75, 222), ()->
-                        new WindowScores(AppController.getInstance().getDataset(), AppController.getInstance().getScoreCalculatorManager().getScoresPerColumnMap()));
-
-                add(editDataType);
-                add(Box.createRigidArea(new Dimension(0, 10))); // Spacing between buttons
-
-            }
-        }
-    }
 }

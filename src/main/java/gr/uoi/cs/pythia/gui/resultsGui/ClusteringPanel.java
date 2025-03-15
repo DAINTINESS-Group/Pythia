@@ -121,7 +121,7 @@ public class ClusteringPanel extends AnalysisPanel {
 
     // Method to create the clusters table
     private JScrollPane createClustersTable() {
-        String[] columnNames = {"ID", "Num of Points", "Mean", "Standard Deviations", "Median", "Min", "Max", "Error"};
+        String[] columnNames = {"ID", "Num of Points", "Mean,EXIST_index", "Standard Deviations,EXIST_index", "Median,EXIST_index", "Min,EXIST_index", "Max,EXIST_index", "Error"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Cluster cluster : clusteringProfile.getClusters()) {
