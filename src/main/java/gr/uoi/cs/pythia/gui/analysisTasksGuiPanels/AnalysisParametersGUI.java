@@ -16,14 +16,12 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
     protected final JTextArea resultArea;
     protected final AnalysisTabsPanel tabsGUI;
     private final ParameterValidator<T> validator;
-    private JPanel mainCardPanel;
-    private CardLayout cardLayout;
+    private final JPanel mainCardPanel;
 
     public AnalysisParametersGUI(String analysisName, AnalysisTabsPanel tabsGUI, ParameterValidator<T> validator, Consumer<T> parameterSetter, JPanel cardPanel,CardLayout cardLayout) {
         this.tabsGUI = tabsGUI;
         // Callback to set parameters in AppController
         this.validator = validator;
-        this.cardLayout = cardLayout;
         this.mainCardPanel = cardPanel;
 
 
@@ -32,10 +30,10 @@ public abstract class AnalysisParametersGUI<T> extends JPanel {
 
         JPanel inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBorder(new TitledBorder(analysisName + " Parameters"));
-        GridBagConstraints gbc = new GridBagConstraints();
+        /*GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.HORIZONTAL;*/
         //int row = 0;
 
         // Input fields will be added here dynamically

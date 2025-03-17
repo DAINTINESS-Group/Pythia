@@ -13,12 +13,11 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.data.statistics.HistogramType;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPanel
+public class HistogramPanel extends AnalysisPanel {
 
 	public HistogramPanel() {
         super();
@@ -32,7 +31,7 @@ public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPane
             return;
         }
 
-        JPanel chartsContainer = new JPanel(new GridLayout(0, 1, 10, 10)); // Vertical layout with gaps
+        JPanel chartsContainer = new JPanel(new GridLayout(0, 1, 10, 10));
 
         for (Column column : columnList) {
             Histogram histogram = column.getHistogram();
@@ -48,8 +47,8 @@ public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPane
         }
 
         JScrollPane scrollPane = new JScrollPane(chartsContainer);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Smoother scrolling
-        add(scrollPane, BorderLayout.CENTER); // Add the scroll pane to the center of the panel
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }
@@ -58,10 +57,12 @@ public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPane
         JFreeChart chart = createHistogramChart(histogram);
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(800, 500));
+        //TODO Check here to fix bug!!
+        // https://stackoverflow.com/questions/62720620/how-to-make-mouse-wheel-zoomsetmousewheelenabled-in-jfreechart-only-affect-s
         chartPanel.setMouseWheelEnabled(true);
 
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder(columnName)); // Use provided column name
+        panel.setBorder(BorderFactory.createTitledBorder(columnName));
         panel.add(chartPanel, BorderLayout.CENTER);
         return panel;
     }
@@ -96,7 +97,6 @@ public class HistogramPanel extends AnalysisPanel { // Inherit from AnalysisPane
                 false
         );
 
-        // Styling (extracted to a separate method for better organization)
         styleHistogramChart(chart, minValue, maxValue);
 
         return chart;

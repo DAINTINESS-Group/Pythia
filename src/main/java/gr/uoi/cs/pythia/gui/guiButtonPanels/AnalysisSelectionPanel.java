@@ -57,7 +57,7 @@ public class AnalysisSelectionPanel extends JPanel {
         add(savePathPanel, gbc); // Add the panel to the AnalysisSelectionPanel
         gbc.gridy++; // Move to the next row
 
-        // Add the results area (πάνω από το resultsArea)
+        // Add the results area
         resultsArea = new JTextArea(10, 40);
         resultsArea.setEditable(false);
         JScrollPane resultsScrollPane = new JScrollPane(resultsArea);

@@ -1,3 +1,5 @@
+package gr.uoi.cs.pythia;
+
 import gr.uoi.cs.pythia.datatypeIdentifier.AllTypeStrategyTests;
 import gr.uoi.cs.pythia.gui.analysisTasksGuiPanelTest.AllAnalysisTasksGuiPanelTests;
 import gr.uoi.cs.pythia.gui.guiButtonPanelTest.AllButtonPanelTest;
