@@ -12,6 +12,10 @@ import java.util.function.Consumer;
 
 public abstract class AnalysisParametersGUI<T> extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5199303217683849758L;
 	protected final Map<String, JComponent> inputFields = new LinkedHashMap<>(); // Preserve order
     protected final JTextArea resultArea;
     protected final AnalysisTabsPanel tabsGUI;

@@ -8,7 +8,12 @@ import java.util.List;
 
 public class DominancePanel extends AnalysisPanel{
 
-    public DominancePanel(){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7082887602070781555L;
+
+	public DominancePanel(){
         super();
     }
     @Override

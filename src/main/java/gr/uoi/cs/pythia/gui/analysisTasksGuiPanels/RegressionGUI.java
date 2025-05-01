@@ -16,6 +16,10 @@ import java.util.List;
 
 public class RegressionGUI extends AnalysisParametersGUI<RegressionRequest>{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -173783125530897391L;
 	private final JTextField dependentVariableField;
     private final JTextField independentVariablesField;
     private final JTextField precisionField;

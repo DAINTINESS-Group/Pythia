@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class AnalysisSelectionPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1191469074235639134L;
 	private final JTextArea resultsArea;
     private final JCheckBox[] checkBoxes;
     private String path;

@@ -9,6 +9,11 @@ import java.awt.*;
 
 public class OutlierAnalysisGUI extends AnalysisParametersGUI<OutlierParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6595300172020616537L;
+
 	public OutlierAnalysisGUI(AnalysisTabsPanel tabsGUI, JPanel cardPanel,CardLayout cardLayout) {
         super("Outlier", tabsGUI, new OutlierParameterValidator(), AppController.getInstance()::declareOutlierParameters,cardPanel,cardLayout);
 

@@ -9,6 +9,11 @@ import java.awt.*;
 
 public class DominanceParametersGUI extends AnalysisParametersGUI<DominanceParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7454744830595618395L;
+
 	public DominanceParametersGUI( AnalysisTabsPanel tabsGUI,JPanel cardPanel, CardLayout cardLayout) {
         super("Dominance Patterns", tabsGUI, new DominanceParameterValidator(), AppController.getInstance()::declareDominanceParameters,cardPanel,cardLayout);
 

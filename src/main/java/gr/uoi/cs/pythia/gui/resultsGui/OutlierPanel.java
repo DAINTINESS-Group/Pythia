@@ -22,7 +22,12 @@ import java.util.List;
 
 public class OutlierPanel extends AnalysisPanel{
 
-    public OutlierPanel(){
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4575415780066067081L;
+
+	public OutlierPanel(){
         super();
     }
 

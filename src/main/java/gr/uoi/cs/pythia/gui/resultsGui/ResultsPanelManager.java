@@ -7,6 +7,10 @@ import java.util.List;
 
 public class ResultsPanelManager extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2591555507351248864L;
 	private final List<AnalysisType> selectedAnalysis;
     private final JTabbedPane tabbedPane;
     private final JPanel cardPanel;

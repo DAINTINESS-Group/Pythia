@@ -11,6 +11,11 @@ import java.awt.*;
 import java.util.List;
 
 public class RegressionPanel extends AnalysisPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1205223788624830759L;
+
 	public RegressionPanel() {
         super();
     }

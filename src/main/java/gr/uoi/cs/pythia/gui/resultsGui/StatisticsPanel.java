@@ -12,6 +12,11 @@ import java.util.List;
 
 public class StatisticsPanel extends AnalysisPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2635233518244620015L;
+
 	public StatisticsPanel() {
         super();
     }

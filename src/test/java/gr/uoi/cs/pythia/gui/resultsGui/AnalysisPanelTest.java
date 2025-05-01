@@ -14,7 +14,11 @@ public class AnalysisPanelTest {
 
     // Concrete subclass of AnalysisPanel for testing
     private static class TestAnalysisPanel extends AnalysisPanel {
-        private boolean panelContentCreated = false;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -9069652031933464602L;
+		private boolean panelContentCreated = false;
         private boolean exceptionThrown = false;
 
         /**

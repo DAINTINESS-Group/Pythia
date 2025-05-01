@@ -6,6 +6,10 @@ import java.util.concurrent.ExecutionException;
 
 public abstract class AnalysisPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -670864156692313912L;
 	public AnalysisPanel() {
 		setLayout(new BorderLayout());
 		runSwingWorker();

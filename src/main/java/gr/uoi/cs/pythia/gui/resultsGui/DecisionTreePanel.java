@@ -11,6 +11,10 @@ import java.util.List;
 
 public class DecisionTreePanel extends AnalysisPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2029255171895761525L;
 	private final String pathImages = AppController.getInstance().getAuxiliaryPath();
     private final List<File> listImages;
 

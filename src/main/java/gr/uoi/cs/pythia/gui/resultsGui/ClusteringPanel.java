@@ -19,7 +19,11 @@ import java.awt.*;
 
 public class ClusteringPanel extends AnalysisPanel {
 
-    ClusteringProfile clusteringProfile;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2042428924134747569L;
+	ClusteringProfile clusteringProfile;
 
     public ClusteringPanel() {
         super();

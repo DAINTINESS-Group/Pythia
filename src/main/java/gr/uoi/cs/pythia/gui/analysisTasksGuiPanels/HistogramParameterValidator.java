@@ -11,6 +11,11 @@ import java.util.Map;
 
 public class HistogramParameterValidator extends Component implements ParameterValidator<HistogramParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4869164109225895506L;
+
 	@Override
     public HistogramParameters validateAndCreate(Map<String, JComponent> inputFields) {
         String histogramType = (String) ((JComboBox<?>) inputFields.get("Histogram Type")).getSelectedItem();

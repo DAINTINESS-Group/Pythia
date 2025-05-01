@@ -10,6 +10,11 @@ import java.awt.*;
 
 public class DatasetWriterGUI extends AnalysisParametersGUI<DatasetWriterParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2859236764053740363L;
+
 	public DatasetWriterGUI(JPanel cardPanel, CardLayout cardLayout) {
         super("Dataset Writer",null, new DatasetWriterParameterValidator(), AppController.getInstance()::writeDataset,cardPanel,cardLayout); // No tabsGUI needed
         addInputField("Dataset Alias", new JTextField(20));

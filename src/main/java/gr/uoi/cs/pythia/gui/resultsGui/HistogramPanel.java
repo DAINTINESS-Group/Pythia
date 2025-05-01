@@ -19,6 +19,11 @@ import java.util.List;
 
 public class HistogramPanel extends AnalysisPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3448302320701728136L;
+
 	public HistogramPanel() {
         super();
     }

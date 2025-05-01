@@ -10,6 +10,11 @@ import java.awt.*;
 public class CorrelationsGUI extends AnalysisParametersGUI<CorrelationsParameters> {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7484717599456449088L;
+
 	public CorrelationsGUI(AnalysisTabsPanel tabsGUI,JPanel cardPanel,CardLayout cardLayout) {
         super("Correlations", tabsGUI, new CorrelationsParameterValidator(), AppController.getInstance()::declareCorrelationsParameters,cardPanel, cardLayout);
         JComboBox<String> correlationMethodComboBox = new JComboBox<>(new String[]{"PEARSON"});

@@ -12,6 +12,10 @@ import java.util.Map;
 
 public class ScorePanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7400743541985730022L;
 	private final JTable table;
     private final String[] columnNames;
 

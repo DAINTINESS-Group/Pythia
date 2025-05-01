@@ -9,6 +9,11 @@ import java.awt.*;
 
 public class HistogramGUI extends AnalysisParametersGUI<HistogramParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -718125596439224581L;
+
 	public HistogramGUI(AnalysisTabsPanel tabs,JPanel cardPanel, CardLayout cardLayout) {
         super("Histograms", tabs, new HistogramParameterValidator(), AppController.getInstance()::declareHistogramParameters,cardPanel,cardLayout);
 

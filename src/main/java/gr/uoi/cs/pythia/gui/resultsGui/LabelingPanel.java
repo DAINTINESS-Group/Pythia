@@ -9,6 +9,11 @@ import java.awt.*;
 
 public class LabelingPanel extends AnalysisPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4974978945258218129L;
+
 	public LabelingPanel( ) {
         super();
     }

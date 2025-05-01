@@ -11,7 +11,11 @@ import java.awt.*;
 
 public class ApplicationNavigationPanel extends JPanel{
 
-    public AnalysisSelectionPanel analysisPanel;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8454137544704536983L;
+	public AnalysisSelectionPanel analysisPanel;
     private JButton showResults;
     private JButton editDataType;
     private final JPanel cardPanel;

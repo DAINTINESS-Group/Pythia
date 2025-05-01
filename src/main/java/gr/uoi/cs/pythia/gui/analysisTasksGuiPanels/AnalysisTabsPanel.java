@@ -16,6 +16,10 @@ import java.util.Map;
 public class AnalysisTabsPanel extends JPanel {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2507414275093094337L;
 	private final JList<String> tabList;
     public final DefaultListModel<String> listModel;
     private final CardLayout cardLayout;

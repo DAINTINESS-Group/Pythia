@@ -11,6 +11,11 @@ import java.io.File;
 
 public class ReportGeneratorGUI extends AnalysisParametersGUI<ReportParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3577433927087270739L;
+
 	public ReportGeneratorGUI(JPanel cardPanel, CardLayout cardLayout) {
         super("Report Generator", null, new ReportParameterValidator(), AppController.getInstance()::generateReport,cardPanel,cardLayout);   // No tabsGUI needed
 

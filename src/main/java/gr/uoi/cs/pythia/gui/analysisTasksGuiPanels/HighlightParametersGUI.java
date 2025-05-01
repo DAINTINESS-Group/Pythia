@@ -10,6 +10,10 @@ import java.awt.*;
 
 public class HighlightParametersGUI extends AnalysisParametersGUI<HighlightParameters> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4531962538792219624L;
 	private final JComboBox<HighlightParameters.HighlightExtractionMode> extractionModeComboBox = new JComboBox<>(HighlightParameters.HighlightExtractionMode.values());
     private final JTextField numericLimitField = new JTextField(10);
 

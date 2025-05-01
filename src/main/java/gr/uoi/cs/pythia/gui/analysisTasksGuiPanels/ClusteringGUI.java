@@ -10,6 +10,11 @@ import java.awt.*;
 public class ClusteringGUI extends AnalysisParametersGUI<ClusteringParameters> {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6752569347529449375L;
+
 	public ClusteringGUI(AnalysisTabsPanel tabsGUI,JPanel cardPanel,CardLayout cardLayout) {
         super("Clustering", tabsGUI, new ClusteringParameterValidator(), AppController.getInstance()::declareClusteringParameters, cardPanel, cardLayout);
 

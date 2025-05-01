@@ -13,6 +13,10 @@ import java.util.concurrent.ExecutionException;
 
 public class DatasetInputPanel extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 742659501582583104L;
 	private final JTextField aliasField = new JTextField(20);
     private final JTextField pathField = new JTextField(20);
     private final JTextField pathSchemaField = new JTextField(20);
